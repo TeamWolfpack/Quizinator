@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<instant-run
+    api-level="23"
+    density="xxhdpi"
+    format="8"
+    plugin-version="2.2.0"
+    timestamp="37196448295532"
+    token="3931074297239858429"
+    verifier="FULL_BUILD_REQUESTED" >
+
+    <task
+        name="javac"
+        duration="334" />
+    <task
+        name="instant-run-dex"
+        duration="0" />
+    <task
+        name="instant-run-transform"
+        duration="722" />
+    <task
+        name="verifier"
+        duration="22" />
+
+    <artifact
+        location="D:\Quizinator\samples\WifiDirect\wifi-direct-demo\app\build\outputs\apk\app-debug.apk"
+        type="MAIN" />
+
+    <build
+        timestamp="37196448295532"
+        verifier="FULL_BUILD_REQUESTED" >
+        <artifact
+            location="D:\Quizinator\samples\WifiDirect\wifi-direct-demo\app\build\outputs\apk\app-debug.apk"
+            type="MAIN" />
+    </build>
+
+</instant-run>
