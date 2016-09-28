@@ -9,14 +9,24 @@ import android.view.View;
 
 import com.seniordesign.wolfpack.quizinator.R;
 
+/**
+ * The main menu activity is...
+ * @creation 09/28/2016
+ */
 public class MainMenuActivity extends AppCompatActivity {
 
+    /*
+     * @author kuczynskij (09/28/2016)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
     }
 
+    /*
+     * @author kuczynskij (09/28/2016)
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         // Inflate the menu; this adds items to the action bar
@@ -26,6 +36,9 @@ public class MainMenuActivity extends AppCompatActivity {
         return true;
     }
 
+    /*
+     * @author kuczynskij (09/28/2016)
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         // Handle action bar item clicks here. The action bar will
@@ -43,7 +56,10 @@ public class MainMenuActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public String onClick(View view){
+    /*
+     * @author kuczynskij (09/28/2016)
+     */
+    public String onButtonClick(View view){
         Intent intent;  //used to start a new activity
         switch (view.getId()){
 //            case R.id.newGameBtn:
@@ -55,11 +71,17 @@ public class MainMenuActivity extends AppCompatActivity {
         return null;
     }
 
+    /*
+     * @author kuczynskij (09/28/2016)
+     */
     @Override
     protected void onResume(){
         super.onResume();
     }
 
+    /*
+     * @author kuczynskij (09/28/2016)
+     */
     @Override
     protected void onPause(){
         super.onPause();
