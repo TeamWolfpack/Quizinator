@@ -10,16 +10,18 @@ env:
 #    - ANDROID_TARGET=android-18 ANDROID_ABI=armeabi-v7a
 #    - ANDROID_TARGET=android-19 ANDROID_ABI=armeabi-v7a
     - ANDROID_TARGET=android-21 ANDROID_ABI=armeabi-v7a
-	
-#notifications:
-#  email:
-#    recipients:
-#      - chuna@msoe.edu
-#      - kuczynskij@msoe.edu
-#      - leonardj@msoe.edu
-#      - farrowc@msoe.edu
-#    on_success: change
-#    on_failure: change
+#    - ANDROID_TARGET=android-23 ANDROID_ABI=armeabi-v7a #currently broken in Travis
+#    - ANDROID_TARGET=android-24                         #currently doesnt have an ABI
+
+notifications:
+  email:
+    recipients:
+      - chuna@msoe.edu
+      - kuczynskij@msoe.edu
+      - leonardj@msoe.edu
+      - farrowc@msoe.edu
+    on_success: change
+    on_failure: change
 
 android:
   components:
