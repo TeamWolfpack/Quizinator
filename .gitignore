@@ -11,3 +11,4 @@
 *.bak
 *.orig
 /.idea/*
+_samples/WifiDirect/wifi-direct-chat/app/build/tmp
