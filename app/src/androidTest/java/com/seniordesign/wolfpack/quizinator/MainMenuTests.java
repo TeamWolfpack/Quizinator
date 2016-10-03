@@ -21,8 +21,8 @@ import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 
-/**
- * Created by leonardj on 10/2/2016.
+/*
+ * @author leonardj (10/2/2016)
  */
 
 @RunWith(AndroidJUnit4.class)
