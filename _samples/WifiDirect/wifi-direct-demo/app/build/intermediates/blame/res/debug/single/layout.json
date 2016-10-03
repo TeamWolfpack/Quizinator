@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "D:\\Quizinator\\samples\\WifiDirect\\wifi-direct-demo\\app\\build\\intermediates\\res\\merged\\debug\\layout\\row_devices.xml",
+        "source": "D:\\Quizinator\\samples\\WifiDirect\\wifi-direct-demo\\app\\src\\main\\res\\layout\\row_devices.xml"
+    },
+    {
+        "merged": "D:\\Quizinator\\samples\\WifiDirect\\wifi-direct-demo\\app\\build\\intermediates\\res\\merged\\debug\\layout\\main.xml",
+        "source": "D:\\Quizinator\\samples\\WifiDirect\\wifi-direct-demo\\app\\src\\main\\res\\layout\\main.xml"
+    },
+    {
+        "merged": "D:\\Quizinator\\samples\\WifiDirect\\wifi-direct-demo\\app\\build\\intermediates\\res\\merged\\debug\\layout\\device_list.xml",
+        "source": "D:\\Quizinator\\samples\\WifiDirect\\wifi-direct-demo\\app\\src\\main\\res\\layout\\device_list.xml"
+    },
+    {
+        "merged": "D:\\Quizinator\\samples\\WifiDirect\\wifi-direct-demo\\app\\build\\intermediates\\res\\merged\\debug\\layout\\device_detail.xml",
+        "source": "D:\\Quizinator\\samples\\WifiDirect\\wifi-direct-demo\\app\\src\\main\\res\\layout\\device_detail.xml"
+    }
+]
