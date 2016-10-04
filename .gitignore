@@ -1,13 +1,29 @@
+# Built application files
+*.apk
+*.ap_
+
+# IntelliJ
 *.iml
-.gradle
-/local.properties
 /.idea/*
 /.idea/workspace.xml
 /.idea/libraries
-.DS_Store
-/build
+
+# Android
+.gradle/
 /captures
-*.iml
+/**/build
+
+# Java class files
+*.class
+
+# Local configuration file
+/local.properties
+
+# Merge conflict files
 *.bak
 *.orig
-/.idea/*
+
+# Sample apps temp folders
+
+# OS Files
+.DS_Store
