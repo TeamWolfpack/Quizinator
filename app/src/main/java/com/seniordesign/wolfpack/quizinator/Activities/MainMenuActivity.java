@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import com.seniordesign.wolfpack.quizinator.R;
 
@@ -22,6 +23,16 @@ public class MainMenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+        Button newGameButton = (Button) findViewById(R.id.newGameButton);
+
+        final Intent intent = new Intent(this, NewGameSettingsActivity.class);
+
+        newGameButton.setOnClickListener( new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                startActivity(intent);
+            }
+        });
     }
 
     /*
