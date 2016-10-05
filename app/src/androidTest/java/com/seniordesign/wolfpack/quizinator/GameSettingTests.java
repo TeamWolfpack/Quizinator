@@ -14,6 +14,7 @@ import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.KeyEvent;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -58,7 +59,20 @@ import static org.hamcrest.Matchers.is;
 public class GameSettingTests {
 
     @Rule
-    public ActivityTestRule mActivityRule = new ActivityTestRule<>(NewGameSettingsActivity.class);
+    public ActivityTestRule<NewGameSettingsActivity> mActivityRule = new ActivityTestRule<>(NewGameSettingsActivity.class);
+
+    @Before
+    public void unlockScreen() {
+        final NewGameSettingsActivity activity = mActivityRule.getActivity();
+        Runnable wakeUpDevice = new Runnable() {
+            public void run() {
+                activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
+                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                        WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            }
+        };
+        activity.runOnUiThread(wakeUpDevice);
+    }
 
     @Test
     public void useAppContext() throws Exception {
