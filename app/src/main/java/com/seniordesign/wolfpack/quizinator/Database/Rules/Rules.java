@@ -10,6 +10,7 @@ public class Rules {
     private int maxCardCount;
     private Time timeLimit;
     private Time cardDisplayTime;
+    private long id;
     /*
      * Using String because going to use an Array of Strings to limit what choice
      * of Card Type in that class instead of using an enum. We thought this
@@ -18,8 +19,18 @@ public class Rules {
      */
     private String cardTypes;
 
-    public Rules(){
+    /*
+     * @author kuczynskij (10/5/2016)
+     */
+    public long getId() {
+        return id;
+    }
 
+    /*
+     * @author kuczynskij (10/5/2016)
+     */
+    public void setId(long id) {
+        this.id = id;
     }
 
     public int getMaxCardCount() {

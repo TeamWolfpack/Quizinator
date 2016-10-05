@@ -8,6 +8,30 @@ public class Settings {
 
     private int numberOfConntections;
     private String userName;
+    private long id;
+
+    /*
+     * @author kuczynskij (10/5/2016)
+     */
+    @Override
+    public String toString(){
+        return "Settings id(" + id + "), userName(" + userName +
+                "), numberOfConnections(" + numberOfConntections + ").";
+    }
+
+    /*
+     * @author kuczynskij (10/5/2016)
+     */
+    public long getId() {
+        return id;
+    }
+
+    /*
+     * @author kuczynskij (10/5/2016)
+     */
+    public void setId(long id) {
+        this.id = id;
+    }
 
     /*
      * @author kuczynskij (10/4/2016)

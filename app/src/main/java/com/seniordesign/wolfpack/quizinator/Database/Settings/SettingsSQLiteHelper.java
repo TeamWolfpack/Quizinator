@@ -6,24 +6,28 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 /**
-<<<<<<< HEAD:app/src/main/java/com/seniordesign/wolfpack/quizinator/Database/Settings/RulesSQLiteHelper.java
- * SQLite data access object for Deck
-=======
  * SQLite data access object for Settings
->>>>>>> 9006be0154d6ca90869c9561d6695e65fb289d4e:app/src/main/java/com/seniordesign/wolfpack/quizinator/Database/Settings/SettingsSQLiteHelper.java
  * @creation 10/4/2016
  */
 public class SettingsSQLiteHelper extends SQLiteOpenHelper {
 
     //table contents
     public static final String TABLE_RULES = "settings";
+    public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_USERNAME = "_userName";
+    public static final String COLUMN_NUMBEROFCONNECTIONS = "_numberOfConnections";
 
     //database filename
     private static final String DATABASE_NAME = "settings.db";
     private static final int DATABASE_VERSION = 1;
 
-    // Database creation sql statement
-    private static final String DATABASE_CREATE = "";
+    // Database creation sql statement, table columns
+    private static final String DATABASE_CREATE = "create table "
+            + TABLE_RULES + "("
+            + COLUMN_ID + " integer primary key autoincrement, "
+            + COLUMN_USERNAME + " TEXT, "
+            + COLUMN_NUMBEROFCONNECTIONS + " REAL, "
+            + ");";
 
     /*
      * @author kuczynskij (10/4/2016)

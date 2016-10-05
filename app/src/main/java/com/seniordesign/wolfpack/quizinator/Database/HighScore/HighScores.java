@@ -10,6 +10,21 @@ public class HighScores {
     private String deckName;
     private Time bestTime;
     private int bestScore;
+    private long id;
+
+    /*
+     * @author kuczynskij (10/5/2016)
+     */
+    public long getId() {
+        return id;
+    }
+
+    /*
+     * @author kuczynskij (10/5/2016)
+     */
+    public void setId(long id) {
+        this.id = id;
+    }
 
     /*
      * @author kuczynskij (10/4/2016)
