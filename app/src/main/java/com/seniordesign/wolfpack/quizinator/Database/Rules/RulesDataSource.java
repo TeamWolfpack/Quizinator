@@ -67,11 +67,11 @@ public class RulesDataSource {
     public Rules createRule(double weight, long date,
                            String location) {
         ContentValues values = new ContentValues();
-//        values.put(RulesSQLiteHelper.COLUMN_FISHTYPE, "Fish");
-//        values.put(RulesSQLiteHelper.COLUMN_WEIGHT, weight);
-//        values.put(RulesSQLiteHelper.COLUMN_LENGTH, 0.0);
-//        values.put(RulesSQLiteHelper.COLUMN_DATE, date);
-//        values.put(RulesSQLiteHelper.COLUMN_LOCATION, location);
+//        values.put(SettingsSQLiteHelper.COLUMN_FISHTYPE, "Fish");
+//        values.put(SettingsSQLiteHelper.COLUMN_WEIGHT, weight);
+//        values.put(SettingsSQLiteHelper.COLUMN_LENGTH, 0.0);
+//        values.put(SettingsSQLiteHelper.COLUMN_DATE, date);
+//        values.put(SettingsSQLiteHelper.COLUMN_LOCATION, location);
         long insertId = database.insert(RulesSQLiteHelper.TABLE_RULES,
                 null, values);
         Cursor cursor = database.query(RulesSQLiteHelper.TABLE_RULES,

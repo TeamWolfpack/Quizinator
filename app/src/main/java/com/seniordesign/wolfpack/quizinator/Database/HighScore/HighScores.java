@@ -1,11 +1,11 @@
-package com.seniordesign.wolfpack.quizinator.Database.Settings;
+package com.seniordesign.wolfpack.quizinator.Database.HighScore;
 
 import java.sql.Time;
 
 /**
  * @creation 10/4/2016.
  */
-public class Rules {
+public class HighScores {
 
     private int maxCardCount;
     private Time timeLimit;
@@ -18,7 +18,7 @@ public class Rules {
      */
     private String cardTypes;
 
-    public Rules(){
+    public HighScores(){
 
     }
 
