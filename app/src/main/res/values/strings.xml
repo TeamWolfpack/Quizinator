@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Quizinator</string>
+
+    <string name="game_time">Game Time:</string>
+    <string name="card_type">Card Type(s):</string>
+    <string name="semicolon">:</string>
+    <string name="start_game">Start Game</string>
+    <string name="no_time">00</string>
+
+    <string-array name="card_type_array">
+        <item>True/False</item>
+        <item>Multiple Choice</item>
+        <item>Both</item>
+    </string-array>
 </resources>
