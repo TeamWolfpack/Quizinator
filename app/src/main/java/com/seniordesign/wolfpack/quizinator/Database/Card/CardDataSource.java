@@ -12,11 +12,11 @@ import java.util.List;
 /**
  * @creation 10/4/2016.
  */
-public class RulesDataSource {
+public class CardDataSource {
 
     // Database fields
     private SQLiteDatabase database;
-    private RulesSQLiteHelper dbHelper;
+    private CardSQLiteHelper dbHelper;
     private String[] allColumns = {
 //            ItemSQLiteHelper.COLUMN_ID,
 //            ItemSQLiteHelper.COLUMN_FISHTYPE,
@@ -29,8 +29,8 @@ public class RulesDataSource {
     /*
      * @author  chuna (10/4/2016)
      */
-    public RulesDataSource(Context context) {
-        dbHelper = new RulesSQLiteHelper(context);
+    public CardDataSource(Context context) {
+        dbHelper = new CardSQLiteHelper(context);
     }
 
     /*
@@ -57,7 +57,7 @@ public class RulesDataSource {
     /*
      * @author  chuna (10/4/2016)
      */
-    public RulesSQLiteHelper getSQLiteHelper() {
+    public CardSQLiteHelper getSQLiteHelper() {
         return dbHelper;
     }
 
@@ -67,15 +67,15 @@ public class RulesDataSource {
     public Rules createRule(double weight, long date,
                             String location) {
         ContentValues values = new ContentValues();
-//        values.put(RulesSQLiteHelper.COLUMN_FISHTYPE, "Fish");
-//        values.put(RulesSQLiteHelper.COLUMN_WEIGHT, weight);
-//        values.put(RulesSQLiteHelper.COLUMN_LENGTH, 0.0);
-//        values.put(RulesSQLiteHelper.COLUMN_DATE, date);
-//        values.put(RulesSQLiteHelper.COLUMN_LOCATION, location);
-        long insertId = database.insert(RulesSQLiteHelper.TABLE_RULES,
+//        values.put(CardSQLiteHelper.COLUMN_FISHTYPE, "Fish");
+//        values.put(CardSQLiteHelper.COLUMN_WEIGHT, weight);
+//        values.put(CardSQLiteHelper.COLUMN_LENGTH, 0.0);
+//        values.put(CardSQLiteHelper.COLUMN_DATE, date);
+//        values.put(CardSQLiteHelper.COLUMN_LOCATION, location);
+        long insertId = database.insert(CardSQLiteHelper.TABLE_RULES,
                 null, values);
-        Cursor cursor = database.query(RulesSQLiteHelper.TABLE_RULES,
-                allColumns, RulesSQLiteHelper.COLUMN_ID
+        Cursor cursor = database.query(CardSQLiteHelper.TABLE_RULES,
+                allColumns, CardSQLiteHelper.COLUMN_ID
                         + " = " + insertId, null,
                 null, null, null);
         cursor.moveToFirst();
@@ -90,8 +90,8 @@ public class RulesDataSource {
     public void deleteItem(Rules rule) { //TODO
         long id = rule.getId();
         System.out.println("Deleted item: " + rule.toString());
-        database.delete(RulesSQLiteHelper.TABLE_RULES,
-                RulesSQLiteHelper.COLUMN_ID + " = " + id, null);
+        database.delete(CardSQLiteHelper.TABLE_RULES,
+                CardSQLiteHelper.COLUMN_ID + " = " + id, null);
     }
 
     /*
@@ -99,7 +99,7 @@ public class RulesDataSource {
      */
     public List<Rules> getAllItems() {
         List<Rules> items = new ArrayList<Item>();
-        Cursor cursor = database.query(RulesSQLiteHelper.TABLE_RULES,
+        Cursor cursor = database.query(CardSQLiteHelper.TABLE_RULES,
                 allColumns, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {

@@ -1,11 +1,11 @@
-package com.seniordesign.wolfpack.quizinator.Database.Card;
+package com.seniordesign.wolfpack.quizinator.Database.Deck;
 
 import java.sql.Time;
 
 /**
  * @creation 10/4/2016.
  */
-public class Rules {
+public class Deck {
 
     private int maxCardCount;
     private Time timeLimit;
@@ -18,7 +18,7 @@ public class Rules {
      */
     private String cardTypes;
 
-    public Rules(){
+    public Deck(){
 
     }
 

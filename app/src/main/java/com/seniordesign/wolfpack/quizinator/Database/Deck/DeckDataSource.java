@@ -12,11 +12,11 @@ import java.util.List;
 /**
  * @creation 10/4/2016.
  */
-public class RulesDataSource {
+public class DeckDataSource {
 
     // Database fields
     private SQLiteDatabase database;
-    private RulesSQLiteHelper dbHelper;
+    private DeckSQLiteHelper dbHelper;
     private String[] allColumns = {
 //            ItemSQLiteHelper.COLUMN_ID,
 //            ItemSQLiteHelper.COLUMN_FISHTYPE,
@@ -29,8 +29,8 @@ public class RulesDataSource {
     /*
      * @author  chuna (10/4/2016)
      */
-    public RulesDataSource(Context context) {
-        dbHelper = new RulesSQLiteHelper(context);
+    public DeckDataSource(Context context) {
+        dbHelper = new DeckSQLiteHelper(context);
     }
 
     /*
@@ -57,29 +57,29 @@ public class RulesDataSource {
     /*
      * @author  chuna (10/4/2016)
      */
-    public RulesSQLiteHelper getSQLiteHelper() {
+    public DeckSQLiteHelper getSQLiteHelper() {
         return dbHelper;
     }
 
     /*
      * @author  chuna (10/4/2016)
      */
-    public Rules createRule(double weight, long date,
-                            String location) {
+    public Deck createRule(double weight, long date,
+                           String location) {
         ContentValues values = new ContentValues();
-//        values.put(RulesSQLiteHelper.COLUMN_FISHTYPE, "Fish");
-//        values.put(RulesSQLiteHelper.COLUMN_WEIGHT, weight);
-//        values.put(RulesSQLiteHelper.COLUMN_LENGTH, 0.0);
-//        values.put(RulesSQLiteHelper.COLUMN_DATE, date);
-//        values.put(RulesSQLiteHelper.COLUMN_LOCATION, location);
-        long insertId = database.insert(RulesSQLiteHelper.TABLE_RULES,
+//        values.put(CardSQLiteHelper.COLUMN_FISHTYPE, "Fish");
+//        values.put(CardSQLiteHelper.COLUMN_WEIGHT, weight);
+//        values.put(CardSQLiteHelper.COLUMN_LENGTH, 0.0);
+//        values.put(CardSQLiteHelper.COLUMN_DATE, date);
+//        values.put(CardSQLiteHelper.COLUMN_LOCATION, location);
+        long insertId = database.insert(DeckSQLiteHelper.TABLE_RULES,
                 null, values);
-        Cursor cursor = database.query(RulesSQLiteHelper.TABLE_RULES,
-                allColumns, RulesSQLiteHelper.COLUMN_ID
+        Cursor cursor = database.query(DeckSQLiteHelper.TABLE_RULES,
+                allColumns, DeckSQLiteHelper.COLUMN_ID
                         + " = " + insertId, null,
                 null, null, null);
         cursor.moveToFirst();
-        Rules newRules = cursorToRule(cursor);
+        Deck newRules = cursorToRule(cursor);
         cursor.close();
         return newRules;
     }
@@ -87,23 +87,23 @@ public class RulesDataSource {
     /*
      * @author  chuna (10/4/2016)
      */
-    public void deleteItem(Rules rule) { //TODO
+    public void deleteItem(Deck rule) { //TODO
         long id = rule.getId();
         System.out.println("Deleted item: " + rule.toString());
-        database.delete(RulesSQLiteHelper.TABLE_RULES,
-                RulesSQLiteHelper.COLUMN_ID + " = " + id, null);
+        database.delete(DeckSQLiteHelper.TABLE_RULES,
+                DeckSQLiteHelper.COLUMN_ID + " = " + id, null);
     }
 
     /*
      * @author  chuna (10/4/2016)
      */
-    public List<Rules> getAllItems() {
-        List<Rules> items = new ArrayList<Item>();
-        Cursor cursor = database.query(RulesSQLiteHelper.TABLE_RULES,
+    public List<Deck> getAllItems() {
+        List<Deck> items = new ArrayList<Item>();
+        Cursor cursor = database.query(DeckSQLiteHelper.TABLE_RULES,
                 allColumns, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            Rules rule = cursorToRule(cursor);
+            Deck rule = cursorToRule(cursor);
             items.add(rule);
             cursor.moveToNext();
         }
@@ -115,8 +115,8 @@ public class RulesDataSource {
     /*
      * @author  chuna (10/4/2016)
      */
-    public Rules cursorToRule(Cursor cursor) {
-        Rules rule = new Rules();
+    public Deck cursorToRule(Cursor cursor) {
+        Deck rule = new Deck();
 //        rule.setId(cursor.getLong(0));//id
 //        rule.setFishType(cursor.getString(1));//fishType
 //        rule.setWeight(cursor.getDouble(2));//weight

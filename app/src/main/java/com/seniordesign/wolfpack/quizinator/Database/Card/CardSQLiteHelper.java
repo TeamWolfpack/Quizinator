@@ -6,10 +6,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 /**
- * SQLite data access object for Rules
+ * SQLite data access object for Deck
  * @creation 10/4/2016
  */
-public class RulesSQLiteHelper extends SQLiteOpenHelper {
+public class CardSQLiteHelper extends SQLiteOpenHelper {
 
     //table contents
     public static final String TABLE_RULES = "rules";
@@ -24,7 +24,7 @@ public class RulesSQLiteHelper extends SQLiteOpenHelper {
     /*
      * @author  chuna (10/4/2016)
      */
-    public RulesSQLiteHelper(Context context) {
+    public CardSQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -41,7 +41,7 @@ public class RulesSQLiteHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.w(RulesSQLiteHelper.class.getName(),
+        Log.w(CardSQLiteHelper.class.getName(),
                 "Upgrading database from version " + oldVersion
                         + " to " + newVersion + ", which will " +
                         "destroy all old data");

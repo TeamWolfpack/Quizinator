@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 /**
- * SQLite data access object for Rules
+ * SQLite data access object for Deck
  * @creation 10/4/2016
  */
 public class RulesSQLiteHelper extends SQLiteOpenHelper {
