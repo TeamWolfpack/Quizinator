@@ -12,24 +12,24 @@ import android.util.Log;
 public class HighScoresSQLiteHelper extends SQLiteOpenHelper {
 
     //table contents
-    public static final String TABLE_RULES = "rules";
+    public static final String TABLE_RULES = "highscores";
 
     //database filename
-    private static final String DATABASE_NAME = "rules.db";
+    private static final String DATABASE_NAME = "highscores.db";
     private static final int DATABASE_VERSION = 1;
 
     // Database creation sql statement
     private static final String DATABASE_CREATE = "";
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
     public HighScoresSQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -37,7 +37,7 @@ public class HighScoresSQLiteHelper extends SQLiteOpenHelper {
     }
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

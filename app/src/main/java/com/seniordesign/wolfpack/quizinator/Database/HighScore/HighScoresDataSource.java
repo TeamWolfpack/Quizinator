@@ -27,42 +27,42 @@ public class HighScoresDataSource {
     };
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
     public HighScoresDataSource(Context context) {
         dbHelper = new HighScoresSQLiteHelper(context);
     }
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
     public void open() throws SQLException {
         database = dbHelper.getWritableDatabase();
     }
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
     public void close() {
         dbHelper.close();
     }
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
     public SQLiteDatabase getDatabase(){
         return database;
     }
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
     public HighScoresSQLiteHelper getSQLiteHelper() {
         return dbHelper;
     }
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
     public HighScores createRule(double weight, long date,
                                  String location) {
@@ -85,20 +85,19 @@ public class HighScoresDataSource {
     }
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
     public void deleteItem(HighScores rule) { //TODO
-        long id = rule.getId();
         System.out.println("Deleted item: " + rule.toString());
         database.delete(HighScoresSQLiteHelper.TABLE_RULES,
                 HighScoresSQLiteHelper.COLUMN_ID + " = " + id, null);
     }
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
     public List<HighScores> getAllItems() {
-        List<HighScores> items = new ArrayList<Item>();
+        List<HighScores> items = new ArrayList<HighScores>();
         Cursor cursor = database.query(HighScoresSQLiteHelper.TABLE_RULES,
                 allColumns, null, null, null, null, null);
         cursor.moveToFirst();
@@ -113,7 +112,7 @@ public class HighScoresDataSource {
     }
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
     public HighScores cursorToRule(Cursor cursor) {
         HighScores rule = new HighScores();

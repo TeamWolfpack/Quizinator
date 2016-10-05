@@ -1,58 +1,39 @@
 package com.seniordesign.wolfpack.quizinator.Database.Settings;
 
-import java.sql.Time;
-
 /**
+ * Represents applications settings for the game.
  * @creation 10/4/2016.
  */
 public class Settings {
 
-    private int maxCardCount;
-    private Time timeLimit;
-    private Time cardDisplayTime;
+    private int numberOfConntections;
+    private String userName;
+
     /*
-     * Using String because going to use an Array of Strings to limit what choice
-     * of Card Type in that class instead of using an enum. We thought this
-     * would be easier to implement than converting an enum to a string
-     * or converting and storing blobs.
+     * @author kuczynskij (10/4/2016)
      */
-    private String cardTypes;
-
-    public Settings(){
-
+    public int getNumberOfConntections() {
+        return numberOfConntections;
     }
 
-    public int getMaxCardCount() {
-        return maxCardCount;
+    /*
+     * @author kuczynskij (10/4/2016)
+     */
+    public void setNumberOfConntections(int numberOfConntections) {
+        this.numberOfConntections = numberOfConntections;
     }
 
-    public void setMaxCardCount(int maxCardCount) {
-        this.maxCardCount = maxCardCount;
+    /*
+     * @author kuczynskij (10/4/2016)
+     */
+    public String getUserName() {
+        return userName;
     }
 
-    public Time getTimeLimit() {
-        return timeLimit;
+    /*
+     * @author kuczynskij (10/4/2016)
+     */
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
-
-    public void setTimeLimit(Time timeLimit) {
-        this.timeLimit = timeLimit;
-    }
-
-    public Time getCardDisplayTime() {
-        return cardDisplayTime;
-    }
-
-    public void setCardDisplayTime(Time cardDisplayTime) {
-        this.cardDisplayTime = cardDisplayTime;
-    }
-
-    public String getCardTypes() {
-        return cardTypes;
-    }
-
-    public void setCardTypes(String cardTypes) {
-        this.cardTypes = cardTypes;
-    }
-
-
 }

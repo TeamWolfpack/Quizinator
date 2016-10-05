@@ -27,42 +27,42 @@ public class SettingsDataSource {
     };
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
     public SettingsDataSource(Context context) {
         dbHelper = new SettingsSQLiteHelper(context);
     }
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
     public void open() throws SQLException {
         database = dbHelper.getWritableDatabase();
     }
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
     public void close() {
         dbHelper.close();
     }
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
     public SQLiteDatabase getDatabase(){
         return database;
     }
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
     public SettingsSQLiteHelper getSQLiteHelper() {
         return dbHelper;
     }
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
     public Settings createRule(double weight, long date,
                                String location) {
@@ -85,20 +85,20 @@ public class SettingsDataSource {
     }
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
     public void deleteItem(Settings rule) { //TODO
-        long id = rule.getId();
+        //long id = rule.getId();
         System.out.println("Deleted item: " + rule.toString());
         database.delete(SettingsSQLiteHelper.TABLE_RULES,
                 SettingsSQLiteHelper.COLUMN_ID + " = " + id, null);
     }
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
     public List<Settings> getAllItems() {
-        List<Settings> items = new ArrayList<Item>();
+        List<Settings> items = new ArrayList<Settings>();
         Cursor cursor = database.query(SettingsSQLiteHelper.TABLE_RULES,
                 allColumns, null, null, null, null, null);
         cursor.moveToFirst();
@@ -113,7 +113,7 @@ public class SettingsDataSource {
     }
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
     public Settings cursorToRule(Cursor cursor) {
         Settings rule = new Settings();

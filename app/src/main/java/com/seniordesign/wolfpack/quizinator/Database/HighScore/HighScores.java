@@ -7,52 +7,49 @@ import java.sql.Time;
  */
 public class HighScores {
 
-    private int maxCardCount;
-    private Time timeLimit;
-    private Time cardDisplayTime;
+    private String deckName;
+    private Time bestTime;
+    private int bestScore;
+
     /*
-     * Using String because going to use an Array of Strings to limit what choice
-     * of Card Type in that class instead of using an enum. We thought this
-     * would be easier to implement than converting an enum to a string
-     * or converting and storing blobs.
+     * @author kuczynskij (10/4/2016)
      */
-    private String cardTypes;
-
-    public HighScores(){
-
+    public int getBestScore() {
+        return bestScore;
     }
 
-    public int getMaxCardCount() {
-        return maxCardCount;
+    /*
+     * @author kuczynskij (10/4/2016)
+     */
+    public void setBestScore(int bestScore) {
+        this.bestScore = bestScore;
     }
 
-    public void setMaxCardCount(int maxCardCount) {
-        this.maxCardCount = maxCardCount;
+    /*
+     * @author kuczynskij (10/4/2016)
+     */
+    public String getDeckName() {
+        return deckName;
     }
 
-    public Time getTimeLimit() {
-        return timeLimit;
+    /*
+     * @author kuczynskij (10/4/2016)
+     */
+    public void setDeckName(String deckName) {
+        this.deckName = deckName;
     }
 
-    public void setTimeLimit(Time timeLimit) {
-        this.timeLimit = timeLimit;
+    /*
+     * @author kuczynskij (10/4/2016)
+     */
+    public Time getBestTime() {
+        return bestTime;
     }
 
-    public Time getCardDisplayTime() {
-        return cardDisplayTime;
+    /*
+     * @author kuczynskij (10/4/2016)
+     */
+    public void setBestTime(Time bestTime) {
+        this.bestTime = bestTime;
     }
-
-    public void setCardDisplayTime(Time cardDisplayTime) {
-        this.cardDisplayTime = cardDisplayTime;
-    }
-
-    public String getCardTypes() {
-        return cardTypes;
-    }
-
-    public void setCardTypes(String cardTypes) {
-        this.cardTypes = cardTypes;
-    }
-
-
 }
