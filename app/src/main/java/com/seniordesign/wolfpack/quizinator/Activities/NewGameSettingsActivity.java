@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
@@ -12,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.seniordesign.wolfpack.quizinator.Filters.TimeFilter;
 import com.seniordesign.wolfpack.quizinator.R;
 
 /**
@@ -35,6 +37,16 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                 R.array.card_type_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+
+        EditText minuteInput = (EditText)findViewById(R.id.game_minutes);
+        TimeFilter minuteTimeFilter = new TimeFilter(1);
+        minuteInput.setFilters(new InputFilter[]{ minuteTimeFilter });
+        minuteInput.setOnFocusChangeListener(minuteTimeFilter);
+
+        EditText secondsInput = (EditText)findViewById(R.id.game_seconds);
+        TimeFilter secondsTimeFilter = new TimeFilter();
+        secondsInput.setFilters(new InputFilter[]{ secondsTimeFilter });
+        secondsInput.setOnFocusChangeListener(secondsTimeFilter);
     }
 
     /*
