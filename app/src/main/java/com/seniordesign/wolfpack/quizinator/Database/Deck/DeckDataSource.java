@@ -67,12 +67,21 @@ public class DeckDataSource {
     public Deck createRule(double weight, long date,
                            String location) {
         ContentValues values = new ContentValues();
+<<<<<<< HEAD:app/src/main/java/com/seniordesign/wolfpack/quizinator/Database/Deck/DeckDataSource.java
 //        values.put(CardSQLiteHelper.COLUMN_FISHTYPE, "Fish");
 //        values.put(CardSQLiteHelper.COLUMN_WEIGHT, weight);
 //        values.put(CardSQLiteHelper.COLUMN_LENGTH, 0.0);
 //        values.put(CardSQLiteHelper.COLUMN_DATE, date);
 //        values.put(CardSQLiteHelper.COLUMN_LOCATION, location);
         long insertId = database.insert(DeckSQLiteHelper.TABLE_RULES,
+=======
+//        values.put(SettingsSQLiteHelper.COLUMN_FISHTYPE, "Fish");
+//        values.put(SettingsSQLiteHelper.COLUMN_WEIGHT, weight);
+//        values.put(SettingsSQLiteHelper.COLUMN_LENGTH, 0.0);
+//        values.put(SettingsSQLiteHelper.COLUMN_DATE, date);
+//        values.put(SettingsSQLiteHelper.COLUMN_LOCATION, location);
+        long insertId = database.insert(RulesSQLiteHelper.TABLE_RULES,
+>>>>>>> 9006be0154d6ca90869c9561d6695e65fb289d4e:app/src/main/java/com/seniordesign/wolfpack/quizinator/Database/Deck/RulesDataSource.java
                 null, values);
         Cursor cursor = database.query(DeckSQLiteHelper.TABLE_RULES,
                 allColumns, DeckSQLiteHelper.COLUMN_ID

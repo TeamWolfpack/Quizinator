@@ -12,11 +12,11 @@ import java.util.List;
 /**
  * @creation 10/4/2016.
  */
-public class RulesDataSource {
+public class SettingsDataSource {
 
     // Database fields
     private SQLiteDatabase database;
-    private RulesSQLiteHelper dbHelper;
+    private SettingsSQLiteHelper dbHelper;
     private String[] allColumns = {
 //            ItemSQLiteHelper.COLUMN_ID,
 //            ItemSQLiteHelper.COLUMN_FISHTYPE,
@@ -27,83 +27,92 @@ public class RulesDataSource {
     };
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
-    public RulesDataSource(Context context) {
-        dbHelper = new RulesSQLiteHelper(context);
+    public SettingsDataSource(Context context) {
+        dbHelper = new SettingsSQLiteHelper(context);
     }
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
     public void open() throws SQLException {
         database = dbHelper.getWritableDatabase();
     }
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
     public void close() {
         dbHelper.close();
     }
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
     public SQLiteDatabase getDatabase(){
         return database;
     }
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
-    public RulesSQLiteHelper getSQLiteHelper() {
+    public SettingsSQLiteHelper getSQLiteHelper() {
         return dbHelper;
     }
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
-    public Rules createRule(double weight, long date,
-                            String location) {
+    public Settings createRule(double weight, long date,
+                               String location) {
         ContentValues values = new ContentValues();
+<<<<<<< HEAD:app/src/main/java/com/seniordesign/wolfpack/quizinator/Database/Settings/RulesDataSource.java
 //        values.put(CardSQLiteHelper.COLUMN_FISHTYPE, "Fish");
 //        values.put(CardSQLiteHelper.COLUMN_WEIGHT, weight);
 //        values.put(CardSQLiteHelper.COLUMN_LENGTH, 0.0);
 //        values.put(CardSQLiteHelper.COLUMN_DATE, date);
 //        values.put(CardSQLiteHelper.COLUMN_LOCATION, location);
         long insertId = database.insert(RulesSQLiteHelper.TABLE_RULES,
+=======
+//        values.put(SettingsSQLiteHelper.COLUMN_FISHTYPE, "Fish");
+//        values.put(SettingsSQLiteHelper.COLUMN_WEIGHT, weight);
+//        values.put(SettingsSQLiteHelper.COLUMN_LENGTH, 0.0);
+//        values.put(SettingsSQLiteHelper.COLUMN_DATE, date);
+//        values.put(SettingsSQLiteHelper.COLUMN_LOCATION, location);
+        long insertId = database.insert(SettingsSQLiteHelper.TABLE_RULES,
+>>>>>>> 9006be0154d6ca90869c9561d6695e65fb289d4e:app/src/main/java/com/seniordesign/wolfpack/quizinator/Database/Settings/SettingsDataSource.java
                 null, values);
-        Cursor cursor = database.query(RulesSQLiteHelper.TABLE_RULES,
-                allColumns, RulesSQLiteHelper.COLUMN_ID
+        Cursor cursor = database.query(SettingsSQLiteHelper.TABLE_RULES,
+                allColumns, SettingsSQLiteHelper.COLUMN_ID
                         + " = " + insertId, null,
                 null, null, null);
         cursor.moveToFirst();
-        Rules newRules = cursorToRule(cursor);
+        Settings newSettings = cursorToRule(cursor);
         cursor.close();
-        return newRules;
+        return newSettings;
     }
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
-    public void deleteItem(Rules rule) { //TODO
-        long id = rule.getId();
+    public void deleteItem(Settings rule) { //TODO
+        //long id = rule.getId();
         System.out.println("Deleted item: " + rule.toString());
-        database.delete(RulesSQLiteHelper.TABLE_RULES,
-                RulesSQLiteHelper.COLUMN_ID + " = " + id, null);
+        database.delete(SettingsSQLiteHelper.TABLE_RULES,
+                SettingsSQLiteHelper.COLUMN_ID + " = " + id, null);
     }
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
-    public List<Rules> getAllItems() {
-        List<Rules> items = new ArrayList<Item>();
-        Cursor cursor = database.query(RulesSQLiteHelper.TABLE_RULES,
+    public List<Settings> getAllItems() {
+        List<Settings> items = new ArrayList<Settings>();
+        Cursor cursor = database.query(SettingsSQLiteHelper.TABLE_RULES,
                 allColumns, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            Rules rule = cursorToRule(cursor);
+            Settings rule = cursorToRule(cursor);
             items.add(rule);
             cursor.moveToNext();
         }
@@ -113,10 +122,10 @@ public class RulesDataSource {
     }
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author kuczynskij (10/4/2016)
      */
-    public Rules cursorToRule(Cursor cursor) {
-        Rules rule = new Rules();
+    public Settings cursorToRule(Cursor cursor) {
+        Settings rule = new Settings();
 //        rule.setId(cursor.getLong(0));//id
 //        rule.setFishType(cursor.getString(1));//fishType
 //        rule.setWeight(cursor.getDouble(2));//weight

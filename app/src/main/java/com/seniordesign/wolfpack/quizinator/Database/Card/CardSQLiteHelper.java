@@ -6,16 +6,17 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 /**
- * SQLite data access object for Deck
+ * SQLite data access object for Card
  * @creation 10/4/2016
  */
 public class CardSQLiteHelper extends SQLiteOpenHelper {
 
     //table contents
-    public static final String TABLE_RULES = "rules";
+    public static final String TABLE_CARD = "card";
+    public static final String COLUMN_ID = "_id";
 
     //database filename
-    private static final String DATABASE_NAME = "rules.db";
+    private static final String DATABASE_NAME = "card.db";
     private static final int DATABASE_VERSION = 1;
 
     // Database creation sql statement
@@ -45,7 +46,7 @@ public class CardSQLiteHelper extends SQLiteOpenHelper {
                 "Upgrading database from version " + oldVersion
                         + " to " + newVersion + ", which will " +
                         "destroy all old data");
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_RULES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CARD);
         onCreate(db);
     }
 }

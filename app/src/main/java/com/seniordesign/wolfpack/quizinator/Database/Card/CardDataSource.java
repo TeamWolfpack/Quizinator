@@ -64,7 +64,7 @@ public class CardDataSource {
     /*
      * @author  chuna (10/4/2016)
      */
-    public Rules createRule(double weight, long date,
+    public Card createCard(double weight, long date,
                             String location) {
         ContentValues values = new ContentValues();
 //        values.put(CardSQLiteHelper.COLUMN_FISHTYPE, "Fish");
@@ -72,39 +72,39 @@ public class CardDataSource {
 //        values.put(CardSQLiteHelper.COLUMN_LENGTH, 0.0);
 //        values.put(CardSQLiteHelper.COLUMN_DATE, date);
 //        values.put(CardSQLiteHelper.COLUMN_LOCATION, location);
-        long insertId = database.insert(CardSQLiteHelper.TABLE_RULES,
+        long insertId = database.insert(CardSQLiteHelper.TABLE_CARD,
                 null, values);
-        Cursor cursor = database.query(CardSQLiteHelper.TABLE_RULES,
+        Cursor cursor = database.query(CardSQLiteHelper.TABLE_CARD,
                 allColumns, CardSQLiteHelper.COLUMN_ID
                         + " = " + insertId, null,
                 null, null, null);
         cursor.moveToFirst();
-        Rules newRules = cursorToRule(cursor);
+        Card newCard = cursorToCard(cursor);
         cursor.close();
-        return newRules;
+        return newCard;
     }
 
     /*
      * @author  chuna (10/4/2016)
      */
-    public void deleteItem(Rules rule) { //TODO
-        long id = rule.getId();
-        System.out.println("Deleted item: " + rule.toString());
-        database.delete(CardSQLiteHelper.TABLE_RULES,
+    public void deleteItem(Card card) { //TODO
+        long id = card.getId();
+        System.out.println("Deleted item: " + card.toString());
+        database.delete(CardSQLiteHelper.TABLE_CARD,
                 CardSQLiteHelper.COLUMN_ID + " = " + id, null);
     }
 
     /*
      * @author  chuna (10/4/2016)
      */
-    public List<Rules> getAllItems() {
-        List<Rules> items = new ArrayList<Item>();
-        Cursor cursor = database.query(CardSQLiteHelper.TABLE_RULES,
+    public List<Card> getAllItems() {
+        List<Card> items = new ArrayList<Card>();
+        Cursor cursor = database.query(CardSQLiteHelper.TABLE_CARD,
                 allColumns, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            Rules rule = cursorToRule(cursor);
-            items.add(rule);
+            Card card = cursorToCard(cursor);
+            items.add(card);
             cursor.moveToNext();
         }
         // make sure to close the cursor
@@ -115,15 +115,15 @@ public class CardDataSource {
     /*
      * @author  chuna (10/4/2016)
      */
-    public Rules cursorToRule(Cursor cursor) {
-        Rules rule = new Rules();
+    public Card cursorToCard(Cursor cursor) {
+        Card card = new Card();
 //        rule.setId(cursor.getLong(0));//id
 //        rule.setFishType(cursor.getString(1));//fishType
 //        rule.setWeight(cursor.getDouble(2));//weight
 //        rule.setLength(cursor.getDouble(3));//length
 //        rule.setDate(cursor.getLong(4));//date
 //        rule.setLocation(cursor.getString(5));//location
-        return rule;
+        return card;
     }
 
     public String[] getAllColumns(){
