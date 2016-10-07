@@ -1,89 +1,116 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.seniordesign.wolfpack.quizinator.R;
 
 /**
- * The main menu activity is...
- * @creation 09/28/2016
+ * The main menu activity
+ * @creation 10/4/2016
  */
-public class MainMenuActivity extends AppCompatActivity {
+public class MainMenuActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
-    /*
-     * @author kuczynskij (09/28/2016)
+    /**
+     * @author farrowc 10/4/2016
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_menu);
+        setContentView(R.layout.activity_navigation_drawer);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Main Menu");
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
-    /*
-     * @author kuczynskij (09/28/2016)
+    /**
+     * @author farrowc 10/4/2016
      */
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        // Inflate the menu; this adds items to the action bar
-        // if it is present.
-        //need to add menu object in the layout (activity_main_menu)
-        //getMenuInflater().inflate(R.menu.menu_main, menu);
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    /**
+     * @author farrowc 10/4/2016
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.navigation_drawer, menu);
         return true;
     }
 
-    /*
-     * @author kuczynskij (09/28/2016)
+    /**
+     * @author farrowc 10/4/2016
      */
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            //this thing let's the user press the menu button to
-//            //open a lil menu option at the bottom
-//            return true;
-//        }
+        if (id == R.id.action_settings) {
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
 
-    /*
-     * @author kuczynskij (09/28/2016)
+    /**
+     * @author farrowc 10/4/2016
      */
-    public String onButtonClick(View view){
-        Intent intent;  //used to start a new activity
-        switch (view.getId()){
-//            case R.id.newGameBtn:
-//                intent = new Intent(this.NewGameSettingsActivity.class);
-//                startActivity(intent);
-//                return "NewGame";
-//                break;
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_application_settings) {
+            // Handle the camera action
+        } else if (id == R.id.nav_quiz_bowl_rules) {
+            Uri uriUrl = Uri.parse("https://www.naqt.com/rules.html");
+            Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+            startActivity(launchBrowser);
         }
-        return null;
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
-    /*
-     * @author kuczynskij (09/28/2016)
+    /**
+     * @author farrowc 10/4/2016
      */
-    @Override
-    protected void onResume(){
-        super.onResume();
-    }
-
-    /*
-     * @author kuczynskij (09/28/2016)
-     */
-    @Override
-    protected void onPause(){
-        super.onPause();
+    public void showGameSettings(View v){
+        final Intent intent = new Intent(this, NewGameSettingsActivity.class);
+        startActivity(intent);
     }
 }

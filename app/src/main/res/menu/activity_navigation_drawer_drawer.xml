@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group>
+        <item
+            android:id="@+id/nav_quiz_bowl_rules"
+            android:title="Quiz Bowl Rules" />
+        <item
+            android:id="@+id/nav_application_settings"
+            android:title="Application Settings" />
+    </group>
+
+</menu>
