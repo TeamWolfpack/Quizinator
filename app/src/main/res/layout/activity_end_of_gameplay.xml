@@ -10,4 +10,65 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.seniordesign.wolfpack.quizinator.Activities.EndOfGameplayActivity">
 
+
+    <TextView
+        android:id="@+id/endOfGameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Game Over"
+        android:textStyle="bold"
+        android:textSize="32dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="78dp" />
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/endOfGameText"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/endOfGameScoreText"
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="Score: "
+            android:layout_below="@id/endOfGameText" />
+        <TextView
+            android:id="@+id/endOfGameTimeText"
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="Time Elapsed: "
+            android:layout_below="@id/endOfGameText" />
+        <TextView
+            android:id="@+id/endOfGameTotalCardsText"
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="Total Cards: "
+            android:layout_below="@id/endOfGameText" />
+        <TextView
+            android:id="@+id/endOfGameHighScoreText"
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="High Score: "
+            android:layout_below="@id/endOfGameText" />
+        <Button
+            android:id="@+id/newGameButton"
+            android:layout_marginTop="20dp"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="Main Menu"
+            android:onClick="showMainMenu"
+            android:layout_below="@id/endOfGameScoreText"
+            />
+
+    </LinearLayout>
+
 </RelativeLayout>
