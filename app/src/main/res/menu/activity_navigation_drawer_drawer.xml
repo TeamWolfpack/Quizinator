@@ -4,10 +4,12 @@
     <group>
         <item
             android:id="@+id/nav_quiz_bowl_rules"
-            android:title="Quiz Bowl Rules" />
+            android:title="@string/quiz_bowl_rules" />
+    <!--
         <item
             android:id="@+id/nav_application_settings"
             android:title="Application Settings" />
+    -->
     </group>
 
 </menu>

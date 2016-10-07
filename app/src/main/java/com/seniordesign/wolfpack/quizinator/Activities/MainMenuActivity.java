@@ -87,19 +87,21 @@ public class MainMenuActivity extends AppCompatActivity
     /**
      * @author farrowc 10/4/2016
      */
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_application_settings) {
-            // Handle the camera action
-        } else if (id == R.id.nav_quiz_bowl_rules) {
+        if (id == R.id.nav_quiz_bowl_rules) {
             Uri uriUrl = Uri.parse("https://www.naqt.com/rules.html");
             Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
             startActivity(launchBrowser);
         }
+        /*
+        else if (id == R.id.nav_application_settings) {
+            // For later sprints
+        }
+        */
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
