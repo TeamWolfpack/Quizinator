@@ -4,10 +4,13 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.seniordesign.wolfpack.quizinator.Activities.MainMenuActivity;
+import com.seniordesign.wolfpack.quizinator.Activities.NewGameSettingsActivity;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,21 +31,36 @@ import static org.hamcrest.Matchers.instanceOf;
 @RunWith(AndroidJUnit4.class)
 public class MainMenuTests {
 
+    // Needed to run in Travis
+    // **********************************************
     @Rule
-    public ActivityTestRule mActivityRule = new ActivityTestRule<>(MainMenuActivity.class);
+    public ActivityTestRule<MainMenuActivity> mActivityRule = new ActivityTestRule<>(MainMenuActivity.class);
+
+    @Before
+    public void unlockScreen() {
+        final MainMenuActivity activity = mActivityRule.getActivity();
+        Runnable wakeUpDevice = new Runnable() {
+            public void run() {
+                activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
+                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                        WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            }
+        };
+        activity.runOnUiThread(wakeUpDevice);
+    }
+    // **********************************************
 
     @Test
     public void useAppContext() throws Exception {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
-
         assertEquals("com.seniordesign.wolfpack.quizinator", appContext.getPackageName());
     }
 
     @Test
     public void TitleTest() {
         //Test checks the toolbar title
-        //onView(allOf(instanceOf(TextView.class), withParent(withId(R.id.toolbar_main_menu))))
-        //        .check(matches(withText("Quizinator")));
+        onView(allOf(instanceOf(TextView.class), withParent(withId(R.id.toolbar))))
+                .check(matches(withText("Main Menu")));
     }
 }
