@@ -1,5 +1,7 @@
 package com.seniordesign.wolfpack.quizinator.Database.Deck;
 
+import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
+
 import java.sql.Time;
 
 /**
@@ -7,52 +9,65 @@ import java.sql.Time;
  */
 public class Deck {
 
-    private int maxCardCount;
-    private Time timeLimit;
-    private Time cardDisplayTime;
+    private long id;
+
     /*
      * Using String because going to use an Array of Strings to limit what choice
      * of Card Type in that class instead of using an enum. We thought this
      * would be easier to implement than converting an enum to a string
      * or converting and storing blobs.
      */
-    private String cardTypes;
+    private String cardTypes[];
 
+//    private boolean moderatorNeeded;
+
+    /*
+     * @author  chuna (10-5-2016)
+     */
     public Deck(){
 
     }
 
-    public int getMaxCardCount() {
-        return maxCardCount;
+    /*
+     * @author  chuna (10-7-2016)
+     */
+    public boolean addCard(Card card){
+        return true;
     }
 
-    public void setMaxCardCount(int maxCardCount) {
-        this.maxCardCount = maxCardCount;
+    /*
+     * @author  chuna (10-7-2016)
+     */
+    public boolean removeCard(Card card){
+        return true;
     }
 
-    public Time getTimeLimit() {
-        return timeLimit;
+//    /*
+//     * @author  chuna (10-7-2016)
+//     */
+//    private void checkIfModeratorNeeded(){
+//
+//    }
+
+    /*
+     * @author  chuna (10-5-2016)
+     */
+    public long getId() {
+        return id;
     }
 
-    public void setTimeLimit(Time timeLimit) {
-        this.timeLimit = timeLimit;
+    /*
+     * @author  chuna (10-5-2016)
+     */
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public Time getCardDisplayTime() {
-        return cardDisplayTime;
-    }
-
-    public void setCardDisplayTime(Time cardDisplayTime) {
-        this.cardDisplayTime = cardDisplayTime;
-    }
-
-    public String getCardTypes() {
+    public String[] getCardTypes() {
         return cardTypes;
     }
 
-    public void setCardTypes(String cardTypes) {
+    public void setCardTypes(String[] cardTypes) {
         this.cardTypes = cardTypes;
     }
-
-
 }

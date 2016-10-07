@@ -67,23 +67,14 @@ public class DeckDataSource {
     public Deck createRule(double weight, long date,
                            String location) {
         ContentValues values = new ContentValues();
-<<<<<<< HEAD:app/src/main/java/com/seniordesign/wolfpack/quizinator/Database/Deck/DeckDataSource.java
-//        values.put(CardSQLiteHelper.COLUMN_FISHTYPE, "Fish");
-//        values.put(CardSQLiteHelper.COLUMN_WEIGHT, weight);
-//        values.put(CardSQLiteHelper.COLUMN_LENGTH, 0.0);
-//        values.put(CardSQLiteHelper.COLUMN_DATE, date);
-//        values.put(CardSQLiteHelper.COLUMN_LOCATION, location);
-        long insertId = database.insert(DeckSQLiteHelper.TABLE_RULES,
-=======
-//        values.put(SettingsSQLiteHelper.COLUMN_FISHTYPE, "Fish");
-//        values.put(SettingsSQLiteHelper.COLUMN_WEIGHT, weight);
-//        values.put(SettingsSQLiteHelper.COLUMN_LENGTH, 0.0);
-//        values.put(SettingsSQLiteHelper.COLUMN_DATE, date);
-//        values.put(SettingsSQLiteHelper.COLUMN_LOCATION, location);
-        long insertId = database.insert(RulesSQLiteHelper.TABLE_RULES,
->>>>>>> 9006be0154d6ca90869c9561d6695e65fb289d4e:app/src/main/java/com/seniordesign/wolfpack/quizinator/Database/Deck/RulesDataSource.java
+//        values.put(DeckSQLiteHelper.COLUMN_FISHTYPE, "Fish");
+//        values.put(DeckSQLiteHelper.COLUMN_WEIGHT, weight);
+//        values.put(DeckSQLiteHelper.COLUMN_LENGTH, 0.0);
+//        values.put(DeckSQLiteHelper.COLUMN_DATE, date);
+//        values.put(DeckSQLiteHelper.COLUMN_LOCATION, location);
+        long insertId = database.insert(DeckSQLiteHelper.TABLE_DECK,
                 null, values);
-        Cursor cursor = database.query(DeckSQLiteHelper.TABLE_RULES,
+        Cursor cursor = database.query(DeckSQLiteHelper.TABLE_DECK,
                 allColumns, DeckSQLiteHelper.COLUMN_ID
                         + " = " + insertId, null,
                 null, null, null);
@@ -96,10 +87,10 @@ public class DeckDataSource {
     /*
      * @author  chuna (10/4/2016)
      */
-    public void deleteItem(Deck rule) { //TODO
-        long id = rule.getId();
-        System.out.println("Deleted item: " + rule.toString());
-        database.delete(DeckSQLiteHelper.TABLE_RULES,
+    public void deleteItem(Deck deck) { //TODO
+        long id = deck.getId();
+        System.out.println("Deleted item: " + deck.toString());
+        database.delete(DeckSQLiteHelper.TABLE_DECK,
                 DeckSQLiteHelper.COLUMN_ID + " = " + id, null);
     }
 
@@ -107,8 +98,8 @@ public class DeckDataSource {
      * @author  chuna (10/4/2016)
      */
     public List<Deck> getAllItems() {
-        List<Deck> items = new ArrayList<Item>();
-        Cursor cursor = database.query(DeckSQLiteHelper.TABLE_RULES,
+        List<Deck> items = new ArrayList<Deck>();
+        Cursor cursor = database.query(DeckSQLiteHelper.TABLE_DECK,
                 allColumns, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
