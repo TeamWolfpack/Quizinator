@@ -32,6 +32,7 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
@@ -158,10 +159,10 @@ public class GameSettingTests {
     @Test
     public void validateCardSecondInput_UpperBound() {
         onView(withId(R.id.card_seconds)).check(matches(withText("03")));
-        onView(withId(R.id.card_seconds)).perform(clearText(), typeText("60"));
+        onView(withId(R.id.card_seconds)).perform(scrollTo(), clearText(), typeText("60"));
         onView(withId(R.id.card_seconds)).check(matches(withText("60")));
 
-        onView(withId(R.id.card_seconds)).perform(clearText(), typeText("61"));
+        onView(withId(R.id.card_seconds)).perform(scrollTo(), clearText(), typeText("61"));
         onView(withId(R.id.card_seconds)).check(matches(withText("6")));
     }
 
