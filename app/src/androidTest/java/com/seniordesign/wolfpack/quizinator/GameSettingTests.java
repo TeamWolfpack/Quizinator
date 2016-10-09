@@ -92,53 +92,112 @@ public class GameSettingTests {
     }
 
     @Test
-    public void validateMinuteInput_LowerBound() {
+    public void validateGameMinuteInput_LowerBound() {
         onView(withId(R.id.game_minutes)).check(matches(withText("01")));
         onView(withId(R.id.game_minutes)).perform(clearText(), typeText("-1"));
         onView(withId(R.id.game_minutes)).check(matches(withText("1")));
     }
 
     @Test
-    public void validateMinuteInput_UpperBound() {
+    public void validateGameMinuteInput_UpperBound() {
         onView(withId(R.id.game_minutes)).check(matches(withText("01")));
         onView(withId(R.id.game_minutes)).perform(clearText(), typeText("60"));
         onView(withId(R.id.game_minutes)).check(matches(withText("60")));
 
-        onView(withId(R.id.game_minutes)).check(matches(withText("60")));
         onView(withId(R.id.game_minutes)).perform(clearText(), typeText("61"));
         onView(withId(R.id.game_minutes)).check(matches(withText("6")));
     }
 
     @Test
-    public void validateSecondInput_LowerBound() throws InterruptedException {
+    public void validateGameSecondInput_LowerBound() throws InterruptedException {
         onView(withId(R.id.game_seconds)).check(matches(withText("00")));
         onView(withId(R.id.game_seconds)).perform(clearText(), typeText("-1"));
         onView(withId(R.id.game_seconds)).check(matches(withText("1")));
     }
 
     @Test
-    public void validateSecondInput_UpperBound() {
+    public void validateGameSecondInput_UpperBound() {
         onView(withId(R.id.game_seconds)).check(matches(withText("00")));
         onView(withId(R.id.game_seconds)).perform(clearText(), typeText("60"));
         onView(withId(R.id.game_seconds)).check(matches(withText("60")));
 
-        onView(withId(R.id.game_seconds)).check(matches(withText("60")));
         onView(withId(R.id.game_seconds)).perform(clearText(), typeText("61"));
         onView(withId(R.id.game_seconds)).check(matches(withText("6")));
     }
 
     @Test
-    public void validateStartGame() throws InterruptedException {
-        onView(withId(R.id.new_game)).perform(click());
-        //Test Intent
+    public void validateCardMinuteInput_LowerBound() {
+        onView(withId(R.id.card_minutes)).check(matches(withText("00")));
+        onView(withId(R.id.card_minutes)).perform(clearText(), typeText("-1"));
+        onView(withId(R.id.card_minutes)).check(matches(withText("1")));
+    }
+
+    @Test
+    public void validateCardMinuteInput_UpperBound() {
+        onView(withId(R.id.card_minutes)).check(matches(withText("00")));
+        onView(withId(R.id.card_minutes)).perform(clearText(), typeText("60"));
+        onView(withId(R.id.card_minutes)).check(matches(withText("60")));
+
+        onView(withId(R.id.card_minutes)).perform(clearText(), typeText("61"));
+        onView(withId(R.id.card_minutes)).check(matches(withText("6")));
+    }
+
+    @Test
+    public void validateCardSecondInput_LowerBound() throws InterruptedException {
+        onView(withId(R.id.card_seconds)).check(matches(withText("03")));
+        onView(withId(R.id.card_seconds)).perform(clearText(), typeText("1"));
+        onView(withId(R.id.card_seconds)).check(matches(withText("1")));
+
+        onView(withId(R.id.card_seconds)).perform(clearText(), typeText("00"));
+        onView(withId(R.id.card_seconds)).check(matches(withText("")));
+
+        onView(withId(R.id.card_seconds)).perform(clearText(), typeText("-1"));
+        onView(withId(R.id.card_seconds)).check(matches(withText("1")));
+    }
+
+    @Test
+    public void validateCardSecondInput_UpperBound() {
+        onView(withId(R.id.card_seconds)).check(matches(withText("03")));
+        onView(withId(R.id.card_seconds)).perform(clearText(), typeText("60"));
+        onView(withId(R.id.card_seconds)).check(matches(withText("60")));
+
+        onView(withId(R.id.card_seconds)).perform(clearText(), typeText("61"));
+        onView(withId(R.id.card_seconds)).check(matches(withText("6")));
+    }
+
+    @Test
+    public void validateCardCountInput() {
+        onView(withId(R.id.card_count)).check(matches(withText("10")));
+        onView(withId(R.id.card_count)).perform(clearText(), typeText("1"));
+        onView(withId(R.id.card_count)).check(matches(withText("1")));
+
+        onView(withId(R.id.card_count)).perform(clearText(), typeText("00"));
+        onView(withId(R.id.card_count)).check(matches(withText("")));
+
+        onView(withId(R.id.card_count)).perform(clearText(), typeText("-1"));
+        onView(withId(R.id.card_count)).check(matches(withText("1")));
+
+        onView(withId(R.id.card_count)).perform(clearText(), typeText("20"));
+        onView(withId(R.id.card_count)).check(matches(withText("2")));
+
+        onView(withId(R.id.card_count)).perform(clearText(), typeText("10"));
+        onView(withId(R.id.card_count)).check(matches(withText("10")));
     }
 
     @Test
     public void validateElementsAreDisplayed() {
         onView(withId(R.id.game_label)).check(matches(isDisplayed()));
         onView(withId(R.id.game_minutes)).check(matches(isDisplayed()));
-        onView(withId(R.id.semicolon)).check(matches(isDisplayed()));
+        onView(withId(R.id.game_semicolon)).check(matches(isDisplayed()));
         onView(withId(R.id.game_seconds)).check(matches(isDisplayed()));
+
+        onView(withId(R.id.card_label)).check(matches(isDisplayed()));
+        onView(withId(R.id.card_minutes)).check(matches(isDisplayed()));
+        onView(withId(R.id.card_semicolon)).check(matches(isDisplayed()));
+        onView(withId(R.id.card_seconds)).check(matches(isDisplayed()));
+
+        onView(withId(R.id.card_count_label)).check(matches(isDisplayed()));
+        onView(withId(R.id.card_count)).check(matches(isDisplayed()));
 
         onView(withId(R.id.card_type_spinner)).check(matches(isDisplayed()));
         onView(withId(R.id.card_type)).check(matches(isDisplayed()));
@@ -150,5 +209,8 @@ public class GameSettingTests {
     public void validateEditTexts() {
         onView(withId(R.id.game_minutes)).check(matches(withText(containsString("01"))));
         onView(withId(R.id.game_seconds)).check(matches(withText(containsString("00"))));
+        onView(withId(R.id.card_minutes)).check(matches(withText(containsString("00"))));
+        onView(withId(R.id.card_seconds)).check(matches(withText(containsString("03"))));
+        onView(withId(R.id.card_count)).check(matches(withText(containsString("10"))));
     }
 }

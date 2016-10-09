@@ -1,19 +1,14 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.View;
-import android.widget.Adapter;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
-
-import com.seniordesign.wolfpack.quizinator.Filters.TimeFilter;
+import com.seniordesign.wolfpack.quizinator.Filters.NumberFilter;
 import com.seniordesign.wolfpack.quizinator.R;
 
 /**
@@ -21,6 +16,14 @@ import com.seniordesign.wolfpack.quizinator.R;
  * @creation 09/28/2016
  */
 public class NewGameSettingsActivity extends AppCompatActivity {
+
+    private EditText cardCountInput;
+    private EditText gameMinutesInput;
+    private EditText gameSecondsInput;
+    private EditText cardMinutesInput;
+    private EditText cardSecondsInput;
+    private Spinner cardTypeSpinner;
+
 
     /*
      * @author kuczynskij (09/28/2016)
@@ -32,21 +35,38 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_game_settings);
         setTitle("Game Settings");
 
-        Spinner spinner = (Spinner) findViewById(R.id.card_type_spinner);
+        cardTypeSpinner = (Spinner)findViewById(R.id.card_type_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.card_type_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        cardTypeSpinner.setAdapter(adapter);
 
-        EditText minuteInput = (EditText)findViewById(R.id.game_minutes);
-        TimeFilter minuteTimeFilter = new TimeFilter(1);
-        minuteInput.setFilters(new InputFilter[]{ minuteTimeFilter });
-        minuteInput.setOnFocusChangeListener(minuteTimeFilter);
+        cardCountInput = (EditText)findViewById(R.id.card_count);
+        NumberFilter cardCountFilter = new NumberFilter(1, 10, false); // Max should be deck count, change when deck is done
+        cardCountInput.setFilters(new InputFilter[]{ cardCountFilter });
+        cardCountInput.setOnFocusChangeListener(cardCountFilter);
 
-        EditText secondsInput = (EditText)findViewById(R.id.game_seconds);
-        TimeFilter secondsTimeFilter = new TimeFilter();
-        secondsInput.setFilters(new InputFilter[]{ secondsTimeFilter });
-        secondsInput.setOnFocusChangeListener(secondsTimeFilter);
+        cardCountInput.setText("10"); // Should be deck count, change when deck is done
+
+        gameMinutesInput = (EditText)findViewById(R.id.game_minutes);
+        NumberFilter gameMinuteFilter = new NumberFilter(1);
+        gameMinutesInput.setFilters(new InputFilter[]{ gameMinuteFilter });
+        gameMinutesInput.setOnFocusChangeListener(gameMinuteFilter);
+
+        gameSecondsInput = (EditText)findViewById(R.id.game_seconds);
+        NumberFilter gameSecondsFilter = new NumberFilter();
+        gameSecondsInput.setFilters(new InputFilter[]{ gameSecondsFilter });
+        gameSecondsInput.setOnFocusChangeListener(gameSecondsFilter);
+
+        cardMinutesInput = (EditText)findViewById(R.id.card_minutes);
+        NumberFilter cardMinuteFilter = new NumberFilter();
+        cardMinutesInput.setFilters(new InputFilter[]{ cardMinuteFilter });
+        cardMinutesInput.setOnFocusChangeListener(cardMinuteFilter);
+
+        cardSecondsInput = (EditText)findViewById(R.id.card_seconds);
+        NumberFilter cardSecondsFilter = new NumberFilter(1);
+        cardSecondsInput.setFilters(new InputFilter[]{ cardSecondsFilter });
+        cardSecondsInput.setOnFocusChangeListener(cardSecondsFilter);
     }
 
     /*
@@ -54,9 +74,12 @@ public class NewGameSettingsActivity extends AppCompatActivity {
      * @author leonardj (10/4/2016)
      */
     public void startGame(View v){
-        //Integer minutes = Integer.valueOf(((EditText)findViewById(R.id.game_minutes)).getText().toString());
-        //Integer seconds = Integer.valueOf(((EditText)findViewById(R.id.game_seconds)).getText().toString());
-        String cardType = ((Spinner)findViewById(R.id.card_type_spinner)).getSelectedItem().toString();
+//        Integer gameMinutes = Integer.valueOf(gameMinutesInput.getText().toString());
+//        Integer gameSeconds = Integer.valueOf(gameSecondsInput.getText().toString());
+//        Integer cardMinutes = Integer.valueOf(cardMinutesInput.getText().toString());
+//        Integer cardSeconds = Integer.valueOf(cardSecondsInput.getText().toString());
+//        Integer cardCount = Integer.valueOf(cardCountInput.getText().toString());
+//        String cardTypes = cardTypeSpinner.getSelectedItem().toString();
 
         final Intent startGameIntent = new Intent(this, GamePlayActivity.class);
         startActivity(startGameIntent);
