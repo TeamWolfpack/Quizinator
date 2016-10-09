@@ -47,6 +47,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -85,9 +86,10 @@ public class GameSettingTests {
     @Test
     public void validateSpinnerOptions() {
         String[] cardTypes = new String[] {"True/False", "Multiple Choice", "Both"};
-        for (String type: cardTypes) {
+        for (int index = 0; index < cardTypes.length; index++) {
+            String type = cardTypes[index];
             onView(withId(R.id.card_type_spinner)).perform();
-            onData(allOf(is(instanceOf(String.class)), is(type))).perform();
+            onData(anything()).inAdapterView(withId(R.id.card_type_spinner)).atPosition(index).perform();
             onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(type))));
         }
     }
