@@ -1,13 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_new_game_settings"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.seniordesign.wolfpack.quizinator.Activities.NewGameSettingsActivity">
+    tools:context="com.seniordesign.wolfpack.quizinator.Activities.NewGameSettingsActivity" >
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
+            <TextView
+                android:id="@+id/game_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/game_time"/>
+            <EditText
+                android:id="@+id/game_minutes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:text="@string/min"
+                android:layout_toEndOf="@id/game_label"
+                android:layout_toRightOf="@id/game_label"
+                android:layout_alignBaseline="@id/game_label"/>
+            <TextView
+                android:id="@+id/game_semicolon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/semicolon"
+                android:layout_toEndOf="@id/game_minutes"
+                android:layout_toRightOf="@id/game_minutes"
+                android:layout_alignBaseline="@id/game_label"/>
+            <EditText
+                android:id="@+id/game_seconds"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:text="@string/no_time"
+                android:layout_toEndOf="@id/game_semicolon"
+                android:layout_toRightOf="@id/game_semicolon"
+                android:layout_alignBaseline="@id/game_label"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
+            <TextView
+                android:id="@+id/card_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/card_type"/>
+            <Spinner
+                android:id="@+id/card_type_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/card_type"
+                android:layout_toRightOf="@id/card_type"
+                android:layout_alignBaseline="@id/card_type"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
+            <TextView
+                android:id="@+id/card_count_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/card_count"/>
+            <EditText
+                android:id="@+id/card_count"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"/>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
+            <TextView
+                android:id="@+id/card_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/card_time"/>
+            <EditText
+                android:id="@+id/card_minutes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:text="@string/no_time"
+                android:layout_toEndOf="@id/card_label"
+                android:layout_toRightOf="@id/card_label"
+                android:layout_alignBaseline="@id/card_label"/>
+            <TextView
+                android:id="@+id/card_semicolon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/semicolon"
+                android:layout_toEndOf="@id/card_minutes"
+                android:layout_toRightOf="@id/card_minutes"
+                android:layout_alignBaseline="@id/card_minutes"/>
+            <EditText
+                android:id="@+id/card_seconds"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:text="@string/three_secs"
+                android:layout_toEndOf="@id/card_semicolon"
+                android:layout_toRightOf="@id/card_semicolon"
+                android:layout_alignBaseline="@id/card_label"/>
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/new_game"
+            android:text="@string/start_game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="startGame"
+            android:layout_gravity="center_horizontal"/>
+
+    </LinearLayout>
+
+</ScrollView>
