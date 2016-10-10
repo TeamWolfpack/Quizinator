@@ -85,6 +85,7 @@ public class GameSettingTests {
 
     @Test
     public void validateSpinnerOptions() {
+        onView(withId(R.id.card_type_spinner)).perform(scrollTo());
         String[] cardTypes = new String[] {"True/False", "Multiple Choice", "Both"};
         for (int index = 0; index < cardTypes.length; index++) {
             String type = cardTypes[index];
