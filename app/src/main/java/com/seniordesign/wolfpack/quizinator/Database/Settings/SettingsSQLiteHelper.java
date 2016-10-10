@@ -12,7 +12,7 @@ import android.util.Log;
 public class SettingsSQLiteHelper extends SQLiteOpenHelper {
 
     //table contents
-    public static final String TABLE_RULES = "settings";
+    public static final String TABLE_SETTINGS = "settings";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_USERNAME = "_userName";
     public static final String COLUMN_NUMBEROFCONNECTIONS = "_numberOfConnections";
@@ -23,10 +23,10 @@ public class SettingsSQLiteHelper extends SQLiteOpenHelper {
 
     // Database creation sql statement, table columns
     private static final String DATABASE_CREATE = "create table "
-            + TABLE_RULES + "("
+            + TABLE_SETTINGS + "("
             + COLUMN_ID + " integer primary key autoincrement, "
             + COLUMN_USERNAME + " TEXT, "
-            + COLUMN_NUMBEROFCONNECTIONS + " REAL, "
+            + COLUMN_NUMBEROFCONNECTIONS + " INTEGER"
             + ");";
 
     /*
@@ -53,7 +53,7 @@ public class SettingsSQLiteHelper extends SQLiteOpenHelper {
                 "Upgrading database from version " + oldVersion
                         + " to " + newVersion + ", which will " +
                         "destroy all old data");
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_RULES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SETTINGS);
         onCreate(db);
     }
 }

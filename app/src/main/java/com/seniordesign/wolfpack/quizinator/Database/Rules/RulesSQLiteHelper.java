@@ -6,34 +6,44 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 /**
-<<<<<<< HEAD
- * SQLite data access object for Deck
-=======
- * SQLite data access object for Settings
->>>>>>> 9006be0154d6ca90869c9561d6695e65fb289d4e
+ * SQLite data access object for Rules
  * @creation 10/4/2016
  */
 public class RulesSQLiteHelper extends SQLiteOpenHelper {
 
     //table contents
     public static final String TABLE_RULES = "rules";
+    //table columns
+    public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_TIMELIMIT = "_timeLimit";
+    public static final String COLUMN_CARDDISPLAYTIME = "_cardDisplayTime";
+    public static final String COLUMN_MAXCARDCOUNT = "_maxCardCount";
+    public static final String COLUMN_CARDTYPES = "_cardTypes";
 
     //database filename
     private static final String DATABASE_NAME = "rules.db";
     private static final int DATABASE_VERSION = 1;
 
     // Database creation sql statement
-    private static final String DATABASE_CREATE = "";
+    private static final String DATABASE_CREATE = "create table "
+            + TABLE_RULES + "("
+            + COLUMN_ID + " integer primary key autoincrement, "
+            + COLUMN_TIMELIMIT + " REAL, "
+            + COLUMN_CARDDISPLAYTIME + " REAL, "
+            + COLUMN_MAXCARDCOUNT + " INTEGER, "
+            + COLUMN_CARDTYPES + " TEXT"
+            + ");";
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author chuna (10/4/2016)
+     * @author kuczynskij (10/5/2016)
      */
     public RulesSQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author chuna (10/4/2016)
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -41,7 +51,7 @@ public class RulesSQLiteHelper extends SQLiteOpenHelper {
     }
 
     /*
-     * @author  chuna (10/4/2016)
+     * @author chuna (10/4/2016)
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
