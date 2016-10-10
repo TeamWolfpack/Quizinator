@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @creation 10/4/2016.
+ * @creation    10/4/2016.
  */
 public class CardDataSource {
 
@@ -116,14 +116,15 @@ public class CardDataSource {
      * @author  chuna (10/4/2016)
      */
     public Card cursorToCard(Cursor cursor) {
-        Card card = new Card();
+//        Card card = new Card();
 //        rule.setId(cursor.getLong(0));//id
 //        rule.setFishType(cursor.getString(1));//fishType
 //        rule.setWeight(cursor.getDouble(2));//weight
 //        rule.setLength(cursor.getDouble(3));//length
 //        rule.setDate(cursor.getLong(4));//date
 //        rule.setLocation(cursor.getString(5));//location
-        return card;
+//        return card;
+        return null;
     }
 
     public String[] getAllColumns(){

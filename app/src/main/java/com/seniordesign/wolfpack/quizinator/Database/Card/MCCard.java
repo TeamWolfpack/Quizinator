@@ -4,18 +4,16 @@ package com.seniordesign.wolfpack.quizinator.Database.Card;
  * @creation    10/7/2016
  */
 
-public class TFCard extends Card {
+public class MCCard extends Card {
 
     private long id;
     private boolean moderatorNeeded;
     private int points;
     private String question;
-    private boolean answer;
+    private String[] possibleAnswers;
+    private String correctAnswer;
 
-    @Override
-    public String toString(){
-        return null;
-    }
+    private final int maxPossibleAnswers = 5;   //Can't have over 5 options
 
     @Override
     public long getId() {
@@ -29,15 +27,12 @@ public class TFCard extends Card {
 
     @Override
     public boolean getModeratorNeeded() {
-        return moderatorNeeded;
+        return false;
     }
 
     @Override
     public void setModeratorNeeded(boolean moderatorNeeded) {
-        this.moderatorNeeded = moderatorNeeded;
-        /* TODO may need to change because doubt we want them to change the value of
-         * this attribute since TF should not need a moderator.
-         */
+
     }
 
     @Override
@@ -60,11 +55,19 @@ public class TFCard extends Card {
         this.question = question;
     }
 
-    public boolean isAnswer() {
-        return answer;
+    public String[] getPossibleAnswers() {
+        return possibleAnswers;
     }
 
-    public void setAnswer(boolean answer) {
-        this.answer = answer;
+    public void setPossibleAnswers(String[] possibleAnswers) {
+        this.possibleAnswers = possibleAnswers;
+    }
+
+    public String getCorrectAnswer() {
+        return correctAnswer;
+    }
+
+    public void setCorrectAnswer(String correctAnswer) {
+        this.correctAnswer = correctAnswer;
     }
 }

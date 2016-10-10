@@ -1,7 +1,7 @@
 package com.seniordesign.wolfpack.quizinator.Database.Card;
 
 /**
- * Created by aaron on 10/4/2016.
+ * @creation    10/4/2016.
  */
 
 public abstract class Card {
@@ -30,4 +30,12 @@ public abstract class Card {
      * @author  chuna (10-7-2016)
      */
     public abstract void setModeratorNeeded(boolean moderatorNeeded);
+
+    public abstract int getPoints();
+
+    public abstract void setPoints(int points);
+
+    public abstract String getQuestion();
+
+    public abstract void setQuestion(String question);
 }
