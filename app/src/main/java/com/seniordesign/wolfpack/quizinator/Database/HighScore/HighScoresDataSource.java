@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Data access object for high scores
  * @creation 10/4/2016.
  */
 public class HighScoresDataSource {
@@ -18,12 +19,10 @@ public class HighScoresDataSource {
     private SQLiteDatabase database;
     private HighScoresSQLiteHelper dbHelper;
     private String[] allColumns = {
-//            ItemSQLiteHelper.COLUMN_ID,
-//            ItemSQLiteHelper.COLUMN_FISHTYPE,
-//            ItemSQLiteHelper.COLUMN_WEIGHT,
-//            ItemSQLiteHelper.COLUMN_LENGTH,
-//            ItemSQLiteHelper.COLUMN_DATE,
-//            ItemSQLiteHelper.COLUMN_LOCATION
+        HighScoresSQLiteHelper.COLUMN_ID,
+        HighScoresSQLiteHelper.COLUMN_DECKNAME,
+        HighScoresSQLiteHelper.COLUMN_BESTTIME,
+        HighScoresSQLiteHelper.COLUMN_BESTSCORE
     };
 
     /*
@@ -62,48 +61,43 @@ public class HighScoresDataSource {
     }
 
     /*
-     * @author kuczynskij (10/4/2016)
+     * @author kuczynskij (10/10/2016)
      */
-    public HighScores createRule(double weight, long date,
-                                 String location) {
+    public HighScores createHighScore(String deckName, long time, int bestScore) {
         ContentValues values = new ContentValues();
-        long insertId = database.insert(HighScoresSQLiteHelper.TABLE_RULES,
-//        values.put(HighScoresSQLiteHelper.COLUMN_FISHTYPE, "Fish");
-//        values.put(HighScoresSQLiteHelper.COLUMN_WEIGHT, weight);
-//        values.put(HighScoresSQLiteHelper.COLUMN_LENGTH, 0.0);
-//        values.put(HighScoresSQLiteHelper.COLUMN_DATE, date);
-//        values.put(HighScoresSQLiteHelper.COLUMN_LOCATION, location);
-        long insertId = database.insert(HighScoresSQLiteHelper.TABLE_RULES,
+            values.put(HighScoresSQLiteHelper.COLUMN_DECKNAME, deckName);
+            values.put(HighScoresSQLiteHelper.COLUMN_BESTTIME, time);
+            values.put(HighScoresSQLiteHelper.COLUMN_BESTSCORE, bestScore);
+        long insertId = database.insert(HighScoresSQLiteHelper.TABLE_HIGHSCORES,
                 null, values);
-        Cursor cursor = database.query(HighScoresSQLiteHelper.TABLE_RULES,
+        Cursor cursor = database.query(HighScoresSQLiteHelper.TABLE_HIGHSCORES,
                 allColumns, HighScoresSQLiteHelper.COLUMN_ID
-                        + " = " + insertId, null,
-                null, null, null);
+                        + " = " + insertId, null, null, null, null);
         cursor.moveToFirst();
-        HighScores newHighScores = cursorToRule(cursor);
+        HighScores newHighScores = cursorToHighScore(cursor);
         cursor.close();
         return newHighScores;
     }
 
     /*
-     * @author kuczynskij (10/4/2016)
+     * @author kuczynskij (10/10/2016)
      */
-    public void deleteItem(HighScores rule) { //TODO
-        System.out.println("Deleted item: " + rule.toString());
-        database.delete(HighScoresSQLiteHelper.TABLE_RULES,
-                HighScoresSQLiteHelper.COLUMN_ID + " = " + id, null);
+    public void deleteHighScore(HighScores scores) {
+        long id = scores.getId();
+        database.delete(HighScoresSQLiteHelper.TABLE_HIGHSCORES,
+            HighScoresSQLiteHelper.COLUMN_ID + " = " + id, null);
     }
 
     /*
-     * @author kuczynskij (10/4/2016)
+     * @author kuczynskij (10/10/2016)
      */
-    public List<HighScores> getAllItems() {
+    public List<HighScores> getAllHighScores() {
         List<HighScores> items = new ArrayList<HighScores>();
-        Cursor cursor = database.query(HighScoresSQLiteHelper.TABLE_RULES,
+        Cursor cursor = database.query(HighScoresSQLiteHelper.TABLE_HIGHSCORES,
                 allColumns, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            HighScores rule = cursorToRule(cursor);
+            HighScores rule = cursorToHighScore(cursor);
             items.add(rule);
             cursor.moveToNext();
         }
@@ -115,15 +109,13 @@ public class HighScoresDataSource {
     /*
      * @author kuczynskij (10/4/2016)
      */
-    public HighScores cursorToRule(Cursor cursor) {
-        HighScores rule = new HighScores();
-//        rule.setId(cursor.getLong(0));//id
-//        rule.setFishType(cursor.getString(1));//fishType
-//        rule.setWeight(cursor.getDouble(2));//weight
-//        rule.setLength(cursor.getDouble(3));//length
-//        rule.setDate(cursor.getLong(4));//date
-//        rule.setLocation(cursor.getString(5));//location
-        return rule;
+    public HighScores cursorToHighScore(Cursor cursor) {
+        HighScores scores = new HighScores();
+            scores.setId(cursor.getLong(0));//id
+            scores.setDeckName(cursor.getString(1));//deck name
+            scores.setBestTime(cursor.getLong(2));//best time
+            scores.setBestScore(cursor.getInt(3));//best score
+        return scores;
     }
 
     public String[] getAllColumns(){

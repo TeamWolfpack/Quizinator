@@ -1,16 +1,15 @@
 package com.seniordesign.wolfpack.quizinator.Database.Rules;
 
-import java.sql.Time;
-
 /**
+ * Represents rules
  * @creation 10/4/2016.
  */
 public class Rules {
 
-    private int maxCardCount;
-    private Time timeLimit;
-    private Time cardDisplayTime;
     private long id;
+    private int maxCardCount;
+    private long timeLimit;
+    private long cardDisplayTime;
     /*
      * Using String because going to use an Array of Strings to limit what choice
      * of Card Type in that class instead of using an enum. We thought this
@@ -18,6 +17,16 @@ public class Rules {
      * or converting and storing blobs.
      */
     private String cardTypes;
+
+    /*
+     * @author kuczynskij (10/5/2016)
+     */
+    @Override
+    public String toString(){
+        return "Rules id(" + id + "), maxCardCount(" + maxCardCount +
+                "), timeLimit(" + timeLimit + "), cardDisplayTime(" +
+                cardDisplayTime + "), cardTypes(" + cardTypes + ").";
+    }
 
     /*
      * @author kuczynskij (10/5/2016)
@@ -41,19 +50,19 @@ public class Rules {
         this.maxCardCount = maxCardCount;
     }
 
-    public Time getTimeLimit() {
+    public long getTimeLimit() {
         return timeLimit;
     }
 
-    public void setTimeLimit(Time timeLimit) {
+    public void setTimeLimit(long timeLimit) {
         this.timeLimit = timeLimit;
     }
 
-    public Time getCardDisplayTime() {
+    public long getCardDisplayTime() {
         return cardDisplayTime;
     }
 
-    public void setCardDisplayTime(Time cardDisplayTime) {
+    public void setCardDisplayTime(long cardDisplayTime) {
         this.cardDisplayTime = cardDisplayTime;
     }
 
@@ -64,6 +73,4 @@ public class Rules {
     public void setCardTypes(String cardTypes) {
         this.cardTypes = cardTypes;
     }
-
-
 }

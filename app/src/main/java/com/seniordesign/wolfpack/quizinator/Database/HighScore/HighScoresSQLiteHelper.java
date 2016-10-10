@@ -6,24 +6,31 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 /**
-<<<<<<< HEAD:app/src/main/java/com/seniordesign/wolfpack/quizinator/Database/HighScore/RulesSQLiteHelper.java
- * SQLite data access object for Deck
-=======
- * SQLite data access object for Settings
->>>>>>> 9006be0154d6ca90869c9561d6695e65fb289d4e:app/src/main/java/com/seniordesign/wolfpack/quizinator/Database/HighScore/HighScoresSQLiteHelper.java
+ * SQLite data access object for High Scores
  * @creation 10/4/2016
  */
 public class HighScoresSQLiteHelper extends SQLiteOpenHelper {
 
     //table contents
-    public static final String TABLE_RULES = "highscores";
+    public static final String TABLE_HIGHSCORES = "highscores";
+    //table columns
+    public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_DECKNAME = "_deckName";
+    public static final String COLUMN_BESTTIME = "_bestTime";
+    public static final String COLUMN_BESTSCORE= "_bestScore";
 
     //database filename
     private static final String DATABASE_NAME = "highscores.db";
     private static final int DATABASE_VERSION = 1;
 
     // Database creation sql statement
-    private static final String DATABASE_CREATE = "";
+    private static final String DATABASE_CREATE = "create table "
+            + TABLE_HIGHSCORES + "("
+            + COLUMN_ID + " integer primary key autoincrement, "
+            + COLUMN_DECKNAME + " TEXT, "
+            + COLUMN_BESTTIME + " REAL"
+            + COLUMN_BESTSCORE + " INTEGER"
+            + ");";
 
     /*
      * @author kuczynskij (10/4/2016)
@@ -49,7 +56,7 @@ public class HighScoresSQLiteHelper extends SQLiteOpenHelper {
                 "Upgrading database from version " + oldVersion
                         + " to " + newVersion + ", which will " +
                         "destroy all old data");
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_RULES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_HIGHSCORES);
         onCreate(db);
     }
 }

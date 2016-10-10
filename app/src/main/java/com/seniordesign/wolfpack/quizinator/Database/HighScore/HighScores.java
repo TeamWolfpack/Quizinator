@@ -1,16 +1,25 @@
 package com.seniordesign.wolfpack.quizinator.Database.HighScore;
 
-import java.sql.Time;
-
 /**
+ * Represents high scores
  * @creation 10/4/2016.
  */
 public class HighScores {
 
     private String deckName;
-    private Time bestTime;
+    private long bestTime;
     private int bestScore;
     private long id;
+
+    /*
+     * @author kuczynskij (10/10/2016)
+     */
+    @Override
+    public String toString(){
+        return "Rules id(" + id + "), deckName(" + deckName +
+                "), bestTime(" + bestTime + "), bestScore(" +
+                bestScore + ").";
+    }
 
     /*
      * @author kuczynskij (10/5/2016)
@@ -57,14 +66,14 @@ public class HighScores {
     /*
      * @author kuczynskij (10/4/2016)
      */
-    public Time getBestTime() {
+    public long getBestTime() {
         return bestTime;
     }
 
     /*
      * @author kuczynskij (10/4/2016)
      */
-    public void setBestTime(Time bestTime) {
+    public void setBestTime(long bestTime) {
         this.bestTime = bestTime;
     }
 }

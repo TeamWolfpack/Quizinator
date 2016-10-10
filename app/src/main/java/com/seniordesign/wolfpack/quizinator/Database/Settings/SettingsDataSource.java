@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Data access object for settings
  * @creation 10/4/2016.
  */
 public class SettingsDataSource {
@@ -18,9 +19,9 @@ public class SettingsDataSource {
     private SQLiteDatabase database;
     private SettingsSQLiteHelper dbHelper;
     private String[] allColumns = {
-            SettingsSQLiteHelper.COLUMN_ID,
-            SettingsSQLiteHelper.COLUMN_USERNAME,
-            SettingsSQLiteHelper.COLUMN_NUMBEROFCONNECTIONS
+        SettingsSQLiteHelper.COLUMN_ID,
+        SettingsSQLiteHelper.COLUMN_USERNAME,
+        SettingsSQLiteHelper.COLUMN_NUMBEROFCONNECTIONS
     };
 
     /*
@@ -65,9 +66,9 @@ public class SettingsDataSource {
         ContentValues values = new ContentValues();
             values.put(SettingsSQLiteHelper.COLUMN_USERNAME, userName);
             values.put(SettingsSQLiteHelper.COLUMN_NUMBEROFCONNECTIONS, numberOfConnections);
-        long insertId = database.insert(SettingsSQLiteHelper.TABLE_RULES,
+        long insertId = database.insert(SettingsSQLiteHelper.TABLE_SETTINGS,
                 null, values);
-        Cursor cursor = database.query(SettingsSQLiteHelper.TABLE_RULES,
+        Cursor cursor = database.query(SettingsSQLiteHelper.TABLE_SETTINGS,
                 allColumns, SettingsSQLiteHelper.COLUMN_ID
                         + " = " + insertId, null,
                 null, null, null);
@@ -82,7 +83,7 @@ public class SettingsDataSource {
      */
     public void deleteItem(Settings settings) {
         long id = settings.getId();
-        database.delete(SettingsSQLiteHelper.TABLE_RULES,
+        database.delete(SettingsSQLiteHelper.TABLE_SETTINGS,
                 SettingsSQLiteHelper.COLUMN_ID + " = " + id, null);
     }
 
@@ -91,7 +92,7 @@ public class SettingsDataSource {
      */
     public List<Settings> getAllItems() {
         List<Settings> settings = new ArrayList<>();
-        Cursor cursor = database.query(SettingsSQLiteHelper.TABLE_RULES,
+        Cursor cursor = database.query(SettingsSQLiteHelper.TABLE_SETTINGS,
                 allColumns, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
