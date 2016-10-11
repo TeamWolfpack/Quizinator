@@ -1,4 +1,4 @@
-package com.seniordesign.wolfpack.quizinator.fragments;
+package com.seniordesign.wolfpack.quizinator.Fragments;
 
 import android.content.Context;
 import android.net.Uri;
@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.seniordesign.wolfpack.quizinator.R;
 
@@ -23,8 +25,6 @@ public class TrueFalseChoiceAnswerFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -61,7 +61,7 @@ public class TrueFalseChoiceAnswerFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        
+
     }
 
     @Override
@@ -69,13 +69,6 @@ public class TrueFalseChoiceAnswerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_true_false_choice_answer, container, false);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
@@ -95,6 +88,13 @@ public class TrueFalseChoiceAnswerFragment extends Fragment {
         mListener = null;
     }
 
+    public void answerClicked(View v){
+        Button clickedButton = (Button)v;
+        String answer = clickedButton.getText().toString();
+        mListener.onFragmentInteraction(answer);
+    }
+
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -107,6 +107,6 @@ public class TrueFalseChoiceAnswerFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(String answer);
     }
 }

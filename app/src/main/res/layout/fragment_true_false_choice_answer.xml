@@ -2,24 +2,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.seniordesign.wolfpack.quizinator.fragments.TrueFalseChoiceAnswerFragment">
+    tools:context="com.seniordesign.wolfpack.quizinator.Fragments.TrueFalseChoiceAnswerFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="horizontal">
         <Button
             android:id="@+id/trueButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="trueClicked"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:onClick="answerClicked"
             android:text="True"
             />
         <Button
             android:id="@+id/falseButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="falseClicked"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:onClick="answerClicked"
             android:text="False"
             />
     </LinearLayout>
