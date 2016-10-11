@@ -25,6 +25,28 @@ public class FilterUnitTest {
     }
 
     @Test
+    public void setMinFilterRange() {
+        NumberFilter filter = new NumberFilter(1);
+
+        assertFalse(filter.isInRange(-1));
+        assertFalse(filter.isInRange(0));
+        assertTrue(filter.isInRange(1));
+        assertTrue(filter.isInRange(60));
+        assertFalse(filter.isInRange(61));
+    }
+
+    @Test
+    public void customFilterRangeWithNonZero() {
+        NumberFilter filter = new NumberFilter(2, 10, false);
+
+        assertFalse(filter.isInRange(-1));
+        assertFalse(filter.isInRange(1));
+        assertTrue(filter.isInRange(2));
+        assertTrue(filter.isInRange(10));
+        assertFalse(filter.isInRange(11));
+    }
+
+    @Test
     public void customFilterRange() {
         NumberFilter filter = new NumberFilter(2, 10);
 
