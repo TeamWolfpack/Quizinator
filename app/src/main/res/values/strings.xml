@@ -17,6 +17,9 @@
     <string name="card_count">Card Count:</string>
     <string name="card_time">Card Time:</string>
     <string name="three_secs">03</string>
+    <string name="new_game">New Game</string>
+    <string name="game_over">Game Over</string>
+    <string name="main_menu">Main Menu</string>
 
     <string-array name="card_type_array">
         <item>True/False</item>
