@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.view.WindowManager;
 
 import com.seniordesign.wolfpack.quizinator.Activities.MainMenuActivity;
+import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScores;
 import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresSQLiteHelper;
 
@@ -57,17 +58,12 @@ public class HighScoreUITests {
     public void normalFlow_HighScoresDataSource() throws Exception{
         assertEquals(true, dao.open());
         assertEquals(true, dao.getDatabase().isOpen());
-
-        dao.createHighScore("Sample", 350000, 650);
-//
-//        System.out.println(dao.getSQLiteHelper().getDatabaseName());
-//        assertEquals("Sample", dao.getSQLiteHelper().getDatabaseName());
-
+        sql.onUpgrade(dao.getDatabase(), 0, 1);
+        HighScores hs = dao.createHighScore("Sample", 350000, 650);
+        assertEquals("highscores.db", dao.getSQLiteHelper().getDatabaseName());
+        assertEquals(1, dao.getAllHighScores().size());
+        assertEquals(4, dao.getAllColumns().length);
+        assertEquals(true, dao.deleteHighScore(hs));
         assertEquals(true, dao.close());
-    }
-
-    @Test
-    public void normalFlow_HighScoresSQLiteHelper() throws Exception{
-        //the SQL helper is not very test able
     }
 }

@@ -84,10 +84,11 @@ public class HighScoresDataSource {
     /*
      * @author kuczynskij (10/10/2016)
      */
-    public void deleteHighScore(HighScores scores) {
+    public boolean deleteHighScore(HighScores scores) {
         long id = scores.getId();
         database.delete(HighScoresSQLiteHelper.TABLE_HIGHSCORES,
             HighScoresSQLiteHelper.COLUMN_ID + " = " + id, null);
+        return true;
     }
 
     /*

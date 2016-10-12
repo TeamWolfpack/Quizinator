@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.view.WindowManager;
 
 import com.seniordesign.wolfpack.quizinator.Activities.MainMenuActivity;
+import com.seniordesign.wolfpack.quizinator.Database.Settings.Settings;
 import com.seniordesign.wolfpack.quizinator.Database.Settings.SettingsDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Settings.SettingsSQLiteHelper;
 
@@ -57,12 +58,12 @@ public class SettingsUITests {
     public void normalFlow_SettingsDataSource() throws Exception{
         assertEquals(true, dao.open());
         assertEquals(true, dao.getDatabase().isOpen());
-
-        dao.createSettings(3, "Jim");
-
-//        System.out.println(dao.getSQLiteHelper().getDatabaseName());
-//        assertEquals("Sample", dao.getSQLiteHelper().getDatabaseName());
-
+        sql.onUpgrade(dao.getDatabase(), 0, 1);
+        Settings s = dao.createSettings(3, "Jim");
+        assertEquals("settings.db", dao.getSQLiteHelper().getDatabaseName());
+        assertEquals(1, dao.getAllSettings().size());
+        assertEquals(3, dao.getAllColumns().length);
+        assertEquals(true, dao.deleteSetting(s));
         assertEquals(true, dao.close());
     }
 }

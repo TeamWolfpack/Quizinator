@@ -76,7 +76,7 @@ public class DeckDataSource {
                         + " = " + insertId, null,
                 null, null, null);
         cursor.moveToFirst();
-        Deck newRules = cursorToRule(cursor);
+        Deck newRules = cursorToDeck(cursor);
         cursor.close();
         return newRules;
     }
