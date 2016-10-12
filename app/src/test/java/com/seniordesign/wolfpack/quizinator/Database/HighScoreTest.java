@@ -1,10 +1,6 @@
 package com.seniordesign.wolfpack.quizinator.Database;
 
-import android.test.mock.MockContext;
-
 import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScores;
-import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresDataSource;
-import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresSQLiteHelper;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,6 +17,9 @@ public class HighScoreTest {
     private HighScores h2 = new HighScores();
     private HighScores h3 = new HighScores();
 
+    /*
+     * @author kuczynskij (10/12/2016)
+     */
     @Before
     public void init(){
         h1.setDeckName("Sample");
@@ -37,6 +36,9 @@ public class HighScoreTest {
         h3.setBestScore(-1);
     }
 
+    /*
+     * @author kuczynskij (10/12/2016)
+     */
     @Test
     public void normalFlow_HighScores() throws Exception{
         String s = "Rules id(1), deckName(Sample), bestTime(350000), " +

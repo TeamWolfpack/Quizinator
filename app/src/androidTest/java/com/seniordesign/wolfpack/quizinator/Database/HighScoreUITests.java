@@ -3,11 +3,9 @@ package com.seniordesign.wolfpack.quizinator.Database;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.test.mock.MockContext;
 import android.view.WindowManager;
 
 import com.seniordesign.wolfpack.quizinator.Activities.MainMenuActivity;
-import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScores;
 import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresSQLiteHelper;
 
@@ -52,6 +50,9 @@ public class HighScoreUITests {
     }
     // **********************************************
 
+    /*
+     * @author kuczynskij (10/12/2016)
+     */
     @Test
     public void normalFlow_HighScoresDataSource() throws Exception{
         assertEquals(true, dao.open());

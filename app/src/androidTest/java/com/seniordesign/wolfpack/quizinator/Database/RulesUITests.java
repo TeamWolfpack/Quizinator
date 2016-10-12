@@ -6,9 +6,6 @@ import android.support.test.runner.AndroidJUnit4;
 import android.view.WindowManager;
 
 import com.seniordesign.wolfpack.quizinator.Activities.MainMenuActivity;
-import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScores;
-import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresDataSource;
-import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresSQLiteHelper;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesSQLiteHelper;
 
@@ -52,15 +49,11 @@ public class RulesUITests {
     }
     // **********************************************
 
+    /*
+     * @author kuczynskij (10/12/2016)
+     */
     @Test
     public void normalFlow_RulesDataSource() throws Exception{
-//        final MainMenuActivity activity = mActivityRule.getActivity();
-//
-//        HighScoresDataSource dao =
-//                new HighScoresDataSource(activity.getApplicationContext());
-//        HighScoresSQLiteHelper sql =
-//                new HighScoresSQLiteHelper(activity);
-
         assertEquals(true, dao.open());
         assertEquals(true, dao.getDatabase().isOpen());
 
@@ -70,9 +63,6 @@ public class RulesUITests {
 //
 //        System.out.println(dao.getSQLiteHelper().getDatabaseName());
 //        assertEquals("Sample", dao.getSQLiteHelper().getDatabaseName());
-
-
-
 
 
         assertEquals(true, dao.close());

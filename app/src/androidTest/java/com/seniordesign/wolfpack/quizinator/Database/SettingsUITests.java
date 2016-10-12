@@ -50,6 +50,9 @@ public class SettingsUITests {
     }
     // **********************************************
 
+    /*
+     * @author kuczynskij (10/12/2016)
+     */
     @Test
     public void normalFlow_SettingsDataSource() throws Exception{
         assertEquals(true, dao.open());
