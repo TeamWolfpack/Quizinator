@@ -11,7 +11,7 @@ public class TFCard extends Card {
     private int points;
     private String question;
     private String correctAnswer;
-    private final String [] possibleAnswers = new String[]{"True", "False"};
+    private String [] possibleAnswers = new String[]{"True", "False"};
 
     /*
      * @author  chuna (10-7-2016)
