@@ -28,7 +28,7 @@ public class HighScoresSQLiteHelper extends SQLiteOpenHelper {
             + TABLE_HIGHSCORES + "("
             + COLUMN_ID + " integer primary key autoincrement, "
             + COLUMN_DECKNAME + " TEXT, "
-            + COLUMN_BESTTIME + " REAL"
+            + COLUMN_BESTTIME + " REAL, "
             + COLUMN_BESTSCORE + " INTEGER"
             + ");";
 

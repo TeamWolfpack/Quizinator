@@ -1,4 +1,4 @@
-package com.seniordesign.wolfpack.quizinator;
+package com.seniordesign.wolfpack.quizinator.Database;
 
 import android.test.mock.MockContext;
 
@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
  * Test the database folder HighScore
  * @creation 10/10/2016
  */
-public class DatabaseHighScoreTest {
+public class HighScoreTest {
 
     private HighScores h1 = new HighScores();
     private HighScores h2 = new HighScores();
