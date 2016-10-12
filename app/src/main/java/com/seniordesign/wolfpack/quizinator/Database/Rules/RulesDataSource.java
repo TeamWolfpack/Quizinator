@@ -36,15 +36,17 @@ public class RulesDataSource {
     /*
      * @author chuna (10/4/2016)
      */
-    public void open() throws SQLException {
+    public boolean open() throws SQLException {
         database = dbHelper.getWritableDatabase();
+        return database.isOpen();
     }
 
     /*
      * @author chuna (10/4/2016)
      */
-    public void close() {
+    public boolean close() {
         dbHelper.close();
+        return true;
     }
 
     /*
