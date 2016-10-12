@@ -22,6 +22,13 @@ public class HighScores {
     }
 
     /*
+     * @author farrowc (10/11/2016)
+     */
+    public String toFormattedString(){
+        return "Score: " + bestScore + " Time:" + bestTime;
+    }
+
+    /*
      * @author kuczynskij (10/5/2016)
      */
     public long getId() {

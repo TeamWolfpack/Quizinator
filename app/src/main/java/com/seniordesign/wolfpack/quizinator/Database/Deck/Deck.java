@@ -10,14 +10,8 @@ import java.sql.Time;
 public class Deck {
 
     private long id;
-
-    /*
-     * Using String because going to use an Array of Strings to limit what choice
-     * of Card Type in that class instead of using an enum. We thought this
-     * would be easier to implement than converting an enum to a string
-     * or converting and storing blobs.
-     */
-    private String cardTypes[];
+    private String deckName;
+    private Card[] cards;
 
 //    private boolean moderatorNeeded;
 
@@ -63,11 +57,31 @@ public class Deck {
         this.id = id;
     }
 
-    public String[] getCardTypes() {
-        return cardTypes;
+    /*
+     * @author  chuna (10-11-2016)
+     */
+    public String getDeckName() {
+        return deckName;
     }
 
-    public void setCardTypes(String[] cardTypes) {
-        this.cardTypes = cardTypes;
+    /*
+     * @author  chuna (10-11-2016)
+     */
+    public void setDeckName(String deckName) {
+        this.deckName = deckName;
+    }
+
+    /*
+     * @author  chuna (10-11-2016)
+     */
+    public Card[] getCards() {
+        return cards;
+    }
+
+    /*
+     * @author  chuna (10-11-2016)
+     */
+    public void setCards(Card[] cards) {
+        this.cards = cards;
     }
 }

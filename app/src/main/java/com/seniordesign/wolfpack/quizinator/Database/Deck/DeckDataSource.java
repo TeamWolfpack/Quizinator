@@ -18,12 +18,9 @@ public class DeckDataSource {
     private SQLiteDatabase database;
     private DeckSQLiteHelper dbHelper;
     private String[] allColumns = {
-//            ItemSQLiteHelper.COLUMN_ID,
-//            ItemSQLiteHelper.COLUMN_FISHTYPE,
-//            ItemSQLiteHelper.COLUMN_WEIGHT,
-//            ItemSQLiteHelper.COLUMN_LENGTH,
-//            ItemSQLiteHelper.COLUMN_DATE,
-//            ItemSQLiteHelper.COLUMN_LOCATION
+            DeckSQLiteHelper.COLUMN_ID,
+            DeckSQLiteHelper.COLUMN_DECK_NAME,
+            DeckSQLiteHelper.COLUMN_CARDS
     };
 
     /*
@@ -64,7 +61,7 @@ public class DeckDataSource {
     /*
      * @author  chuna (10/4/2016)
      */
-    public Deck createRule(double weight, long date,
+    public Deck createDeck(double weight, long date,
                            String location) {
         ContentValues values = new ContentValues();
 //        values.put(DeckSQLiteHelper.COLUMN_FISHTYPE, "Fish");
@@ -87,7 +84,7 @@ public class DeckDataSource {
     /*
      * @author  chuna (10/4/2016)
      */
-    public void deleteItem(Deck deck) { //TODO
+    public void deleteDeck(Deck deck) { //TODO
         long id = deck.getId();
         System.out.println("Deleted item: " + deck.toString());
         database.delete(DeckSQLiteHelper.TABLE_DECK,
@@ -97,33 +94,33 @@ public class DeckDataSource {
     /*
      * @author  chuna (10/4/2016)
      */
-    public List<Deck> getAllItems() {
-        List<Deck> items = new ArrayList<Deck>();
+    public List<Deck> getAllDecks() {
+        List<Deck> decks = new ArrayList<Deck>();
         Cursor cursor = database.query(DeckSQLiteHelper.TABLE_DECK,
                 allColumns, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            Deck rule = cursorToRule(cursor);
-            items.add(rule);
+            Deck deck = cursorToDeck(cursor);
+            decks.add(deck);
             cursor.moveToNext();
         }
         // make sure to close the cursor
         cursor.close();
-        return items;
+        return decks;
     }
 
     /*
      * @author  chuna (10/4/2016)
      */
-    public Deck cursorToRule(Cursor cursor) {
-        Deck rule = new Deck();
+    public Deck cursorToDeck(Cursor cursor) {
+        Deck deck = new Deck();
 //        rule.setId(cursor.getLong(0));//id
 //        rule.setFishType(cursor.getString(1));//fishType
 //        rule.setWeight(cursor.getDouble(2));//weight
 //        rule.setLength(cursor.getDouble(3));//length
 //        rule.setDate(cursor.getLong(4));//date
 //        rule.setLocation(cursor.getString(5));//location
-        return rule;
+        return deck;
     }
 
     public String[] getAllColumns(){
