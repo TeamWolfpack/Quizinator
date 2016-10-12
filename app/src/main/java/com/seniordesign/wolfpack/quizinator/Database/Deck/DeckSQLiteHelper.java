@@ -6,11 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 /**
-<<<<<<< HEAD:app/src/main/java/com/seniordesign/wolfpack/quizinator/Database/Deck/DeckSQLiteHelper.java
  * SQLite data access object for Deck
-=======
- * SQLite data access object for Settings
->>>>>>> 9006be0154d6ca90869c9561d6695e65fb289d4e:app/src/main/java/com/seniordesign/wolfpack/quizinator/Database/Deck/RulesSQLiteHelper.java
  * @creation 10/4/2016
  */
 public class DeckSQLiteHelper extends SQLiteOpenHelper {
@@ -18,6 +14,8 @@ public class DeckSQLiteHelper extends SQLiteOpenHelper {
     //table contents
     public static final String TABLE_DECK = "deck";
     public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_DECK_NAME = "deckName";
+    public static final String COLUMN_CARDS = "cards";
 
 
     //database filename
@@ -25,7 +23,12 @@ public class DeckSQLiteHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     // Database creation sql statement
-    private static final String DATABASE_CREATE = "";
+    private static final String DATABASE_CREATE = "create table "
+            + TABLE_DECK + "("
+            + COLUMN_ID + " integer primary key autoincrement, "
+            + COLUMN_DECK_NAME + " TEXT, "
+            + COLUMN_CARDS + " TEXT"
+            + ");";
 
     /*
      * @author  chuna (10/4/2016)

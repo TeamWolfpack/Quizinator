@@ -13,7 +13,7 @@ public class MCCard extends Card {
     private String[] possibleAnswers;
     private String correctAnswer;
 
-    private final int maxPossibleAnswers = 5;   //Can't have over 5 options
+    private final int maxPossibleAnswers = 4;   //Can't have over 4 options
 
     @Override
     public long getId() {
@@ -32,7 +32,7 @@ public class MCCard extends Card {
 
     @Override
     public void setModeratorNeeded(boolean moderatorNeeded) {
-
+        this.moderatorNeeded = moderatorNeeded;
     }
 
     @Override
