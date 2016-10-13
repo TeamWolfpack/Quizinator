@@ -12,23 +12,28 @@ import android.widget.Toast;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Card.TFCard;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
+import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScores;
+import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.Fragments.TrueFalseChoiceAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.R;
 
-import java.util.ArrayList;
-
 /**
  * The game play activity is...
  * @creation 09/28/2016
  */
-public class GamePlayActivity extends AppCompatActivity implements TrueFalseChoiceAnswerFragment.OnFragmentInteractionListener {
+public class GamePlayActivity
+        extends AppCompatActivity
+        implements TrueFalseChoiceAnswerFragment.OnFragmentInteractionListener {
 
     private Rules rules;
     private Deck deck;
     private TFCard currentCard;
+
     private RulesDataSource rulesDataSource;
+    private HighScoresDataSource highScoresDataSource;
+
     int deckIndex;
     int deckLength;
     int score;
@@ -41,9 +46,7 @@ public class GamePlayActivity extends AppCompatActivity implements TrueFalseChoi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_play);
-        //rules = rulesDataSource.getAllItems().get(0);
-
-
+        initializeDB();
         beginGamePlay();
     }
 
@@ -110,10 +113,12 @@ public class GamePlayActivity extends AppCompatActivity implements TrueFalseChoi
      * @author farrowc (10/11/2016)
      */
     private void showCard(Card card) {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.answerArea,new TrueFalseChoiceAnswerFragment())
+        getSupportFragmentManager().
+                beginTransaction()
+                .replace(R.id.answerArea, new TrueFalseChoiceAnswerFragment())
                 .commit();
-        ((TextView)findViewById(R.id.questionTextArea)).setText(card.getQuestion());
+        ((TextView)findViewById(R.id.questionTextArea))
+                .setText(card.getQuestion());
     }
 
     /*
@@ -127,6 +132,13 @@ public class GamePlayActivity extends AppCompatActivity implements TrueFalseChoi
      * @author kuczynskij (09/28/2016)
      */
     private boolean addToGameStatsDB(){
+        HighScores h = highScoresDataSource.getAllHighScores().get(0);
+        if(score > h.getBestScore()){
+            h.setBestScore(score);
+        }
+        if(){
+
+        }
         return false;
     }
 
@@ -134,8 +146,16 @@ public class GamePlayActivity extends AppCompatActivity implements TrueFalseChoi
      * @author kuczynskij (09/28/2016)
      */
     private boolean initializeDB(){
-//        datasource = new ItemDataSource(this);
-//        datasource.open();
+        int positiveDBConnections = 0;
+        rulesDataSource = new RulesDataSource(this);
+        if(rulesDataSource.open()){
+            positiveDBConnections++;
+        }
+        rules = rulesDataSource.getAllItems().get(0);
+
+        highScoresDataSource = new HighScoresDataSource(this);
+        highScoresDataSource.open();
+
         return true;
     }
 
