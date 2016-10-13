@@ -85,7 +85,7 @@ public class GamePlayActivity extends AppCompatActivity implements TrueFalseChoi
 
             currentCard = new TFCard();
             currentCard.setQuestion("Hello World");
-            currentCard.setAnswer(true);
+            currentCard.setCorrectAnswer("True");
 
 
             showCard(currentCard);
@@ -164,7 +164,7 @@ public class GamePlayActivity extends AppCompatActivity implements TrueFalseChoi
 
     @Override
     public void onFragmentInteraction(String answer) {
-        if(answer.equals("True") == currentCard.isAnswer()) {
+        if(answer.equals("True")){// == currentCard.isAnswer()) {
             Toast.makeText(this, "Beautiful!", Toast.LENGTH_SHORT).show();
             score++;
         }

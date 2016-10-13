@@ -19,9 +19,6 @@ public class DatabaseHighScoreTest {
     private HighScores h2 = new HighScores();
     private HighScores h3 = new HighScores();
 
-    private HighScoresDataSource dao = new HighScoresDataSource();
-    private HighScoresSQLiteHelper sql = new HighScoresSQLiteHelper();
-
     @Before
     private void init(){
         h1.setDeckName("Sample");
