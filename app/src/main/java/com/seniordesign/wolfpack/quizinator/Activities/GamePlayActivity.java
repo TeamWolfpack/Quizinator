@@ -19,6 +19,8 @@ import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.Fragments.TrueFalseChoiceAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.R;
 
+import java.util.ArrayList;
+
 /**
  * The game play activity is...
  * @creation 09/28/2016
@@ -184,12 +186,12 @@ public class GamePlayActivity
 
     @Override
     public void onFragmentInteraction(String answer) {
-        if(answer.equals("True")){// == currentCard.isAnswer()) {
-            Toast.makeText(this, "Beautiful!", Toast.LENGTH_SHORT).show();
-            score++;
-        }
-        else{
-            Toast.makeText(this, "You Suck!", Toast.LENGTH_SHORT).show();
-        }
+//        if(answer.equals("True") == currentCard.getCorrectAnswer()) {
+//            Toast.makeText(this, "Beautiful!", Toast.LENGTH_SHORT).show();
+//            score++;
+//        }
+//        else{
+//            Toast.makeText(this, "You Suck!", Toast.LENGTH_SHORT).show();
+//        }
     }
 }

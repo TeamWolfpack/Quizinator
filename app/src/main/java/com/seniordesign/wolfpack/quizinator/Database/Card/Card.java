@@ -10,6 +10,8 @@ public abstract class Card {
     protected boolean moderatorNeeded;
     protected int points;
     protected String question;
+    protected String correctAnswer;
+    protected String [] possibleAnswers;
 
     /*
      * @author  chuna (10-5-2016)
@@ -38,4 +40,39 @@ public abstract class Card {
     public abstract String getQuestion();
 
     public abstract void setQuestion(String question);
+
+    /*
+     * @author  chuna (10-11-2016)
+     */
+    public boolean isModeratorNeeded() {
+        return moderatorNeeded;
+    }
+
+    /*
+     * @author  chuna (10-11-2016)
+     */
+    public String getCorrectAnswer() {
+        return correctAnswer;
+    }
+
+    /*
+     * @author  chuna (10-11-2016)
+     */
+    public void setCorrectAnswer(String correctAnswer) {
+        this.correctAnswer = correctAnswer;
+    }
+
+    /*
+     * @author  chuna (10-11-2016)
+     */
+    public String[] getPossibleAnswers() {
+        return possibleAnswers;
+    }
+
+    /*
+     * @author  chuna (10-11-2016)
+     */
+    public void setPossibleAnswers(String[] possibleAnswers) {
+        this.possibleAnswers = possibleAnswers;
+    }
 }

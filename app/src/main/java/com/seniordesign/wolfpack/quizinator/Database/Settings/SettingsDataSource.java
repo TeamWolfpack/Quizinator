@@ -34,15 +34,17 @@ public class SettingsDataSource {
     /*
      * @author kuczynskij (10/4/2016)
      */
-    public void open() throws SQLException {
+    public boolean open() throws SQLException {
         database = dbHelper.getWritableDatabase();
+        return database.isOpen();
     }
 
     /*
      * @author kuczynskij (10/4/2016)
      */
-    public void close() {
+    public boolean close() {
         dbHelper.close();
+        return true;
     }
 
     /*
@@ -81,16 +83,17 @@ public class SettingsDataSource {
     /*
      * @author kuczynskij (10/4/2016)
      */
-    public void deleteItem(Settings settings) {
+    public boolean deleteSetting(Settings settings) {
         long id = settings.getId();
         database.delete(SettingsSQLiteHelper.TABLE_SETTINGS,
                 SettingsSQLiteHelper.COLUMN_ID + " = " + id, null);
+        return true;
     }
 
     /*
      * @author kuczynskij (10/4/2016)
      */
-    public List<Settings> getAllItems() {
+    public List<Settings> getAllSettings() {
         List<Settings> settings = new ArrayList<>();
         Cursor cursor = database.query(SettingsSQLiteHelper.TABLE_SETTINGS,
                 allColumns, null, null, null, null, null);

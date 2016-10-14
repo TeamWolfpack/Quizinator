@@ -36,15 +36,17 @@ public class RulesDataSource {
     /*
      * @author chuna (10/4/2016)
      */
-    public void open() throws SQLException {
+    public boolean open() throws SQLException {
         database = dbHelper.getWritableDatabase();
+        return database.isOpen();
     }
 
     /*
      * @author chuna (10/4/2016)
      */
-    public void close() {
+    public boolean close() {
         dbHelper.close();
+        return true;
     }
 
     /*
@@ -86,16 +88,17 @@ public class RulesDataSource {
     /*
      * @author chuna (10/4/2016)
      */
-    public void deleteRule(Rules rule) {
+    public boolean deleteRule(Rules rule) {
         long id = rule.getId();
         database.delete(RulesSQLiteHelper.TABLE_RULES,
             RulesSQLiteHelper.COLUMN_ID + " = " + id, null);
+        return true;
     }
 
     /*
      * @author chuna (10/4/2016)
      */
-    public List<Rules> getAllItems() {
+    public List<Rules> getAllRules() {
         List<Rules> items = new ArrayList<Rules>();
         Cursor cursor = database.query(RulesSQLiteHelper.TABLE_RULES,
                 allColumns, null, null, null, null, null);

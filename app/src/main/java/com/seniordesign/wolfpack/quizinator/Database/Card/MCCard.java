@@ -10,8 +10,8 @@ public class MCCard extends Card {
     private boolean moderatorNeeded;
     private int points;
     private String question;
-    private String[] possibleAnswers;
     private String correctAnswer;
+    private String[] possibleAnswers;
 
     private final int maxPossibleAnswers = 4;   //Can't have over 4 options
 
