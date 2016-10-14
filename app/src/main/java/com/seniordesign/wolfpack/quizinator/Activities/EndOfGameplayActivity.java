@@ -32,6 +32,15 @@ public class EndOfGameplayActivity extends AppCompatActivity {
         initializeDB();
         gamePlayStats = getIntent().getExtras().getParcelable("gameStats");
         HighScores highScores = highScoresDataSource.getAllHighScores().get(0);
+        ((TextView)findViewById(R.id.endOfGameScoreText)).setText(
+                "Score: " + gamePlayStats.getScore()
+        );
+        ((TextView)findViewById(R.id.endOfGameTimeText)).setText(
+                "Time: " + (gamePlayStats.getTimeElapsed()/60000) + ":" + (gamePlayStats.getTimeElapsed()/1000)%60
+        );
+        ((TextView)findViewById(R.id.endOfGameTotalCardsText)).setText(
+                "Total Cards: " + gamePlayStats.getTotalCardsCompleted()
+        );
         ((TextView)findViewById(R.id.endOfGameHighScoreText)).setText("High Score: "+highScores.getBestScore());
         ((TextView)findViewById(R.id.endOfGameHighScoreTimeText)).setText(
                 "High Score Time: " + (highScores.getBestTime()/60000) + ":" + (highScores.getBestTime()/1000)%60
