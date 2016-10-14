@@ -1,5 +1,6 @@
 package com.seniordesign.wolfpack.quizinator;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +22,8 @@ import android.widget.Toast;
 import com.seniordesign.wolfpack.quizinator.Activities.GamePlayActivity;
 import com.seniordesign.wolfpack.quizinator.Activities.MainMenuActivity;
 import com.seniordesign.wolfpack.quizinator.Activities.NewGameSettingsActivity;
+import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
+import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 
 import org.hamcrest.Matcher;
 import org.junit.Before;
@@ -209,6 +212,57 @@ public class GameSettingTests {
         onView(withId(R.id.card_type)).check(matches(isDisplayed()));
 
         onView(withId(R.id.new_game)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void validateLoadingFromDatabase() {
+        RulesDataSource rulesource = new RulesDataSource(mActivityRule.getActivity());
+        rulesource.open();
+        rulesource.createRule(5, 603000, 9000, "Both");
+        mActivityRule.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mActivityRule.getActivity().loadPreviousRules();
+            }
+        });
+
+        onView(withId(R.id.game_minutes)).check(matches(withText(containsString("1"))));
+        onView(withId(R.id.game_seconds)).check(matches(withText(containsString("03"))));
+        onView(withId(R.id.card_minutes)).check(matches(withText(containsString("0"))));
+        onView(withId(R.id.card_seconds)).check(matches(withText(containsString("09"))));
+        onView(withId(R.id.card_count)).check(matches(withText(containsString("5"))));
+        onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString("Both"))));
+
+        rulesource.createRule(5, 90000, 10000, "Both");
+        mActivityRule.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mActivityRule.getActivity().loadPreviousRules();
+            }
+        });
+
+        onView(withId(R.id.game_minutes)).check(matches(withText(containsString("1"))));
+        onView(withId(R.id.game_seconds)).check(matches(withText(containsString("30"))));
+        onView(withId(R.id.card_minutes)).check(matches(withText(containsString("0"))));
+        onView(withId(R.id.card_seconds)).check(matches(withText(containsString("10"))));
+        onView(withId(R.id.card_count)).check(matches(withText(containsString("5"))));
+        onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString("Both"))));
+
+        rulesource.close();
+    }
+
+    @Test
+    public void validateValidateDatabaseAfterGameStart() {
+        RulesDataSource rulesource = new RulesDataSource(mActivityRule.getActivity());
+        rulesource.open();
+        rulesource.createRule(5, 90000, 9000, "Both");
+        mActivityRule.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mActivityRule.getActivity().loadPreviousRules();
+            }
+        });
+        
     }
 
     @Test

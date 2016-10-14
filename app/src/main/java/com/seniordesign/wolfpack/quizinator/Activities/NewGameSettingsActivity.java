@@ -112,8 +112,6 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                 rule.setCardTypes(cardTypes);
             }
 
-            System.out.println(cardTypes);
-
             rulesSource.createRule(rule.getMaxCardCount(), rule.getTimeLimit(), rule.getCardDisplayTime(), rule.getCardTypes());
         }
 
@@ -132,12 +130,8 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         Calendar gameCal = Calendar.getInstance();
         gameCal.setTimeInMillis(rule.getTimeLimit());
 
-        System.out.println(rule.getTimeLimit());
-
         Calendar cardCal = Calendar.getInstance();
         cardCal.setTimeInMillis(rule.getCardDisplayTime());
-
-        System.out.println(rule.getCardDisplayTime());
 
         gameMinutesInput.setText("" + gameCal.get(Calendar.MINUTE));
         gameSecondsInput.setText(gameCal.get(Calendar.SECOND) < 10 ?
@@ -148,8 +142,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                                     "0" + cardCal.get(Calendar.SECOND) :
                                     "" + cardCal.get(Calendar.SECOND));
 
-        System.out.println(rule.getMaxCardCount());
-
+        cardCountInput.setText("" + rule.getMaxCardCount());
         cardCountInput.setText("" + rule.getMaxCardCount());
 
         int position = 0;
