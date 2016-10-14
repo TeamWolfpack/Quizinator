@@ -7,18 +7,21 @@ package com.seniordesign.wolfpack.quizinator.Database.Card;
 public class TFCard extends Card {
 
     private long id;
-    private boolean moderatorNeeded;
-    private int points;
+    private String cardType;
     private String question;
     private String correctAnswer;
     private String [] possibleAnswers = new String[]{"True", "False"};
+    private String moderatorNeeded = "False";
+    private int points;
 
     /*
      * @author  chuna (10-7-2016)
      */
     @Override
     public String toString(){
-        return null;
+        return cardType + " | " + question + " | " +
+                possibleAnswers[0] + ", " + possibleAnswers[1] +
+                " | " + points;
     }
 
     /*
@@ -38,38 +41,19 @@ public class TFCard extends Card {
     }
 
     /*
-     * @author  chuna (10-5-2016)
+     * @author  chuna (10-13-2016)
      */
     @Override
-    public boolean getModeratorNeeded() {
-        return moderatorNeeded;
+    public String getCardType() {
+        return cardType;
     }
 
     /*
-     * @author  chuna (10-5-2016)
+     * @author  chuna (10-13-2016)
      */
     @Override
-    public void setModeratorNeeded(boolean moderatorNeeded) {
-        //this.moderatorNeeded = moderatorNeeded;
-        /* TODO may need to change because doubt we want them to change the value of
-         * this attribute since TF should not need a moderator.
-         */
-    }
-
-    /*
-     * @author  chuna (10-5-2016)
-     */
-    @Override
-    public int getPoints() {
-        return points;
-    }
-
-    /*
-     * @author  chuna (10-5-2016)
-     */
-    @Override
-    public void setPoints(int points) {
-        this.points = points;
+    public void setCardType(String cardType) {
+        this.cardType = cardType;
     }
 
     /*
@@ -107,5 +91,46 @@ public class TFCard extends Card {
      */
     public String[] getPossibleAnswers() {
         return possibleAnswers;
+    }
+
+    @Override
+    public void setPossibleAnswers(String[] possibleAnswers) {
+//        this.possibleAnswers = possibleAnswers;
+        // TODO logically this shouldn't change
+    }
+
+    /*
+     * @author  chuna (10-5-2016)
+     */
+    @Override
+    public String getModeratorNeeded() {
+        return moderatorNeeded;
+    }
+
+    /*
+     * @author  chuna (10-5-2016)
+     */
+    @Override
+    public void setModeratorNeeded(String moderatorNeeded) {
+        //this.moderatorNeeded = moderatorNeeded;
+        /* TODO may need to change because doubt we want them to change the value of
+         * this attribute since TF should not need a moderator.
+         */
+    }
+
+    /*
+     * @author  chuna (10-5-2016)
+     */
+    @Override
+    public int getPoints() {
+        return points;
+    }
+
+    /*
+     * @author  chuna (10-5-2016)
+     */
+    @Override
+    public void setPoints(int points) {
+        this.points = points;
     }
 }

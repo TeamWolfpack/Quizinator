@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,12 +20,13 @@ public class CardDataSource {
     private SQLiteDatabase database;
     private CardSQLiteHelper dbHelper;
     private String[] allColumns = {
-//            ItemSQLiteHelper.COLUMN_ID,
-//            ItemSQLiteHelper.COLUMN_FISHTYPE,
-//            ItemSQLiteHelper.COLUMN_WEIGHT,
-//            ItemSQLiteHelper.COLUMN_LENGTH,
-//            ItemSQLiteHelper.COLUMN_DATE,
-//            ItemSQLiteHelper.COLUMN_LOCATION
+            CardSQLiteHelper.COLUMN_ID,
+            CardSQLiteHelper.COLUMN_CARD_TYPE,
+            CardSQLiteHelper.COLUMN_QUESTION,
+            CardSQLiteHelper.COLUMN_CORRECT_ANSWER,
+            CardSQLiteHelper.COLUMN_POSSIBLE_ANSWERS,
+            CardSQLiteHelper.COLUMN_POINTS,
+            CardSQLiteHelper.COLUMN_MODERATOR_NEEDED
     };
 
     /*
@@ -64,17 +67,24 @@ public class CardDataSource {
     /*
      * @author  chuna (10/4/2016)
      */
-    public Card createCard(double weight, long date,
-                            String location) {
+    public Card createCard(String cardType, String question, String correctAnswer,
+                           String[] possibleCorrectAnswers, int points,
+                           String moderatorNeeded) {
         ContentValues values = new ContentValues();
-//        values.put(CardSQLiteHelper.COLUMN_FISHTYPE, "Fish");
-//        values.put(CardSQLiteHelper.COLUMN_WEIGHT, weight);
-//        values.put(CardSQLiteHelper.COLUMN_LENGTH, 0.0);
-//        values.put(CardSQLiteHelper.COLUMN_DATE, date);
-//        values.put(CardSQLiteHelper.COLUMN_LOCATION, location);
-        long insertId = database.insert(CardSQLiteHelper.TABLE_CARD,
+        values.put(CardSQLiteHelper.COLUMN_CARD_TYPE, cardType);
+        values.put(CardSQLiteHelper.COLUMN_QUESTION, question);
+        values.put(CardSQLiteHelper.COLUMN_CORRECT_ANSWER, correctAnswer);
+
+        //TODO make sure this works
+        Gson gson = new Gson();
+        String stringPossibleAnswers = gson.toJson(possibleCorrectAnswers);
+        values.put(CardSQLiteHelper.COLUMN_POSSIBLE_ANSWERS, stringPossibleAnswers);
+
+        values.put(CardSQLiteHelper.COLUMN_POINTS, points);
+        values.put(CardSQLiteHelper.COLUMN_MODERATOR_NEEDED, moderatorNeeded);
+        long insertId = database.insert(CardSQLiteHelper.TABLE_CARDS,
                 null, values);
-        Cursor cursor = database.query(CardSQLiteHelper.TABLE_CARD,
+        Cursor cursor = database.query(CardSQLiteHelper.TABLE_CARDS,
                 allColumns, CardSQLiteHelper.COLUMN_ID
                         + " = " + insertId, null,
                 null, null, null);
@@ -87,44 +97,67 @@ public class CardDataSource {
     /*
      * @author  chuna (10/4/2016)
      */
-    public void deleteItem(Card card) { //TODO
+    public void deleteCard(Card card) {
         long id = card.getId();
-        System.out.println("Deleted item: " + card.toString());
-        database.delete(CardSQLiteHelper.TABLE_CARD,
+        System.out.println("Deleted card: " + card.toString());
+        database.delete(CardSQLiteHelper.TABLE_CARDS,
                 CardSQLiteHelper.COLUMN_ID + " = " + id, null);
     }
 
     /*
      * @author  chuna (10/4/2016)
      */
-    public List<Card> getAllItems() {
-        List<Card> items = new ArrayList<Card>();
-        Cursor cursor = database.query(CardSQLiteHelper.TABLE_CARD,
+    public List<Card> getAllCards() {
+        List<Card> cards = new ArrayList<Card>();
+        Cursor cursor = database.query(CardSQLiteHelper.TABLE_CARDS,
                 allColumns, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Card card = cursorToCard(cursor);
-            items.add(card);
+            cards.add(card);
             cursor.moveToNext();
         }
         // make sure to close the cursor
         cursor.close();
-        return items;
+        return cards;
     }
 
     /*
      * @author  chuna (10/4/2016)
      */
     public Card cursorToCard(Cursor cursor) {
-//        Card card = new Card();
-//        rule.setId(cursor.getLong(0));//id
-//        rule.setFishType(cursor.getString(1));//fishType
-//        rule.setWeight(cursor.getDouble(2));//weight
-//        rule.setLength(cursor.getDouble(3));//length
-//        rule.setDate(cursor.getLong(4));//date
-//        rule.setLocation(cursor.getString(5));//location
-//        return card;
-        return null;
+        String cardType = cursor.getString(1);
+        Card card = new TFCard(); // Defaulting to a TFCard
+        switch(cardType) {
+            case "TF":
+                card = new TFCard();
+                break;
+            case "MC":
+                card = new MCCard();
+                break;
+            //TODO will implement later
+//            case "FR":
+//                card = new FRCard();
+//                break;
+//            case "VR":
+//                card = new VRCard();
+//                break;
+        }
+        card.setId(cursor.getLong(0));
+        card.setCardType(cursor.getString(1));
+        card.setQuestion(cursor.getString(2));
+        card.setCorrectAnswer(cursor.getString(3));
+
+        //TODO make sure this works and we can convert back into String Array
+        String[] answers;
+        Gson gson = new Gson();
+        String json = cursor.getString(4);
+        answers = gson.fromJson(json, String[].class);
+        card.setPossibleAnswers(answers);
+
+        card.setPoints(cursor.getInt(5));
+        card.setModeratorNeeded(cursor.getString(6));
+        return card;
     }
 
     public String[] getAllColumns(){
