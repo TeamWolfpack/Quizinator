@@ -1,13 +1,34 @@
-*.iml
-.gradle
+# Local configuration file (sdk path, etc)
 /local.properties
+
+.DS_Store
+
+# Built app files
+*.apk
+*.ap_
+
+# Java Class Files
+*.class
+
+# Android Gradle Files
+.gradle/
+build/
+
+# log files
+*.log
+
+# Android Studio captures folder
+/captures
+
+# Merge conflict files that shouldn't be in remote repo
+*.bak
+*.orig
+
+# IntelliJ folders
 /.idea/*
 /.idea/workspace.xml
 /.idea/libraries
-.DS_Store
-/build
-/captures
 *.iml
-*.bak
-*.orig
-/.idea/*
+
+# sample app's test folder
+_samples/WifiDirect/wifi-direct-chat/app/build/tmp

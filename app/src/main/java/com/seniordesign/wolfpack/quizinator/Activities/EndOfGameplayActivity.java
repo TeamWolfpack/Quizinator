@@ -1,9 +1,14 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
+import com.seniordesign.wolfpack.quizinator.Database.GamePlayStats;
+import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScores;
+import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
 
 import java.sql.Time;
@@ -14,7 +19,8 @@ import java.sql.Time;
  */
 public class EndOfGameplayActivity extends AppCompatActivity {
 
-//    private ItemDataSource datasource;
+    private HighScoresDataSource highScoresDataSource;
+    private GamePlayStats gamePlayStats;
 
     /*
      * @author kuczynskij (09/28/2016)
@@ -23,6 +29,27 @@ public class EndOfGameplayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_end_of_gameplay);
+        initializeDB();
+        gamePlayStats = getIntent().getExtras().getParcelable("gameStats");
+        HighScores highScores = highScoresDataSource.getAllHighScores().get(0);
+        ((TextView)findViewById(R.id.endOfGameScoreText)).setText(
+                "Score: " + gamePlayStats.getScore()
+        );
+        ((TextView)findViewById(R.id.endOfGameTimeText)).setText(
+                "Time: " + (gamePlayStats.getTimeElapsed()/60000) + ":" + (gamePlayStats.getTimeElapsed()/1000)%60
+        );
+        ((TextView)findViewById(R.id.endOfGameTotalCardsText)).setText(
+                "Total Cards: " + gamePlayStats.getTotalCardsCompleted()
+        );
+        ((TextView)findViewById(R.id.endOfGameHighScoreText)).setText("High Score: "+highScores.getBestScore());
+        ((TextView)findViewById(R.id.endOfGameHighScoreTimeText)).setText(
+                "High Score Time: " + (highScores.getBestTime()/60000) + ":" + (highScores.getBestTime()/1000)%60
+        );
+    }
+
+    public void showMainMenu(View v){
+        final Intent intent = new Intent(this, MainMenuActivity.class);
+        startActivity(intent);
     }
 
     /*
@@ -36,9 +63,14 @@ public class EndOfGameplayActivity extends AppCompatActivity {
      * @author kuczynskij (09/28/2016)
      */
     private boolean initializeDB(){
+        int positiveDBConnections = 0;
+        highScoresDataSource = new HighScoresDataSource(this);
+        if(highScoresDataSource.open()){
+            positiveDBConnections++;
+        }
 //        datasource = new ItemDataSource(this);
 //        datasource.open();
-        return true;
+        return (positiveDBConnections == 1);
     }
 
     /*
@@ -75,6 +107,7 @@ public class EndOfGameplayActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
+        highScoresDataSource.open();
     }
 
     /*
@@ -83,5 +116,6 @@ public class EndOfGameplayActivity extends AppCompatActivity {
     @Override
     protected void onPause(){
         super.onPause();
+        highScoresDataSource.close();
     }
 }
