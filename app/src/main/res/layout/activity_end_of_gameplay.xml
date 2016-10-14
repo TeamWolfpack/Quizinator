@@ -59,6 +59,13 @@
             android:layout_height="wrap_content"
             android:text="High Score: "
             android:layout_below="@id/endOfGameText" />
+        <TextView
+            android:id="@+id/endOfGameHighScoreTimeText"
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="High Score Time: "
+            android:layout_below="@id/endOfGameText" />
         <Button
             android:id="@+id/newGameButton"
             android:layout_marginTop="20dp"
