@@ -34,7 +34,7 @@ public class EndOfGameplayActivity extends AppCompatActivity {
         HighScores highScores = highScoresDataSource.getAllHighScores().get(0);
         ((TextView)findViewById(R.id.endOfGameHighScoreText)).setText("High Score: "+highScores.getBestScore());
         ((TextView)findViewById(R.id.endOfGameHighScoreTimeText)).setText(
-                "High Score Time: " + (highScores.getBestTime()/1000000000)/60 + ":" + (highScores.getBestTime()/1000000000)%60
+                "High Score Time: " + (highScores.getBestTime()/60000) + ":" + (highScores.getBestTime()/1000)%60
         );
     }
 
