@@ -72,7 +72,7 @@ public class RulesDataSource {
         ContentValues values = new ContentValues();
             values.put(RulesSQLiteHelper.COLUMN_TIMELIMIT, timeLimit);
             values.put(RulesSQLiteHelper.COLUMN_CARDDISPLAYTIME, cardDisplayTime);
-            values.put(RulesSQLiteHelper.COLUMN_TIMELIMIT, maxCardCount);
+            values.put(RulesSQLiteHelper.COLUMN_MAXCARDCOUNT, maxCardCount);
             values.put(RulesSQLiteHelper.COLUMN_CARDTYPES, cardTypes);
         long insertId = database.insert(RulesSQLiteHelper.TABLE_RULES,
                 null, values);
