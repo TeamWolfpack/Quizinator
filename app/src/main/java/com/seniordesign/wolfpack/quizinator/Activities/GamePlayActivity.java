@@ -39,6 +39,9 @@ public class GamePlayActivity
     private int deckLength;
     private int score;
 
+    private long startGamePlayTimer = 0;
+    private long stopGamePlayTimer = 0;
+
     /*
      * @author kuczynskij (09/28/2016)
      * @author farrowc (10/11/2016)
@@ -113,11 +116,7 @@ public class GamePlayActivity
             deck.setDeckName("Sample");
         deckLength = 3;
         //deckLength = Math.min(deck.getCards().length, rules.getMaxCardCount());
-
-        //TODO -> initialize gameplay timer
-
-
-        //Start Gameplay loop
+        startGamePlayTimer = System.nanoTime();
         switchToNewCard(deck, deckIndex);
     }
 
@@ -160,7 +159,7 @@ public class GamePlayActivity
      * @author kuczynskij (10/13/2016)
      */
     private void endGamePlay() {
-        //TODO stop the timer
+        stopGamePlayTimer = System.nanoTime();
         final Intent intent =
                 new Intent(this, EndOfGameplayActivity.class);
         checkGameStatsAgainstHighScoresDB();
@@ -191,17 +190,21 @@ public class GamePlayActivity
     /*
      * @author kuczynskij (09/28/2016)
      */
-    private boolean checkGameStatsAgainstHighScoresDB(){
-        HighScores h = highScoresDataSource
-                .getAllHighScores().get(0);
-        //TODO -> there is a lot more we need to check for and add
-        if(score > h.getBestScore()){
-            h.setDeckName(deck.getDeckName());
-            h.setBestScore(score);
-            //set best time
-            //h.setBestTime();
+    private String checkGameStatsAgainstHighScoresDB(){
+        if(highScoresDataSource.getAllHighScores().size() > 0){
+            HighScores h = highScoresDataSource.getAllHighScores().get(0);
+            if(score > h.getBestScore()){
+                h.setDeckName(deck.getDeckName());
+                h.setBestScore(score);
+                h.setBestTime(stopGamePlayTimer - startGamePlayTimer);
+                return "Updated HighScores";
+            }
+            return "No HighScore";
+        }else{
+            highScoresDataSource.createHighScore(deck.getDeckName(),
+                    stopGamePlayTimer - startGamePlayTimer, score);
+            return "New HighScore";
         }
-        return false;
     }
 
     /*
