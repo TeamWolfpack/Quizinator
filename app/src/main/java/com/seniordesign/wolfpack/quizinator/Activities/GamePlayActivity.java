@@ -42,6 +42,7 @@ public class GamePlayActivity
 
     private long startGamePlayTimer = 0;
     private long stopGamePlayTimer = 0;
+    //private long maxGameDuration = TimeUnit.s;
 
     /*
      * @author kuczynskij (09/28/2016)
