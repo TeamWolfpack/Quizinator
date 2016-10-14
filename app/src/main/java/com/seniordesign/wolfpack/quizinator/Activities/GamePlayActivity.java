@@ -49,6 +49,12 @@ public class GamePlayActivity
     private CountDownTimer cardTimerStatic;
     private CountDownTimer cardTimerRunning;
 
+    private CountDownTimer cardTimerAreaBackgroundStatic;
+    private CountDownTimer cardTimerAreaBackgroundRunning;
+    private int r;
+    private int g;
+    private int b;
+
     /*
      * @author kuczynskij (09/28/2016)
      * @author farrowc (10/11/2016)
@@ -62,6 +68,7 @@ public class GamePlayActivity
         rules.setTimeLimit(60000);
         initializeGameTimer(rules.getTimeLimit());
         initializeCardTimer(10000);
+        initializeCorrectnessColorController();
         initializeGamePlay();
     }
 
@@ -69,7 +76,7 @@ public class GamePlayActivity
      * @author kuczynskij (10/13/2016)
      */
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         rulesDataSource.open();
         highScoresDataSource.open();
@@ -79,7 +86,7 @@ public class GamePlayActivity
      * @author kuczynskij (10/13/2016)
      */
     @Override
-    protected void onPause(){
+    protected void onPause() {
         super.onPause();
         rulesDataSource.close();
         highScoresDataSource.close();
@@ -88,7 +95,7 @@ public class GamePlayActivity
     /*
      * @author kuczynskij (10/13/2016)
      */
-    private void cleanUpOnExit(){
+    private void cleanUpOnExit() {
         rulesDataSource.close();
         highScoresDataSource.close();
         this.finish();
@@ -100,30 +107,33 @@ public class GamePlayActivity
      */
     @Override
     public void onFragmentInteraction(String answer) {
-        if(answer.equals(currentCard.getCorrectAnswer())) {
+        if (answer.equals(currentCard.getCorrectAnswer())) {
             //quickToast("Beautiful!");
             quickCorrectAnswerConfirmation(true);
             score++;
-        }
-        else{
+        } else {
             //quickToast("You Suck!");
             quickCorrectAnswerConfirmation(false);
         }
     }
 
-    private boolean quickCorrectAnswerConfirmation(boolean correct){
+    private boolean quickCorrectAnswerConfirmation(boolean correct) {
+        setCorrectnessColors(correct);
+        cardTimerAreaBackgroundRunning = cardTimerAreaBackgroundStatic.start();
+        /*
         if(correct){
             findViewById(R.id.cardTimeBackground).setBackgroundColor(Color.rgb(10,200,10));
         }else{
             findViewById(R.id.cardTimeBackground).setBackgroundColor(Color.RED);
         }
+        */
         return true;
     }
 
     /*
      * @author kuczynskij (10/13/2016)
      */
-    private boolean quickToast(String message){
+    private boolean quickToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         return true;
     }
@@ -135,11 +145,13 @@ public class GamePlayActivity
     private void initializeGamePlay() {
         //Deck stuff
         deck = initializeDeck();
-            deck.setDeckName("Sample");
+        deck.setDeckName("Sample");
         deckLength = 5;
         //deckLength = Math.min(deck.getCards().length, rules.getMaxCardCount());
         cardTimerRunning = cardTimerStatic.start();
         gamePlayTimerRunning = gamePlayTimerStatic.start();
+        cardTimerAreaBackgroundRunning = cardTimerRunning.start();
+        cardTimerAreaBackgroundRunning.cancel();
         switchToNewCard(deck, deckIndex);
     }
 
@@ -148,7 +160,7 @@ public class GamePlayActivity
      */
     private long switchToNewCard(Deck deck, int deckIndex) {
         cardTimerRunning.cancel();
-        if(deckLength > deckIndex) {
+        if (deckLength > deckIndex) {
             ((TextView) findViewById(R.id.scoreText)).setText("Score: " + score);
 
             //TODO Here set card to the card at the position of deckIndex
@@ -159,8 +171,7 @@ public class GamePlayActivity
             showCard(currentCard);
             cardTimerRunning = cardTimerStatic.start();
             this.deckIndex++;
-        }
-        else{
+        } else {
             endGamePlay();
         }
         return currentCard.getId();
@@ -174,7 +185,7 @@ public class GamePlayActivity
                 beginTransaction()
                 .replace(R.id.answerArea, new TrueFalseChoiceAnswerFragment())
                 .commit();
-        ((TextView)findViewById(R.id.questionTextArea))
+        ((TextView) findViewById(R.id.questionTextArea))
                 .setText(card.getQuestion());
     }
 
@@ -188,9 +199,9 @@ public class GamePlayActivity
                 new Intent(this, EndOfGameplayActivity.class);
         checkGameStatsAgainstHighScoresDB();
         GamePlayStats s = new GamePlayStats();
-            s.setScore(score);
-            s.setTimeElapsed(rules.getTimeLimit()-gamePlayTimerRemaining);
-            s.setTotalCardsCompleted(deckIndex);
+        s.setScore(score);
+        s.setTimeElapsed(rules.getTimeLimit() - gamePlayTimerRemaining);
+        s.setTotalCardsCompleted(deckIndex);
         intent.putExtra("gameStats", s);
         startActivity(intent);
     }
@@ -199,35 +210,64 @@ public class GamePlayActivity
      * Actions cannot be tested.
      * @author farrowc (??/??/2016)
      */
-    public long answerClicked(View v){
-        Button clickedButton = (Button)v;
+    public long answerClicked(View v) {
+        cardTimerAreaBackgroundRunning.cancel();
+        Button clickedButton = (Button) v;
         String answer = clickedButton.getText().toString();
         this.onFragmentInteraction(answer);
-        return switchToNewCard(deck,deckIndex);
+        return switchToNewCard(deck, deckIndex);
     }
 
     /*
      * @author kuczynskij (09/28/2016)
      */
-    private String checkGameStatsAgainstHighScoresDB(){
-        if(highScoresDataSource.getAllHighScores().size() > 0){
+    private String checkGameStatsAgainstHighScoresDB() {
+        if (highScoresDataSource.getAllHighScores().size() > 0) {
             HighScores h = highScoresDataSource.getAllHighScores().get(0);
-            if(score >= h.getBestScore()){
+            if (score >= h.getBestScore()) {
                 h.setDeckName(deck.getDeckName());
                 h.setBestScore(score);
-                if(rules.getTimeLimit()-gamePlayTimerRemaining<h.getBestTime()) {
+                if (rules.getTimeLimit() - gamePlayTimerRemaining < h.getBestTime()) {
                     h.setBestTime(rules.getTimeLimit() - gamePlayTimerRemaining);
                 }
                 highScoresDataSource.deleteHighScore(h);
-                highScoresDataSource.createHighScore(h.getDeckName(),h.getBestTime(),h.getBestScore());
+                highScoresDataSource.createHighScore(h.getDeckName(), h.getBestTime(), h.getBestScore());
                 return "Updated HighScores";
             }
             return "No HighScore";
-        }else{
+        } else {
             highScoresDataSource.createHighScore(deck.getDeckName(),
-                    rules.getTimeLimit()-gamePlayTimerRemaining, score);
+                    rules.getTimeLimit() - gamePlayTimerRemaining, score);
             return "New HighScore";
         }
+    }
+
+
+    /*
+     * @author farrowc (10/14/2016)
+     */
+    private boolean adjustCardTimerColor() {
+        findViewById(R.id.cardTimeBackground).setBackgroundColor(Color.rgb(r, g, b));
+        r /= 1.05;
+        g /= 1.05;
+        b /= 1.05;
+        return true;
+    }
+
+    /*
+     * @author farrowc (10/14/2016)
+     */
+    private boolean setCorrectnessColors(boolean isAnswerCorrect) {
+        if (isAnswerCorrect) {
+            r = 10;
+            g = 200;
+            b = 10;
+        } else {
+            r = 200;
+            g = 10;
+            b = 10;
+        }
+        return true;
     }
 
     /*
@@ -235,7 +275,7 @@ public class GamePlayActivity
      * TEMP returns a sample deck for testing
      * The deck database is incomplete right now
      */
-    private Deck initializeDeck(){
+    private Deck initializeDeck() {
         Deck newDeck = new Deck();
         Card[] cards = new Card[5];
         cards[0] = new TFCard();
@@ -261,19 +301,19 @@ public class GamePlayActivity
     /*
      * @author kuczynskij (10/13/2016)
      */
-    private boolean initializeDB(){
+    private boolean initializeDB() {
         int positiveDBConnections = 0;
         rulesDataSource = new RulesDataSource(this);
-        if(rulesDataSource.open()){
+        if (rulesDataSource.open()) {
             positiveDBConnections++;
             //rules = rulesDataSource.getAllRules().get(0);
         }
         highScoresDataSource = new HighScoresDataSource(this);
-        if(highScoresDataSource.open()){
+        if (highScoresDataSource.open()) {
             positiveDBConnections++;
         }
         deckDataSource = new DeckDataSource(this);
-        if(deckDataSource.open()){
+        if (deckDataSource.open()) {
             positiveDBConnections++;
             //deck = deckDataSource.getAllDecks().get(0);
         }
@@ -283,12 +323,12 @@ public class GamePlayActivity
     /*
      * @author farrowc 10/14/2016
      */
-    private boolean initializeGameTimer(long time){
+    private boolean initializeGameTimer(long time) {
         gamePlayTimerStatic = new CountDownTimer(time, 10) {
             @Override
             public void onTick(long millisUntilFinished) {
-                ((TextView)findViewById(R.id.gamePlayTimeText)).setText(
-                        "Game Time: "+millisUntilFinished/60000+":"+millisUntilFinished/1000%60
+                ((TextView) findViewById(R.id.gamePlayTimeText)).setText(
+                        "Game Time: " + millisUntilFinished / 60000 + ":" + millisUntilFinished / 1000 % 60
                 );
                 gamePlayTimerRemaining = millisUntilFinished;
             }
@@ -304,19 +344,38 @@ public class GamePlayActivity
     /*
      * @author farrowc 10/14/2016
      */
-    private boolean initializeCardTimer(long time){
+    private boolean initializeCardTimer(long time) {
         cardTimerStatic = new CountDownTimer(time, 10) {
 
             @Override
             public void onTick(long millisUntilFinished) {
-                ((TextView)findViewById(R.id.cardTimeBackground)).setText(
-                        "Time Left: "+millisUntilFinished/1000+"."+millisUntilFinished/10%100
+                ((TextView) findViewById(R.id.cardTimeBackground)).setText(
+                        "Time Left: " + millisUntilFinished / 1000 + "." + millisUntilFinished / 10 % 100
                 );
             }
 
             @Override
             public void onFinish() {
-                switchToNewCard(deck,deckIndex);
+                switchToNewCard(deck, deckIndex);
+            }
+        };
+        return true;
+    }
+
+    /*
+     * @author farrowc (10/14/2016)
+     */
+    private boolean initializeCorrectnessColorController() {
+        cardTimerAreaBackgroundStatic = new CountDownTimer(1000, 10) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                adjustCardTimerColor();
+            }
+
+            @Override
+            public void onFinish() {
+                findViewById(R.id.cardTimeBackground).setBackgroundColor(Color.rgb(0, 0, 0));
+
             }
         };
         return true;
