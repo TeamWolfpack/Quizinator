@@ -253,7 +253,7 @@ public class GamePlayActivity
         rulesDataSource = new RulesDataSource(this);
         if(rulesDataSource.open()){
             positiveDBConnections++;
-            rules = rulesDataSource.getAllRules().get(0);
+            //rules = rulesDataSource.getAllRules().get(0);
         }
         highScoresDataSource = new HighScoresDataSource(this);
         if(highScoresDataSource.open()){
