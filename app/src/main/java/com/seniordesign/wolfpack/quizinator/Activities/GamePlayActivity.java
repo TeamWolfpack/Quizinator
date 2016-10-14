@@ -2,6 +2,7 @@ package com.seniordesign.wolfpack.quizinator.Activities;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -44,6 +45,9 @@ public class GamePlayActivity
     private long stopGamePlayTimer = 0;
     //private long maxGameDuration = TimeUnit.s;
 
+    CountDownTimer cardTimerStatic;
+    CountDownTimer cardTimerRunning;
+
     /*
      * @author kuczynskij (09/28/2016)
      * @author farrowc (10/11/2016)
@@ -52,6 +56,7 @@ public class GamePlayActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_play);
+        initializeCardTimer(10000);
         initializeDB();
         initializeGamePlay();
     }
@@ -104,7 +109,7 @@ public class GamePlayActivity
 
     private boolean quickCorrectAnswerConfirmation(boolean correct){
         if(correct){
-            findViewById(R.id.cardTimeBackground).setBackgroundColor(Color.GREEN);
+            findViewById(R.id.cardTimeBackground).setBackgroundColor(Color.rgb(10,200,10));
         }else{
             findViewById(R.id.cardTimeBackground).setBackgroundColor(Color.RED);
         }
@@ -130,6 +135,7 @@ public class GamePlayActivity
         deckLength = 5;
         //deckLength = Math.min(deck.getCards().length, rules.getMaxCardCount());
         startGamePlayTimer = System.nanoTime();
+        cardTimerRunning = cardTimerStatic.start();
         switchToNewCard(deck, deckIndex);
     }
 
@@ -137,6 +143,7 @@ public class GamePlayActivity
      * @author farrowc (10/11/2016)
      */
     private long switchToNewCard(Deck deck, int deckIndex) {
+        cardTimerRunning.cancel();
         if(deckLength > deckIndex) {
             ((TextView) findViewById(R.id.scoreText)).setText("Score: " + score);
 
@@ -146,6 +153,7 @@ public class GamePlayActivity
 
 
             showCard(currentCard);
+            cardTimerRunning = cardTimerStatic.start();
             this.deckIndex++;
         }
         else{
@@ -256,5 +264,25 @@ public class GamePlayActivity
             //deck = deckDataSource.getAllDecks().get(0);
         }
         return (positiveDBConnections == 3);
+    }
+
+    /*
+     * @author farrowc 10/14/2016
+     */
+    private boolean initializeCardTimer(long time){
+        cardTimerStatic = new CountDownTimer(time, 10) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                ((TextView)findViewById(R.id.cardTimeBackground)).setText(
+                        "Time Left: "+millisUntilFinished/1000+":"+millisUntilFinished/10%100
+                );
+            }
+
+            @Override
+            public void onFinish() {
+                switchToNewCard(deck,deckIndex);
+            }
+        };
+        return true;
     }
 }
