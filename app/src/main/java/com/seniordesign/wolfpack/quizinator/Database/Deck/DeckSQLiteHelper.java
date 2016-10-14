@@ -12,10 +12,10 @@ import android.util.Log;
 public class DeckSQLiteHelper extends SQLiteOpenHelper {
 
     //table contents
-    public static final String TABLE_DECK = "deck";
+    public static final String TABLE_DECKS = "deck";
     public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_DECK_NAME = "deckName";
-    public static final String COLUMN_CARDS = "cards";
+    public static final String COLUMN_DECKNAME = "_deckName";
+    public static final String COLUMN_CARDS = "_cards";
 
 
     //database filename
@@ -24,9 +24,9 @@ public class DeckSQLiteHelper extends SQLiteOpenHelper {
 
     // Database creation sql statement
     private static final String DATABASE_CREATE = "create table "
-            + TABLE_DECK + "("
+            + TABLE_DECKS + "("
             + COLUMN_ID + " integer primary key autoincrement, "
-            + COLUMN_DECK_NAME + " TEXT, "
+            + COLUMN_DECKNAME + " TEXT, "
             + COLUMN_CARDS + " TEXT"
             + ");";
 
@@ -54,7 +54,7 @@ public class DeckSQLiteHelper extends SQLiteOpenHelper {
                 "Upgrading database from version " + oldVersion
                         + " to " + newVersion + ", which will " +
                         "destroy all old data");
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DECK);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DECKS);
         onCreate(db);
     }
 }

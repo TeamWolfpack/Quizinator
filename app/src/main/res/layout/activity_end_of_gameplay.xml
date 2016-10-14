@@ -15,7 +15,7 @@
         android:id="@+id/endOfGameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Game Over"
+        android:text="@string/game_over"
         android:textStyle="bold"
         android:textSize="32dp"
         android:layout_alignParentTop="true"
@@ -34,31 +34,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:text="Score: "
-            android:layout_below="@id/endOfGameText" />
+            android:text="Score: " />
         <TextView
             android:id="@+id/endOfGameTimeText"
             android:textAlignment="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:text="Time Elapsed: "
-            android:layout_below="@id/endOfGameText" />
+            android:text="Time Elapsed: " />
         <TextView
             android:id="@+id/endOfGameTotalCardsText"
             android:textAlignment="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:text="Total Cards: "
-            android:layout_below="@id/endOfGameText" />
+            android:text="Total Cards: "/>
         <TextView
             android:id="@+id/endOfGameHighScoreText"
             android:textAlignment="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="High Score: "
-            android:layout_below="@id/endOfGameText" />
+            android:text="High Score: " />
         <TextView
             android:id="@+id/endOfGameHighScoreTimeText"
             android:textAlignment="center"
@@ -71,9 +67,8 @@
             android:layout_marginTop="20dp"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="Main Menu"
+            android:text="@string/main_menu"
             android:onClick="showMainMenu"
-            android:layout_below="@id/endOfGameScoreText"
             />
 
     </LinearLayout>

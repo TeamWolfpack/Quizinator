@@ -7,11 +7,12 @@ package com.seniordesign.wolfpack.quizinator.Database.Card;
 public abstract class Card {
 
     protected long id;
-    protected boolean moderatorNeeded;
-    protected int points;
+    protected String cardType;
     protected String question;
     protected String correctAnswer;
     protected String [] possibleAnswers;
+    protected String moderatorNeeded;
+    protected int points;
 
     /*
      * @author  chuna (10-5-2016)
@@ -24,55 +25,62 @@ public abstract class Card {
     public abstract void setId(long id);
 
     /*
-     * @author  chuna (10-7-2016)
+     * @author  chuna (10-13-2016)
      */
-    public abstract boolean getModeratorNeeded();
+    public abstract String getCardType();
 
     /*
-     * @author  chuna (10-7-2016)
+     * @author  chuna (10-13-2016)
      */
-    public abstract void setModeratorNeeded(boolean moderatorNeeded);
+    public abstract void setCardType(String cardType);
 
-    public abstract int getPoints();
-
-    public abstract void setPoints(int points);
-
+    /*
+     * @author  chuna (10-5-2016)
+     */
     public abstract String getQuestion();
 
+    /*
+     * @author  chuna (10-5-2016)
+     */
     public abstract void setQuestion(String question);
 
     /*
      * @author  chuna (10-11-2016)
      */
-    public boolean isModeratorNeeded() {
-        return moderatorNeeded;
-    }
+    public abstract String getCorrectAnswer();
 
     /*
      * @author  chuna (10-11-2016)
      */
-    public String getCorrectAnswer() {
-        return correctAnswer;
-    }
+    public abstract void setCorrectAnswer(String correctAnswer);
 
     /*
      * @author  chuna (10-11-2016)
      */
-    public void setCorrectAnswer(String correctAnswer) {
-        this.correctAnswer = correctAnswer;
-    }
+    public abstract String[] getPossibleAnswers();
 
     /*
      * @author  chuna (10-11-2016)
      */
-    public String[] getPossibleAnswers() {
-        return possibleAnswers;
-    }
+    public abstract void setPossibleAnswers(String[] possibleAnswers);
 
     /*
-     * @author  chuna (10-11-2016)
+     * @author  chuna (10-5-2016)
      */
-    public void setPossibleAnswers(String[] possibleAnswers) {
-        this.possibleAnswers = possibleAnswers;
-    }
+    public abstract int getPoints();
+
+    /*
+     * @author  chuna (10-5-2016)
+     */
+    public abstract void setPoints(int points);
+
+    /*
+     * @author  chuna (10-5-2016)
+     */
+    public abstract String getModeratorNeeded();
+
+    /*
+     * @author  chuna (10-5-2016)
+     */
+    public abstract void setModeratorNeeded(String moderatorNeeded);
 }

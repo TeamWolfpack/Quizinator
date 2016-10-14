@@ -12,8 +12,14 @@ import android.util.Log;
 public class CardSQLiteHelper extends SQLiteOpenHelper {
 
     //table contents
-    public static final String TABLE_CARD = "card";
+    public static final String TABLE_CARDS = "cards";
     public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_CARDTYPE = "_cardYype";
+    public static final String COLUMN_QUESTION = "_question";
+    public static final String COLUMN_POSSIBLEANSWERS = "_possibleAnswers";
+    public static final String COLUMN_CORRECTANSWER = "_correctAnswer";
+    public static final String COLUMN_POINTS = "_points";
+    public static final String COLUMN_MODERATORNEEDED = "_moderatorNeeded";
 
     //database filename
     private static final String DATABASE_NAME = "card.db";
@@ -46,7 +52,7 @@ public class CardSQLiteHelper extends SQLiteOpenHelper {
                 "Upgrading database from version " + oldVersion
                         + " to " + newVersion + ", which will " +
                         "destroy all old data");
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CARD);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CARDS);
         onCreate(db);
     }
 }

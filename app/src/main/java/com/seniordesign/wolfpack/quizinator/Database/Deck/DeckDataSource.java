@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.google.gson.Gson;
+import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +22,7 @@ public class DeckDataSource {
     private DeckSQLiteHelper dbHelper;
     private String[] allColumns = {
             DeckSQLiteHelper.COLUMN_ID,
-            DeckSQLiteHelper.COLUMN_DECK_NAME,
+            DeckSQLiteHelper.COLUMN_DECKNAME,
             DeckSQLiteHelper.COLUMN_CARDS
     };
 
@@ -62,33 +65,34 @@ public class DeckDataSource {
     /*
      * @author  chuna (10/4/2016)
      */
-    public Deck createDeck(double weight, long date,
-                           String location) {
+    public Deck createDeck(String deckName, List<Card> cards) {
         ContentValues values = new ContentValues();
-//        values.put(DeckSQLiteHelper.COLUMN_FISHTYPE, "Fish");
-//        values.put(DeckSQLiteHelper.COLUMN_WEIGHT, weight);
-//        values.put(DeckSQLiteHelper.COLUMN_LENGTH, 0.0);
-//        values.put(DeckSQLiteHelper.COLUMN_DATE, date);
-//        values.put(DeckSQLiteHelper.COLUMN_LOCATION, location);
-        long insertId = database.insert(DeckSQLiteHelper.TABLE_DECK,
+        values.put(DeckSQLiteHelper.COLUMN_DECKNAME, deckName);
+
+        // TODO make sure this works like in CardDataSource
+        Gson gson = new Gson();
+        String cardsStr = gson.toJson(cards);
+        values.put(DeckSQLiteHelper.COLUMN_CARDS, cardsStr);
+
+        long insertId = database.insert(DeckSQLiteHelper.TABLE_DECKS,
                 null, values);
-        Cursor cursor = database.query(DeckSQLiteHelper.TABLE_DECK,
+        Cursor cursor = database.query(DeckSQLiteHelper.TABLE_DECKS,
                 allColumns, DeckSQLiteHelper.COLUMN_ID
                         + " = " + insertId, null,
                 null, null, null);
         cursor.moveToFirst();
-        Deck newRules = cursorToDeck(cursor);
+        Deck newDeck = cursorToDeck(cursor);
         cursor.close();
-        return newRules;
+        return newDeck;
     }
 
     /*
      * @author  chuna (10/4/2016)
      */
-    public void deleteDeck(Deck deck) { //TODO
+    public void deleteDeck(Deck deck) {
         long id = deck.getId();
         System.out.println("Deleted item: " + deck.toString());
-        database.delete(DeckSQLiteHelper.TABLE_DECK,
+        database.delete(DeckSQLiteHelper.TABLE_DECKS,
                 DeckSQLiteHelper.COLUMN_ID + " = " + id, null);
     }
 
@@ -97,7 +101,7 @@ public class DeckDataSource {
      */
     public List<Deck> getAllDecks() {
         List<Deck> decks = new ArrayList<Deck>();
-        Cursor cursor = database.query(DeckSQLiteHelper.TABLE_DECK,
+        Cursor cursor = database.query(DeckSQLiteHelper.TABLE_DECKS,
                 allColumns, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -115,12 +119,16 @@ public class DeckDataSource {
      */
     public Deck cursorToDeck(Cursor cursor) {
         Deck deck = new Deck();
-//        rule.setId(cursor.getLong(0));//id
-//        rule.setFishType(cursor.getString(1));//fishType
-//        rule.setWeight(cursor.getDouble(2));//weight
-//        rule.setLength(cursor.getDouble(3));//length
-//        rule.setDate(cursor.getLong(4));//date
-//        rule.setLocation(cursor.getString(5));//location
+        deck.setId(cursor.getLong(0));
+        deck.setDeckName(cursor.getString(1));
+
+        //TODO make sure this works like in CardDatasource
+        List<Card> cards;
+        Gson gson = new Gson();
+        String json = cursor.getString(2);
+        cards = gson.fromJson(json, List.class);
+        deck.setCards(cards);
+
         return deck;
     }
 
