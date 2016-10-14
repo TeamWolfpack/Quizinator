@@ -41,12 +41,12 @@ public class GamePlayActivity
     private int deckLength;
     private int score;
 
-    private long startGamePlayTimer = 0;
-    private long stopGamePlayTimer = 0;
-    //private long maxGameDuration = TimeUnit.s;
+    private CountDownTimer gamePlayTimerStatic;
+    private CountDownTimer gamePlayTimerRunning;
+    private long gamePlayTimerRemaining;
 
-    CountDownTimer cardTimerStatic;
-    CountDownTimer cardTimerRunning;
+    private CountDownTimer cardTimerStatic;
+    private CountDownTimer cardTimerRunning;
 
     /*
      * @author kuczynskij (09/28/2016)
@@ -56,8 +56,11 @@ public class GamePlayActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_play);
-        initializeCardTimer(10000);
         initializeDB();
+        rules = new Rules();
+        rules.setTimeLimit(60000);
+        initializeGameTimer(rules.getTimeLimit());
+        initializeCardTimer(10000);
         initializeGamePlay();
     }
 
@@ -134,8 +137,8 @@ public class GamePlayActivity
             deck.setDeckName("Sample");
         deckLength = 5;
         //deckLength = Math.min(deck.getCards().length, rules.getMaxCardCount());
-        startGamePlayTimer = System.nanoTime();
         cardTimerRunning = cardTimerStatic.start();
+        gamePlayTimerRunning = gamePlayTimerStatic.start();
         switchToNewCard(deck, deckIndex);
     }
 
@@ -178,11 +181,13 @@ public class GamePlayActivity
      * @author kuczynskij (10/13/2016)
      */
     private void endGamePlay() {
-        stopGamePlayTimer = System.nanoTime();
+        cardTimerRunning.cancel();
+        gamePlayTimerRunning.cancel();
         final Intent intent =
                 new Intent(this, EndOfGameplayActivity.class);
         checkGameStatsAgainstHighScoresDB();
         startActivity(intent);
+
     }
 
     /*
@@ -215,13 +220,13 @@ public class GamePlayActivity
             if(score > h.getBestScore()){
                 h.setDeckName(deck.getDeckName());
                 h.setBestScore(score);
-                h.setBestTime(stopGamePlayTimer - startGamePlayTimer);
+                h.setBestTime(rules.getTimeLimit()-gamePlayTimerRemaining);
                 return "Updated HighScores";
             }
             return "No HighScore";
         }else{
             highScoresDataSource.createHighScore(deck.getDeckName(),
-                    stopGamePlayTimer - startGamePlayTimer, score);
+                    rules.getTimeLimit()-gamePlayTimerRemaining, score);
             return "New HighScore";
         }
     }
@@ -279,12 +284,34 @@ public class GamePlayActivity
     /*
      * @author farrowc 10/14/2016
      */
+    private boolean initializeGameTimer(long time){
+        gamePlayTimerStatic = new CountDownTimer(time, 10) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                ((TextView)findViewById(R.id.gamePlayTimeText)).setText(
+                        "Game Time: "+millisUntilFinished/60000+":"+millisUntilFinished/1000%60
+                );
+                gamePlayTimerRemaining = millisUntilFinished;
+            }
+
+            @Override
+            public void onFinish() {
+                endGamePlay();
+            }
+        };
+        return true;
+    }
+
+    /*
+     * @author farrowc 10/14/2016
+     */
     private boolean initializeCardTimer(long time){
         cardTimerStatic = new CountDownTimer(time, 10) {
+
             @Override
             public void onTick(long millisUntilFinished) {
                 ((TextView)findViewById(R.id.cardTimeBackground)).setText(
-                        "Time Left: "+millisUntilFinished/1000+":"+millisUntilFinished/10%100
+                        "Time Left: "+millisUntilFinished/1000+"."+millisUntilFinished/10%100
                 );
             }
 
