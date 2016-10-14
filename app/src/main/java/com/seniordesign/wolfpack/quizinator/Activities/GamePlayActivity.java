@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Card.TFCard;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
+import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScores;
 import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
@@ -32,10 +33,11 @@ public class GamePlayActivity
 
     private RulesDataSource rulesDataSource;
     private HighScoresDataSource highScoresDataSource;
+    private DeckDataSource deckDataSource;
 
-    int deckIndex;
-    int deckLength;
-    int score;
+    private int deckIndex;
+    private int deckLength;
+    private int score;
 
     /*
      * @author kuczynskij (09/28/2016)
@@ -46,7 +48,7 @@ public class GamePlayActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_play);
         initializeDB();
-        beginGamePlay();
+        initializeGamePlay();
     }
 
     /*
@@ -84,7 +86,7 @@ public class GamePlayActivity
      */
     @Override
     public void onFragmentInteraction(String answer) {
-        if(answer == currentCard.getCorrectAnswer()) {
+        if(answer.equals(currentCard.getCorrectAnswer())) {
             quickToast("Beautiful!");
             score++;
         }
@@ -105,29 +107,12 @@ public class GamePlayActivity
      * @author farrowc (10/11/2016)
      * @author kuczynskij (10/13/2016)
      */
-    public boolean setRules(Rules rules){
-        this.rules = rules;
-        return true;
-    }
-
-    /*
-     * @author farrowc (10/11/2016)
-     * @author kuczynskij (10/13/2016)
-     */
-    public boolean setDeck(Deck deck){
-        this.deck = deck;
-        return true;
-    }
-
-    /*
-     * @author farrowc (10/11/2016)
-     * @author kuczynskij (10/13/2016)
-     */
-    private void beginGamePlay() {
+    private void initializeGamePlay() {
         //Deck stuff
         deck = new Deck();
-        //deckLength = Math.min(deck.getCardTypes().length,rules.getMaxCardCount());
-        deckLength = 4;
+            deck.setDeckName("Sample");
+        deckLength = 3;
+        //deckLength = Math.min(deck.getCards().length, rules.getMaxCardCount());
 
         //TODO -> initialize gameplay timer
 
@@ -139,8 +124,8 @@ public class GamePlayActivity
     /*
      * @author farrowc (10/11/2016)
      */
-    private String switchToNewCard(Deck deck, int deckIndex) {
-        if(deckLength>deckIndex) {
+    private long switchToNewCard(Deck deck, int deckIndex) {
+        if(deckLength > deckIndex) {
             ((TextView) findViewById(R.id.scoreText)).setText("Score: " + score);
 
             //TODO Here set card to the card at the position of deckIndex
@@ -156,17 +141,7 @@ public class GamePlayActivity
         else{
             endGamePlay();
         }
-        return "";
-    }
-
-    /*
-     * @author kuczynskij (10/13/2016)
-     */
-    private void endGamePlay() {
-        final Intent intent =
-                new Intent(this, EndOfGameplayActivity.class);
-        checkGameStatsAgainstHighScoresDB();
-        startActivity(intent);
+        return currentCard.getId();
     }
 
     /*
@@ -182,22 +157,35 @@ public class GamePlayActivity
     }
 
     /*
+     * @author kuczynskij (10/13/2016)
+     */
+    private void endGamePlay() {
+        //TODO stop the timer
+        final Intent intent =
+                new Intent(this, EndOfGameplayActivity.class);
+        checkGameStatsAgainstHighScoresDB();
+        startActivity(intent);
+    }
+
+    /*
      * @author kuczynskij (09/28/2016)
      */
     public String onButtonClick(View view){
         //TODO button handling seems to be in the fragment, remove me if left unused
-
+        //discussion for next meeting
+            //set button handlers in code or in layout?
         return null;
     }
 
     /*
+     * Actions cannot be tested.
      * @author farrowc (??/??/2016)
      */
-    public void answerClicked(View v){
+    public long answerClicked(View v){
         Button clickedButton = (Button)v;
         String answer = clickedButton.getText().toString();
         this.onFragmentInteraction(answer);
-        switchToNewCard(deck,deckIndex);
+        return switchToNewCard(deck,deckIndex);
     }
 
     /*
@@ -210,6 +198,8 @@ public class GamePlayActivity
         if(score > h.getBestScore()){
             h.setDeckName(deck.getDeckName());
             h.setBestScore(score);
+            //set best time
+            //h.setBestTime();
         }
         return false;
     }
@@ -222,12 +212,17 @@ public class GamePlayActivity
         rulesDataSource = new RulesDataSource(this);
         if(rulesDataSource.open()){
             positiveDBConnections++;
-            rules = rulesDataSource.getAllRules().get(0);
+            //rules = rulesDataSource.getAllRules().get(0);
         }
         highScoresDataSource = new HighScoresDataSource(this);
         if(highScoresDataSource.open()){
             positiveDBConnections++;
         }
-        return (positiveDBConnections == 2);
+        deckDataSource = new DeckDataSource(this);
+        if(deckDataSource.open()){
+            positiveDBConnections++;
+            //deck = deckDataSource.getAllDecks().get(0);
+        }
+        return (positiveDBConnections == 3);
     }
 }

@@ -1,14 +1,11 @@
 package com.seniordesign.wolfpack.quizinator.Fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
 
 import com.seniordesign.wolfpack.quizinator.R;
 
@@ -19,6 +16,8 @@ import com.seniordesign.wolfpack.quizinator.R;
  * to handle interaction events.
  * Use the {@link TrueFalseChoiceAnswerFragment#newInstance} factory method to
  * create an instance of this fragment.
+ *
+ * @creation 10/11/2016
  */
 public class TrueFalseChoiceAnswerFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -88,12 +87,6 @@ public class TrueFalseChoiceAnswerFragment extends Fragment {
         mListener = null;
     }
 
-    public void answerClicked(View v){
-        Button clickedButton = (Button)v;
-        String answer = clickedButton.getText().toString();
-        mListener.onFragmentInteraction(answer);
-    }
-
 
     /**
      * This interface must be implemented by activities that contain this
@@ -104,6 +97,9 @@ public class TrueFalseChoiceAnswerFragment extends Fragment {
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
+     */
+    /*
+     * @author farrowc (10/11/2016)
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name

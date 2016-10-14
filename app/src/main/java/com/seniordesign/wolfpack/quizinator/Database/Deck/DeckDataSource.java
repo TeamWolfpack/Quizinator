@@ -33,8 +33,9 @@ public class DeckDataSource {
     /*
      * @author  chuna (10/4/2016)
      */
-    public void open() throws SQLException {
+    public boolean open() throws SQLException {
         database = dbHelper.getWritableDatabase();
+        return true;
     }
 
     /*
