@@ -2,7 +2,9 @@ package com.seniordesign.wolfpack.quizinator.Database.Deck;
 
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 
-import java.sql.Time;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 /**
  * @creation 10/4/2016.
@@ -11,7 +13,7 @@ public class Deck {
 
     private long id;
     private String deckName;
-    private Card[] cards;
+    private List<Card> cards;
 
 //    private boolean moderatorNeeded;
 
@@ -26,22 +28,24 @@ public class Deck {
      * @author  chuna (10-7-2016)
      */
     public boolean addCard(Card card){
-        return true;
+        return cards.add(card);
     }
 
     /*
      * @author  chuna (10-7-2016)
      */
     public boolean removeCard(Card card){
-        return true;
+        return cards.remove(card);
     }
 
-//    /*
-//     * @author  chuna (10-7-2016)
-//     */
-//    private void checkIfModeratorNeeded(){
-//
-//    }
+    /*
+     * @author  chuna (10-14-2016)
+     */
+    public boolean shuffleDeck(){
+        long seed = System.nanoTime();
+        Collections.shuffle(cards, new Random(seed));
+        return true;
+    }
 
     /*
      * @author  chuna (10-5-2016)
@@ -74,14 +78,14 @@ public class Deck {
     /*
      * @author  chuna (10-11-2016)
      */
-    public Card[] getCards() {
+    public List<Card> getCards() {
         return cards;
     }
 
     /*
      * @author  chuna (10-11-2016)
      */
-    public void setCards(Card[] cards) {
+    public void setCards(List<Card> cards) {
         this.cards = cards;
     }
 }

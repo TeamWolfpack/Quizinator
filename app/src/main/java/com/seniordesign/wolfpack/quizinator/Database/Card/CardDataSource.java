@@ -21,12 +21,12 @@ public class CardDataSource {
     private CardSQLiteHelper dbHelper;
     private String[] allColumns = {
             CardSQLiteHelper.COLUMN_ID,
-            CardSQLiteHelper.COLUMN_CARD_TYPE,
+            CardSQLiteHelper.COLUMN_CARDTYPE,
             CardSQLiteHelper.COLUMN_QUESTION,
-            CardSQLiteHelper.COLUMN_CORRECT_ANSWER,
-            CardSQLiteHelper.COLUMN_POSSIBLE_ANSWERS,
+            CardSQLiteHelper.COLUMN_CORRECTANSWER,
+            CardSQLiteHelper.COLUMN_POSSIBLEANSWERS,
             CardSQLiteHelper.COLUMN_POINTS,
-            CardSQLiteHelper.COLUMN_MODERATOR_NEEDED
+            CardSQLiteHelper.COLUMN_MODERATORNEEDED
     };
 
     /*
@@ -71,17 +71,17 @@ public class CardDataSource {
                            String[] possibleCorrectAnswers, int points,
                            String moderatorNeeded) {
         ContentValues values = new ContentValues();
-        values.put(CardSQLiteHelper.COLUMN_CARD_TYPE, cardType);
+        values.put(CardSQLiteHelper.COLUMN_CARDTYPE, cardType);
         values.put(CardSQLiteHelper.COLUMN_QUESTION, question);
-        values.put(CardSQLiteHelper.COLUMN_CORRECT_ANSWER, correctAnswer);
+        values.put(CardSQLiteHelper.COLUMN_CORRECTANSWER, correctAnswer);
 
         //TODO make sure this works
         Gson gson = new Gson();
         String stringPossibleAnswers = gson.toJson(possibleCorrectAnswers);
-        values.put(CardSQLiteHelper.COLUMN_POSSIBLE_ANSWERS, stringPossibleAnswers);
+        values.put(CardSQLiteHelper.COLUMN_POSSIBLEANSWERS, stringPossibleAnswers);
 
         values.put(CardSQLiteHelper.COLUMN_POINTS, points);
-        values.put(CardSQLiteHelper.COLUMN_MODERATOR_NEEDED, moderatorNeeded);
+        values.put(CardSQLiteHelper.COLUMN_MODERATORNEEDED, moderatorNeeded);
         long insertId = database.insert(CardSQLiteHelper.TABLE_CARDS,
                 null, values);
         Cursor cursor = database.query(CardSQLiteHelper.TABLE_CARDS,

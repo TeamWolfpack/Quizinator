@@ -14,12 +14,12 @@ public class CardSQLiteHelper extends SQLiteOpenHelper {
     //table contents
     public static final String TABLE_CARDS = "cards";
     public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_CARD_TYPE = "_card_type";
+    public static final String COLUMN_CARDTYPE = "_cardYype";
     public static final String COLUMN_QUESTION = "_question";
-    public static final String COLUMN_POSSIBLE_ANSWERS = "_possible_answers";
-    public static final String COLUMN_CORRECT_ANSWER = "_correct_answer";
+    public static final String COLUMN_POSSIBLEANSWERS = "_possibleAnswers";
+    public static final String COLUMN_CORRECTANSWER = "_correctAnswer";
     public static final String COLUMN_POINTS = "_points";
-    public static final String COLUMN_MODERATOR_NEEDED = "_moderator_needed";
+    public static final String COLUMN_MODERATORNEEDED = "_moderatorNeeded";
 
     //database filename
     private static final String DATABASE_NAME = "card.db";
