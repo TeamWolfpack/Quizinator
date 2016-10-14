@@ -14,6 +14,7 @@ import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Card.TFCard;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckDataSource;
+import com.seniordesign.wolfpack.quizinator.Database.GamePlayStats;
 import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScores;
 import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
@@ -186,8 +187,12 @@ public class GamePlayActivity
         final Intent intent =
                 new Intent(this, EndOfGameplayActivity.class);
         checkGameStatsAgainstHighScoresDB();
+        GamePlayStats s = new GamePlayStats();
+            s.setScore(score);
+            s.setTimeElapsed(rules.getTimeLimit()-gamePlayTimerRemaining);
+            s.setTotalCardsCompleted(deckIndex);
+        intent.putExtra("gameStats", s);
         startActivity(intent);
-
     }
 
     /*

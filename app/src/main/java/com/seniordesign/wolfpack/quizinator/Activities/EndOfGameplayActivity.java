@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.seniordesign.wolfpack.quizinator.Database.GamePlayStats;
 import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScores;
 import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
@@ -19,6 +20,7 @@ import java.sql.Time;
 public class EndOfGameplayActivity extends AppCompatActivity {
 
     private HighScoresDataSource highScoresDataSource;
+    private GamePlayStats gamePlayStats;
 
     /*
      * @author kuczynskij (09/28/2016)
@@ -28,6 +30,7 @@ public class EndOfGameplayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_end_of_gameplay);
         initializeDB();
+        gamePlayStats = getIntent().getExtras().getParcelable("gameStats");
         HighScores highScores = highScoresDataSource.getAllHighScores().get(0);
         ((TextView)findViewById(R.id.endOfGameHighScoreText)).setText("High Score: "+highScores.getBestScore());
         ((TextView)findViewById(R.id.endOfGameHighScoreTimeText)).setText(
