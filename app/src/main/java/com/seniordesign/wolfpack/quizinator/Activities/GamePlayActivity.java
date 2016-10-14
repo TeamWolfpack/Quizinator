@@ -1,7 +1,6 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,8 +17,6 @@ import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.Fragments.TrueFalseChoiceAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.R;
-
-import java.util.ArrayList;
 
 /**
  * The game play activity is...
@@ -53,27 +50,87 @@ public class GamePlayActivity
     }
 
     /*
-     * @author farrowc (10/11/2016)
+     * @author kuczynskij (10/13/2016)
      */
-    public void setRules(Rules rules){
+    @Override
+    protected void onResume(){
+        super.onResume();
+        rulesDataSource.open();
+        highScoresDataSource.open();
+    }
+
+    /*
+     * @author kuczynskij (10/13/2016)
+     */
+    @Override
+    protected void onPause(){
+        super.onPause();
+        rulesDataSource.close();
+        highScoresDataSource.close();
+    }
+
+    /*
+     * @author kuczynskij (10/13/2016)
+     */
+    private void cleanUpOnExit(){
+        rulesDataSource.close();
+        highScoresDataSource.close();
+        this.finish();
+        //remove if left unused due to creation of new intent
+    }
+
+    /*
+     * @author farrowc (??/??/2016)
+     */
+    @Override
+    public void onFragmentInteraction(String answer) {
+        if(answer == currentCard.getCorrectAnswer()) {
+            quickToast("Beautiful!");
+            score++;
+        }
+        else{
+            quickToast("You Suck!");
+        }
+    }
+
+    /*
+     * @author kuczynskij (10/13/2016)
+     */
+    private boolean quickToast(String message){
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        return true;
+    }
+
+    /*
+     * @author farrowc (10/11/2016)
+     * @author kuczynskij (10/13/2016)
+     */
+    public boolean setRules(Rules rules){
         this.rules = rules;
+        return true;
     }
 
     /*
      * @author farrowc (10/11/2016)
+     * @author kuczynskij (10/13/2016)
      */
-    public void setDeck(Deck deck){
+    public boolean setDeck(Deck deck){
         this.deck = deck;
+        return true;
     }
 
     /*
      * @author farrowc (10/11/2016)
+     * @author kuczynskij (10/13/2016)
      */
     private void beginGamePlay() {
         //Deck stuff
         deck = new Deck();
         //deckLength = Math.min(deck.getCardTypes().length,rules.getMaxCardCount());
         deckLength = 4;
+
+        //TODO -> initialize gameplay timer
+
 
         //Start Gameplay loop
         switchToNewCard(deck, deckIndex);
@@ -82,7 +139,7 @@ public class GamePlayActivity
     /*
      * @author farrowc (10/11/2016)
      */
-    private void switchToNewCard(Deck deck, int deckIndex) {
+    private String switchToNewCard(Deck deck, int deckIndex) {
         if(deckLength>deckIndex) {
             ((TextView) findViewById(R.id.scoreText)).setText("Score: " + score);
 
@@ -99,15 +156,16 @@ public class GamePlayActivity
         else{
             endGamePlay();
         }
+        return "";
     }
 
+    /*
+     * @author kuczynskij (10/13/2016)
+     */
     private void endGamePlay() {
-        final Intent intent = new Intent(this, EndOfGameplayActivity.class);
-
-        //TODO Check score against high score
-
-        //TODO If score is higher than high score, replace it
-
+        final Intent intent =
+                new Intent(this, EndOfGameplayActivity.class);
+        checkGameStatsAgainstHighScoresDB();
         startActivity(intent);
     }
 
@@ -127,56 +185,14 @@ public class GamePlayActivity
      * @author kuczynskij (09/28/2016)
      */
     public String onButtonClick(View view){
+        //TODO button handling seems to be in the fragment, remove me if left unused
+
         return null;
     }
 
     /*
-     * @author kuczynskij (09/28/2016)
+     * @author farrowc (??/??/2016)
      */
-    private boolean addToGameStatsDB(){
-        HighScores h = highScoresDataSource.getAllHighScores().get(0);
-        if(score > h.getBestScore()){
-            h.setBestScore(score);
-        }
-        if(){
-
-        }
-        return false;
-    }
-
-    /*
-     * @author kuczynskij (09/28/2016)
-     */
-    private boolean initializeDB(){
-        int positiveDBConnections = 0;
-        rulesDataSource = new RulesDataSource(this);
-        if(rulesDataSource.open()){
-            positiveDBConnections++;
-        }
-        rules = rulesDataSource.getAllItems().get(0);
-
-        highScoresDataSource = new HighScoresDataSource(this);
-        highScoresDataSource.open();
-
-        return true;
-    }
-
-    /*
-     * @author kuczynskij (09/28/2016)
-     */
-    @Override
-    protected void onResume(){
-        super.onResume();
-    }
-
-    /*
-     * @author kuczynskij (09/28/2016)
-     */
-    @Override
-    protected void onPause(){
-        super.onPause();
-    }
-
     public void answerClicked(View v){
         Button clickedButton = (Button)v;
         String answer = clickedButton.getText().toString();
@@ -184,14 +200,34 @@ public class GamePlayActivity
         switchToNewCard(deck,deckIndex);
     }
 
-    @Override
-    public void onFragmentInteraction(String answer) {
-//        if(answer.equals("True") == currentCard.getCorrectAnswer()) {
-//            Toast.makeText(this, "Beautiful!", Toast.LENGTH_SHORT).show();
-//            score++;
-//        }
-//        else{
-//            Toast.makeText(this, "You Suck!", Toast.LENGTH_SHORT).show();
-//        }
+    /*
+     * @author kuczynskij (09/28/2016)
+     */
+    private boolean checkGameStatsAgainstHighScoresDB(){
+        HighScores h = highScoresDataSource
+                .getAllHighScores().get(0);
+        //TODO -> there is a lot more we need to check for and add
+        if(score > h.getBestScore()){
+            h.setDeckName(deck.getDeckName());
+            h.setBestScore(score);
+        }
+        return false;
+    }
+
+    /*
+     * @author kuczynskij (10/13/2016)
+     */
+    private boolean initializeDB(){
+        int positiveDBConnections = 0;
+        rulesDataSource = new RulesDataSource(this);
+        if(rulesDataSource.open()){
+            positiveDBConnections++;
+            rules = rulesDataSource.getAllRules().get(0);
+        }
+        highScoresDataSource = new HighScoresDataSource(this);
+        if(highScoresDataSource.open()){
+            positiveDBConnections++;
+        }
+        return (positiveDBConnections == 2);
     }
 }
