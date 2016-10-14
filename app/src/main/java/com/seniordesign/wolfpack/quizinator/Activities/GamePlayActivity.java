@@ -43,6 +43,7 @@ public class GamePlayActivity
 
     private long startGamePlayTimer = 0;
     private long stopGamePlayTimer = 0;
+    //private long maxGameDuration = TimeUnit.s;
 
     CountDownTimer cardTimerStatic;
     CountDownTimer cardTimerRunning;
