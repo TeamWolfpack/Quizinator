@@ -1,6 +1,7 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -28,7 +29,7 @@ public class GamePlayActivity
 
     private Rules rules;
     private Deck deck;
-    private TFCard currentCard;
+    private Card currentCard;
 
     private RulesDataSource rulesDataSource;
     private HighScoresDataSource highScoresDataSource;
@@ -84,13 +85,24 @@ public class GamePlayActivity
      */
     @Override
     public void onFragmentInteraction(String answer) {
-        if(answer == currentCard.getCorrectAnswer()) {
-            quickToast("Beautiful!");
+        if(answer.equals(currentCard.getCorrectAnswer())) {
+            //quickToast("Beautiful!");
+            quickCorrectAnswerConfirmation(true);
             score++;
         }
         else{
-            quickToast("You Suck!");
+            //quickToast("You Suck!");
+            quickCorrectAnswerConfirmation(false);
         }
+    }
+
+    private boolean quickCorrectAnswerConfirmation(boolean correct){
+        if(correct){
+            findViewById(R.id.cardTimeBackground).setBackgroundColor(Color.GREEN);
+        }else{
+            findViewById(R.id.cardTimeBackground).setBackgroundColor(Color.RED);
+        }
+        return true;
     }
 
     /*
@@ -125,7 +137,7 @@ public class GamePlayActivity
      */
     private void beginGamePlay() {
         //Deck stuff
-        deck = new Deck();
+        deck = initializeDeck();
         //deckLength = Math.min(deck.getCardTypes().length,rules.getMaxCardCount());
         deckLength = 4;
 
@@ -145,9 +157,7 @@ public class GamePlayActivity
 
             //TODO Here set card to the card at the position of deckIndex
 
-            currentCard = new TFCard();
-            currentCard.setQuestion("Hello World");
-            currentCard.setCorrectAnswer("True");
+            currentCard = deck.getCards()[deckIndex];
 
 
             showCard(currentCard);
@@ -165,7 +175,7 @@ public class GamePlayActivity
     private void endGamePlay() {
         final Intent intent =
                 new Intent(this, EndOfGameplayActivity.class);
-        checkGameStatsAgainstHighScoresDB();
+        //checkGameStatsAgainstHighScoresDB();
         startActivity(intent);
     }
 
@@ -215,6 +225,34 @@ public class GamePlayActivity
     }
 
     /*
+     * @author farrowc (10/13/2016)
+     * TEMP returns a sample deck for testing
+     * The deck database is incomplete right now
+     */
+    private Deck initializeDeck(){
+        Deck newDeck = new Deck();
+        Card[] cards = new Card[5];
+        cards[0] = new TFCard();
+        cards[0].setQuestion("This is True.");
+        cards[0].setCorrectAnswer("True");
+        cards[1] = new TFCard();
+        cards[1].setQuestion("This is False.");
+        cards[1].setCorrectAnswer("False");
+        cards[2] = new TFCard();
+        cards[2].setQuestion("2+2 = 4");
+        cards[2].setCorrectAnswer("True");
+        cards[3] = new TFCard();
+        cards[3].setQuestion("1*2 = 2");
+        cards[3].setCorrectAnswer("True");
+        cards[4] = new TFCard();
+        cards[4].setQuestion("2/1 = 1");
+        cards[4].setCorrectAnswer("False");
+        newDeck.setCards(cards);
+
+        return newDeck;
+    }
+
+    /*
      * @author kuczynskij (10/13/2016)
      */
     private boolean initializeDB(){
@@ -222,7 +260,8 @@ public class GamePlayActivity
         rulesDataSource = new RulesDataSource(this);
         if(rulesDataSource.open()){
             positiveDBConnections++;
-            rules = rulesDataSource.getAllRules().get(0);
+            //rules = rulesDataSource.getAllRules().get(0);
+            rules = new Rules();
         }
         highScoresDataSource = new HighScoresDataSource(this);
         if(highScoresDataSource.open()){
