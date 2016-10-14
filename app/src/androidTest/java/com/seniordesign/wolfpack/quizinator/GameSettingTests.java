@@ -60,6 +60,8 @@ import static org.hamcrest.Matchers.is;
 @LargeTest
 public class GameSettingTests {
 
+    // Needed to run in Travis
+    // **********************************************
     @Rule
     public ActivityTestRule<NewGameSettingsActivity> mActivityRule = new ActivityTestRule<>(NewGameSettingsActivity.class);
 
@@ -75,6 +77,7 @@ public class GameSettingTests {
         };
         activity.runOnUiThread(wakeUpDevice);
     }
+    // **********************************************
 
     @Test
     public void useAppContext() throws Exception {

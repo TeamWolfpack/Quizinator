@@ -7,13 +7,11 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.seniordesign.wolfpack.quizinator.Activities.EndOfGameplayActivity;
-import com.seniordesign.wolfpack.quizinator.Activities.NewGameSettingsActivity;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -25,12 +23,14 @@ import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 
-/**
- * Created by leonardj on 10/10/2016.
+/*
+ * @author leonardj (10/10/2016)
  */
 
 public class EndOfGameTests {
 
+    // Needed to run in Travis
+    // **********************************************
     @Rule
     public ActivityTestRule<EndOfGameplayActivity> mActivityRule = new ActivityTestRule<>(EndOfGameplayActivity.class);
 
@@ -46,6 +46,7 @@ public class EndOfGameTests {
         };
         activity.runOnUiThread(wakeUpDevice);
     }
+    // **********************************************
 
     @Test
     public void useAppContext() throws Exception {
