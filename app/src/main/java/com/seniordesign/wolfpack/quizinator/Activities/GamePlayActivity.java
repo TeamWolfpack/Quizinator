@@ -191,16 +191,6 @@ public class GamePlayActivity
     }
 
     /*
-     * @author kuczynskij (09/28/2016)
-     */
-    public String onButtonClick(View view){
-        //TODO button handling seems to be in the fragment, remove me if left unused
-        //discussion for next meeting
-            //set button handlers in code or in layout?
-        return null;
-    }
-
-    /*
      * Actions cannot be tested.
      * @author farrowc (??/??/2016)
      */
