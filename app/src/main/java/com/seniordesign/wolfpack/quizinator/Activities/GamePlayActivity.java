@@ -22,6 +22,10 @@ import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.Fragments.TrueFalseChoiceAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.R;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * The game play activity is...
  * @creation 09/28/2016
@@ -165,8 +169,7 @@ public class GamePlayActivity
 
             //TODO Here set card to the card at the position of deckIndex
 
-            currentCard = deck.getCards()[deckIndex];
-
+            currentCard = deck.getCards().get(deckIndex);
 
             showCard(currentCard);
             cardTimerRunning = cardTimerStatic.start();
@@ -293,7 +296,7 @@ public class GamePlayActivity
         cards[4] = new TFCard();
         cards[4].setQuestion("2/1 = 1");
         cards[4].setCorrectAnswer("False");
-        newDeck.setCards(cards);
+        newDeck.setCards(Arrays.asList(cards));
 
         return newDeck;
     }
