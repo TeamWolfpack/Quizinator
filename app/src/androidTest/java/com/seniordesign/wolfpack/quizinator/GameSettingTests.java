@@ -1,31 +1,13 @@
 package com.seniordesign.wolfpack.quizinator;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.ViewAction;
-import android.support.test.espresso.action.GeneralClickAction;
-import android.support.test.espresso.action.GeneralLocation;
-import android.support.test.espresso.action.Press;
-import android.support.test.espresso.action.Tap;
-import android.support.test.espresso.action.ViewActions;
-import android.support.test.espresso.intent.Intents;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.view.KeyEvent;
 import android.view.WindowManager;
-import android.widget.EditText;
-import android.widget.Toast;
-
-import com.seniordesign.wolfpack.quizinator.Activities.GamePlayActivity;
-import com.seniordesign.wolfpack.quizinator.Activities.MainMenuActivity;
 import com.seniordesign.wolfpack.quizinator.Activities.NewGameSettingsActivity;
-import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
-import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 
-import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -34,26 +16,15 @@ import org.junit.runner.RunWith;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.Intents.intending;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
-import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
 
 /*
  * @author leonardj (10/2/2016)
@@ -212,57 +183,6 @@ public class GameSettingTests {
         onView(withId(R.id.card_type)).check(matches(isDisplayed()));
 
         onView(withId(R.id.new_game)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void validateLoadingFromDatabase() {
-        RulesDataSource rulesource = new RulesDataSource(mActivityRule.getActivity());
-        rulesource.open();
-        rulesource.createRule(5, 603000, 9000, "Both");
-        mActivityRule.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mActivityRule.getActivity().loadPreviousRules();
-            }
-        });
-
-        onView(withId(R.id.game_minutes)).check(matches(withText(containsString("1"))));
-        onView(withId(R.id.game_seconds)).check(matches(withText(containsString("03"))));
-        onView(withId(R.id.card_minutes)).check(matches(withText(containsString("0"))));
-        onView(withId(R.id.card_seconds)).check(matches(withText(containsString("09"))));
-        onView(withId(R.id.card_count)).check(matches(withText(containsString("5"))));
-        onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString("Both"))));
-
-        rulesource.createRule(5, 90000, 10000, "Both");
-        mActivityRule.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mActivityRule.getActivity().loadPreviousRules();
-            }
-        });
-
-        onView(withId(R.id.game_minutes)).check(matches(withText(containsString("1"))));
-        onView(withId(R.id.game_seconds)).check(matches(withText(containsString("30"))));
-        onView(withId(R.id.card_minutes)).check(matches(withText(containsString("0"))));
-        onView(withId(R.id.card_seconds)).check(matches(withText(containsString("10"))));
-        onView(withId(R.id.card_count)).check(matches(withText(containsString("5"))));
-        onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString("Both"))));
-
-        rulesource.close();
-    }
-
-    @Test
-    public void validateValidateDatabaseAfterGameStart() {
-        RulesDataSource rulesource = new RulesDataSource(mActivityRule.getActivity());
-        rulesource.open();
-        rulesource.createRule(5, 90000, 9000, "Both");
-        mActivityRule.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mActivityRule.getActivity().loadPreviousRules();
-            }
-        });
-        
     }
 
     @Test
