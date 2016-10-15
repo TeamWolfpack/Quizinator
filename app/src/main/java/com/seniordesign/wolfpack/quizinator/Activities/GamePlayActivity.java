@@ -223,16 +223,17 @@ public class GamePlayActivity
 
     /*
      * @author kuczynskij (09/28/2016)
+     * @author leonardj (10/15/2016)
      */
     private String checkGameStatsAgainstHighScoresDB() {
         if (highScoresDataSource.getAllHighScores().size() > 0) {
             HighScores h = highScoresDataSource.getAllHighScores().get(0);
             if (score >= h.getBestScore()) {
-                h.setDeckName(deck.getDeckName());
-                h.setBestScore(score);
-                if (rules.getTimeLimit() - gamePlayTimerRemaining < h.getBestTime()) {
+                if (score > h.getBestScore() || rules.getTimeLimit() - gamePlayTimerRemaining < h.getBestTime()) {
                     h.setBestTime(rules.getTimeLimit() - gamePlayTimerRemaining);
                 }
+                h.setBestScore(score);
+                h.setDeckName(deck.getDeckName());
                 highScoresDataSource.deleteHighScore(h);
                 highScoresDataSource.createHighScore(h.getDeckName(), h.getBestTime(), h.getBestScore());
                 return "Updated HighScores";
