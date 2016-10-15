@@ -30,20 +30,42 @@ public class EndOfGameplayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_end_of_gameplay);
         initializeDB();
-        gamePlayStats = getIntent().getExtras().getParcelable("gameStats");
-        HighScores highScores = highScoresDataSource.getAllHighScores().get(0);
+
+        if (getIntent().getExtras() != null) {
+            gamePlayStats = getIntent().getExtras().getParcelable("gameStats");
+        } else {
+            gamePlayStats = new GamePlayStats();
+            gamePlayStats.setScore(0);
+            gamePlayStats.setTimeElapsed(0);
+            gamePlayStats.setTotalCardsCompleted(0);
+        }
+
         ((TextView)findViewById(R.id.endOfGameScoreText)).setText(
                 "Score: " + gamePlayStats.getScore()
         );
+        long endOfGameSeconds = (gamePlayStats.getTimeElapsed()/1000)%60;
+        String formattedGameSeconds = endOfGameSeconds < 10 ? "0" + endOfGameSeconds : "" + endOfGameSeconds;
         ((TextView)findViewById(R.id.endOfGameTimeText)).setText(
-                "Time: " + (gamePlayStats.getTimeElapsed()/60000) + ":" + (gamePlayStats.getTimeElapsed()/1000)%60
+
+                "Time: " + (gamePlayStats.getTimeElapsed()/60000) + ":" + formattedGameSeconds
         );
         ((TextView)findViewById(R.id.endOfGameTotalCardsText)).setText(
                 "Total Cards: " + gamePlayStats.getTotalCardsCompleted()
         );
+
+        HighScores highScores = new HighScores();
+        if (highScoresDataSource.getAllHighScores().size() > 0) {
+            highScores = highScoresDataSource.getAllHighScores().get(0);
+        } else {
+            highScores.setBestScore(0);
+            highScores.setBestTime(0);
+            highScores.setDeckName("");
+        }
+        long highScoreSeconds = (highScores.getBestTime()/1000)%60;
+        String formattedHighScoreSeconds = highScoreSeconds < 10 ? "0" + highScoreSeconds : "" + highScoreSeconds;
         ((TextView)findViewById(R.id.endOfGameHighScoreText)).setText("High Score: "+highScores.getBestScore());
         ((TextView)findViewById(R.id.endOfGameHighScoreTimeText)).setText(
-                "High Score Time: " + (highScores.getBestTime()/60000) + ":" + (highScores.getBestTime()/1000)%60
+                "High Score Time: " + (highScores.getBestTime()/60000) + ":" + formattedHighScoreSeconds
         );
     }
 

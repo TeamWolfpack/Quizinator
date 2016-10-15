@@ -7,8 +7,11 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.seniordesign.wolfpack.quizinator.Activities.EndOfGameplayActivity;
+import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresDataSource;
 
+import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -57,7 +60,7 @@ public class EndOfGameTests {
 
     @Test
     public void validateMainMenuIntent() {
-        onView(withId(R.id.newGameButton)).perform(click());
+        onView(withId(R.id.goToMainMenu)).perform(click());
         onView(allOf(instanceOf(TextView.class), withParent(withId(R.id.toolbar))))
                 .check(matches(withText("Main Menu")));
     }
@@ -69,6 +72,6 @@ public class EndOfGameTests {
         onView(withId(R.id.endOfGameTimeText)).check(matches(isDisplayed()));
         onView(withId(R.id.endOfGameTotalCardsText)).check(matches(isDisplayed()));
         onView(withId(R.id.endOfGameHighScoreText)).check(matches(isDisplayed()));
-        onView(withId(R.id.newGameButton)).check(matches(isDisplayed()));
+        onView(withId(R.id.goToMainMenu)).check(matches(isDisplayed()));
     }
 }

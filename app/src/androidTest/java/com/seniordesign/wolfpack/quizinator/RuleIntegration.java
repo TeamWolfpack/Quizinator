@@ -67,12 +67,12 @@ public class RuleIntegration {
         mActivityRule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mActivityRule.getActivity().startGame(mActivityRule.getActivity().findViewById(R.id.new_game));
+                mActivityRule.getActivity().updateRuleSet();
             }
         });
 
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -139,7 +139,7 @@ public class RuleIntegration {
         mActivityRule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mActivityRule.getActivity().startGame(mActivityRule.getActivity().findViewById(R.id.new_game));
+                mActivityRule.getActivity().updateRuleSet();
             }
         });
 

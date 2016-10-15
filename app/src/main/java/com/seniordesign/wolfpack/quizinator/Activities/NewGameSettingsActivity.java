@@ -85,6 +85,15 @@ public class NewGameSettingsActivity extends AppCompatActivity {
      * @author leonardj (10/4/2016)
      */
     public void startGame(View v){
+        updateRuleSet();
+        final Intent startGameIntent = new Intent(this, GamePlayActivity.class);
+        startActivity(startGameIntent);
+    }
+
+    /*
+     * @author leonardj (10/15/2016)
+     */
+    public void updateRuleSet() {
         long gameMinutesInMilli = Integer.valueOf(gameMinutesInput.getText().toString()) * 60000;
         long gameSecondsInMilli = Integer.valueOf(gameSecondsInput.getText().toString()) * 1000;
         long cardMinutesInMilli = Integer.valueOf(cardMinutesInput.getText().toString()) * 60000;
@@ -94,29 +103,27 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
         if (rulesSource.getAllRules().size() < 1) {
             rulesSource.createRule(cardCount, gameMinutesInMilli + gameSecondsInMilli,
-                        cardMinutesInMilli + cardSecondsInMilli, cardTypes);
-        } else {
-            Rules rule = rulesSource.getAllRules().get(rulesSource.getAllRules().size() - 1);
-            rulesSource.deleteRule(rule);
-
-            if (rule.getTimeLimit() != gameMinutesInMilli + gameSecondsInMilli) {
-                rule.setTimeLimit(gameMinutesInMilli + gameSecondsInMilli);
-            }
-            if (rule.getCardDisplayTime() != cardMinutesInMilli + cardSecondsInMilli) {
-                rule.setCardDisplayTime(cardMinutesInMilli + cardSecondsInMilli);
-            }
-            if (rule.getMaxCardCount() != cardCount) {
-                rule.setMaxCardCount(cardCount);
-            }
-            if (!rule.getCardTypes().equals(cardTypes)) {
-                rule.setCardTypes(cardTypes);
-            }
-
-            rulesSource.createRule(rule.getMaxCardCount(), rule.getTimeLimit(), rule.getCardDisplayTime(), rule.getCardTypes());
+                    cardMinutesInMilli + cardSecondsInMilli, cardTypes);
+            return;
         }
 
-        final Intent startGameIntent = new Intent(this, GamePlayActivity.class);
-        startActivity(startGameIntent);
+        Rules rule = rulesSource.getAllRules().get(rulesSource.getAllRules().size() - 1);
+        rulesSource.deleteRule(rule);
+
+        if (rule.getTimeLimit() != gameMinutesInMilli + gameSecondsInMilli) {
+            rule.setTimeLimit(gameMinutesInMilli + gameSecondsInMilli);
+        }
+        if (rule.getCardDisplayTime() != cardMinutesInMilli + cardSecondsInMilli) {
+            rule.setCardDisplayTime(cardMinutesInMilli + cardSecondsInMilli);
+        }
+        if (rule.getMaxCardCount() != cardCount) {
+            rule.setMaxCardCount(cardCount);
+        }
+        if (!rule.getCardTypes().equals(cardTypes)) {
+            rule.setCardTypes(cardTypes);
+        }
+
+        rulesSource.createRule(rule.getMaxCardCount(), rule.getTimeLimit(), rule.getCardDisplayTime(), rule.getCardTypes());
     }
 
     /*
