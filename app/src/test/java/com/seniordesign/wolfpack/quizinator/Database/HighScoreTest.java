@@ -17,9 +17,6 @@ public class HighScoreTest {
     private HighScores h2 = new HighScores();
     private HighScores h3 = new HighScores();
 
-    private HighScoresDataSource dao = new HighScoresDataSource();
-    private HighScoresSQLiteHelper sql = new HighScoresSQLiteHelper();
-
     /*
      * @author kuczynskij (10/12/2016)
      */
