@@ -60,7 +60,7 @@ public class CardUITests {
      * @author  chuna (10/16/2016)
      */
     @Test
-    public void normalFlow_DeckDataSource() throws Exception{
+    public void normalFlow_CardDataSource() throws Exception{
         assertEquals(true, datasource.open());
         assertEquals(true, datasource.getDatabase().isOpen());
         dbHelper.onUpgrade(datasource.getDatabase(), 0, 1);

@@ -30,6 +30,10 @@ import static org.hamcrest.Matchers.instanceOf;
  * @author leonardj (10/10/2016)
  */
 
+/**
+ * Tests EndOfGame Tests
+ * @creation 10/10/2016
+ */
 public class EndOfGameTests {
 
     // Needed to run in Travis
