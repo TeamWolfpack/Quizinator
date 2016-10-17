@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 
 /**
  * Unit Test the database for Deck
- * @creation 10/15/2016.za
+ * @creation 10/15/2016
  */
 public class DeckTest {
 

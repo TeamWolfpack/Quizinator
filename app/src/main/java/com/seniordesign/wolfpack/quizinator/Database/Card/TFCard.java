@@ -7,7 +7,7 @@ package com.seniordesign.wolfpack.quizinator.Database.Card;
 public class TFCard extends Card {
 
     private long id;
-    private String cardType;
+    private String cardType = "TF";
     private String question;
     private String correctAnswer;
     private String [] possibleAnswers = new String[]{"True", "False"};
@@ -53,7 +53,8 @@ public class TFCard extends Card {
      */
     @Override
     public void setCardType(String cardType) {
-        this.cardType = cardType;
+        //TODO should not be able to change card type
+//        this.cardType = cardType;
     }
 
     /*

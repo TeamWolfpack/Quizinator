@@ -69,6 +69,8 @@ public class DeckUITests {
         assertEquals("deck.db", datasource.getSQLiteHelper().getDatabaseName());
         assertEquals(1, datasource.getAllDecks().size());
         assertEquals(3, datasource.getAllColumns().length);
+        deck.setDeckName("TestDeck2");
+        assertEquals(1, datasource.updateDeck(deck));
         assertEquals(1, datasource.deleteDeck(deck));
         assertEquals(true, datasource.close());
     }
