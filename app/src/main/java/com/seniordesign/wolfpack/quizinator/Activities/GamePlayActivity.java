@@ -68,10 +68,10 @@ public class GamePlayActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_play);
         initializeDB();
-        rules = new Rules();
-        rules.setTimeLimit(60000);
+        //rules = new Rules();
+        //rules.setTimeLimit(60000);
         initializeGameTimer(rules.getTimeLimit());
-        initializeCardTimer(10000);
+        initializeCardTimer(rules.getCardDisplayTime());
         initializeCorrectnessColorController();
         initializeGamePlay();
     }
@@ -150,7 +150,7 @@ public class GamePlayActivity
         //Deck stuff
         deck = initializeDeck();
         deck.setDeckName("Sample");
-        deckLength = 5;
+        deckLength = Math.min(rules.getMaxCardCount(),deck.getCards().size());
         //deckLength = Math.min(deck.getCards().length, rules.getMaxCardCount());
         cardTimerRunning = cardTimerStatic.start();
         gamePlayTimerRunning = gamePlayTimerStatic.start();
@@ -310,7 +310,7 @@ public class GamePlayActivity
         rulesDataSource = new RulesDataSource(this);
         if (rulesDataSource.open()) {
             positiveDBConnections++;
-            //rules = rulesDataSource.getAllRules().get(0);
+            rules = rulesDataSource.getAllRules().get(0);
         }
         highScoresDataSource = new HighScoresDataSource(this);
         if (highScoresDataSource.open()) {
