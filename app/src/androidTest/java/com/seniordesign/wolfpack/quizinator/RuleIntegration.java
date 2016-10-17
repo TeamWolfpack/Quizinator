@@ -82,15 +82,19 @@ public class RuleIntegration {
             }
         });
 
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         Rules rule = rulesource.getAllRules().get(rulesource.getAllRules().size() - 1);
-        assertTrue(rule.getTimeLimit() == 150000);
+        assertTrue("Game time is " + rule.getTimeLimit(), rule.getTimeLimit() == 150000);
         assertTrue(rule.getCardDisplayTime() == 30000);
         assertTrue(rule.getMaxCardCount() == 1);
         assertTrue(rule.getCardTypes().equals("Both"));
 
-        for (Rules r: rulesource.getAllRules()) {
-            rulesource.deleteRule(r);
-        }
+
 
         rulesource.close();
     }
@@ -146,6 +150,12 @@ public class RuleIntegration {
                 mActivityRule.getActivity().updateRuleSet();
             }
         });
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         Rules rule = rulesource.getAllRules().get(rulesource.getAllRules().size() - 1);
         assertTrue("Game time is " + rule.getTimeLimit(), rule.getTimeLimit() == 60000);
