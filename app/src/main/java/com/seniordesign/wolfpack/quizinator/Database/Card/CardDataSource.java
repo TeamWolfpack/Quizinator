@@ -160,7 +160,30 @@ public class CardDataSource {
         return card;
     }
 
+    /*
+     * @author  chuna (10/4/2016)
+     */
     public String[] getAllColumns(){
         return allColumns;
+    }
+
+    /*
+     * @author  chuna (10/16/2016)
+     */
+    public int updateCard(Card card){
+        ContentValues values = new ContentValues();
+        values.put(CardSQLiteHelper.COLUMN_CARDTYPE, card.getCardType());
+        values.put(CardSQLiteHelper.COLUMN_QUESTION, card.getQuestion());
+        values.put(CardSQLiteHelper.COLUMN_CORRECTANSWER, card.getCorrectAnswer());
+
+        Gson gson = new Gson();
+        String possibleAnswerStr = gson.toJson(card.getPossibleAnswers());
+        values.put(CardSQLiteHelper.COLUMN_POSSIBLEANSWERS, possibleAnswerStr);
+
+        values.put(CardSQLiteHelper.COLUMN_MODERATORNEEDED, card.getModeratorNeeded());
+        values.put(CardSQLiteHelper.COLUMN_POINTS, card.getPoints());
+
+        String where = CardSQLiteHelper.COLUMN_ID + " = " + card.getId();
+        return database.update(CardSQLiteHelper.TABLE_CARDS, values, where, null);
     }
 }

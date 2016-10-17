@@ -14,7 +14,7 @@ public class CardSQLiteHelper extends SQLiteOpenHelper {
     //table contents
     public static final String TABLE_CARDS = "cards";
     public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_CARDTYPE = "_cardYype";
+    public static final String COLUMN_CARDTYPE = "_cardType";
     public static final String COLUMN_QUESTION = "_question";
     public static final String COLUMN_POSSIBLEANSWERS = "_possibleAnswers";
     public static final String COLUMN_CORRECTANSWER = "_correctAnswer";

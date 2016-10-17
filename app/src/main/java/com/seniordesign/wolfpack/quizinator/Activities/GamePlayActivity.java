@@ -94,8 +94,7 @@ public class GamePlayActivity
     @Override
     protected void onPause() {
         super.onPause();
-        rulesDataSource.close();
-        highScoresDataSource.close();
+        cleanUpOnExit();
     }
 
     /*
@@ -104,8 +103,18 @@ public class GamePlayActivity
     private void cleanUpOnExit() {
         rulesDataSource.close();
         highScoresDataSource.close();
+        deckDataSource.close();
+
+        gamePlayTimerStatic.cancel();
+        gamePlayTimerRunning.cancel();
+
+        cardTimerStatic.cancel();
+        cardTimerRunning.cancel();
+
+        cardTimerAreaBackgroundStatic.cancel();
+        cardTimerAreaBackgroundRunning.cancel();
+
         this.finish();
-        //remove if left unused due to creation of new intent
     }
 
     /*
