@@ -3,7 +3,11 @@ package com.seniordesign.wolfpack.quizinator;
 import android.support.test.rule.ActivityTestRule;
 import android.view.WindowManager;
 
+import com.google.gson.internal.LinkedTreeMap;
 import com.seniordesign.wolfpack.quizinator.Activities.NewGameSettingsActivity;
+import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
+import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
+import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 
@@ -12,11 +16,15 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.List;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -137,7 +145,6 @@ public class RuleIntegration {
     public void validateCreatingRuleOnGameStart() {
         RulesDataSource rulesource = new RulesDataSource(mActivityRule.getActivity());
         rulesource.open();
-
         mActivityRule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -161,29 +168,6 @@ public class RuleIntegration {
     }
 
     @Test
-    public void validateGameEndsWhenGameTimerEnds() {
-//        RulesDataSource rulesource = new RulesDataSource(mActivityRule.getActivity());
-//        rulesource.open();
-//        rulesource.createRule(5, 60000, 90000, "Both");
-//        mActivityRule.getActivity().runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                mActivityRule.getActivity().loadPreviousRules();
-//            }
-//        });
-//
-//        onView(withId(R.id.new_game)).perform(click());
-//
-//        try {
-//            Thread.sleep(70000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        onView(withId(R.id.endOfGameScoreText)).check(matches(withText("0")));
-    }
-
-    @Test
     public void validateCardLimit() {
         RulesDataSource rulesource = new RulesDataSource(mActivityRule.getActivity());
         rulesource.open();
@@ -194,8 +178,9 @@ public class RuleIntegration {
                 mActivityRule.getActivity().loadPreviousRules();
             }
         });
+        rulesource.close();
 
-        onView(withId(R.id.new_game)).perform(click());
+        onView(withId(R.id.new_game)).perform(scrollTo(), click());
 
         try {
             Thread.sleep(10000);
@@ -204,5 +189,91 @@ public class RuleIntegration {
         }
 
         onView(withId(R.id.endOfGameScoreText)).check(matches(withText(containsString("0"))));
+    }
+
+    @Test
+    public void validateWrongAnswer() {
+        RulesDataSource rulesource = new RulesDataSource(mActivityRule.getActivity());
+        rulesource.open();
+        rulesource.createRule(1, 60000, 30000, "Both");
+        mActivityRule.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mActivityRule.getActivity().loadPreviousRules();
+            }
+        });
+        rulesource.close();
+
+        onView(withId(R.id.new_game)).perform(scrollTo(), click());
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        DeckDataSource decksource = new DeckDataSource(mActivityRule.getActivity());
+        decksource.open();
+        String answer = decksource.getAllDecks().get(0).getCards().get(0).getCorrectAnswer();
+        if (answer.equals("True")) {
+            //Click the wrong button
+            onView(withId(R.id.falseButton)).perform(click());
+        } else {
+            //Click the wrong button
+            onView(withId(R.id.trueButton)).perform(click());
+        }
+        decksource.close();
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        onView(withId(R.id.endOfGameScoreText)).check(matches(withText(containsString("0"))));
+    }
+
+    @Test
+    public void validateCorrectAnswer() {
+        RulesDataSource rulesource = new RulesDataSource(mActivityRule.getActivity());
+        rulesource.open();
+        rulesource.createRule(1, 60000, 30000, "Both");
+        mActivityRule.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mActivityRule.getActivity().loadPreviousRules();
+            }
+        });
+        rulesource.close();
+
+        onView(withId(R.id.new_game)).perform(scrollTo(), click());
+
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        DeckDataSource decksource = new DeckDataSource(mActivityRule.getActivity());
+        decksource.open();
+        Deck deck = decksource.getAllDecks().get(0);
+        List<Card> list = deck.getCards();
+        String answer = list.get(0).getCorrectAnswer();
+
+        if (answer.equals("True")) {
+            onView(withId(R.id.trueButton)).check(matches(isDisplayed()));
+            onView(withId(R.id.trueButton)).perform(click());
+        } else {
+            onView(withId(R.id.falseButton)).perform(click());
+        }
+        decksource.close();
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        onView(withId(R.id.endOfGameScoreText)).check(matches(withText(containsString("1"))));
     }
 }
