@@ -75,6 +75,7 @@ public class GamePlayActivity
         initializeCardTimer(rules.getCardDisplayTime());
         initializeCorrectnessColorController();
         initializeGamePlay();
+        System.out.println("Hello");
     }
 
     /*
@@ -306,7 +307,7 @@ public class GamePlayActivity
         cards[2].setCorrectAnswer("True");
         cards[3] = new TFCard();
         cards[3].setQuestion("20*10 = 100");
-        cards[3].setCorrectAnswer("True");
+        cards[3].setCorrectAnswer("False");
         cards[4] = new TFCard();
         cards[4].setQuestion("10*91 = 901");
         cards[4].setCorrectAnswer("False");
