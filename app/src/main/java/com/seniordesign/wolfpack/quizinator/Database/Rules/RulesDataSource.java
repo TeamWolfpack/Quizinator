@@ -88,7 +88,7 @@ public class RulesDataSource {
     /*
      * @author kuczynskij (10/16/2016)
      */
-    public int updateRule(long id, Rules r){
+    public int updateRules(long id, Rules r){
         ContentValues cv = new ContentValues();
             cv.put(RulesSQLiteHelper.COLUMN_TIMELIMIT, r.getTimeLimit());
             cv.put(RulesSQLiteHelper.COLUMN_CARDDISPLAYTIME, r.getCardDisplayTime());
