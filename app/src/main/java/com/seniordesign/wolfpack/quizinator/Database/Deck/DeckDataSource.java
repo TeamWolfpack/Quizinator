@@ -44,8 +44,9 @@ public class DeckDataSource {
     /*
      * @author  chuna (10/4/2016)
      */
-    public void close() {
+    public boolean close() {
         dbHelper.close();
+        return true;
     }
 
     /*
@@ -89,10 +90,10 @@ public class DeckDataSource {
     /*
      * @author  chuna (10/4/2016)
      */
-    public void deleteDeck(Deck deck) {
+    public int deleteDeck(Deck deck) {
         long id = deck.getId();
         System.out.println("Deleted item: " + deck.toString());
-        database.delete(DeckSQLiteHelper.TABLE_DECKS,
+        return database.delete(DeckSQLiteHelper.TABLE_DECKS,
                 DeckSQLiteHelper.COLUMN_ID + " = " + id, null);
     }
 
