@@ -135,6 +135,9 @@ public class GamePlayActivity
         }
     }
 
+    /*
+     * @author farrowc 10/14/2016
+     */
     private boolean quickCorrectAnswerConfirmation(boolean correct) {
         setCorrectnessColors(correct);
         cardTimerAreaBackgroundRunning = cardTimerAreaBackgroundStatic.start();
