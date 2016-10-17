@@ -86,6 +86,19 @@ public class RulesDataSource {
     }
 
     /*
+     * @author kuczynskij (10/16/2016)
+     */
+    public int updateRule(long id, Rules r){
+        ContentValues cv = new ContentValues();
+            cv.put(RulesSQLiteHelper.COLUMN_TIMELIMIT, r.getTimeLimit());
+            cv.put(RulesSQLiteHelper.COLUMN_CARDDISPLAYTIME, r.getCardDisplayTime());
+            cv.put(RulesSQLiteHelper.COLUMN_MAXCARDCOUNT, r.getMaxCardCount());
+            cv.put(RulesSQLiteHelper.COLUMN_CARDTYPES, r.getCardTypes());
+        String where = RulesSQLiteHelper.COLUMN_ID + " = " + id;
+        return database.update(RulesSQLiteHelper.TABLE_RULES, cv, where, null);
+    }
+
+    /*
      * @author chuna (10/4/2016)
      */
     public boolean deleteRule(Rules rule) {
