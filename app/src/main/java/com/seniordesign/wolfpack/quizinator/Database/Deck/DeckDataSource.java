@@ -132,7 +132,25 @@ public class DeckDataSource {
         return deck;
     }
 
+    /*
+     * @author  chuna (10/4/2016)
+     */
     public String[] getAllColumns(){
         return allColumns;
+    }
+
+    /*
+     * @author  chuna (10//2016)
+     */
+    public int updateDeck(Deck deck){
+        ContentValues values = new ContentValues();
+        values.put(DeckSQLiteHelper.COLUMN_DECKNAME, deck.getDeckName());
+
+        Gson gson = new Gson();
+        String cardsStr = gson.toJson(deck.getCards());
+        values.put(DeckSQLiteHelper.COLUMN_CARDS, cardsStr);
+
+        String where = DeckSQLiteHelper.COLUMN_ID + " = " + deck.getId();
+        return database.update(DeckSQLiteHelper.TABLE_DECKS, values, where, null);
     }
 }
