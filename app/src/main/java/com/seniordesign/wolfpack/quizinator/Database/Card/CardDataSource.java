@@ -41,7 +41,7 @@ public class CardDataSource {
      */
     public boolean open() throws SQLException {
         database = dbHelper.getWritableDatabase();
-        return true;
+        return database.isOpen();
     }
 
     /*

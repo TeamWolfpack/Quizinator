@@ -26,7 +26,16 @@ public class CardSQLiteHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     // Database creation sql statement
-    private static final String DATABASE_CREATE = "";
+    private static final String DATABASE_CREATE = "create table "
+            + TABLE_CARDS + "("
+            + COLUMN_ID + " integer primary key autoincrement, "
+            + COLUMN_CARDTYPE + " TEXT, "
+            + COLUMN_QUESTION + " TEXT, "
+            + COLUMN_CORRECTANSWER + " TEXT, "
+            + COLUMN_POSSIBLEANSWERS + " TEXT, "
+            + COLUMN_POINTS + " INTEGER, "
+            + COLUMN_MODERATORNEEDED + " TEXT"
+            + ");";
 
     /*
      * @author  chuna (10/4/2016)

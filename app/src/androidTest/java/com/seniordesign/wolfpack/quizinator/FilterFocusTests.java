@@ -1,6 +1,7 @@
 package com.seniordesign.wolfpack.quizinator;
 
 import android.support.test.rule.ActivityTestRule;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.seniordesign.wolfpack.quizinator.Activities.NewGameSettingsActivity;
