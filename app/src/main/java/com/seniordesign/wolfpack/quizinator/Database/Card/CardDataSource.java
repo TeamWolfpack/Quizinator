@@ -39,15 +39,17 @@ public class CardDataSource {
     /*
      * @author  chuna (10/4/2016)
      */
-    public void open() throws SQLException {
+    public boolean open() throws SQLException {
         database = dbHelper.getWritableDatabase();
+        return true;
     }
 
     /*
      * @author  chuna (10/4/2016)
      */
-    public void close() {
+    public boolean close() {
         dbHelper.close();
+        return true;
     }
 
     /*
@@ -97,10 +99,10 @@ public class CardDataSource {
     /*
      * @author  chuna (10/4/2016)
      */
-    public void deleteCard(Card card) {
+    public int deleteCard(Card card) {
         long id = card.getId();
         System.out.println("Deleted card: " + card.toString());
-        database.delete(CardSQLiteHelper.TABLE_CARDS,
+        return database.delete(CardSQLiteHelper.TABLE_CARDS,
                 CardSQLiteHelper.COLUMN_ID + " = " + id, null);
     }
 
