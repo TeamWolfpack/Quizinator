@@ -81,6 +81,18 @@ public class SettingsDataSource {
     }
 
     /*
+     * @author kuczynskij (10/16/2016)
+     */
+    public int updateSettings(Settings s){
+        ContentValues cv = new ContentValues();
+            cv.put(SettingsSQLiteHelper.COLUMN_ID, s.getId());
+            cv.put(SettingsSQLiteHelper.COLUMN_USERNAME, s.getUserName());
+            cv.put(SettingsSQLiteHelper.COLUMN_NUMBEROFCONNECTIONS, s.getNumberOfConntections());
+        String where = SettingsSQLiteHelper.COLUMN_ID + " = " + s.getId();
+        return database.update(SettingsSQLiteHelper.TABLE_SETTINGS, cv, where, null);
+    }
+
+    /*
      * @author kuczynskij (10/4/2016)
      */
     public boolean deleteSetting(Settings settings) {

@@ -318,7 +318,9 @@ public class GamePlayActivity
         cards[9].setCorrectAnswer("False");
         newDeck.setCards(Arrays.asList(cards));
 
-        return  newDeck;
+        deckDataSource.createDeck("Default", Arrays.asList(cards));
+
+        return newDeck;
     }
 
     /*
@@ -329,7 +331,8 @@ public class GamePlayActivity
         rulesDataSource = new RulesDataSource(this);
         if (rulesDataSource.open()) {
             positiveDBConnections++;
-            rules = rulesDataSource.getAllRules().get(0);
+            List<Rules> ruleList = rulesDataSource.getAllRules();
+            rules = ruleList.get(ruleList.size() - 1);
         }
         highScoresDataSource = new HighScoresDataSource(this);
         if (highScoresDataSource.open()) {
@@ -338,7 +341,8 @@ public class GamePlayActivity
         deckDataSource = new DeckDataSource(this);
         if (deckDataSource.open()) {
             positiveDBConnections++;
-            //deck = deckDataSource.getAllDecks().get(0);
+            initializeDeck();
+            deck = deckDataSource.getAllDecks().get(0);
         }
         return (positiveDBConnections == 3);
     }

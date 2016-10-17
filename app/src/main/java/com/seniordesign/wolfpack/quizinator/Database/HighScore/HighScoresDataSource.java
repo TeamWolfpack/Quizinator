@@ -82,6 +82,19 @@ public class HighScoresDataSource {
     }
 
     /*
+     * @author kuczynskij (10/16/2016)
+     */
+    public int updateHighScore(HighScores hs) {
+        ContentValues cv = new ContentValues();
+            cv.put(HighScoresSQLiteHelper.COLUMN_ID, hs.getId());
+            cv.put(HighScoresSQLiteHelper.COLUMN_DECKNAME, hs.getDeckName());
+            cv.put(HighScoresSQLiteHelper.COLUMN_BESTTIME, hs.getBestTime());
+            cv.put(HighScoresSQLiteHelper.COLUMN_BESTSCORE, hs.getBestScore());
+        String where = HighScoresSQLiteHelper.COLUMN_ID + " = " + hs.getId();
+        return database.update(HighScoresSQLiteHelper.TABLE_HIGHSCORES, cv, where, null);
+    }
+
+    /*
      * @author kuczynskij (10/10/2016)
      */
     public boolean deleteHighScore(HighScores scores) {
