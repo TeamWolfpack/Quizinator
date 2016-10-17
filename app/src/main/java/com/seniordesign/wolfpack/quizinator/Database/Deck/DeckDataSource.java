@@ -133,13 +133,8 @@ public class DeckDataSource {
         Gson gson = new Gson();
         String json = cursor.getString(2);
 
-        //cards = new ArrayList<>();
-
         Type listType = new TypeToken<List<TFCard>>(){}.getType();
         cards = new Gson().fromJson(json, listType);
-
-
-        //cards = gson.fromJson(json, List.class);
         deck.setCards(cards);
 
         return deck;
