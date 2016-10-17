@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -156,5 +157,51 @@ public class RuleIntegration {
         assertTrue("Card type is " + rule.getCardTypes(), rule.getCardTypes().equals("True/False"));
 
         rulesource.close();
+    }
+
+    @Test
+    public void validateGameEndsWhenGameTimerEnds() {
+//        RulesDataSource rulesource = new RulesDataSource(mActivityRule.getActivity());
+//        rulesource.open();
+//        rulesource.createRule(5, 60000, 90000, "Both");
+//        mActivityRule.getActivity().runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                mActivityRule.getActivity().loadPreviousRules();
+//            }
+//        });
+//
+//        onView(withId(R.id.new_game)).perform(click());
+//
+//        try {
+//            Thread.sleep(70000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//
+//        onView(withId(R.id.endOfGameScoreText)).check(matches(withText("0")));
+    }
+
+    @Test
+    public void validateCardLimit() {
+        RulesDataSource rulesource = new RulesDataSource(mActivityRule.getActivity());
+        rulesource.open();
+        rulesource.createRule(1, 60000, 5000, "Both");
+        mActivityRule.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mActivityRule.getActivity().loadPreviousRules();
+            }
+        });
+
+        onView(withId(R.id.new_game)).perform(click());
+
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        onView(withId(R.id.endOfGameScoreText)).check(matches(withText(containsString("0"))));
     }
 }
