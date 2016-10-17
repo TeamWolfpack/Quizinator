@@ -300,6 +300,8 @@ public class GamePlayActivity
         cards[4].setCorrectAnswer("False");
         newDeck.setCards(Arrays.asList(cards));
 
+        deckDataSource.createDeck("Default", Arrays.asList(cards));
+
         return newDeck;
     }
 
@@ -321,7 +323,8 @@ public class GamePlayActivity
         deckDataSource = new DeckDataSource(this);
         if (deckDataSource.open()) {
             positiveDBConnections++;
-            //deck = deckDataSource.getAllDecks().get(0);
+            initializeDeck();
+            deck = deckDataSource.getAllDecks().get(0);
         }
         return (positiveDBConnections == 3);
     }

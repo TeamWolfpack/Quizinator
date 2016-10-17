@@ -1,17 +1,34 @@
 package com.seniordesign.wolfpack.quizinator.Database.Card;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
 /**
  * @creation    10/4/2016.
  */
 
-public abstract class Card {
+public abstract class Card implements Serializable {
 
+    @SerializedName("superId")
     protected long id;
+
+    @SerializedName("superCardType")
     protected String cardType;
+
+    @SerializedName("superQuestion")
     protected String question;
+
+    @SerializedName("superCorrectAnswer")
     protected String correctAnswer;
+
+    @SerializedName("superPossibleAnswers")
     protected String [] possibleAnswers;
+
+    @SerializedName("superModeratorNeeded")
     protected String moderatorNeeded;
+
+    @SerializedName("superPoints")
     protected int points;
 
     /*
