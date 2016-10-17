@@ -25,6 +25,7 @@ import com.seniordesign.wolfpack.quizinator.R;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * The game play activity is...
@@ -68,10 +69,10 @@ public class GamePlayActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_play);
         initializeDB();
-        rules = new Rules();
-        rules.setTimeLimit(60000);
+        //rules = new Rules();
+        //rules.setTimeLimit(60000);
         initializeGameTimer(rules.getTimeLimit());
-        initializeCardTimer(10000);
+        initializeCardTimer(rules.getCardDisplayTime());
         initializeCorrectnessColorController();
         initializeGamePlay();
     }
@@ -150,7 +151,7 @@ public class GamePlayActivity
         //Deck stuff
         deck = initializeDeck();
         deck.setDeckName("Sample");
-        deckLength = 5;
+        deckLength = Math.min(rules.getMaxCardCount(),deck.getCards().size());
         //deckLength = Math.min(deck.getCards().length, rules.getMaxCardCount());
         cardTimerRunning = cardTimerStatic.start();
         gamePlayTimerRunning = gamePlayTimerStatic.start();
@@ -299,6 +300,8 @@ public class GamePlayActivity
         cards[4].setCorrectAnswer("False");
         newDeck.setCards(Arrays.asList(cards));
 
+        deckDataSource.createDeck("Default", Arrays.asList(cards));
+
         return newDeck;
     }
 
@@ -310,7 +313,8 @@ public class GamePlayActivity
         rulesDataSource = new RulesDataSource(this);
         if (rulesDataSource.open()) {
             positiveDBConnections++;
-            //rules = rulesDataSource.getAllRules().get(0);
+            List<Rules> ruleList = rulesDataSource.getAllRules();
+            rules = ruleList.get(ruleList.size() - 1);
         }
         highScoresDataSource = new HighScoresDataSource(this);
         if (highScoresDataSource.open()) {
@@ -319,7 +323,8 @@ public class GamePlayActivity
         deckDataSource = new DeckDataSource(this);
         if (deckDataSource.open()) {
             positiveDBConnections++;
-            //deck = deckDataSource.getAllDecks().get(0);
+            initializeDeck();
+            deck = deckDataSource.getAllDecks().get(0);
         }
         return (positiveDBConnections == 3);
     }
