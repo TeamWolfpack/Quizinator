@@ -13,15 +13,15 @@ import org.junit.Test;
 import static junit.framework.Assert.assertEquals;
 
 /**
- * Created by leonardj on 10/10/2016.
+ * @creation 10/10/2016.
  */
-
 public class FilterFocusTests {
 
     private EditText editText;
 
     @Rule
-    public ActivityTestRule<NewGameSettingsActivity> mActivityRule = new ActivityTestRule<>(NewGameSettingsActivity.class);
+    public ActivityTestRule<NewGameSettingsActivity> mActivityRule =
+            new ActivityTestRule<>(NewGameSettingsActivity.class);
 
     @Before
     public void createEditText() {

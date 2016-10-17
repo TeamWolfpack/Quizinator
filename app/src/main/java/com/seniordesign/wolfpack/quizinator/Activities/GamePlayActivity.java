@@ -22,8 +22,6 @@ import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.Fragments.TrueFalseChoiceAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.R;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -69,13 +67,10 @@ public class GamePlayActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_play);
         initializeDB();
-        //rules = new Rules();
-        //rules.setTimeLimit(60000);
         initializeGameTimer(rules.getTimeLimit());
         initializeCardTimer(rules.getCardDisplayTime());
         initializeCorrectnessColorController();
         initializeGamePlay();
-        System.out.println("Hello");
     }
 
     /*
@@ -99,6 +94,7 @@ public class GamePlayActivity
 
     /*
      * @author kuczynskij (10/13/2016)
+     * @author leonardj (??/??/2016)
      */
     private void cleanUpOnExit() {
         rulesDataSource.close();

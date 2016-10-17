@@ -7,6 +7,7 @@ import com.seniordesign.wolfpack.quizinator.Activities.NewGameSettingsActivity;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
