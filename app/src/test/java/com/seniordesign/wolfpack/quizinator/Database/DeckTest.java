@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 
 /**
  * Unit Test the database for Deck
- * @creation 10/15/2016.
+ * @creation 10/15/2016.za
  */
 public class DeckTest {
 
@@ -88,7 +88,7 @@ public class DeckTest {
      */
     @Test
     public void shuffleTest(){
-        //TODO ot sure if we would need to check each spot in the array
+        //TODO Not sure if we would need to check each spot in the array
         List<Card> startCards = deck.getCards();
         deck.shuffleDeck();
         List<Card> endCards = deck.getCards();
