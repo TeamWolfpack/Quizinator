@@ -22,7 +22,7 @@ public class MCCard extends Card {
     @Override
     public String toString(){
         return cardType + " | " + question + " | " +
-                possibleAnswers[0] + ", " + possibleAnswers[1] +
+                possibleAnswers[0] + ", " + possibleAnswers[1] + ", " +
                 possibleAnswers[2] + ", " + possibleAnswers[3] +
                 " | " + points;
     }

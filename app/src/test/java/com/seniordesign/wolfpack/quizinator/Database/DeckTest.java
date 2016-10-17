@@ -79,7 +79,7 @@ public class DeckTest {
         Card cardToRemove = deck.getCards().get(0);
         Card newFirstCard = deck.getCards().get(1);
         deck.removeCard(cardToRemove);
-        assertEquals(6, deck.getCards().size());
+        assertEquals(5, deck.getCards().size());
         assertEquals(newFirstCard, deck.getCards().get(0));
     }
 
@@ -88,10 +88,15 @@ public class DeckTest {
      */
     @Test
     public void shuffleTest(){
-        //TODO Not sure if we would need to check each spot in the array
-        List<Card> startCards = deck.getCards();
+        List<Card> startCards = new ArrayList<>(deck.getCards());
         deck.shuffleDeck();
         List<Card> endCards = deck.getCards();
-        assertNotEquals(startCards, endCards);
+        for (int i = 0; i < endCards.size(); i++) {
+            if (endCards.get(i).getId() != startCards.get(i).getId()) {
+                assertTrue(true);
+                return;
+            }
+        }
+        fail();
     }
 }
