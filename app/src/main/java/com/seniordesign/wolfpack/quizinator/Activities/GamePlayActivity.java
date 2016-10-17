@@ -25,6 +25,7 @@ import com.seniordesign.wolfpack.quizinator.R;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * The game play activity is...
@@ -111,7 +112,10 @@ public class GamePlayActivity
      */
     @Override
     public void onFragmentInteraction(String answer) {
-        if (answer.equals(currentCard.getCorrectAnswer())) {
+        if(answer==null){
+            quickCorrectAnswerConfirmation(false);
+        }
+        else if (answer.equals(currentCard.getCorrectAnswer())) {
             //quickToast("Beautiful!");
             quickCorrectAnswerConfirmation(true);
             score++;
@@ -281,25 +285,40 @@ public class GamePlayActivity
      */
     private Deck initializeDeck() {
         Deck newDeck = new Deck();
-        Card[] cards = new Card[5];
+        Card[] cards = new Card[10];
         cards[0] = new TFCard();
-        cards[0].setQuestion("This is True.");
+        cards[0].setQuestion("1+1 = 2");
         cards[0].setCorrectAnswer("True");
         cards[1] = new TFCard();
-        cards[1].setQuestion("This is False.");
+        cards[1].setQuestion("1*2 = 0");
         cards[1].setCorrectAnswer("False");
         cards[2] = new TFCard();
-        cards[2].setQuestion("2+2 = 4");
+        cards[2].setQuestion("4*5 = 20");
         cards[2].setCorrectAnswer("True");
         cards[3] = new TFCard();
-        cards[3].setQuestion("1*2 = 2");
+        cards[3].setQuestion("20*10 = 100");
         cards[3].setCorrectAnswer("True");
         cards[4] = new TFCard();
-        cards[4].setQuestion("2/1 = 1");
+        cards[4].setQuestion("10*91 = 901");
         cards[4].setCorrectAnswer("False");
+        cards[5] = new TFCard();
+        cards[5].setQuestion("100^2 = 10000");
+        cards[5].setCorrectAnswer("True");
+        cards[6] = new TFCard();
+        cards[6].setQuestion("10*102 = 1002");
+        cards[6].setCorrectAnswer("False");
+        cards[7] = new TFCard();
+        cards[7].setQuestion("8/2 = 4");
+        cards[7].setCorrectAnswer("True");
+        cards[8] = new TFCard();
+        cards[8].setQuestion("120/4 = 30");
+        cards[8].setCorrectAnswer("True");
+        cards[9] = new TFCard();
+        cards[9].setQuestion("6*7 = 41");
+        cards[9].setCorrectAnswer("False");
         newDeck.setCards(Arrays.asList(cards));
 
-        return newDeck;
+        return  newDeck;
     }
 
     /*
@@ -360,6 +379,7 @@ public class GamePlayActivity
 
             @Override
             public void onFinish() {
+                onFragmentInteraction(null);
                 switchToNewCard(deck, deckIndex);
             }
         };
