@@ -33,7 +33,7 @@ import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.Matchers.containsString;
 
 /**
- * Created by leonardj on 10/14/2016.
+ * @author leonardj (10/14/2016)
  */
 
 public class RuleIntegration {
