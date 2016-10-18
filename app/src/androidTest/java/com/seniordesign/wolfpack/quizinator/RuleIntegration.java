@@ -94,8 +94,6 @@ public class RuleIntegration {
         assertTrue(rule.getMaxCardCount() == 1);
         assertTrue(rule.getCardTypes().equals("Both"));
 
-
-
         rulesource.close();
     }
 
