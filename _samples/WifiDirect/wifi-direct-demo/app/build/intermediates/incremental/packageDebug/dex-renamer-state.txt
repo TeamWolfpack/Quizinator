@@ -1,0 +1,7 @@
+#Thu Sep 22 16:05:19 CDT 2016
+base.0=D\:\\Quizinator\\samples\\WifiDirect\\wifi-direct-demo\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run_207fa4fdcab91ca0f5812db73c4547220efd64f2
+renamed.1=classes.dex
+renamed.0=classes2.dex
+file.1=D\:\\Quizinator\\samples\\WifiDirect\\wifi-direct-demo\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run-bootstrap_076b0c337491f9149950b90249b74c82518af48a\\classes.dex
+base.1=D\:\\Quizinator\\samples\\WifiDirect\\wifi-direct-demo\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run-bootstrap_076b0c337491f9149950b90249b74c82518af48a
+file.0=D\:\\Quizinator\\samples\\WifiDirect\\wifi-direct-demo\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run_207fa4fdcab91ca0f5812db73c4547220efd64f2\\classes.dex
