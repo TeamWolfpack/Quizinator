@@ -25,7 +25,7 @@ import com.seniordesign.wolfpack.quizinator.R;
 import java.util.Arrays;
 import java.util.List;
 
-/**
+/*
  * The game play activity is...
  * @creation 09/28/2016
  */

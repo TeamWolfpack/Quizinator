@@ -19,7 +19,7 @@ import com.seniordesign.wolfpack.quizinator.R;
 import java.util.Calendar;
 import java.util.Date;
 
-/**
+/*
  * The new game settings activity is...
  * @creation 09/28/2016
  */

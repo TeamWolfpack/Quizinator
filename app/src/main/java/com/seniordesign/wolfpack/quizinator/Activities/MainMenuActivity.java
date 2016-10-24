@@ -15,7 +15,7 @@ import android.view.MenuItem;
 
 import com.seniordesign.wolfpack.quizinator.R;
 
-/**
+/*
  * The main menu activity
  * @creation 10/4/2016
  */
@@ -45,7 +45,7 @@ public class MainMenuActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    /**
+    /*
      * @author farrowc 10/4/2016
      */
     @Override
@@ -58,7 +58,7 @@ public class MainMenuActivity extends AppCompatActivity
         }
     }
 
-    /**
+    /*
      * @author farrowc 10/4/2016
      */
     @Override
@@ -68,7 +68,7 @@ public class MainMenuActivity extends AppCompatActivity
         return true;
     }
 
-    /**
+    /*
      * @author farrowc 10/4/2016
      */
     @Override
@@ -86,7 +86,7 @@ public class MainMenuActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    /**
+    /*
      * @author farrowc 10/4/2016
      */
     @Override
@@ -110,7 +110,7 @@ public class MainMenuActivity extends AppCompatActivity
         return true;
     }
 
-    /**
+    /*
      * @author farrowc 10/4/2016
      */
     public void showGameSettings(View v){

@@ -13,7 +13,7 @@ import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 
-/**
+/*
  * @creation 10/10/2016.
  */
 public class FilterFocusTests {
