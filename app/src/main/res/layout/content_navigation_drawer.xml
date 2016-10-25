@@ -53,6 +53,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/host_game"
+            android:onClick="initiateDiscovery"
             />
     </LinearLayout>
+    <fragment
+        class="com.seniordesign.wolfpack.quizinator.WifiDirect.DeviceListFragment"
+        android:id="@+id/frag_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mainMenuButtons" >
+    </fragment>
+    <fragment
+        class="com.seniordesign.wolfpack.quizinator.WifiDirect.DeviceDetailFragment"
+        android:id="@+id/frag_detail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/mainMenuButtons" >
+    </fragment>
 </RelativeLayout>

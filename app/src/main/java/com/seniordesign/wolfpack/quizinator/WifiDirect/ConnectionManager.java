@@ -1,4 +1,4 @@
-package com.colorcloud.wifichat;
+package com.seniordesign.wolfpack.quizinator.WifiDirect;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -14,8 +14,6 @@ import java.util.Map;
 import android.content.Context;
 import android.util.Log;
 
-import com.colorcloud.wifichat.WiFiDirectApp.PTPLog;
-
 /**
  * this class encapsulate the NIO buffer and NIO channel on top of socket. It is all abt NIO style.
  * SSLServerSocketChannel, ServerSocketChannel, SocketChannel, Selector, ByteBuffer, etc. 
@@ -29,7 +27,7 @@ public class ConnectionManager {
 	
 	private Context mContext;
 	ConnectionService mService;
-	WiFiDirectApp mApp;
+	WifiDirectApp mApp;
 	
 	// Server knows all clients. key is ip addr, value is socket channel. 
 	// when remote client screen on, a new connection with the same ip addr is established.
@@ -48,7 +46,7 @@ public class ConnectionManager {
 	 */
 	public ConnectionManager(ConnectionService service) {
 		mService = service;
-		mApp = (WiFiDirectApp)mService.getApplication();
+		mApp = (WifiDirectApp)mService.getApplication();
 	}
 	
 	public void configIPV4() {
@@ -124,14 +122,12 @@ public class ConnectionManager {
 		    sChannel.register(mClientSelector, SelectionKey.OP_READ );
 		    mApp.setMyAddr(mClientAddr);
 		    mApp.clearMessages();
-		    PTPLog.d(TAG, "startClientSelector : started: " + mClientSocketChannel.socket().getLocalAddress().getHostAddress());
-		    
+
 			// start selector monitoring, blocking
 			new SelectorAsyncTask(mService, mClientSelector).execute();
 			return 0;
 
 		} catch(Exception e) {
-			PTPLog.e(TAG, "startClientSelector : exception: " + e.toString());
 			mClientSelector = null;
 			mClientSocketChannel = null;
 			mApp.setMyAddr(null);
@@ -155,7 +151,7 @@ public class ConnectionManager {
 		    if( "0.0.0.0".equals(mServerAddr)){
 		    	mServerAddr = "Master";
 		    }
-		    ((WiFiDirectApp)mService.getApplication()).setMyAddr(mServerAddr);
+		    ((WifiDirectApp)mService.getApplication()).setMyAddr(mServerAddr);
 		    
 		    mServerSelector = Selector.open();
 		    SelectionKey acceptKey = sServerChannel.register(mServerSelector, SelectionKey.OP_ACCEPT);
@@ -234,7 +230,7 @@ public class ConnectionManager {
 			}
 			schannel.close();
 		}catch(Exception e){
-			PTPLog.e(TAG, "onBrokenConn: close channel: " + e.toString());
+			//PTPLog.e(TAG, "onBrokenConn: close channel: " + e.toString());
 		}
 	}
 	
@@ -256,7 +252,7 @@ public class ConnectionManager {
 		Log.d(TAG, "onFinishConnect : client connect to server succeed : " + clientaddr + " -> " + serveraddr);
 		mClientSocketChannel = schannel;
 		mClientAddr = clientaddr;
-		((WiFiDirectApp)mService.getApplication()).setMyAddr(mClientAddr);
+		((WifiDirectApp)mService.getApplication()).setMyAddr(mClientAddr);
 	}
 	
 	/**
