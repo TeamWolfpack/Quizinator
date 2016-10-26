@@ -1,13 +1,3 @@
-/*
- * (c) COPYRIGHT 2009-2011 MOTOROLA INC.
- * MOTOROLA CONFIDENTIAL PROPRIETARY
- * MOTOROLA Advanced Technology and Software Operations
- *
- * REVISION HISTORY:
- * Author        Date       CR Number         Brief Description
- * ------------- ---------- ----------------- ------------------------------
- * e51141        2010/08/27 IKCTXTAW-19		   Initial version
- */
 package com.seniordesign.wolfpack.quizinator.WifiDirect;
 
 import android.os.Handler;
@@ -16,51 +6,34 @@ import android.os.Looper;
 import android.os.Process;
 
 /**
- *<code><pre>
- * CLASS:
- *  implements stand alone worker thread
- *
- * RESPONSIBILITIES: for component to create a standalone thread other than main thread
- *
- * COLABORATORS:
- * 	LocationSensorManager
- *
- * USAGE:
- * 	See each method.
- *
- *</pre></code>
+ * Creates a standalone thread other than the main thread.
+ * @creation 10/26/2016
  */
 public final class WorkHandler {
 
     private HandlerThread mHandlerThread;
     private Handler mHandler;
 
-    /**
-     * Create a new WorkHandler instance.
-     *
-     * @param threadName The name of the thread.
+    /*
+     * @author kuczynskij (10/26/2016)
      */
     public WorkHandler(String threadName) {
         //mHandlerThread = new HandlerThread(threadName, Process.THREAD_PRIORITY_BACKGROUND);
-        mHandlerThread = new HandlerThread(threadName, Process.THREAD_PRIORITY_DEFAULT);
+        mHandlerThread = new HandlerThread(threadName,
+                Process.THREAD_PRIORITY_DEFAULT);
         mHandlerThread.start();
         mHandler = new Handler(mHandlerThread.getLooper());
     }
 
-    /**
-     * Get the Handler instance for this WorkHandler. Returns null if the
-     * WorkHandler has been closed.
-     *
-     * @return An <code>android.os.Handler</code> instance or null.
+    /*
+     * @author kuczynskij (10/26/2016)
      */
     public Handler getHandler() {
         return mHandler;
     }
 
-    /**
-     * TODO
-     *
-     * @return
+    /*
+     * @author kuczynskij (10/26/2016)
      */
     public Looper getLooper() {
         Handler h = mHandler;
@@ -71,6 +44,9 @@ public final class WorkHandler {
      * Close the WorkHandler instance. Should be called when the
      * WorkHandler is no longer needed.
      */
+    /*
+     * @author kuczynskij (10/26/2016)
+     */
     public void close() {
         if (mHandler != null) {
             mHandlerThread.getLooper().quit();
@@ -79,14 +55,13 @@ public final class WorkHandler {
         }
     }
 
-    /**
-     * Cleanup if needed and log the fact the WorkHandler instance was
-     * not properly closed.
-     *
-     * @override
+    /*
+     * @author kuczynskij (10/26/2016)
      */
     @Override
     protected void finalize() {
+        //cleanup if needed and log the fact the WorkHandler
+        //instance was not properly closed.
         if (mHandler != null) {
             close();
         }

@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class WifiDirectApp extends Application {
 
-    private static final String TAG = "PTP_APP";
+    private static final String TAG = "WifiDirectApp";
 
     public WifiP2pManager mP2pMan;
     public WifiP2pManager.Channel mP2pChannel;
