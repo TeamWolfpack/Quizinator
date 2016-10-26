@@ -20,9 +20,11 @@ import com.seniordesign.wolfpack.quizinator.WifiDirect.DeviceDetailFragment;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.DeviceListFragment;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
-public class HostGameActivity extends AppCompatActivity implements DeviceListFragment.DeviceActionListener {
+public class HostGameActivity
+        extends AppCompatActivity
+        implements DeviceListFragment.DeviceActionListener {
 
-    private WifiDirectApp mApp;
+    private WifiDirectApp wifiDirectApp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +32,14 @@ public class HostGameActivity extends AppCompatActivity implements DeviceListFra
         setContentView(R.layout.activity_host_game);
         setTitle("Host Game");
 
-        mApp = (WifiDirectApp)getApplication();
-        mApp.mHomeActivity = this;
+        wifiDirectApp = (WifiDirectApp)getApplication();
+        wifiDirectApp.mHomeActivity = this;
 
         // If service not started yet, start it.
-        Intent serviceIntent = new Intent(this, ConnectionService.class);
-        startService(serviceIntent);  // start the connection service
+        Intent serviceIntent =
+                new Intent(this, ConnectionService.class);
+        // start the connection service
+        startService(serviceIntent);
     }
 
     /*
@@ -45,35 +49,41 @@ public class HostGameActivity extends AppCompatActivity implements DeviceListFra
     protected void onStart(){
         super.onStart();
         //Initiate Discovery
-
-//        //leonardj - isP2pEnabled() is always false for some reason
-        if( !mApp.isP2pEnabled() ){
+        if( !wifiDirectApp.isP2pEnabled() ){
             Toast.makeText(this, R.string.p2p_off_warning, Toast.LENGTH_LONG).show();
             return;
         }
-
-        final DeviceListFragment fragment = (DeviceListFragment)getFragmentManager().findFragmentById(R.id.frag_list);
+        final DeviceListFragment fragment =
+                (DeviceListFragment)getFragmentManager().findFragmentById(R.id.frag_list);
         fragment.onInitiateDiscovery();
 
-        if (mApp.mP2pMan == null) {
-            Toast.makeText(this, "mP2pMan is null", Toast.LENGTH_SHORT).show();
-        } else if (mApp.mP2pChannel == null) {
-            Toast.makeText(this, "mP2pChannel is null", Toast.LENGTH_SHORT).show();
+        if (wifiDirectApp.mP2pMan == null) {
+            Toast.makeText(this, "mP2p manager is null",
+                    Toast.LENGTH_SHORT).show();
+        } else if (wifiDirectApp.mP2pChannel == null) {
+            Toast.makeText(this, "mP2p channel is null",
+                    Toast.LENGTH_SHORT).show();
         }
 
-        mApp.mP2pMan.discoverPeers(mApp.mP2pChannel, new WifiP2pManager.ActionListener() {
+        wifiDirectApp.mP2pMan.discoverPeers(wifiDirectApp.mP2pChannel,
+                new WifiP2pManager.ActionListener() {
+
             @Override
             public void onSuccess() {
-                Toast.makeText(HostGameActivity.this, "Discovery Initiated", Toast.LENGTH_SHORT).show();
+                Toast.makeText(HostGameActivity.this,
+                        "Discovery Initiated", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(int reasonCode) {
                 fragment.clearPeers();
-                Toast.makeText(HostGameActivity.this, "Discovery Failed, try again... ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(HostGameActivity.this,
+                        "Discovery Failed, try again... ", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+
 
     /**
      * process WIFI_P2P_THIS_DEVICE_CHANGED_ACTION intent, refresh this device.
@@ -125,7 +135,7 @@ public class HostGameActivity extends AppCompatActivity implements DeviceListFra
         runOnUiThread(new Runnable() {
             @Override public void run() {
                 DeviceListFragment fragmentList = (DeviceListFragment) getFragmentManager().findFragmentById(R.id.frag_list);
-                fragmentList.onPeersAvailable(mApp.mPeers);  // use application cached list.
+                fragmentList.onPeersAvailable(wifiDirectApp.mPeers);  // use application cached list.
                 DeviceDetailFragment fragmentDetails = (DeviceDetailFragment) getFragmentManager().findFragmentById(R.id.frag_detail);
 
                 for(WifiP2pDevice d : peerList.getDeviceList()){
@@ -177,12 +187,12 @@ public class HostGameActivity extends AppCompatActivity implements DeviceListFra
          * already connected. Else, request WifiP2pManager to abort the ongoing
          * request
          */
-        if (mApp.mP2pMan != null) {
+        if (wifiDirectApp.mP2pMan != null) {
             final DeviceListFragment fragment = (DeviceListFragment) getFragmentManager().findFragmentById(R.id.frag_list);
             if (fragment.getDevice() == null || fragment.getDevice().status == WifiP2pDevice.CONNECTED) {
                 disconnect();
             } else if (fragment.getDevice().status == WifiP2pDevice.AVAILABLE || fragment.getDevice().status == WifiP2pDevice.INVITED) {
-                mApp.mP2pMan.cancelConnect(mApp.mP2pChannel, new WifiP2pManager.ActionListener() {
+                wifiDirectApp.mP2pMan.cancelConnect(wifiDirectApp.mP2pChannel, new WifiP2pManager.ActionListener() {
                     @Override
                     public void onSuccess() {
                         Toast.makeText(HostGameActivity.this, "Aborting connection", Toast.LENGTH_SHORT).show();
@@ -202,7 +212,7 @@ public class HostGameActivity extends AppCompatActivity implements DeviceListFra
     @Override
     public void connect(WifiP2pConfig config) {
         // perform p2p connect upon users click the connect button. after connection, manager request connection info.
-        mApp.mP2pMan.connect(mApp.mP2pChannel, config, new WifiP2pManager.ActionListener() {
+        wifiDirectApp.mP2pMan.connect(wifiDirectApp.mP2pChannel, config, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
                 // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
@@ -220,7 +230,7 @@ public class HostGameActivity extends AppCompatActivity implements DeviceListFra
     public void disconnect() {
         final DeviceDetailFragment fragment = (DeviceDetailFragment) getFragmentManager().findFragmentById(R.id.frag_detail);
         fragment.resetViews();
-        mApp.mP2pMan.removeGroup(mApp.mP2pChannel, new WifiP2pManager.ActionListener() {
+        wifiDirectApp.mP2pMan.removeGroup(wifiDirectApp.mP2pChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onFailure(int reasonCode) {
                 Toast.makeText(HostGameActivity.this, "disconnect failed.." + reasonCode, Toast.LENGTH_SHORT).show();

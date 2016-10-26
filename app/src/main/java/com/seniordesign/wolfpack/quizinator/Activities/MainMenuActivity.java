@@ -1,16 +1,8 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.net.wifi.p2p.WifiP2pConfig;
-import android.net.wifi.p2p.WifiP2pDevice;
-import android.net.wifi.p2p.WifiP2pDeviceList;
-import android.net.wifi.p2p.WifiP2pInfo;
-import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,18 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.Toast;
 
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.DeviceDetailFragment;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.DeviceListFragment;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
-
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.ACT_CREATE;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.CAT_LOCATION;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.LAB_HOME;
 
 /*
  * The main menu activity
