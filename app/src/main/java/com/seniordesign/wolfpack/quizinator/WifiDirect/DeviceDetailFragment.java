@@ -173,7 +173,7 @@ public class DeviceDetailFragment extends Fragment {
             ((TextView) mContentView.findViewById(R.id.status_text)).setText(getResources().getString(R.string.client_text));
         }
         
-        if( ! mApp.mIsServer && mApp.mMyAddr == null ){
+        if( ! mApp.mIsServer && mApp.mMyAddress == null ){
         	Toast.makeText(mApp, "Connect to Server Failed, Please try again...", Toast.LENGTH_LONG).show();
         }else{
         	// hide the connect button and enable start chat button

@@ -20,10 +20,6 @@ import com.seniordesign.wolfpack.quizinator.WifiDirect.DeviceDetailFragment;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.DeviceListFragment;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.ACT_CREATE;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.CAT_LOCATION;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.LAB_HOME;
-
 public class HostGameActivity extends AppCompatActivity implements DeviceListFragment.DeviceActionListener {
 
     private WifiDirectApp mApp;
@@ -51,10 +47,10 @@ public class HostGameActivity extends AppCompatActivity implements DeviceListFra
         //Initiate Discovery
 
 //        //leonardj - isP2pEnabled() is always false for some reason
-//        if( !mApp.isP2pEnabled() ){
-//            Toast.makeText(this, R.string.p2p_off_warning, Toast.LENGTH_LONG).show();
-//            return;
-//        }
+        if( !mApp.isP2pEnabled() ){
+            Toast.makeText(this, R.string.p2p_off_warning, Toast.LENGTH_LONG).show();
+            return;
+        }
 
         final DeviceListFragment fragment = (DeviceListFragment)getFragmentManager().findFragmentById(R.id.frag_list);
         fragment.onInitiateDiscovery();

@@ -120,7 +120,7 @@ public class ConnectionManager {
 		    mClientSocketChannel = sChannel;
 		    mClientAddr = mClientSocketChannel.socket().getLocalAddress().getHostName();
 		    sChannel.register(mClientSelector, SelectionKey.OP_READ );
-		    mApp.setMyAddr(mClientAddr);
+		    mApp.setMyAddress(mClientAddr);
 		    mApp.clearMessages();
 
 			// start selector monitoring, blocking
@@ -130,7 +130,7 @@ public class ConnectionManager {
 		} catch(Exception e) {
 			mClientSelector = null;
 			mClientSocketChannel = null;
-			mApp.setMyAddr(null);
+			mApp.setMyAddress(null);
 			
 			return -1;
 		}		
@@ -151,7 +151,7 @@ public class ConnectionManager {
 		    if( "0.0.0.0".equals(mServerAddr)){
 		    	mServerAddr = "Master";
 		    }
-		    ((WifiDirectApp)mService.getApplication()).setMyAddr(mServerAddr);
+		    ((WifiDirectApp)mService.getApplication()).setMyAddress(mServerAddr);
 		    
 		    mServerSelector = Selector.open();
 		    SelectionKey acceptKey = sServerChannel.register(mServerSelector, SelectionKey.OP_ACCEPT);
@@ -252,7 +252,7 @@ public class ConnectionManager {
 		Log.d(TAG, "onFinishConnect : client connect to server succeed : " + clientaddr + " -> " + serveraddr);
 		mClientSocketChannel = schannel;
 		mClientAddr = clientaddr;
-		((WifiDirectApp)mService.getApplication()).setMyAddr(mClientAddr);
+		((WifiDirectApp)mService.getApplication()).setMyAddress(mClientAddr);
 	}
 	
 	/**
