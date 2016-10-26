@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.seniordesign.wolfpack.quizinator.R;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.AnalyticsUtils;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.DeviceDetailFragment;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.DeviceListFragment;
@@ -66,7 +65,6 @@ public class HostGameActivity extends AppCompatActivity implements DeviceListFra
             Toast.makeText(this, "mP2pChannel is null", Toast.LENGTH_SHORT).show();
         }
 
-        AnalyticsUtils.getInstance(mApp).trackEvent(CAT_LOCATION, ACT_CREATE, LAB_HOME, 2);
         mApp.mP2pMan.discoverPeers(mApp.mP2pChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {

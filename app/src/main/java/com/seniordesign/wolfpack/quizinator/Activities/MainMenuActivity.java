@@ -24,7 +24,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.seniordesign.wolfpack.quizinator.R;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.AnalyticsUtils;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.DeviceDetailFragment;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.DeviceListFragment;
