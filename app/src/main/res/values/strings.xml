@@ -17,7 +17,12 @@
     <string name="card_count">Card Count:</string>
     <string name="card_time">Card Time:</string>
     <string name="three_secs">03</string>
+
     <string name="new_game">New Game</string>
+    <string name="solo_game">Solo Game</string>
+    <string name="join_game">Join Game</string>
+    <string name="host_game">Host Game</string>
+
     <string name="game_over">Game Over</string>
     <string name="main_menu">Main Menu</string>
 

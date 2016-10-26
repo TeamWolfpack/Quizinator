@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 
 /**
  * @creation 10/11/2016.
@@ -62,6 +63,29 @@ public class RulesUITests {
         assertEquals("rules.db", dao.getSQLiteHelper().getDatabaseName());
         assertEquals(1, dao.getAllRules().size());
         assertEquals(5, dao.getAllColumns().length);
+        assertEquals(true, dao.deleteRule(r));
+        assertEquals(true, dao.close());
+    }
+
+    /*
+     * @author kuczynskij (10/12/2016)
+     */
+    @Test
+    public void normalFlow_UpdateRule() throws Exception{
+        assertEquals(true, dao.open());
+        assertEquals(true, dao.getDatabase().isOpen());
+        sql.onUpgrade(dao.getDatabase(), 0, 1);
+        Rules r = dao.createRule(4, 350000, 350000, "true/false");
+        assertEquals("rules.db", dao.getSQLiteHelper().getDatabaseName());
+        assertEquals(1, dao.getAllRules().size());
+        assertEquals(5, dao.getAllColumns().length);
+
+        r.setMaxCardCount(5);
+        r.setTimeLimit(90000);
+        r.setCardDisplayTime(10000);
+        dao.updateRules(r);
+        assertEquals(1, dao.getAllRules().size());
+
         assertEquals(true, dao.deleteRule(r));
         assertEquals(true, dao.close());
     }
