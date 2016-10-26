@@ -6,6 +6,7 @@ import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.widget.Toast;
 
+import com.seniordesign.wolfpack.quizinator.Activities.HostGameActivity;
 import com.seniordesign.wolfpack.quizinator.Activities.MainMenuActivity;
 
 import org.json.JSONArray;
@@ -33,7 +34,7 @@ public class WifiDirectApp extends Application {
 
     public boolean mIsServer;
 
-    public MainMenuActivity mHomeActivity;
+    public HostGameActivity mHomeActivity;
     public List<WifiP2pDevice> mPeers = new ArrayList<>();  // update on every peers available
     JSONArray mMessageArray = new JSONArray();		// limit to the latest 50 messages
 
@@ -42,24 +43,13 @@ public class WifiDirectApp extends Application {
         super.onCreate();
     }
 
-//    /*
-//     * @author leonardj (10/24/16)
-//     */
-//    public boolean isP2pEnabled() {
-//        String state = AppPreferences.getStringFromPref(this, AppPreferences.PREF_NAME, AppPreferences.P2P_ENABLED);
-//        return state != null && "1".equals(state.trim());
-//    }
-
     /**
      * whether p2p is enabled in this device.
      * my bcast listener always gets enable/disable intent and persist to shared pref
      */
     public boolean isP2pEnabled() {
         String state = AppPreferences.getStringFromPref(this, AppPreferences.PREF_NAME, AppPreferences.P2P_ENABLED);
-        if ( state != null && "1".equals(state.trim())){
-            return true;
-        }
-        return false;
+        return state != null && "1".equals(state.trim());
     }
 
     /**

@@ -56,7 +56,7 @@ public class ConnectionService extends Service implements ChannelListener, PeerL
         mHandler = new MessageHandler(mWorkHandler.getLooper());
         
         mApp = (WifiDirectApp)getApplication();
-        mApp.mP2pMan = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
+        mApp.mP2pMan = (WifiP2pManager)getSystemService(Context.WIFI_P2P_SERVICE);
         mApp.mP2pChannel = mApp.mP2pMan.initialize(this, mWorkHandler.getLooper(), null);
         
         mConnMan = new ConnectionManager(this);
@@ -129,7 +129,7 @@ public class ConnectionService extends Service implements ChannelListener, PeerL
                   return;
               }
 
-              NetworkInfo networkInfo = (NetworkInfo) intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+              NetworkInfo networkInfo = intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
               if (networkInfo.isConnected()) {
             	  Log.d(TAG, "processIntent: WIFI_P2P_CONNECTION_CHANGED_ACTION: p2p connected ");
                   // Connected with the other device, request connection info for group owner IP. Callback inside details fragment.
@@ -146,7 +146,7 @@ public class ConnectionService extends Service implements ChannelListener, PeerL
               }
           } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {  
         	  // this device details has changed(name, connected, etc)
-        	  mApp.mThisDevice = (WifiP2pDevice) intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
+        	  mApp.mThisDevice = intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
         	  mApp.mDeviceName = mApp.mThisDevice.deviceName;
         	  if( mApp.mHomeActivity != null ){
         		  mApp.mHomeActivity.updateThisDevice(mApp.mThisDevice);
