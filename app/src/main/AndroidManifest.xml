@@ -24,11 +24,11 @@
         <activity android:name=".Activities.HostGameActivity" />
         <activity
             android:name=".Activities.GamePlayActivity"
-            android:label="@string/title_activity_navigation_drawer"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.MainMenuActivity"
-            android:label="@string/title_activity_navigation_drawer"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
