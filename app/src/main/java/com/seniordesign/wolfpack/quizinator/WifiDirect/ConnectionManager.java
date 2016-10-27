@@ -284,7 +284,7 @@ public class ConnectionManager {
         Log.d(TAG, "connection onDataIn : " + data);
         // push all _other_ clients if the device is the server
         if (mApp.mIsServer) {
-            pubDataToAllClients(data, schannel);
+            publishDataToAllClients(data, schannel);
         }
     }
 
@@ -314,9 +314,9 @@ public class ConnectionManager {
     /**
      * Server publish data to all the connected clients.
      */
-    private void pubDataToAllClients(String msg,
-                                     SocketChannel incomingChannel) {
-        Log.d(TAG, "pubDataToAllClients : isServer ? " +
+    private void publishDataToAllClients(String msg,
+                                         SocketChannel incomingChannel) {
+        Log.d(TAG, "publishDataToAllClients : isServer ? " +
                 mApp.mIsServer + " msg: " + msg);
         if (!mApp.mIsServer) {
             return;
@@ -325,7 +325,7 @@ public class ConnectionManager {
         for (SocketChannel s : mClientChannels.values()) {
             if (s != incomingChannel) {
                 String peeraddr = s.socket().getInetAddress().getHostAddress();
-                Log.d(TAG, "pubDataToAllClients : Server pub data to:  " + peeraddr);
+                Log.d(TAG, "publishDataToAllClients : Server pub data to:  " + peeraddr);
                 writeData(s, msg);
             }
         }
@@ -344,7 +344,7 @@ public class ConnectionManager {
         } else {
             // server pub to all clients, msg already appended with
             // sender addr inside send button handler.
-            pubDataToAllClients(jsonString, null);
+            publishDataToAllClients(jsonString, null);
         }
         return 0;
     }
