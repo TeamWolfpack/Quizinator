@@ -325,7 +325,7 @@ public class ConnectionService
                 mConnMan.onSelectorError();
                 break;
             case MSG_BROKEN_CONN:
-                mConnMan.onBrokenConn((SocketChannel) msg.obj);
+                mConnMan.onBrokenConnection((SocketChannel) msg.obj);
                 break;
             default:
                 break;

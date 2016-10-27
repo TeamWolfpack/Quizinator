@@ -15,15 +15,23 @@ import android.content.Context;
 import android.util.Log;
 
 /**
- * this class encapsulate the NIO buffer and NIO channel on top of socket. It is all abt NIO style.
- * SSLServerSocketChannel, ServerSocketChannel, SocketChannel, Selector, ByteBuffer, etc.
- * NIO buffer (ByteBuffer) either in writing mode or in reading mode. Need to flip the mode before reading or writing.
- * <p>
- * You know when a socket channel disconnected when you read -1 or write exception. You need app level ACK.
+ * This class encapsulate the NIO buffer and NIO channel on top of
+ * socket. It is all abt NIO style.
+ *
+ * SSLServerSocketChannel, ServerSocketChannel, SocketChannel,
+ * Selector, ByteBuffer, etc.
+ *
+ * NIO buffer (ByteBuffer) either in writing mode or in reading mode.
+ * Need to flip the mode before reading or writing.
+ *
+ * You know when a socket channel disconnected when you read -1 or
+ * write exception. You need app level ACK.
+ *
+ * @creation 10/26/2016
  */
 public class ConnectionManager {
 
-    private final String TAG = "PTP_ConnMan";
+    private final String TAG = "ConnectionManager";
 
     private Context mContext;
     ConnectionService mService;
@@ -41,9 +49,6 @@ public class ConnectionManager {
     String mClientAddr = null;
     String mServerAddr = null;
 
-    /**
-     * constructor
-     */
     public ConnectionManager(ConnectionService service) {
         mService = service;
         mApp = (WifiDirectApp) mService.getApplication();
@@ -56,22 +61,27 @@ public class ConnectionManager {
     }
 
     /**
-     * create a server socket channel to listen to the port for incoming connections.
+     * Create a server socket channel to listen to the port for
+     * incoming connections.
      */
-    public static ServerSocketChannel createServerSocketChannel(int port) throws IOException {
+    public static ServerSocketChannel createServerSocketChannel(int port)
+            throws IOException {
         // Create a non-blocking socket channel
         ServerSocketChannel ssChannel = ServerSocketChannel.open();
         ssChannel.configureBlocking(false);
         ServerSocket serverSocket = ssChannel.socket();
-        serverSocket.bind(new InetSocketAddress(port));  // bind to the port to listen.
+        // bind to the port to listen.
+        serverSocket.bind(new InetSocketAddress(port));
         return ssChannel;
     }
 
     /**
-     * Creates a non-blocking socket channel to connect to specified host name and port.
+     * Creates a non-blocking socket channel to connect to
+     * specified host name and port.
      * connect() is called on the new channel before it is returned.
      */
-    public static SocketChannel createSocketChannel(String hostName, int port) throws IOException {
+    public static SocketChannel createSocketChannel(String hostName,
+                                    int port) throws IOException {
         // Create a non-blocking socket channel
         SocketChannel sChannel = SocketChannel.open();
         sChannel.configureBlocking(false);
@@ -83,15 +93,18 @@ public class ConnectionManager {
 
 
     /**
-     * create a socket channel and connect to the host.
-     * after return, the socket channel guarantee to be connected.
+     * Create a socket channel and connect to the host.
+     * After return, the socket channel guaranteed to be connected.
      */
-    public SocketChannel connectTo(String hostname, int port) throws Exception {
+    public SocketChannel connectTo(String hostname, int port)
+            throws Exception {
         SocketChannel sChannel = null;
 
-        sChannel = createSocketChannel(hostname, port);  // connect to the remote host, port
+        // connect to the remote host, port
+        sChannel = createSocketChannel(hostname, port);
 
-        // Before the socket is usable, the connection must be completed. finishConnect().
+        // Before the socket is usable, the connection must
+        // be completed. finishConnect().
         while (!sChannel.finishConnect()) {
             // blocking spin lock
         }
@@ -101,8 +114,9 @@ public class ConnectionManager {
     }
 
     /**
-     * client, after p2p connection available, connect to group owner and select monitoring the sockets.
-     * start blocking selector monitoring in an async task, infinite loop
+     * Client, after p2p connection available, connect to group
+     * owner and select monitoring the sockets. Start blocking
+     * selector monitoring in an async task, infinite loop
      */
     public int startClientSelector(String host) {
         closeServer();   // close linger server.
@@ -138,15 +152,17 @@ public class ConnectionManager {
     }
 
     /**
-     * create a selector to manage a server socket channel
-     * The registration process yields an object called a selection key which identifies the selector/socket channel pair
+     * Create a selector to manage a server socket channel.
+     * The registration process yields an object called a selection
+     * key which identifies the selector/socket channel pair.
      */
     public int startServerSelector() {
         closeClient();   // close linger client, if exists.
 
         try {
             // create server socket and register to selector to listen OP_ACCEPT event
-            ServerSocketChannel sServerChannel = createServerSocketChannel(1080); // BindException if already bind.
+            // BindException if already bind.
+            ServerSocketChannel sServerChannel = createServerSocketChannel(1080);
             mServerSocketChannel = sServerChannel;
             mServerAddr = mServerSocketChannel.socket().getInetAddress().getHostAddress();
             if ("0.0.0.0".equals(mServerAddr)) {
@@ -155,13 +171,15 @@ public class ConnectionManager {
             ((WifiDirectApp) mService.getApplication()).setMyAddress(mServerAddr);
 
             mServerSelector = Selector.open();
-            SelectionKey acceptKey = sServerChannel.register(mServerSelector, SelectionKey.OP_ACCEPT);
+            SelectionKey acceptKey = sServerChannel.register(
+                    mServerSelector, SelectionKey.OP_ACCEPT);
             acceptKey.attach("accept_channel");
             mApp.mIsServer = true;
 
             //SocketChannel sChannel = createSocketChannel("hostname.com", 80);
             //sChannel.register(selector, SelectionKey.OP_CONNECT);  // listen to connect event.
-            Log.d(TAG, "startServerSelector : started: " + sServerChannel.socket().getLocalSocketAddress().toString());
+            Log.d(TAG, "startServerSelector : started: " +
+                    sServerChannel.socket().getLocalSocketAddress().toString());
 
             new SelectorAsyncTask(mService, mServerSelector).execute();
             return 0;
@@ -173,7 +191,7 @@ public class ConnectionManager {
     }
 
     /**
-     * handle selector error, re-start
+     * Handle selector error, re-start.
      */
     public void onSelectorError() {
         Log.e(TAG, " onSelectorError : do nothing for now.");
@@ -181,8 +199,9 @@ public class ConnectionManager {
     }
 
     /**
-     * a device can only be either group owner, or group client, not both.
-     * when we start as client, close server, if existing due to linger connection.
+     * A device can only be either group owner, or group client, not
+     * both. When we start as client, close server, if existing due
+     * to linger connection.
      */
     public void closeServer() {
         if (mServerSocketChannel != null) {
@@ -217,21 +236,22 @@ public class ConnectionManager {
     }
 
     /**
-     * read out -1, connection broken, remove it from clients collection
+     * Read out -1, connection broken, remove it from clients collection
      */
-    public void onBrokenConn(SocketChannel schannel) {
+    public void onBrokenConnection(SocketChannel schannel) {
         try {
             String peeraddr = schannel.socket().getInetAddress().getHostAddress();
             if (mApp.mIsServer) {
                 mClientChannels.remove(peeraddr);
-                Log.d(TAG, "onBrokenConn : client down: " + peeraddr);
+                Log.d(TAG, "onBrokenConnection : client down: " + peeraddr);
             } else {
-                Log.d(TAG, "onBrokenConn : set null client channel after server down: " + peeraddr);
+                Log.d(TAG, "onBrokenConnection : set null client " +
+                        "channel after server down: " + peeraddr);
                 closeClient();
             }
             schannel.close();
         } catch (Exception e) {
-            //PTPLog.e(TAG, "onBrokenConn: close channel: " + e.toString());
+            //PTPLog.e(TAG, "onBrokenConnection: close channel: " + e.toString());
         }
     }
 
@@ -245,52 +265,59 @@ public class ConnectionManager {
     }
 
     /**
-     * Client's connect to server success,
+     * Client's connect to server success.
      */
     public void onFinishConnect(SocketChannel schannel) {
         String clientaddr = schannel.socket().getLocalAddress().getHostAddress();
         String serveraddr = schannel.socket().getInetAddress().getHostAddress();
-        Log.d(TAG, "onFinishConnect : client connect to server succeed : " + clientaddr + " -> " + serveraddr);
+        Log.d(TAG, "onFinishConnect : client connect to server succeed : " +
+                clientaddr + " -> " + serveraddr);
         mClientSocketChannel = schannel;
         mClientAddr = clientaddr;
         ((WifiDirectApp) mService.getApplication()).setMyAddress(mClientAddr);
     }
 
     /**
-     * client send data into server, server pub to all clients.
+     * Client send data into server, server pub to all clients.
      */
     public void onDataIn(SocketChannel schannel, String data) {
         Log.d(TAG, "connection onDataIn : " + data);
-        if (mApp.mIsServer) {  // push all _other_ clients if the device is the server
+        // push all _other_ clients if the device is the server
+        if (mApp.mIsServer) {
             pubDataToAllClients(data, schannel);
         }
     }
 
     /**
-     * write byte buf to the socket channel.
+     * Write byte buf to the socket channel.
      */
     private int writeData(SocketChannel sChannel, String jsonString) {
         byte[] buf = jsonString.getBytes();
-        ByteBuffer bytebuf = ByteBuffer.wrap(buf);  // wrap the buf into byte buffer
+        // wrap the buf into byte buffer
+        ByteBuffer bytebuf = ByteBuffer.wrap(buf);
         int nwritten = 0;
         try {
             //bytebuf.flip();  // no flip after creating from wrap.
-            Log.d(TAG, "writeData: start:limit = " + bytebuf.position() + " : " + bytebuf.limit());
+            Log.d(TAG, "writeData: start:limit = " +
+                    bytebuf.position() + " : " + bytebuf.limit());
             nwritten = sChannel.write(bytebuf);
         } catch (Exception e) {
             // Connection may have been closed
             Log.e(TAG, "writeData: exception : " + e.toString());
-            onBrokenConn(sChannel);
+            onBrokenConnection(sChannel);
         }
-        Log.d(TAG, "writeData: content: " + new String(buf) + "  : len: " + nwritten);
+        Log.d(TAG, "writeData: content: " + new String(buf) +
+                "  : len: " + nwritten);
         return nwritten;
     }
 
     /**
-     * server publish data to all the connected clients
+     * Server publish data to all the connected clients.
      */
-    private void pubDataToAllClients(String msg, SocketChannel incomingChannel) {
-        Log.d(TAG, "pubDataToAllClients : isServer ? " + mApp.mIsServer + " msg: " + msg);
+    private void pubDataToAllClients(String msg,
+                                     SocketChannel incomingChannel) {
+        Log.d(TAG, "pubDataToAllClients : isServer ? " +
+                mApp.mIsServer + " msg: " + msg);
         if (!mApp.mIsServer) {
             return;
         }
@@ -305,29 +332,35 @@ public class ConnectionManager {
     }
 
     /**
-     * the device want to push out data.
-     * If the device is client, the only channel is to the server.
-     * If the device is server, it just pub the data to all clients for now.
+     * The device want to push out data.
+     *  If the device is client, the only channel is to the server.
+     *  If the device is server, it just pub the data to all clients
+     *      for now.
      */
     public int pushOutData(String jsonString) {
-        if (!mApp.mIsServer) {   // device is client, can only send to server
+        if (!mApp.mIsServer) {   // device is client, can only send
+            // to server
             sendDataToServer(jsonString);
         } else {
-            // server pub to all clients, msg already appended with sender addr inside send button handler.
+            // server pub to all clients, msg already appended with
+            // sender addr inside send button handler.
             pubDataToAllClients(jsonString, null);
         }
         return 0;
     }
 
     /**
-     * whenever client write to server, carry the format of "client_addr : msg "
+     * Whenever client write to server, carry the format
+     *  of "client_addr : msg "
      */
     private int sendDataToServer(String jsonString) {
         if (mClientSocketChannel == null) {
             Log.d(TAG, "sendDataToServer: channel not connected ! waiting...");
             return 0;
         }
-        Log.d(TAG, "sendDataToServer: " + mClientAddr + " -> " + mClientSocketChannel.socket().getInetAddress().getHostAddress() + " : " + jsonString);
+        String hostAddress = mClientSocketChannel.socket().getInetAddress().getHostAddress();
+        Log.d(TAG, "sendDataToServer: " + mClientAddr + " -> " +
+                hostAddress + " : " + jsonString);
         return writeData(mClientSocketChannel, jsonString);
     }
 }

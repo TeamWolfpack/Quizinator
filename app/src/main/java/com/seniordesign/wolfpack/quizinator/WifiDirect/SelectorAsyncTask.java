@@ -76,10 +76,12 @@ public class SelectorAsyncTask extends AsyncTask<Void, Void, Void> {
     }
 
     /**
-     * process the event popped to the selector
+     * Process the event popped to the selector
      */
-    public void processSelectionKey(Selector selector, SelectionKey selKey) throws IOException {
-        if (selKey.isValid() && selKey.isAcceptable()) {  // there is a connection to the server socket channel
+    public void processSelectionKey(Selector selector,
+                            SelectionKey selKey) throws IOException {
+        // there is a connection to the server socket channel
+        if (selKey.isValid() && selKey.isAcceptable()) {
             ServerSocketChannel ssChannel = (ServerSocketChannel) selKey.channel();
             SocketChannel sChannel = ssChannel.accept();  // accept the connect and get a new socket channel.
             sChannel.configureBlocking(false);
