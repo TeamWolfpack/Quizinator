@@ -7,6 +7,7 @@ import android.os.Process;
 
 /**
  * Creates a standalone thread other than the main thread.
+ *
  * @creation 10/26/2016
  */
 public final class WorkHandler {

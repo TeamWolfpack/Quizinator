@@ -86,9 +86,9 @@ public class ConnectionService
         if (intent == null)
             return;
         String action = intent.getAction();
-        if(action == null)
+        if (action == null)
             return;
-        switch(action){
+        switch (action) {
             case WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION:
                 int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
                 deviceWifiStateChangedAction(state);
@@ -117,7 +117,7 @@ public class ConnectionService
     /*
      * @author kuczynskij (10/26/2016)
      */
-    private boolean deviceWifiStateChangedAction(int state){
+    private boolean deviceWifiStateChangedAction(int state) {
         if (state == WifiP2pManager.WIFI_P2P_STATE_ENABLED) {
             // Wifi Direct mode is enabled
             mApp.mP2pChannel = mApp.mP2pMan.initialize(this,
@@ -142,14 +142,14 @@ public class ConnectionService
     /*
      * @author kuczynskij (10/26/2016)
      */
-    private boolean deviceWifiPeersChangedAction(){
+    private boolean deviceWifiPeersChangedAction() {
         // a list of peers are available after discovery,
         // use PeerListListener to collect request available
         // peers from the wifi p2p manager. This is an
         // asynchronous call and the calling activity is
         // notified with callback on
         // PeerListListener.onPeersAvailable()
-        if (mApp.mP2pMan != null){
+        if (mApp.mP2pMan != null) {
             mApp.mP2pMan.requestPeers(mApp.mP2pChannel, this);
             return true;
         }
@@ -159,7 +159,7 @@ public class ConnectionService
     /*
      * @author kuczynskij (10/26/2016)
      */
-    private boolean deviceConnectionChangedAction(Intent intent){
+    private boolean deviceConnectionChangedAction(Intent intent) {
         NetworkInfo networkInfo = intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
         if (networkInfo.isConnected()) {
             Log.d(TAG, "processIntent: WIFI_P2P_CONNECTION_CHANGED_ACTION: p2p connected ");
@@ -184,7 +184,7 @@ public class ConnectionService
     /*
      * @author kuczynskij (10/26/2016)
      */
-    private boolean deviceDetailsHaveChanged(Intent intent){
+    private boolean deviceDetailsHaveChanged(Intent intent) {
         mApp.mThisDevice = intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
         mApp.mDeviceName = mApp.mThisDevice.deviceName;
         if (mApp.mHomeActivity != null) {

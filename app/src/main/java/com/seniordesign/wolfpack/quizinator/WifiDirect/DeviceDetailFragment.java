@@ -44,6 +44,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.seniordesign.wolfpack.quizinator.R;
 
 /**
@@ -52,33 +53,33 @@ import com.seniordesign.wolfpack.quizinator.R;
  */
 public class DeviceDetailFragment extends Fragment {
 
-	private static final String TAG = "PTP_Detail";
-	
+    private static final String TAG = "PTP_Detail";
+
     protected static final int CHOOSE_FILE_RESULT_CODE = 20;
     private View mContentView = null;
     private WifiP2pDevice device;
     private WifiP2pInfo info;
     ProgressDialog progressDialog = null;
-    
+
     WifiDirectApp mApp = null;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mApp = (WifiDirectApp)getActivity().getApplication();
+        mApp = (WifiDirectApp) getActivity().getApplication();
     }
-    
+
     @Override
-    public void onAttach(Activity activity){
-    	super.onAttach(activity);
-    	// onAttach -> onCreate -> onCreateView -> onActivityCreated -> onStart -> onResume
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        // onAttach -> onCreate -> onCreateView -> onActivityCreated -> onStart -> onResume
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         mContentView = inflater.inflate(R.layout.device_detail, null);
-        
+
         // connect button, per
         mContentView.findViewById(R.id.btn_connect).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,11 +96,11 @@ public class DeviceDetailFragment extends Fragment {
                         new DialogInterface.OnCancelListener() {
                             @Override
                             public void onCancel(DialogInterface dialog) {
-                                ((DeviceListFragment.DeviceActionListener)getActivity()).cancelDisconnect();
+                                ((DeviceListFragment.DeviceActionListener) getActivity()).cancelDisconnect();
                             }
                         });
                 // perform p2p connect upon user click the connect button, connect available handle when connection done.
-                ((DeviceListFragment.DeviceActionListener)getActivity()).connect(config);
+                ((DeviceListFragment.DeviceActionListener) getActivity()).connect(config);
             }
         });
 
@@ -158,7 +159,7 @@ public class DeviceDetailFragment extends Fragment {
         TextView view = (TextView) mContentView.findViewById(R.id.group_owner);
         view.setText(getResources().getString(R.string.group_owner_text)
                 + ((info.isGroupOwner == true) ? getResources().getString(R.string.yes)
-                        : getResources().getString(R.string.no)));
+                : getResources().getString(R.string.no)));
 
         // InetAddress from WifiP2pInfo struct.
         view = (TextView) mContentView.findViewById(R.id.device_info);
@@ -167,24 +168,24 @@ public class DeviceDetailFragment extends Fragment {
         Log.d(TAG, "onConnectionInfoAvailable: " + info.groupOwnerAddress.getHostAddress());
         if (info.groupFormed && info.isGroupOwner) {
             //new FileServerAsyncTask(getActivity(), mContentView.findViewById(R.id.status_text)).execute();
-        	Log.d(TAG, "onConnectionInfoAvailable: device is groupOwner: startSocketServer done ");
+            Log.d(TAG, "onConnectionInfoAvailable: device is groupOwner: startSocketServer done ");
         } else if (info.groupFormed) {
-        	Log.d(TAG, "onConnectionInfoAvailable: device is client, connect to group owner: startSocketClient done ");
+            Log.d(TAG, "onConnectionInfoAvailable: device is client, connect to group owner: startSocketClient done ");
             ((TextView) mContentView.findViewById(R.id.status_text)).setText(getResources().getString(R.string.client_text));
         }
-        
-        if( ! mApp.mIsServer && mApp.mMyAddress == null ){
-        	Toast.makeText(mApp, "Connect to Server Failed, Please try again...", Toast.LENGTH_LONG).show();
-        }else{
-        	// hide the connect button and enable start chat button
-        	mContentView.findViewById(R.id.btn_connect).setVisibility(View.GONE);
-        	mContentView.findViewById(R.id.btn_start_client).setVisibility(View.VISIBLE);
+
+        if (!mApp.mIsServer && mApp.mMyAddress == null) {
+            Toast.makeText(mApp, "Connect to Server Failed, Please try again...", Toast.LENGTH_LONG).show();
+        } else {
+            // hide the connect button and enable start chat button
+            mContentView.findViewById(R.id.btn_connect).setVisibility(View.GONE);
+            mContentView.findViewById(R.id.btn_start_client).setVisibility(View.VISIBLE);
         }
     }
 
     /**
      * Updates the UI with device data
-     * 
+     *
      * @param device the device to be displayed
      */
     public void showDetails(WifiP2pDevice device) {
@@ -200,10 +201,10 @@ public class DeviceDetailFragment extends Fragment {
      * Clears the UI fields after a disconnect or direct mode disable operation.
      */
     public void resetViews() {
-    	if (progressDialog != null && progressDialog.isShowing()) {
+        if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
-    	
+
         mContentView.findViewById(R.id.btn_connect).setVisibility(View.VISIBLE);
         TextView view = (TextView) mContentView.findViewById(R.id.device_address);
         view.setText(R.string.empty);
@@ -241,7 +242,7 @@ public class DeviceDetailFragment extends Fragment {
                 ServerSocket serverSocket = new ServerSocket(8988);
 
                 Socket client = serverSocket.accept();
-                
+
                 final File f = new File(Environment.getExternalStorageDirectory() + "/"
                         + context.getPackageName() + "/wifip2pshared-" + System.currentTimeMillis()
                         + ".jpg");

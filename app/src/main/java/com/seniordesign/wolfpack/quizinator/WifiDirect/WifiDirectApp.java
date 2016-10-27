@@ -15,6 +15,7 @@ import java.util.List;
 /**
  * Creates an instance of a WifiDirect Application because it is a
  * global singleton.
+ *
  * @creation 10/24/2016.
  */
 public class WifiDirectApp extends Application {
@@ -52,6 +53,7 @@ public class WifiDirectApp extends Application {
     /**
      * bcast listener always gets enable/disable intent
      * and persists to shared pref.
+     *
      * @return true if P2P is enabled on device
      */
     /*
@@ -97,10 +99,10 @@ public class WifiDirectApp extends Application {
     /*
      * @author kuczynskij (10/26/2016)
      */
-    public WifiP2pDevice getConnectedPeer(){
+    public WifiP2pDevice getConnectedPeer() {
         WifiP2pDevice peer = null;
-        for(WifiP2pDevice d : mPeers ){
-            if( d.status == WifiP2pDevice.CONNECTED)
+        for (WifiP2pDevice d : mPeers) {
+            if (d.status == WifiP2pDevice.CONNECTED)
                 peer = d;
         }
         return peer;
@@ -116,7 +118,7 @@ public class WifiDirectApp extends Application {
     /*
      * @author kuczynskij (10/26/2016)
      */
-    public void setMyAddress(String addr){
+    public void setMyAddress(String addr) {
         mMyAddress = addr;
     }
 }

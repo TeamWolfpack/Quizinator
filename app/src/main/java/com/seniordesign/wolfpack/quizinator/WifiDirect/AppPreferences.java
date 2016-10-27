@@ -18,16 +18,16 @@ import android.content.SharedPreferences;
 public class AppPreferences {
 
     private static final String TAG = "PTP_Pref";
-    
+
     public static final String PREF_NAME = Constants.PACKAGE_NAME;
-    
+
     public static final String P2P_ENABLED = "p2pEnabled";
 
     private WifiDirectApp mApp;
     private SharedPreferences mPref;
 
     public AppPreferences(WifiDirectApp app) {
-    	mApp = app;
+        mApp = app;
         mPref = mApp.getSharedPreferences(Constants.PACKAGE_NAME, 0);
     }
 
@@ -40,60 +40,58 @@ public class AppPreferences {
         editor.putString(key, value);
         editor.apply();
     }
-    
-    
-        
+
+
     /**
      * Get the value of a key from a different preference in the same application
      * adb shell cat /data/data/com.motorola.contextual.smartrules/shared_prefs/com.motorola.contextual.virtualsensor.locationsensor.xml
-	 *
-	 * <?xml version='1.0' encoding='utf-8' standalone='yes' ?>
-	 * <map>
-	 * <string name="poi">Location:1331910178767</string>
-	 * <string name="background_scan">1</string>
-	 * 
-	 * @param preferenceFileName, the file name under shared_prefs dir
-	 * @param key the key
-	 * </map>
+     * <p>
+     * <?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+     * <map>
+     * <string name="poi">Location:1331910178767</string>
+     * <string name="background_scan">1</string>
+     *
+     * @param preferenceFileName, the file name under shared_prefs dir
+     * @param key                 the key
+     *                            </map>
      */
     public static String getStringFromPref(Context ctx, String preferenceFileName, String key) {
-    	String value = null;
-    	SharedPreferences pref = ctx.getSharedPreferences(preferenceFileName, 0);
-    	if( pref != null){
-    		value = pref.getString(key, null);
-    	}
+        String value = null;
+        SharedPreferences pref = ctx.getSharedPreferences(preferenceFileName, 0);
+        if (pref != null) {
+            value = pref.getString(key, null);
+        }
         return value;
     }
-    
+
     public static void setStringToPref(Context ctx, String preferenceFileName, String key, String value) {
-    	SharedPreferences pref = ctx.getSharedPreferences(preferenceFileName, 0);
-    	if( pref != null){
-    		SharedPreferences.Editor editor = pref.edit();
+        SharedPreferences pref = ctx.getSharedPreferences(preferenceFileName, 0);
+        if (pref != null) {
+            SharedPreferences.Editor editor = pref.edit();
             editor.putString(key, value);
             editor.apply();
-    	}
+        }
     }
-    
+
     /**
      * Get the value of a key from a different preference in the same application
      * adb shell cat /data/data/com.motorola.contextual.smartrules/shared_prefs/com.motorola.contextual.virtualsensor.locationsensor.xml
-	 *
-	 * <?xml version='1.0' encoding='utf-8' standalone='yes' ?>
-	 * <map>
-	 * <string name="poi">Location:1331910178767</string>
-	 * <string name="background_scan">1</string>
-	 * </map>
-	 * 
-	 * @param preferenceFileName, the file name under shared_prefs dir
-	 * @param key the key
-	 
+     * <p>
+     * <?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+     * <map>
+     * <string name="poi">Location:1331910178767</string>
+     * <string name="background_scan">1</string>
+     * </map>
+     *
+     * @param preferenceFileName, the file name under shared_prefs dir
+     * @param key                 the key
      */
     public static boolean getBooleanFromPref(Context ctx, String preferenceFileName, String key) {
-    	boolean value = false;
-    	SharedPreferences pref = ctx.getSharedPreferences(preferenceFileName, 0);
-    	if( pref != null){
-    		value = pref.getBoolean(key, false);
-    	}
+        boolean value = false;
+        SharedPreferences pref = ctx.getSharedPreferences(preferenceFileName, 0);
+        if (pref != null) {
+            value = pref.getBoolean(key, false);
+        }
         return value;
     }
 }
