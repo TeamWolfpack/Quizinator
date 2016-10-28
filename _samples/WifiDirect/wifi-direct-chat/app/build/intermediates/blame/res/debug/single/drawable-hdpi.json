@@ -1,5 +1,9 @@
 [
     {
+        "merged": "C:\\Users\\aaron\\Documents\\School\\Senior\\SeniorDesign\\Quizinator\\_samples\\WifiDirect\\wifi-direct-chat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\ic_launcher.png",
+        "source": "C:\\Users\\aaron\\Documents\\School\\Senior\\SeniorDesign\\Quizinator\\_samples\\WifiDirect\\wifi-direct-chat\\app\\src\\main\\res\\drawable-hdpi\\ic_launcher.png"
+    },
+    {
         "merged": "D:\\Quizinator\\samples\\WifiDirect\\wifi-direct-chat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\ic_launcher.png",
         "source": "D:\\Quizinator\\samples\\WifiDirect\\wifi-direct-chat\\app\\src\\main\\res\\drawable-hdpi\\ic_launcher.png"
     },
@@ -18,6 +22,14 @@
     {
         "merged": "D:\\Quizinator\\samples\\WifiDirect\\wifi-direct-chat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\ic_action_discover.png",
         "source": "D:\\Quizinator\\samples\\WifiDirect\\wifi-direct-chat\\app\\src\\main\\res\\drawable-hdpi\\ic_action_discover.png"
+    },
+    {
+        "merged": "C:\\Users\\aaron\\Documents\\School\\Senior\\SeniorDesign\\Quizinator\\_samples\\WifiDirect\\wifi-direct-chat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\ic_action_on_off.png",
+        "source": "C:\\Users\\aaron\\Documents\\School\\Senior\\SeniorDesign\\Quizinator\\_samples\\WifiDirect\\wifi-direct-chat\\app\\src\\main\\res\\drawable-hdpi\\ic_action_on_off.png"
+    },
+    {
+        "merged": "C:\\Users\\aaron\\Documents\\School\\Senior\\SeniorDesign\\Quizinator\\_samples\\WifiDirect\\wifi-direct-chat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\ic_action_discover.png",
+        "source": "C:\\Users\\aaron\\Documents\\School\\Senior\\SeniorDesign\\Quizinator\\_samples\\WifiDirect\\wifi-direct-chat\\app\\src\\main\\res\\drawable-hdpi\\ic_action_discover.png"
     },
     {
         "merged": "D:\\School\\SE4910\\wifi-direct-chat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\ic_launcher.png",
