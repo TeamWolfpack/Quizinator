@@ -38,6 +38,7 @@ import android.net.wifi.p2p.WifiP2pInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +47,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.seniordesign.wolfpack.quizinator.R;
+
+import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_PUSHOUT_DATA;
 
 /**
  * A fragment that manages a particular peer and allows interaction with device
@@ -124,11 +127,18 @@ public class DeviceDetailFragment extends Fragment {
 //                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 //                        intent.setType("image/*");
 //                        //startActivityForResult(intent, CHOOSE_FILE_RESULT_CODE);
-//                        Log.d(TAG, "start_client button clicked, start chat activity !");
-//                        ((MainMenuActivity)getActivity()).startChatActivity(null);  // no init msg if started from button click.
+                        //Log.d(TAG, "start_client button clicked, start chat activity !");
+                        //((MainMenuActivit)getActivity()).startChatActivity("Hi Jimmy");  // no init msg if started from button click.
+
+                        //Actually send the message
+                        String message = "Hi Jimmy";
+                        Log.d(TAG, "pushOutMessage : " + message);
+                        Message msg = ConnectionService.getInstance().getHandler().obtainMessage();
+                        msg.what = MSG_PUSHOUT_DATA;
+                        msg.obj = message;
+                        ConnectionService.getInstance().getHandler().sendMessage(msg);
                     }
                 });
-
         return mContentView;
     }
 
