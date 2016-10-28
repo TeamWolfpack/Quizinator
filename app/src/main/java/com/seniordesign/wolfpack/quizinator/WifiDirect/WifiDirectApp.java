@@ -28,6 +28,7 @@ public class WifiDirectApp extends Application {
     public String mMyAddress;
     // the p2p name that is configurated from UI.
     public String mDeviceName;
+    public WiFiDirectBroadcastReceiver mReceiver;
 
     public WifiP2pDevice mThisDevice;
     // set when connection info available, reset
@@ -65,7 +66,6 @@ public class WifiDirectApp extends Application {
                         this,
                         AppPreferences.PREF_NAME,
                         AppPreferences.P2P_ENABLED);
-        System.out.println(state);
         return state != null && "1".equals(state.trim());
     }
 

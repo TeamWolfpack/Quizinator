@@ -1,5 +1,6 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -27,7 +28,6 @@ public class HostGameActivity
         implements DeviceListFragment.DeviceActionListener {
 
     private WifiDirectApp wifiDirectApp;
-    private WiFiDirectBroadcastReceiver receiver;
     private IntentFilter mIntentFilter;
 
     @Override
@@ -43,6 +43,14 @@ public class HostGameActivity
         Intent serviceIntent =
                 new Intent(this, ConnectionService.class);
         // start the connection service
+
+
+        wifiDirectApp.mP2pMan = (WifiP2pManager) getSystemService(
+                Context.WIFI_P2P_SERVICE);
+        wifiDirectApp.mP2pChannel = wifiDirectApp.mP2pMan.initialize(
+                this, getMainLooper(), null);
+        wifiDirectApp.mReceiver = new WiFiDirectBroadcastReceiver(
+                wifiDirectApp.mP2pMan, wifiDirectApp.mP2pChannel, this);
 
         mIntentFilter = new IntentFilter();
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
@@ -79,15 +87,18 @@ public class HostGameActivity
 
             @Override
             public void onSuccess() {
-                Toast.makeText(HostGameActivity.this,
-                        "Discovery Initiated", Toast.LENGTH_SHORT).show();
+                // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
+//                Toast.makeText(HostGameActivity.this,
+//                        "Discovery Initiated", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(int reasonCode) {
                 fragment.clearPeers();
                 Toast.makeText(HostGameActivity.this,
-                        "Discovery Failed, try again... ", Toast.LENGTH_SHORT).show();
+                    "Connect failed. Retry.", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(HostGameActivity.this,
+//                        "Discovery Failed, try again... ", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -97,15 +108,18 @@ public class HostGameActivity
     public void onResume() {
         super.onResume();
         //receiver = new WiFiDirectBroadcastReceiver(wifiDirectApp.mP2pMan, wifiDirectApp.mP2pChannel, this);
-        receiver = new WiFiDirectBroadcastReceiver();
+        //receiver = new WiFiDirectBroadcastReceiver();
 
-        registerReceiver(receiver, mIntentFilter);
+        wifiDirectApp.mReceiver = new WiFiDirectBroadcastReceiver(
+                wifiDirectApp.mP2pMan, wifiDirectApp.mP2pChannel, this);
+
+        registerReceiver(wifiDirectApp.mReceiver, mIntentFilter);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        unregisterReceiver(receiver);
+        unregisterReceiver(wifiDirectApp.mReceiver);
     }
 
     /**

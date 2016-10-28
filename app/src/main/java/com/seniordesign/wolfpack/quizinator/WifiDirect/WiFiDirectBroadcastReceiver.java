@@ -1,9 +1,12 @@
 package com.seniordesign.wolfpack.quizinator.WifiDirect;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+
+import android.net.wifi.p2p.WifiP2pManager;
 
 /**
  * A BroadcastReceiver that notifies of important wifi p2p events.
@@ -13,6 +16,19 @@ import android.content.IntentFilter;
 public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 
     private static final String TAG = "WifiDirectBroadcastReceiver";
+
+    private WifiP2pManager mManager;
+    private WifiP2pManager.Channel mChannel;
+    private Activity mActivity;
+
+    public WiFiDirectBroadcastReceiver(WifiP2pManager manager,
+                                       WifiP2pManager.Channel channel,
+                                       Activity activity) {
+        super();
+        this.mManager = manager;
+        this.mChannel = channel;
+        this.mActivity = activity;
+    }
 
     /*
      * @author kuczynskij (10/26/2016)
