@@ -128,6 +128,16 @@ public class MainMenuActivity extends AppCompatActivity
      */
     public void initiateHostGame(View v) {
         final Intent intent = new Intent(this, HostGameActivity.class);
+        intent.putExtra("isServer", true);
+        startActivity(intent);
+    }
+
+    /*
+     * @author leonardj (10/26/16)
+     */
+    public void initiateJoinGame(View v) {
+        final Intent intent = new Intent(this, HostGameActivity.class);
+        intent.putExtra("isServer", true);
         startActivity(intent);
     }
 }

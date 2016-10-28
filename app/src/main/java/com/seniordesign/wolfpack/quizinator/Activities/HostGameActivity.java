@@ -34,16 +34,21 @@ public class HostGameActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_host_game);
-        setTitle("Host Game");
 
         wifiDirectApp = (WifiDirectApp)getApplication();
         wifiDirectApp.mHomeActivity = this;
+        wifiDirectApp.mIsServer = getIntent().getExtras().getBoolean("isServer");
+
+        if (wifiDirectApp.mIsServer) {
+            setTitle("Host Game");
+        } else {
+            setTitle("Join Game");
+        }
 
         // If service not started yet, start it.
         Intent serviceIntent =
                 new Intent(this, ConnectionService.class);
         // start the connection service
-
 
         wifiDirectApp.mP2pMan = (WifiP2pManager) getSystemService(
                 Context.WIFI_P2P_SERVICE);

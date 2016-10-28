@@ -74,6 +74,10 @@ public class WifiDirectApp extends Application {
         return state != null && "1".equals(state.trim());
     }
 
+    public int isHost() {
+        return mIsServer ? 15 : 0;
+    }
+
     /**
      * Upon p2p connection available, group owner start server socket
      * channel start socket server and select monitor the socket.
