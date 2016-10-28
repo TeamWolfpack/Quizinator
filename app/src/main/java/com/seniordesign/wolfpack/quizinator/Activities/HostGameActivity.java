@@ -2,6 +2,7 @@ package com.seniordesign.wolfpack.quizinator.Activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
@@ -18,6 +19,7 @@ import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.DeviceDetailFragment;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.DeviceListFragment;
+import com.seniordesign.wolfpack.quizinator.WifiDirect.WiFiDirectBroadcastReceiver;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
 public class HostGameActivity
@@ -25,6 +27,8 @@ public class HostGameActivity
         implements DeviceListFragment.DeviceActionListener {
 
     private WifiDirectApp wifiDirectApp;
+    private WiFiDirectBroadcastReceiver receiver;
+    private IntentFilter mIntentFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +43,12 @@ public class HostGameActivity
         Intent serviceIntent =
                 new Intent(this, ConnectionService.class);
         // start the connection service
-        startService(serviceIntent);
+
+        mIntentFilter = new IntentFilter();
+        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
+        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
+        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
+        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
     }
 
     /*
@@ -83,7 +92,21 @@ public class HostGameActivity
         });
     }
 
+    /** register the BroadcastReceiver with the intent values to be matched */
+    @Override
+    public void onResume() {
+        super.onResume();
+        //receiver = new WiFiDirectBroadcastReceiver(wifiDirectApp.mP2pMan, wifiDirectApp.mP2pChannel, this);
+        receiver = new WiFiDirectBroadcastReceiver();
 
+        registerReceiver(receiver, mIntentFilter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+    }
 
     /**
      * process WIFI_P2P_THIS_DEVICE_CHANGED_ACTION intent, refresh this device.
