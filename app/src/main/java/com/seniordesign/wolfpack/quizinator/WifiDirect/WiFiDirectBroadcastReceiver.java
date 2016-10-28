@@ -9,7 +9,7 @@ import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pManager;
 
 /**
- * A BroadcastReceiver that notifies of important wifi p2p events.
+ *  A BroadcastReceiver that notifies of important Wi-Fi p2p events.
  *
  * @creation 10/26/2016
  */
@@ -61,9 +61,9 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 //            // the Activity.
 //            int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
 //            if (state == WifiP2pManager.WIFI_P2P_STATE_ENABLED) {
-//                activity.setIsWifiP2pEnabled(true);
+//                mActivity.setIsWifiP2pEnabled(true);
 //            } else {
-//                activity.setIsWifiP2pEnabled(false);
+//                mActivity.setIsWifiP2pEnabled(false);
 //            }
 //        } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
 //
@@ -76,7 +76,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 //            // that.
 //
 //        } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
-//            DeviceListFragment fragment = (DeviceListFragment) activity.getFragmentManager()
+//            DeviceListFragment fragment = (DeviceListFragment) mActivity.getFragmentManager()
 //                    .findFragmentById(R.id.frag_list);
 //            fragment.updateThisDevice((WifiP2pDevice) intent.getParcelableExtra(
 //                    WifiP2pManager.EXTRA_WIFI_P2P_DEVICE));
