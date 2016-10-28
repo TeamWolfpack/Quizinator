@@ -50,7 +50,7 @@ public class HostGameActivity
         wifiDirectApp.mP2pChannel = wifiDirectApp.mP2pMan.initialize(
                 this, getMainLooper(), null);
         wifiDirectApp.mReceiver = new WiFiDirectBroadcastReceiver(
-                wifiDirectApp.mP2pMan, wifiDirectApp.mP2pChannel, this);
+                wifiDirectApp, this);
 
         mIntentFilter = new IntentFilter();
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
@@ -111,7 +111,7 @@ public class HostGameActivity
         //receiver = new WiFiDirectBroadcastReceiver();
 
         wifiDirectApp.mReceiver = new WiFiDirectBroadcastReceiver(
-                wifiDirectApp.mP2pMan, wifiDirectApp.mP2pChannel, this);
+                wifiDirectApp, this);
 
         registerReceiver(wifiDirectApp.mReceiver, mIntentFilter);
     }

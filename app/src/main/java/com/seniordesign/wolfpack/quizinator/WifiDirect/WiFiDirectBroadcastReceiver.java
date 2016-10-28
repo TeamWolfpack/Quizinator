@@ -11,6 +11,8 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.List;
+
 /**
  *  A BroadcastReceiver that notifies of important Wi-Fi p2p events.
  *
@@ -20,22 +22,32 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 
     private static final String TAG = "p2pBroadcastReceiver";
 
-    private WifiP2pManager mManager;
-    private WifiP2pManager.Channel mChannel;
+
+//    private WifiP2pManager mManager;
+//    private WifiP2pManager.Channel mChannel;
     private Activity mActivity;
+
+    private WifiDirectApp wifiDirectApp;
 
     public WiFiDirectBroadcastReceiver() {
         super();
     }
 
-    public WiFiDirectBroadcastReceiver(WifiP2pManager manager,
-                                       WifiP2pManager.Channel channel,
+    public WiFiDirectBroadcastReceiver(WifiDirectApp wifiDirectApp,
                                        Activity activity) {
         super();
-        this.mManager = manager;
-        this.mChannel = channel;
+        this.wifiDirectApp = wifiDirectApp;
         this.mActivity = activity;
     }
+
+//    public WiFiDirectBroadcastReceiver(WifiP2pManager manager,
+//                                       WifiP2pManager.Channel channel,
+//                                       Activity activity) {
+//        super();
+//        this.mManager = manager;
+//        this.mChannel = channel;
+//        this.mActivity = activity;
+//    }
 
     /*
      * @author kuczynskij (10/26/2016)
@@ -75,12 +87,12 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
         } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
             // Call WifiP2pManager.requestPeers() to get a list of current peers
             // The peer list has changed!  We should probably do something about that.
-            if (mManager != null) {
-                mManager.requestPeers(mChannel, new WifiP2pManager.PeerListListener() {
+            if (wifiDirectApp.mP2pMan != null) {
+                wifiDirectApp.mP2pMan.requestPeers(wifiDirectApp.mP2pChannel, new WifiP2pManager.PeerListListener() {
                     @Override
                     public void onPeersAvailable(WifiP2pDeviceList peers) {
                         Log.d(TAG, String.format("PeerListListener: %d peers available", peers.getDeviceList().size()));
-
+                        wifiDirectApp.mPeers = (List)peers.getDeviceList();
                         // DO WHATEVER YOU WANT HERE
                         // YOU CAN GET ACCESS TO ALL THE DEVICES YOU FOUND FROM peers OBJECT
 

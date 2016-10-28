@@ -168,7 +168,7 @@ public class DeviceListFragment extends ListFragment {  // callback of requestPe
                 }
                 peers.clear();
                 ((WiFiPeerListAdapter) getListAdapter()).notifyDataSetChanged();
-                Toast.makeText(getActivity(), "p2p connection broken...please try again...", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getActivity(), "p2p connection broken...please try again...", Toast.LENGTH_LONG).show();
             }
         });
 
