@@ -43,6 +43,7 @@
                 <action android:name="android.net.wifi.p2p.PEERS_CHANGED" />
                 <action android:name="android.net.wifi.p2p.THIS_DEVICE_CHANGED" />
                 <action android:name="android.net.wifi.p2p.CONNECTION_STATE_CHANGE" />
+                <action android:name="android.permission.INTERACT_ACROSS_USERS_FULL" />
             </intent-filter>
         </receiver>
 

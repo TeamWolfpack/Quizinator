@@ -65,6 +65,7 @@ public class WifiDirectApp extends Application {
                         this,
                         AppPreferences.PREF_NAME,
                         AppPreferences.P2P_ENABLED);
+        System.out.println(state);
         return state != null && "1".equals(state.trim());
     }
 

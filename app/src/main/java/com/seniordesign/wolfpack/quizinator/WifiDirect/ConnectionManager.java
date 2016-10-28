@@ -39,13 +39,15 @@ public class ConnectionManager {
 
     // Server knows all clients. key is ip addr, value is socket channel.
     // when remote client screen on, a new connection with the same ip addr is established.
-    private Map<String, SocketChannel> mClientChannels = new HashMap<String, SocketChannel>();
+    private Map<String, SocketChannel> mClientChannels =
+            new HashMap<String, SocketChannel>();
 
     // global selector and channels
     private Selector mClientSelector = null;
     private Selector mServerSelector = null;
     private ServerSocketChannel mServerSocketChannel = null;
     private SocketChannel mClientSocketChannel = null;
+
     String mClientAddr = null;
     String mServerAddr = null;
 
@@ -56,8 +58,10 @@ public class ConnectionManager {
 
     public void configIPV4() {
         // by default Selector attempts to work on IPv6 stack.
-        java.lang.System.setProperty("java.net.preferIPv4Stack", "true");
-        java.lang.System.setProperty("java.net.preferIPv6Addresses", "false");
+        java.lang.System.setProperty("java.net.preferIPv4Stack",
+                "true");
+        java.lang.System.setProperty("java.net.preferIPv6Addresses",
+                "false");
     }
 
     /**

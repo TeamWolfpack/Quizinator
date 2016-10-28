@@ -198,34 +198,14 @@ public class SelectorAsyncTask extends AsyncTask<Void, Void, Void> {
     public String readData(SocketChannel sChannel) {
         // let's cap json string to 4k for now.
         ByteBuffer buf = ByteBuffer.allocate(1024 * 4);
-        byte[] bytes = null;
         String jsonString = null;
-
         try {
             buf.clear();  // Clear the buffer and read bytes from socket
             int numBytesRead = sChannel.read(buf);
             if (numBytesRead == -1) {
-                // Read -1 means socket channel is broken.
-                // Remove it from the selector.
-                Log.e(TAG, "readData : channel closed due to read -1: ");
-                sChannel.close();  // close the channel.
-                notifyConnectionService(MSG_BROKEN_CONN, sChannel, null);
-                // sChannel.close();
+                handleBrokenSocket(sChannel);
             } else {
-                Log.d(TAG, "readData: bufpos: limit : " +
-                        buf.position() + ":" + buf.limit() + " : " +
-                        buf.capacity());
-                buf.flip();  // make buffer ready for read by
-                // flipping it into read mode.
-                Log.d(TAG, "readData: bufpos: limit : " +
-                        buf.position() + ":" + buf.limit() + " : " +
-                        buf.capacity());
-                // use bytes.length will cause underflow exception.
-                bytes = new byte[buf.limit()];
-                buf.get(bytes);
-                // while ( buf.hasRemaining() ) buf.get();
-                // convert byte[] back to string.
-                jsonString = new String(bytes);
+                jsonString = readBuffer(buf);
             }
         } catch (Exception e) {
             Log.e(TAG, "readData : exception: " + e.toString());
@@ -234,6 +214,35 @@ public class SelectorAsyncTask extends AsyncTask<Void, Void, Void> {
 
         Log.d(TAG, "readData: content: " + jsonString);
         return jsonString;
+    }
+
+    private boolean handleBrokenSocket(SocketChannel sChannel)
+            throws IOException {
+        // Read -1 means socket channel is broken.
+        // Remove it from the selector.
+        Log.e(TAG, "readData : channel closed due to read -1: ");
+        sChannel.close();  // close the channel.
+        notifyConnectionService(MSG_BROKEN_CONN, sChannel, null);
+        // sChannel.close();
+        return true;
+    }
+
+    private String readBuffer(ByteBuffer buf){
+        byte[] bytes = null;
+        Log.d(TAG, "readData: bufpos: limit : " +
+                buf.position() + ":" + buf.limit() + " : " +
+                buf.capacity());
+        buf.flip();  // make buffer ready for read by
+        // flipping it into read mode.
+        Log.d(TAG, "readData: bufpos: limit : " +
+                buf.position() + ":" + buf.limit() + " : " +
+                buf.capacity());
+        // use bytes.length will cause underflow exception.
+        bytes = new byte[buf.limit()];
+        buf.get(bytes);
+        // while ( buf.hasRemaining() ) buf.get();
+        // convert byte[] back to string.
+        return new String(bytes);
     }
 
     /**
