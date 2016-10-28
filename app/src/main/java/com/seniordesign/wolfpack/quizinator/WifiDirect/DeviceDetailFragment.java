@@ -91,14 +91,14 @@ public class DeviceDetailFragment extends Fragment {
                 if (progressDialog != null && progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
-                progressDialog = ProgressDialog.show(getActivity(), "Press back to cancel",
-                        "Connecting to :" + device.deviceAddress, true, true,  // cancellable
-                        new DialogInterface.OnCancelListener() {
-                            @Override
-                            public void onCancel(DialogInterface dialog) {
-                                ((DeviceListFragment.DeviceActionListener) getActivity()).cancelDisconnect();
-                            }
-                        });
+//                progressDialog = ProgressDialog.show(getActivity(), "Press back to cancel",
+//                        "Connecting to :" + device.deviceAddress, true, true,  // cancellable
+//                        new DialogInterface.OnCancelListener() {
+//                            @Override
+//                            public void onCancel(DialogInterface dialog) {
+//                                ((DeviceListFragment.DeviceActionListener) getActivity()).cancelDisconnect();
+//                            }
+//                        });
                 // perform p2p connect upon user click the connect button, connect available handle when connection done.
                 ((DeviceListFragment.DeviceActionListener) getActivity()).connect(config);
             }

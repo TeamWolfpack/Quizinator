@@ -198,7 +198,7 @@ public class HostGameActivity
                         startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
                     }
                 })
-                .setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         finish();
                     }
@@ -213,7 +213,8 @@ public class HostGameActivity
      */
     @Override
     public void showDetails(WifiP2pDevice device) {
-        DeviceDetailFragment fragment = (DeviceDetailFragment) getFragmentManager().findFragmentById(R.id.frag_detail);
+        DeviceDetailFragment fragment = (DeviceDetailFragment)
+                getFragmentManager().findFragmentById(R.id.frag_detail);
         fragment.showDetails(device);
     }
 
@@ -232,11 +233,15 @@ public class HostGameActivity
                 wifiDirectApp.mP2pMan.cancelConnect(wifiDirectApp.mP2pChannel, new WifiP2pManager.ActionListener() {
                     @Override
                     public void onSuccess() {
-                        Toast.makeText(HostGameActivity.this, "Aborting connection", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(HostGameActivity.this,
+                                "Aborting connection", Toast.LENGTH_SHORT).show();
                     }
                     @Override
                     public void onFailure(int reasonCode) {
-                        Toast.makeText(HostGameActivity.this, "cancelConnect: request failed. Please try again.. ", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(HostGameActivity.this,
+                                "cancelConnect: request failed. " +
+                                        "Please try again.. ",
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -248,12 +253,15 @@ public class HostGameActivity
      */
     @Override
     public void connect(WifiP2pConfig config) {
-        // perform p2p connect upon users click the connect button. after connection, manager request connection info.
-        wifiDirectApp.mP2pMan.connect(wifiDirectApp.mP2pChannel, config, new WifiP2pManager.ActionListener() {
+        // perform p2p connect upon users click the connect button.
+        // after connection, manager request connection info.
+        wifiDirectApp.mP2pMan.connect(wifiDirectApp.mP2pChannel,
+                config, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
                 // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
-                Toast.makeText(HostGameActivity.this, "Connect success..", Toast.LENGTH_SHORT).show();
+
+                //Toast.makeText(HostGameActivity.this, "Connect success..", Toast.LENGTH_SHORT).show();
             }
 
             @Override
