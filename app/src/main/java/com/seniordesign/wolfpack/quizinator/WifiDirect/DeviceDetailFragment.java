@@ -87,6 +87,9 @@ public class DeviceDetailFragment extends Fragment {
                 WifiP2pConfig config = new WifiP2pConfig();
                 config.deviceAddress = device.deviceAddress;
                 config.wps.setup = WpsInfo.PBC;
+
+                // 15 is highest group owner (host)
+                // 0 is lowest (player)
                 config.groupOwnerIntent = 0;  // least inclination to be group owner.
                 if (progressDialog != null && progressDialog.isShowing()) {
                     progressDialog.dismiss();

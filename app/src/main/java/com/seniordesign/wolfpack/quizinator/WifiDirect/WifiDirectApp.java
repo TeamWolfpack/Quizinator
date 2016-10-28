@@ -4,6 +4,8 @@ import android.app.Application;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.os.Message;
+import android.util.Log;
 
 import com.seniordesign.wolfpack.quizinator.Activities.HostGameActivity;
 
@@ -11,6 +13,9 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_STARTCLIENT;
+import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_STARTSERVER;
 
 /**
  * Creates an instance of a WifiDirect Application because it is a
@@ -77,9 +82,9 @@ public class WifiDirectApp extends Application {
      * @author kuczynskij (10/26/2016)
      */
     public void startSocketServer() {
-        //Message msg = ConnectionService.getInstance().getHandler().obtainMessage();
-        //msg.what = MSG_STARTSERVER;
-        //ConnectionService.getInstance().getHandler().sendMessage(msg);
+        Message msg = ConnectionService.getInstance().getHandler().obtainMessage();
+        msg.what = MSG_STARTSERVER;
+        ConnectionService.getInstance().getHandler().sendMessage(msg);
     }
 
     /**
@@ -90,11 +95,11 @@ public class WifiDirectApp extends Application {
      * @author kuczynskij (10/26/2016)
      */
     public void startSocketClient(String hostname) {
-        //Log.d(TAG, "startSocketClient : client connect to group owner : " + hostname);
-        //Message msg = ConnectionService.getInstance().getHandler().obtainMessage();
-        //msg.what = MSG_STARTCLIENT;
-        //msg.obj = hostname;
-        //ConnectionService.getInstance().getHandler().sendMessage(msg);
+        Log.d(TAG, "startSocketClient : client connect to group owner : " + hostname);
+        Message msg = ConnectionService.getInstance().getHandler().obtainMessage();
+        msg.what = MSG_STARTCLIENT;
+        msg.obj = hostname;
+        ConnectionService.getInstance().getHandler().sendMessage(msg);
     }
 
     /*
