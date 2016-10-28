@@ -11,6 +11,7 @@
         android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" />
 
     <!-- Market filtering -->
     <uses-feature android:name="android.hardware.wifi.direct" android:required="true" />
@@ -46,7 +47,6 @@
                 <action android:name="android.net.wifi.p2p.PEERS_CHANGED" />
                 <action android:name="android.net.wifi.p2p.THIS_DEVICE_CHANGED" />
                 <action android:name="android.net.wifi.p2p.CONNECTION_STATE_CHANGE" />
-                <action android:name="android.permission.INTERACT_ACROSS_USERS_FULL" />
             </intent-filter>
         </receiver>
 
