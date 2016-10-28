@@ -155,12 +155,12 @@ public class DeviceListFragment extends ListFragment {  // callback of requestPe
 
         if (mApp.mIsServer) {
             for (WifiP2pDevice device : peerList) {
-                if (device.isGroupOwner())
+                if (!device.isGroupOwner())
                     peerList.remove(device);
             }
         } else {
             for (WifiP2pDevice device : peerList) {
-                if (!device.isGroupOwner())
+                if (device.isGroupOwner())
                     peerList.remove(device);
             }
         }
