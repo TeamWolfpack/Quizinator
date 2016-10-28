@@ -21,10 +21,14 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
     private WifiP2pManager.Channel mChannel;
     private Activity mActivity;
 
+    public WiFiDirectBroadcastReceiver(){
+        super();
+    }
+
     public WiFiDirectBroadcastReceiver(WifiP2pManager manager,
                                        WifiP2pManager.Channel channel,
                                        Activity activity) {
-        super();
+        this();
         this.mManager = manager;
         this.mChannel = channel;
         this.mActivity = activity;
