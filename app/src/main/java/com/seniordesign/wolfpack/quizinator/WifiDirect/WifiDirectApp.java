@@ -1,6 +1,7 @@
 package com.seniordesign.wolfpack.quizinator.WifiDirect;
 
 import android.app.Application;
+import android.content.Intent;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
@@ -130,5 +131,18 @@ public class WifiDirectApp extends Application {
      */
     public void setMyAddress(String addr) {
         mMyAddress = addr;
+    }
+
+    /*
+     * @author kuczynskij (10/31/2016)
+     */
+    public Intent getLauchActivityIntent(Class<?> cls,
+                                         String initmsg){
+        //get the intent to launch any activity
+        Intent i = new Intent(this, cls);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            i.putExtra("FIRST_MSG", initmsg);
+        return i;
     }
 }

@@ -13,7 +13,9 @@ import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.seniordesign.wolfpack.quizinator.R;
@@ -26,6 +28,8 @@ import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 public class HostGameActivity
         extends AppCompatActivity
         implements DeviceListFragment.DeviceActionListener {
+
+    private static final String TAG = "ACT_HG";
 
     private WifiDirectApp wifiDirectApp;
     private IntentFilter mIntentFilter;
@@ -41,8 +45,10 @@ public class HostGameActivity
 
         if (wifiDirectApp.mIsServer) {
             setTitle("Host Game");
+
         } else {
             setTitle("Join Game");
+            findViewById(R.id.start_game_settings).setVisibility(View.GONE);
         }
 
         // If service not started yet, start it.
@@ -291,5 +297,24 @@ public class HostGameActivity
                 fragment.getView().setVisibility(View.GONE);
             }
         });
+    }
+
+    public boolean startGameSettingsActivity(View v){
+        if(!wifiDirectApp.mP2pConnected ){
+            Log.d(TAG, "startChatActivity : p2p connection is " +
+                    "missing, do nothing...");
+            return false;
+        }
+
+        //PTPLog.d(TAG, "startChatActivity : start chat activity fragment..." + initMsg);
+        runOnUiThread(new Runnable() {
+            @Override public void run() {
+                Intent i = wifiDirectApp.
+                        getLauchActivityIntent(
+                                NewGameSettingsActivity.class, null);
+                startActivity(i);
+            }
+        });
+        return true;
     }
 }
