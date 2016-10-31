@@ -16,11 +16,13 @@ import android.net.wifi.p2p.WifiP2pManager.ChannelListener;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.seniordesign.wolfpack.quizinator.Activities.MainMenuActivity;
 
@@ -316,7 +318,7 @@ public class ConnectionService
                 mConnMan.onFinishConnect((SocketChannel) msg.obj);
                 break;
             case MSG_PULLIN_DATA:
-                //onPullInData((SocketChannel)msg.obj, msg.getData());
+                onPullInData((SocketChannel)msg.obj, msg.getData());
                 break;
             case MSG_PUSHOUT_DATA:
                 onPushOutData((String) msg.obj);
@@ -355,6 +357,24 @@ public class ConnectionService
     private void onPushOutData(String data) {
         Log.d(TAG, "onPushOutData : " + data);
         mConnMan.pushOutData(data);
+    }
+
+    /**
+     * service handle data in come from socket channel
+     */
+    private String onPullInData(SocketChannel schannel, Bundle b){
+        String data = b.getString("DATA");
+        Log.d(TAG, "onDataIn : recvd msg : " + data);
+        mConnMan.onDataIn(schannel, data);  // pub to all client if this device is server.
+
+        Toast.makeText(mApp.mHomeActivity, data, Toast.LENGTH_LONG).show();
+        
+//        MessageRow row = MessageRow.parseMessageRow(data);
+//        // now first add to app json array
+//        mApp.shiftInsertMessage(row);
+//        // add to activity if it is on focus.
+//        showInActivity(row);
+        return data;
     }
 
     /**

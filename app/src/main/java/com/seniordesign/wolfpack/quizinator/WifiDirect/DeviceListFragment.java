@@ -152,6 +152,19 @@ public class DeviceListFragment extends ListFragment {  // callback of requestPe
             progressDialog.dismiss();
         }
         peers.clear();
+
+        if (mApp.mIsServer) {
+            for (WifiP2pDevice device : peerList) {
+                if (!device.isGroupOwner())
+                    peerList.remove(device);
+            }
+        } else {
+            for (WifiP2pDevice device : peerList) {
+                if (device.isGroupOwner())
+                    peerList.remove(device);
+            }
+        }
+
         peers.addAll(peerList);
         ((WiFiPeerListAdapter) getListAdapter()).notifyDataSetChanged();
         if (peers.size() == 0) {
@@ -168,7 +181,7 @@ public class DeviceListFragment extends ListFragment {  // callback of requestPe
                 }
                 peers.clear();
                 ((WiFiPeerListAdapter) getListAdapter()).notifyDataSetChanged();
-                Toast.makeText(getActivity(), "p2p connection broken...please try again...", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getActivity(), "p2p connection broken...please try again...", Toast.LENGTH_LONG).show();
             }
         });
 

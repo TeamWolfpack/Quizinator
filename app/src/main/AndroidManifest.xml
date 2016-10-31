@@ -2,16 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.seniordesign.wolfpack.quizinator">
 
-    <uses-permission android:required="true"
-        android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:required="true"
-        android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <uses-permission android:required="true"
-        android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" />
+    <uses-permission android:required="true" android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:required="true" android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:required="true" android:name="android.permission.INTERNET" />
+    <uses-permission android:required="true" android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:required="true" android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:required="true" android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:required="true" android:name="android.permission.INTERACT_ACROSS_USERS_FULL" />
 
     <!-- Market filtering -->
     <uses-feature android:name="android.hardware.wifi.direct" android:required="true" />

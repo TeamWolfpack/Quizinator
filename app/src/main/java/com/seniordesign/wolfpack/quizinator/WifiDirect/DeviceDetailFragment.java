@@ -38,6 +38,7 @@ import android.net.wifi.p2p.WifiP2pInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +47,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.seniordesign.wolfpack.quizinator.R;
+
+import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_PUSHOUT_DATA;
 
 /**
  * A fragment that manages a particular peer and allows interaction with device
@@ -87,18 +90,21 @@ public class DeviceDetailFragment extends Fragment {
                 WifiP2pConfig config = new WifiP2pConfig();
                 config.deviceAddress = device.deviceAddress;
                 config.wps.setup = WpsInfo.PBC;
-                config.groupOwnerIntent = 0;  // least inclination to be group owner.
+
+                // 15 is highest group owner (host)
+                // 0 is lowest (player)
+                config.groupOwnerIntent = mApp.isHost();  // least inclination to be group owner.
                 if (progressDialog != null && progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
-                progressDialog = ProgressDialog.show(getActivity(), "Press back to cancel",
-                        "Connecting to :" + device.deviceAddress, true, true,  // cancellable
-                        new DialogInterface.OnCancelListener() {
-                            @Override
-                            public void onCancel(DialogInterface dialog) {
-                                ((DeviceListFragment.DeviceActionListener) getActivity()).cancelDisconnect();
-                            }
-                        });
+//                progressDialog = ProgressDialog.show(getActivity(), "Press back to cancel",
+//                        "Connecting to :" + device.deviceAddress, true, true,  // cancellable
+//                        new DialogInterface.OnCancelListener() {
+//                            @Override
+//                            public void onCancel(DialogInterface dialog) {
+//                                ((DeviceListFragment.DeviceActionListener) getActivity()).cancelDisconnect();
+//                            }
+//                        });
                 // perform p2p connect upon user click the connect button, connect available handle when connection done.
                 ((DeviceListFragment.DeviceActionListener) getActivity()).connect(config);
             }
@@ -121,11 +127,18 @@ public class DeviceDetailFragment extends Fragment {
 //                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 //                        intent.setType("image/*");
 //                        //startActivityForResult(intent, CHOOSE_FILE_RESULT_CODE);
-//                        Log.d(TAG, "start_client button clicked, start chat activity !");
-//                        ((MainMenuActivity)getActivity()).startChatActivity(null);  // no init msg if started from button click.
+                        //Log.d(TAG, "start_client button clicked, start chat activity !");
+                        //((MainMenuActivit)getActivity()).startChatActivity("Hi Jimmy");  // no init msg if started from button click.
+
+                        //Actually send the message
+                        String message = "Hi Jimmy";
+                        Log.d(TAG, "pushOutMessage : " + message);
+                        Message msg = ConnectionService.getInstance().getHandler().obtainMessage();
+                        msg.what = MSG_PUSHOUT_DATA;
+                        msg.obj = message;
+                        ConnectionService.getInstance().getHandler().sendMessage(msg);
                     }
                 });
-
         return mContentView;
     }
 
