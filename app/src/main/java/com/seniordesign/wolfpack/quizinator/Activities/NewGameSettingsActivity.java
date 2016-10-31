@@ -9,21 +9,22 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.Filters.NumberFilter;
 import com.seniordesign.wolfpack.quizinator.R;
+import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
 import java.util.Calendar;
-import java.util.Date;
 
 /*
  * The new game settings activity is...
  * @creation 09/28/2016
  */
 public class NewGameSettingsActivity extends AppCompatActivity {
+
+    private static final String TAG = "ACT_NGS";
 
     private EditText cardCountInput;
     private EditText gameMinutesInput;
@@ -34,6 +35,8 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
     private RulesDataSource rulesSource;
 
+    WifiDirectApp wifiDirectApp = null;
+
     /*
      * @author kuczynskij (09/28/2016)
      * @author leonardj (10/4/2016)
@@ -43,6 +46,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_game_settings);
         setTitle("Game Settings");
+        wifiDirectApp = (WifiDirectApp)getApplication();
         initializeDB();
 
         cardTypeSpinner = (Spinner)findViewById(R.id.card_type_spinner);
@@ -84,27 +88,70 @@ public class NewGameSettingsActivity extends AppCompatActivity {
      * @author kuczynskij (09/28/2016)
      * @author leonardj (10/4/2016)
      */
-    public void startGame(View v){
-        updateRuleSet();
-        final Intent startGameIntent = new Intent(this, GamePlayActivity.class);
-        startActivity(startGameIntent);
+    public boolean startGame(View v){
+        Rules r = updateRuleSet();
+        if(wifiDirectApp.isHost() == 15){
+            return startMultiplayerGamePlay(r);
+        }else{
+            //single player
+            final Intent startGameIntent = new Intent(this,
+                    GamePlayActivity.class);
+            startActivity(startGameIntent);
+            return true;
+        }
     }
 
     /*
-     * @author leonardj (10/15/2016)
+     * @author kuczynskij (10/31/2016)
+     * @author leonardj (10/31/2016)
      */
-    public void updateRuleSet() {
-        long gameMinutesInMilli = Integer.valueOf(gameMinutesInput.getText().toString()) * 60000;
-        long gameSecondsInMilli = Integer.valueOf(gameSecondsInput.getText().toString()) * 1000;
-        long cardMinutesInMilli = Integer.valueOf(cardMinutesInput.getText().toString()) * 60000;
-        long cardSecondsInMilli = Integer.valueOf(cardSecondsInput.getText().toString()) * 1000;
-        int cardCount = Integer.valueOf(cardCountInput.getText().toString());
+    private boolean startMultiplayerGamePlay(Rules r){
+        //multi-player
+        if(!wifiDirectApp.mP2pConnected ){
+            Log.d(TAG, "startChatActivity : p2p connection is " +
+                    "missing, do nothing...");
+            return false;
+        }
+
+        //send everyone the rules
+
+        //somehow send r to everyone
+
+        runOnUiThread(new Runnable() {
+            @Override public void run() {
+                Intent i = wifiDirectApp.
+                        getLauchActivityIntent(
+                                HostGameActivity.class, null);
+                //tell everyone to start the game
+
+                startActivity(i);
+            }
+        });
+        return true;
+
+    }
+
+    /*
+     * @author leonardj (10/31/2016)
+     * @author kuczynskij (10/31/2016)
+     */
+    public Rules updateRuleSet() {
+        long gameMinutesInMilli = Integer.valueOf(
+                gameMinutesInput.getText().toString()) * 60000;
+        long gameSecondsInMilli = Integer.valueOf(
+                gameSecondsInput.getText().toString()) * 1000;
+        long cardMinutesInMilli = Integer.valueOf(
+                cardMinutesInput.getText().toString()) * 60000;
+        long cardSecondsInMilli = Integer.valueOf(
+                cardSecondsInput.getText().toString()) * 1000;
+        int cardCount = Integer.valueOf(
+                cardCountInput.getText().toString());
         String cardTypes = cardTypeSpinner.getSelectedItem().toString();
 
         if (rulesSource.getAllRules().size() < 1) {
-            rulesSource.createRule(cardCount, gameMinutesInMilli + gameSecondsInMilli,
+            return rulesSource.createRule(cardCount,
+                    gameMinutesInMilli + gameSecondsInMilli,
                     cardMinutesInMilli + cardSecondsInMilli, cardTypes);
-            return;
         }
 
         Rules rule = rulesSource.getAllRules().get(rulesSource.getAllRules().size() - 1);
@@ -123,7 +170,9 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             rule.setCardTypes(cardTypes);
         }
 
-        rulesSource.createRule(rule.getMaxCardCount(), rule.getTimeLimit(), rule.getCardDisplayTime(), rule.getCardTypes());
+        return rulesSource.createRule(rule.getMaxCardCount(),
+                rule.getTimeLimit(), rule.getCardDisplayTime(),
+                rule.getCardTypes());
     }
 
     /*
