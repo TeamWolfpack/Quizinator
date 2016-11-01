@@ -359,6 +359,16 @@ public class ConnectionService
         mConnMan.pushOutData(data);
     }
 
+    /*
+     * @author kuczynskij (10/31/2016)
+     * @author leonardj (10/31/2016)
+     */
+    private void pushAllRulesOut(String data){
+        Log.d(TAG, "pushAllRulesOut: " + data);
+        //anything we may need to the rules string
+        mConnMan.pushOutData(data);
+    }
+
     /**
      * service handle data in come from socket channel
      */

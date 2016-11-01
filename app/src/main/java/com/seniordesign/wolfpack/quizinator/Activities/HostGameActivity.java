@@ -183,7 +183,9 @@ public class HostGameActivity
         runOnUiThread(new Runnable() {
             @Override public void run() {
                 DeviceListFragment fragmentList = (DeviceListFragment) getFragmentManager().findFragmentById(R.id.frag_list);
-                fragmentList.onPeersAvailable(wifiDirectApp.mPeers);  // use application cached list.
+                synchronized (this){
+                    fragmentList.onPeersAvailable(wifiDirectApp.mPeers);  // use application cached list.
+                }
                 DeviceDetailFragment fragmentDetails = (DeviceDetailFragment) getFragmentManager().findFragmentById(R.id.frag_detail);
 
                 for(WifiP2pDevice d : peerList.getDeviceList()){
