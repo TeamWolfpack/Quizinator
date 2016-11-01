@@ -164,8 +164,10 @@ public class HostGameActivity
     public void resetData() {
         runOnUiThread(new Runnable() {
             @Override public void run() {
-                DeviceListFragment fragmentList = (DeviceListFragment) getFragmentManager().findFragmentById(R.id.frag_list);
-                DeviceDetailFragment fragmentDetails = (DeviceDetailFragment) getFragmentManager().findFragmentById(R.id.frag_detail);
+                DeviceListFragment fragmentList =
+                        (DeviceListFragment) getFragmentManager().findFragmentById(R.id.frag_list);
+                DeviceDetailFragment fragmentDetails =
+                        (DeviceDetailFragment) getFragmentManager().findFragmentById(R.id.frag_detail);
                 if (fragmentList != null) {
                     fragmentList.clearPeers();
                 }
@@ -182,7 +184,8 @@ public class HostGameActivity
     public void onConnectionInfoAvailable(final WifiP2pInfo info) {
         runOnUiThread(new Runnable() {
             @Override public void run() {
-                DeviceDetailFragment fragmentDetails = (DeviceDetailFragment) getFragmentManager().findFragmentById(R.id.frag_detail);
+                DeviceDetailFragment fragmentDetails =
+                        (DeviceDetailFragment) getFragmentManager().findFragmentById(R.id.frag_detail);
                 fragmentDetails.onConnectionInfoAvailable(info);
             }
         });

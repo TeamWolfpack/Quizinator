@@ -178,7 +178,7 @@ public class ConnectionManager {
             SelectionKey acceptKey = sServerChannel.register(
                     mServerSelector, SelectionKey.OP_ACCEPT);
             acceptKey.attach("accept_channel");
-            mApp.mIsServer = true;
+            //mApp.mIsServer = true;
 
             //SocketChannel sChannel = createSocketChannel("hostname.com", 80);
             //sChannel.register(selector, SelectionKey.OP_CONNECT);  // listen to connect event.
