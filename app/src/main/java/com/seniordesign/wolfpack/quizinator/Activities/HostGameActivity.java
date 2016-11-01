@@ -147,7 +147,8 @@ public class HostGameActivity
 
     @Override
     public void onDestroy(){
-        wifiDirectApp.mP2pMan.removeGroup(wifiDirectApp.mP2pChannel, null);
+        super.onDestroy();
+        this.disconnect();
     }
 
     /**
