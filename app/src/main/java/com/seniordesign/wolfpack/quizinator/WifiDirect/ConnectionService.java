@@ -24,7 +24,9 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Activities.MainMenuActivity;
+import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 
 /**
  * @creation 10/26/2016
@@ -323,6 +325,9 @@ public class ConnectionService
             case MSG_PUSHOUT_DATA:
                 onPushOutData((String) msg.obj);
                 break;
+            case MSG_SEND_RULES_ACTIVITY:
+                pushAllRulesOut((String) msg.obj);
+                break;
             case MSG_SELECT_ERROR:
                 mConnMan.onSelectorError();
                 break;
@@ -360,13 +365,13 @@ public class ConnectionService
     }
 
     /*
-     * @author kuczynskij (10/31/2016)
+     * @author kuczynskij (11/01/2016)
      * @author leonardj (10/31/2016)
      */
     private void pushAllRulesOut(String data){
         Log.d(TAG, "pushAllRulesOut: " + data);
         //anything we may need to the rules string
-        mConnMan.pushOutData(data);
+        mConnMan.pushOutData(MSG_SEND_RULES_ACTIVITY + data);
     }
 
     /**
@@ -376,9 +381,15 @@ public class ConnectionService
         String data = b.getString("DATA");
         Log.d(TAG, "onDataIn : recvd msg : " + data);
         mConnMan.onDataIn(schannel, data);  // pub to all client if this device is server.
-
-        Toast.makeText(mApp.mHomeActivity, data, Toast.LENGTH_LONG).show();
-        
+        int code = Integer.parseInt(data.substring(0,4));
+        data = data.substring(4);
+        switch(code){
+            case MSG_SEND_RULES_ACTIVITY:
+                Gson g = new Gson();
+                Rules r = g.fromJson(data, Rules.class);
+                Toast.makeText(mApp.mHomeActivity, r.toString(), Toast.LENGTH_LONG).show();
+                break;
+        }
 //        MessageRow row = MessageRow.parseMessageRow(data);
 //        // now first add to app json array
 //        mApp.shiftInsertMessage(row);

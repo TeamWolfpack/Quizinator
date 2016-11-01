@@ -1,6 +1,7 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
 import android.content.Intent;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputFilter;
@@ -10,13 +11,17 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.Filters.NumberFilter;
 import com.seniordesign.wolfpack.quizinator.R;
+import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
 import java.util.Calendar;
+
+import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_SEND_RULES_ACTIVITY;
 
 /*
  * The new game settings activity is...
@@ -114,6 +119,13 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         }
 
         //send everyone the rules
+        Gson gson = new Gson();
+        String rulesToSend = gson.toJson(r);
+
+        Message msg = ConnectionService.getInstance().getHandler().obtainMessage();
+            msg.what = MSG_SEND_RULES_ACTIVITY;
+            msg.obj = rulesToSend;
+        ConnectionService.getInstance().getHandler().sendMessage(msg);
 
         //somehow send r to everyone
 
