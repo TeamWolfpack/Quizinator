@@ -17,6 +17,7 @@
 package com.seniordesign.wolfpack.quizinator.WifiDirect;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import android.app.ListFragment;
@@ -153,17 +154,19 @@ public class DeviceListFragment extends ListFragment {  // callback of requestPe
         }
         peers.clear();
 
+        ArrayList<WifiP2pDevice> toRemove = new ArrayList();
         if (mApp.mIsServer) {
             for (WifiP2pDevice device : peerList) {
                 if (!device.isGroupOwner())
-                    peerList.remove(device);
+                    toRemove.add(device);
             }
         } else {
             for (WifiP2pDevice device : peerList) {
                 if (device.isGroupOwner())
-                    peerList.remove(device);
+                    toRemove.add(device);
             }
         }
+        peerList.removeAll(toRemove);
 
         peers.addAll(peerList);
         ((WiFiPeerListAdapter) getListAdapter()).notifyDataSetChanged();
