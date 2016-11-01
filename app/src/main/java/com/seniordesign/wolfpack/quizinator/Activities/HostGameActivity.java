@@ -58,10 +58,8 @@ public class HostGameActivity
 
         wifiDirectApp.mP2pMan = (WifiP2pManager) getSystemService(
                 Context.WIFI_P2P_SERVICE);
-        if (wifiDirectApp.mIsServer) {
-            wifiDirectApp.mP2pChannel = wifiDirectApp.mP2pMan.initialize(
-                    this, getMainLooper(), null);
-        }
+        wifiDirectApp.mP2pChannel = wifiDirectApp.mP2pMan.initialize(
+                this, getMainLooper(), null);
         wifiDirectApp.mReceiver = new WiFiDirectBroadcastReceiver(
                 wifiDirectApp, this);
 
@@ -270,12 +268,10 @@ public class HostGameActivity
     public void connect(WifiP2pConfig config) {
         // perform p2p connect upon users click the connect button.
         // after connection, manager request connection info.
-        wifiDirectApp.mP2pMan.connect(wifiDirectApp.mP2pChannel,
-                config, new WifiP2pManager.ActionListener() {
+        wifiDirectApp.mP2pMan.createGroup(wifiDirectApp.mP2pChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
                 // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
-
                 //Toast.makeText(HostGameActivity.this, "Connect success..", Toast.LENGTH_SHORT).show();
             }
 
