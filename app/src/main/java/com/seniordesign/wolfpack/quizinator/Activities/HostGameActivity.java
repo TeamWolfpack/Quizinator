@@ -145,6 +145,11 @@ public class HostGameActivity
         unregisterReceiver(wifiDirectApp.mReceiver);
     }
 
+    @Override
+    public void onDestroy(){
+        wifiDirectApp.mP2pMan.removeGroup(wifiDirectApp.mP2pChannel, null);
+    }
+
     /**
      * process WIFI_P2P_THIS_DEVICE_CHANGED_ACTION intent, refresh this device.
      */
