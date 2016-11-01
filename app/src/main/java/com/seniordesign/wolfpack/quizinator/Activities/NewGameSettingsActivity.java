@@ -122,6 +122,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                 Intent i = wifiDirectApp.
                         getLauchActivityIntent(
                                 HostGameActivity.class, null);
+                i.putExtra("isServer", true);
                 //tell everyone to start the game
 
                 startActivity(i);
