@@ -134,8 +134,8 @@ public class DeviceDetailFragment extends Fragment {
                         String message = "Hi Jimmy";
                         Log.d(TAG, "pushOutMessage : " + message);
                         Message msg = ConnectionService.getInstance().getHandler().obtainMessage();
-                        msg.what = MSG_PUSHOUT_DATA;
-                        msg.obj = message;
+                            msg.what = MSG_PUSHOUT_DATA;
+                            msg.obj = message;
                         ConnectionService.getInstance().getHandler().sendMessage(msg);
                     }
                 });
