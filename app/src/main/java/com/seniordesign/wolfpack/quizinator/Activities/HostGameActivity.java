@@ -58,8 +58,10 @@ public class HostGameActivity
 
         wifiDirectApp.mP2pMan = (WifiP2pManager) getSystemService(
                 Context.WIFI_P2P_SERVICE);
-        wifiDirectApp.mP2pChannel = wifiDirectApp.mP2pMan.initialize(
-                this, getMainLooper(), null);
+        if (wifiDirectApp.mIsServer) {
+            wifiDirectApp.mP2pChannel = wifiDirectApp.mP2pMan.initialize(
+                    this, getMainLooper(), null);
+        }
         wifiDirectApp.mReceiver = new WiFiDirectBroadcastReceiver(
                 wifiDirectApp, this);
 
