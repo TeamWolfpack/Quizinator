@@ -276,19 +276,22 @@ public class HostGameActivity
                 // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
                 Toast.makeText(HostGameActivity.this, "Connect success..", Toast.LENGTH_SHORT).show();
 
-                wifiDirectApp.mP2pMan.createGroup(wifiDirectApp.mP2pChannel,
-                        new WifiP2pManager.ActionListener() {
-                    @Override
-                    public void onSuccess() {
-                        // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
-                        Toast.makeText(HostGameActivity.this, "Group connection success..", Toast.LENGTH_SHORT).show();
-                    }
+                if (wifiDirectApp.mIsServer) {
+                    wifiDirectApp.mP2pMan.createGroup(wifiDirectApp.mP2pChannel,
+                            new WifiP2pManager.ActionListener() {
+                        @Override
+                        public void onSuccess() {
+                            // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
+                            Toast.makeText(HostGameActivity.this, "Group connection success..", Toast.LENGTH_SHORT).show();
+                        }
 
-                    @Override
-                    public void onFailure(int reason) {
-                        Toast.makeText(HostGameActivity.this, "Connect failed. Retry.", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        @Override
+                        public void onFailure(int reason) {
+                            Toast.makeText(HostGameActivity.this, "Connect failed. Retry.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
             }
 
             @Override
