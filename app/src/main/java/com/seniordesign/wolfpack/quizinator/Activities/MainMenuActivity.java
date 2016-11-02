@@ -14,13 +14,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.seniordesign.wolfpack.quizinator.R;
+import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 
-/**
+/*
  * The main menu activity
  * @creation 10/4/2016
  */
 public class MainMenuActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     /*
      * @author farrowc (10/4/2016)
@@ -43,9 +44,13 @@ public class MainMenuActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // If service not started yet, start it.
+        Intent serviceIntent = new Intent(this, ConnectionService.class);
+        startService(serviceIntent);  // start the connection service
     }
 
-    /**
+    /*
      * @author farrowc 10/4/2016
      */
     @Override
@@ -58,7 +63,7 @@ public class MainMenuActivity extends AppCompatActivity
         }
     }
 
-    /**
+    /*
      * @author farrowc 10/4/2016
      */
     @Override
@@ -68,7 +73,7 @@ public class MainMenuActivity extends AppCompatActivity
         return true;
     }
 
-    /**
+    /*
      * @author farrowc 10/4/2016
      */
     @Override
@@ -86,7 +91,7 @@ public class MainMenuActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    /**
+    /*
      * @author farrowc 10/4/2016
      */
     @Override
@@ -110,11 +115,29 @@ public class MainMenuActivity extends AppCompatActivity
         return true;
     }
 
-    /**
+    /*
      * @author farrowc 10/4/2016
      */
     public void showGameSettings(View v){
         final Intent intent = new Intent(this, NewGameSettingsActivity.class);
+        startActivity(intent);
+    }
+
+    /*
+     * @author leonardj (10/26/16)
+     */
+    public void initiateHostGame(View v) {
+        final Intent intent = new Intent(this, HostGameActivity.class);
+        intent.putExtra("isServer", true);
+        startActivity(intent);
+    }
+
+    /*
+     * @author leonardj (10/26/16)
+     */
+    public void initiateJoinGame(View v) {
+        final Intent intent = new Intent(this, HostGameActivity.class);
+        intent.putExtra("isServer", false);
         startActivity(intent);
     }
 }

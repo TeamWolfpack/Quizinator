@@ -1,6 +1,7 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
 import android.content.Intent;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputFilter;
@@ -9,8 +10,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Card.MCCard;
 import com.seniordesign.wolfpack.quizinator.Database.Card.TFCard;
@@ -20,16 +21,21 @@ import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.Filters.NumberFilter;
 import com.seniordesign.wolfpack.quizinator.R;
+import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
+import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 
-/**
+import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_SEND_RULES_ACTIVITY;
+
+/*
  * The new game settings activity is...
  * @creation 09/28/2016
  */
 public class NewGameSettingsActivity extends AppCompatActivity {
+
+    private static final String TAG = "ACT_NGS";
 
     private EditText cardCountInput;
     private EditText gameMinutesInput;
@@ -43,6 +49,8 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
     private Deck deck;
 
+    WifiDirectApp wifiDirectApp = null;
+
     /*
      * @author kuczynskij (09/28/2016)
      * @author leonardj (10/4/2016)
@@ -52,6 +60,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_game_settings);
         setTitle("Game Settings");
+        wifiDirectApp = (WifiDirectApp)getApplication();
         initializeDB();
 
         if(deckDataSource.getAllDecks().size()>0){
@@ -99,27 +108,78 @@ public class NewGameSettingsActivity extends AppCompatActivity {
      * @author kuczynskij (09/28/2016)
      * @author leonardj (10/4/2016)
      */
-    public void startGame(View v){
-        updateRuleSet();
-        final Intent startGameIntent = new Intent(this, GamePlayActivity.class);
-        startActivity(startGameIntent);
+    public boolean startGame(View v){
+        Rules r = updateRuleSet();
+        if(wifiDirectApp.isHost() == 15){
+            return startMultiplayerGamePlay(r);
+        }else{
+            //single player
+            final Intent startGameIntent = new Intent(this,
+                    GamePlayActivity.class);
+            startActivity(startGameIntent);
+            return true;
+        }
     }
 
     /*
-     * @author leonardj (10/15/2016)
+     * @author kuczynskij (10/31/2016)
+     * @author leonardj (10/31/2016)
      */
-    public void updateRuleSet() {
-        long gameMinutesInMilli = Integer.valueOf(gameMinutesInput.getText().toString()) * 60000;
-        long gameSecondsInMilli = Integer.valueOf(gameSecondsInput.getText().toString()) * 1000;
-        long cardMinutesInMilli = Integer.valueOf(cardMinutesInput.getText().toString()) * 60000;
-        long cardSecondsInMilli = Integer.valueOf(cardSecondsInput.getText().toString()) * 1000;
-        int cardCount = Integer.valueOf(cardCountInput.getText().toString());
+    private boolean startMultiplayerGamePlay(Rules r){
+        //multi-player
+        if(!wifiDirectApp.mP2pConnected ){
+            Log.d(TAG, "startChatActivity : p2p connection is " +
+                    "missing, do nothing...");
+            return false;
+        }
+
+        //send everyone the rules
+        Gson gson = new Gson();
+        String rulesToSend = gson.toJson(r);
+
+        Message msg = ConnectionService.getInstance().getHandler().obtainMessage();
+            msg.what = MSG_SEND_RULES_ACTIVITY;
+            msg.obj = rulesToSend;
+        ConnectionService.getInstance().getHandler().sendMessage(msg);
+
+        //somehow send r to everyone
+
+        runOnUiThread(new Runnable() {
+            @Override public void run() {
+                Intent i = wifiDirectApp.
+                        getLauchActivityIntent(
+                                HostGameActivity.class, null);
+                i.putExtra("isServer", true);
+                //tell everyone to start the game
+
+                startActivity(i);
+            }
+        });
+        return true;
+
+    }
+
+    /*
+     * @author leonardj (10/31/2016)
+     * @author kuczynskij (10/31/2016)
+     */
+    public Rules updateRuleSet() {
+        long gameMinutesInMilli = Integer.valueOf(
+                gameMinutesInput.getText().toString()) * 60000;
+        long gameSecondsInMilli = Integer.valueOf(
+                gameSecondsInput.getText().toString()) * 1000;
+        long cardMinutesInMilli = Integer.valueOf(
+                cardMinutesInput.getText().toString()) * 60000;
+        long cardSecondsInMilli = Integer.valueOf(
+                cardSecondsInput.getText().toString()) * 1000;
+        int cardCount = Integer.valueOf(
+                cardCountInput.getText().toString());
         String cardTypes = cardTypeSpinner.getSelectedItem().toString();
 
         if (rulesSource.getAllRules().size() < 1) {
-            rulesSource.createRule(cardCount, gameMinutesInMilli + gameSecondsInMilli,
+            return rulesSource.createRule(cardCount,
+                    gameMinutesInMilli + gameSecondsInMilli,
                     cardMinutesInMilli + cardSecondsInMilli, cardTypes);
-            return;
         }
 
         Rules rule = rulesSource.getAllRules().get(rulesSource.getAllRules().size() - 1);
@@ -138,7 +198,9 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             rule.setCardTypes(cardTypes);
         }
 
-        rulesSource.createRule(rule.getMaxCardCount(), rule.getTimeLimit(), rule.getCardDisplayTime(), rule.getCardTypes());
+        return rulesSource.createRule(rule.getMaxCardCount(),
+                rule.getTimeLimit(), rule.getCardDisplayTime(),
+                rule.getCardTypes());
     }
 
     /*
