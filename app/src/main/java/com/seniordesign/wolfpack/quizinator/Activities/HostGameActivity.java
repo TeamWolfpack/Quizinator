@@ -18,6 +18,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
+import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.DeviceDetailFragment;
@@ -243,6 +245,14 @@ public class HostGameActivity
         info.show();
     }
 
+    public void loadRuleInActivity(Rules rule) {
+        RulesDataSource rulesDataSource = new RulesDataSource(this);
+        rulesDataSource.open();
+        rulesDataSource.createRule(rule.getMaxCardCount(), rule.getTimeLimit(),
+                rule.getCardDisplayTime(), rule.getCardTypes());
+        Toast.makeText(this, rule.toString(), Toast.LENGTH_LONG).show();
+    }
+
     /**
      * user taps on peer from discovered list of peers, show this peer's detail.
      */
@@ -312,7 +322,7 @@ public class HostGameActivity
         if (fragment != null) {
             fragment.resetViews();
         }
-        
+
         wifiDirectApp.mP2pMan.removeGroup(wifiDirectApp.mP2pChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onFailure(int reasonCode) {

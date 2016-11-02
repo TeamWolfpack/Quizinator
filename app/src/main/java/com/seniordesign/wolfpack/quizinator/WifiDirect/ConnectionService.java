@@ -387,7 +387,7 @@ public class ConnectionService
             case MSG_SEND_RULES_ACTIVITY:
                 Gson g = new Gson();
                 Rules r = g.fromJson(data, Rules.class);
-                Toast.makeText(mApp.mHomeActivity, r.toString(), Toast.LENGTH_LONG).show();
+                mApp.mHomeActivity.loadRuleInActivity(r);
                 break;
         }
 //        MessageRow row = MessageRow.parseMessageRow(data);
