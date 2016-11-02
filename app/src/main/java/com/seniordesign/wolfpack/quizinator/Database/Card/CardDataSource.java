@@ -129,22 +129,22 @@ public class CardDataSource {
      */
     public Card cursorToCard(Cursor cursor) {
         String cardType = cursor.getString(1);
-        Card card = new TFCard(); // Defaulting to a TFCard
-        switch(cardType) {
-            case "TF":
-                card = new TFCard();
-                break;
-            case "MC":
-                card = new MCCard();
-                break;
-            //TODO will implement later
-//            case "FR":
-//                card = new FRCard();
+        Card card = new Card();
+//        switch(cardType) {
+//            case "TF":
+//                card = new TFCard();
 //                break;
-//            case "VR":
-//                card = new VRCard();
+//            case "MC":
+//                card = new MCCard();
 //                break;
-        }
+//            //TODO will implement later
+////            case "FR":
+////                card = new FRCard();
+////                break;
+////            case "VR":
+////                card = new VRCard();
+////                break;
+//        }
         card.setId(cursor.getLong(0));
         card.setCardType(cursor.getString(1));
         card.setQuestion(cursor.getString(2));
