@@ -2,6 +2,7 @@ package com.seniordesign.wolfpack.quizinator.Activities;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,7 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
-import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
+import com.seniordesign.wolfpack.quizinator.Database.Card.MCCard;
+import com.seniordesign.wolfpack.quizinator.Database.Card.TFCard;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.GamePlayStats;
@@ -19,6 +21,7 @@ import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScores;
 import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
+import com.seniordesign.wolfpack.quizinator.Fragments.MultipleChoiceAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.Fragments.TrueFalseChoiceAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.R;
 
@@ -31,7 +34,8 @@ import java.util.List;
  */
 public class GamePlayActivity
         extends AppCompatActivity
-        implements TrueFalseChoiceAnswerFragment.OnFragmentInteractionListener {
+        implements TrueFalseChoiceAnswerFragment.OnFragmentInteractionListener,
+        MultipleChoiceAnswerFragment.OnFragmentInteractionListener{
 
     private Rules rules;
     private Deck deck;
@@ -193,12 +197,30 @@ public class GamePlayActivity
      * @author farrowc (10/11/2016)
      */
     private void showCard(Card card) {
-        getSupportFragmentManager().
-                beginTransaction()
-                .replace(R.id.answerArea, new TrueFalseChoiceAnswerFragment())
-                .commit();
-        ((TextView) findViewById(R.id.questionTextArea))
-                .setText(card.getQuestion());
+        if(card instanceof TFCard){
+            getSupportFragmentManager().
+                    beginTransaction()
+                    .replace(R.id.answerArea, new TrueFalseChoiceAnswerFragment())
+                    .commitNow();
+            ((TextView) findViewById(R.id.questionTextArea))
+                    .setText(card.getQuestion());
+            getSupportFragmentManager().executePendingTransactions();
+        }
+        else if(card instanceof MCCard){
+            MultipleChoiceAnswerFragment mcFragment = new MultipleChoiceAnswerFragment();
+            mcFragment.setChoiceA(card.getPossibleAnswers()[0]);
+            mcFragment.setChoiceB(card.getPossibleAnswers()[1]);
+            mcFragment.setChoiceC(card.getPossibleAnswers()[2]);
+            mcFragment.setChoiceD(card.getPossibleAnswers()[3]);
+            getSupportFragmentManager().
+                    beginTransaction()
+                    .replace(R.id.answerArea,mcFragment)
+                    .commitNow();
+            ((TextView) findViewById(R.id.questionTextArea))
+                    .setText(card.getQuestion());
+
+
+        }
     }
 
     /*
@@ -292,9 +314,11 @@ public class GamePlayActivity
         Deck newDeck = new Deck();
         Card[] cards = new Card[10];
         cards[0] = new Card();
-        cards[0].setQuestion("1+1 = 2");
-        cards[0].setCorrectAnswer("True");
-        cards[0].setCardType("TF");
+        cards[0].setQuestion("1+1 = ?");
+        cards[0].setCorrectAnswer("2");
+        String[] answerArea = {"1","2","3","4"};
+        cards[0].setPossibleAnswers(answerArea);
+        cards[0].setCardType("MC");
         cards[1] = new Card();
         cards[1].setQuestion("1*2 = 0");
         cards[1].setCorrectAnswer("False");
@@ -423,4 +447,5 @@ public class GamePlayActivity
         };
         return true;
     }
+
 }
