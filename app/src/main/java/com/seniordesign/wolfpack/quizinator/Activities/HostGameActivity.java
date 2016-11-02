@@ -309,7 +309,10 @@ public class HostGameActivity
     @Override
     public void disconnect() {
         final DeviceDetailFragment fragment = (DeviceDetailFragment) getFragmentManager().findFragmentById(R.id.frag_detail);
-        fragment.resetViews();
+        if (fragment != null) {
+            fragment.resetViews();
+        }
+        
         wifiDirectApp.mP2pMan.removeGroup(wifiDirectApp.mP2pChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onFailure(int reasonCode) {
