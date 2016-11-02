@@ -1,20 +1,19 @@
 package com.seniordesign.wolfpack.quizinator.Database;
 
-import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
-import com.seniordesign.wolfpack.quizinator.Database.Card.MCCard;
-import com.seniordesign.wolfpack.quizinator.Database.Card.TFCard;
-import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
+        import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
+        import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
 
-import org.junit.Before;
-import org.junit.Test;
+        import org.junit.Before;
+        import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
+        import java.util.ArrayList;
+        import java.util.List;
 
-import static org.junit.Assert.*;
+        import static org.junit.Assert.*;
 
 /**
  * Unit Test the database for Deck
+ *
  * @creation 10/15/2016
  */
 public class DeckTest {
@@ -25,16 +24,16 @@ public class DeckTest {
      * @author  chuna (10/15/2016)
      */
     @Before
-    public void init(){
+    public void init() {
         deck.setId(1);
         deck.setDeckName("TestDeck");
         List<Card> cards = new ArrayList<>();
-        Card c1 = new TFCard();
-        Card c2 = new MCCard();
-        Card c3 = new MCCard();
-        Card c4 = new TFCard();
-        Card c5 = new TFCard();
-        Card c6 = new MCCard();
+        Card c1 = new Card();
+        Card c2 = new Card();
+        Card c3 = new Card();
+        Card c4 = new Card();
+        Card c5 = new Card();
+        Card c6 = new Card();
         c1.setId(1);
         c2.setId(2);
         c3.setId(3);
@@ -54,7 +53,7 @@ public class DeckTest {
      * @author  chuna (10/15/2016)
      */
     @Test
-    public void gettersTest(){
+    public void gettersTest() {
         assertEquals(1, deck.getId());
         assertEquals("TestDeck", deck.getDeckName());
         assertEquals(6, deck.getCards().size());
@@ -64,8 +63,8 @@ public class DeckTest {
      * @author  chuna (10/15/2016)
      */
     @Test
-    public void addCardTest(){
-        Card c7 = new TFCard();
+    public void addCardTest() {
+        Card c7 = new Card();
         c7.setId(7);
         deck.addCard(c7);
         assertEquals(7, deck.getCards().size());
@@ -75,7 +74,7 @@ public class DeckTest {
      * @author  chuna (10/15/2016)
      */
     @Test
-    public void removeCardTest(){
+    public void removeCardTest() {
         Card cardToRemove = deck.getCards().get(0);
         Card newFirstCard = deck.getCards().get(1);
         deck.removeCard(cardToRemove);
@@ -87,7 +86,7 @@ public class DeckTest {
      * @author  chuna (10/15/2016)
      */
     @Test
-    public void shuffleTest(){
+    public void shuffleTest() {
         List<Card> startCards = new ArrayList<>(deck.getCards());
         deck.shuffleDeck();
         List<Card> endCards = deck.getCards();

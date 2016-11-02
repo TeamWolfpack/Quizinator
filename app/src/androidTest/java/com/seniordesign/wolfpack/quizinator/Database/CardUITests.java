@@ -9,11 +9,6 @@ import com.seniordesign.wolfpack.quizinator.Activities.MainMenuActivity;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Card.CardDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Card.CardSQLiteHelper;
-import com.seniordesign.wolfpack.quizinator.Database.Card.MCCard;
-import com.seniordesign.wolfpack.quizinator.Database.Card.TFCard;
-import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
-import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckDataSource;
-import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckSQLiteHelper;
 
 import org.junit.Before;
 import org.junit.Rule;

@@ -12,8 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
-import com.seniordesign.wolfpack.quizinator.Database.Card.MCCard;
-import com.seniordesign.wolfpack.quizinator.Database.Card.TFCard;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.GamePlayStats;
@@ -197,27 +195,31 @@ public class GamePlayActivity
      * @author farrowc (10/11/2016)
      */
     private void showCard(Card card) {
-        if(card instanceof TFCard){
-            getSupportFragmentManager().
-                    beginTransaction()
-                    .replace(R.id.answerArea, new TrueFalseChoiceAnswerFragment())
-                    .commitNow();
-            ((TextView) findViewById(R.id.questionTextArea))
-                    .setText(card.getQuestion());
-            getSupportFragmentManager().executePendingTransactions();
-        }
-        else if(card instanceof MCCard){
-            MultipleChoiceAnswerFragment mcFragment = new MultipleChoiceAnswerFragment();
-            mcFragment.setChoiceA(card.getPossibleAnswers()[0]);
-            mcFragment.setChoiceB(card.getPossibleAnswers()[1]);
-            mcFragment.setChoiceC(card.getPossibleAnswers()[2]);
-            mcFragment.setChoiceD(card.getPossibleAnswers()[3]);
-            getSupportFragmentManager().
-                    beginTransaction()
-                    .replace(R.id.answerArea,mcFragment)
-                    .commitNow();
-            ((TextView) findViewById(R.id.questionTextArea))
-                    .setText(card.getQuestion());
+        switch(card.getCardType()){
+            case("TF"):
+                getSupportFragmentManager().
+                        beginTransaction()
+                        .replace(R.id.answerArea, new TrueFalseChoiceAnswerFragment())
+                        .commitNow();
+                ((TextView) findViewById(R.id.questionTextArea))
+                        .setText(card.getQuestion());
+                getSupportFragmentManager().executePendingTransactions();
+                break;
+            case("MC"):
+                MultipleChoiceAnswerFragment mcFragment = new MultipleChoiceAnswerFragment();
+                mcFragment.setChoiceA(card.getPossibleAnswers()[0]);
+                mcFragment.setChoiceB(card.getPossibleAnswers()[1]);
+                mcFragment.setChoiceC(card.getPossibleAnswers()[2]);
+                mcFragment.setChoiceD(card.getPossibleAnswers()[3]);
+                getSupportFragmentManager().
+                        beginTransaction()
+                        .replace(R.id.answerArea,mcFragment)
+                        .commitNow();
+                ((TextView) findViewById(R.id.questionTextArea))
+                        .setText(card.getQuestion());
+                 break;
+            default:
+                break;
 
 
         }
