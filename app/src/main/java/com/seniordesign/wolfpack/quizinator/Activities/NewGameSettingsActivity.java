@@ -129,17 +129,17 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
         //somehow send r to everyone
 
-        runOnUiThread(new Runnable() {
-            @Override public void run() {
-                Intent i = wifiDirectApp.
-                        getLauchActivityIntent(
-                                HostGameActivity.class, null);
-                i.putExtra("isServer", true);
-                //tell everyone to start the game
-
-                startActivity(i);
-            }
-        });
+//        runOnUiThread(new Runnable() {
+//            @Override public void run() {
+//                Intent i = wifiDirectApp.
+//                        getLauchActivityIntent(
+//                                HostGameActivity.class, null);
+//                i.putExtra("isServer", true);
+//                //tell everyone to start the game
+//
+//                startActivity(i);
+//            }
+//        });
         return true;
 
     }
