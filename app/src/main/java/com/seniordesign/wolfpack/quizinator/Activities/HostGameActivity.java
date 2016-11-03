@@ -18,6 +18,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
+import com.seniordesign.wolfpack.quizinator.Database.Card.CardDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
@@ -285,7 +287,15 @@ public class HostGameActivity
         rulesDataSource.open();
         rulesDataSource.createRule(rule.getMaxCardCount(), rule.getTimeLimit(),
                 rule.getCardDisplayTime(), rule.getCardTypes());
-        Toast.makeText(this, rule.toString(), Toast.LENGTH_LONG).show();
+    }
+
+    public void loadCardInActivity(Card card) {
+        CardDataSource cardDataSource = new CardDataSource(this);
+        cardDataSource.open();
+        cardDataSource.createCard(card.getCardType(), card.getQuestion(),
+                card.getCorrectAnswer(), card.getPossibleAnswers(), card.getPoints(),
+                card.getModeratorNeeded());
+        Toast.makeText(this, card.toString(), Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -480,8 +490,8 @@ public class HostGameActivity
 
     public boolean startGameSettingsActivity(View v){
         if(!wifiDirectApp.mP2pConnected ){
-            Log.d(TAG, "startChatActivity : p2p connection is " +
-                    "missing, do nothing...");
+            Toast.makeText(this, "You are not connected to anyone",
+                    Toast.LENGTH_SHORT).show();
             return false;
         }
 
