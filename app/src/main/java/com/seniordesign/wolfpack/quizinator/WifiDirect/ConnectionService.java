@@ -329,6 +329,9 @@ public class ConnectionService
             case MSG_SEND_RULES_ACTIVITY:
                 pushAllRulesOut((String) msg.obj);
                 break;
+            case MSG_SEND_CARD_ACTIVITY:
+                pushCardOut((String) msg.obj);
+                break;
             case MSG_SELECT_ERROR:
                 mConnMan.onSelectorError();
                 break;
