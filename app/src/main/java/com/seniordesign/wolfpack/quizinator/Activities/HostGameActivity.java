@@ -47,7 +47,7 @@ public class HostGameActivity
 
         if (wifiDirectApp.mIsServer) {
             setTitle("Host Game");
-            wifiDirectApp.mP2pInfo.isGroupOwner = true;
+//            wifiDirectApp.mP2pInfo.isGroupOwner = true;
 //            wifiDirectApp.mP2pMan.createGroup(wifiDirectApp.mP2pChannel,
 //                    new WifiP2pManager.ActionListener() {
 //                @Override
@@ -184,7 +184,7 @@ public class HostGameActivity
     @Override
     public void onDestroy(){
         super.onDestroy();
-        wifiDirectApp.mP2pInfo.isGroupOwner = false;
+//        wifiDirectApp.mP2pInfo.isGroupOwner = false;
         //unregisterReceiver(wifiDirectApp.mReceiver);
         //wifiDirectApp.mP2pMan.removeGroup(wifiDirectApp.mP2pChannel, null);
     }
