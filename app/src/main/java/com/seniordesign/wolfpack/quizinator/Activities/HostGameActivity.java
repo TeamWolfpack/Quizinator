@@ -49,53 +49,6 @@ public class HostGameActivity
 
         if (wifiDirectApp.mIsServer) {
             setTitle("Host Game");
-//            wifiDirectApp.mP2pInfo.isGroupOwner = true;
-//            wifiDirectApp.mP2pMan.createGroup(wifiDirectApp.mP2pChannel,
-//                    new WifiP2pManager.ActionListener() {
-//                @Override
-//                public void onSuccess() {
-//                    // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
-//                    Toast.makeText(HostGameActivity.this, "Group connection success..", Toast.LENGTH_SHORT).show();
-//                }
-//
-//                @Override
-//                public void onFailure(int reason) {
-//                    Toast.makeText(HostGameActivity.this, "Connect failed. Retry.", Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//            wifiDirectApp.mP2pMan.requestGroupInfo(wifiDirectApp.mP2pChannel, new WifiP2pManager.GroupInfoListener() {
-//                @Override
-//                public void onGroupInfoAvailable(WifiP2pGroup group) {
-//                    if (group != null) {
-//                        Log.d(TAG, "group != null");
-//                        wifiDirectApp.mP2pMan.removeGroup(wifiDirectApp.mP2pChannel, new WifiP2pManager.ActionListener() {
-//                            @Override
-//                            public void onSuccess() {
-//                                Log.d(TAG, "removeGroup Success");
-//
-//                                wifiDirectApp.mP2pMan.createGroup(wifiDirectApp.mP2pChannel, new WifiP2pManager.ActionListener() {
-//                                    @Override
-//                                    public void onSuccess() {
-//                                        Log.d(TAG, "createGroup Success");
-//                                    }
-//
-//                                    @Override
-//                                    public void onFailure(int reason) {
-//                                        Log.d(TAG, "createGroup Fail: " + reason);
-//                                    }
-//                                });
-//                            }
-//
-//                            @Override
-//                            public void onFailure(int reason) {
-//                                Log.d(TAG, "removeGroup Fail: " + reason);
-//                            }
-//                        });
-//                    }else{
-//
-//                    }
-//                }
-//            });
         } else {
             setTitle("Join Game");
             findViewById(R.id.start_game_settings).setVisibility(View.GONE);
@@ -375,7 +328,7 @@ public class HostGameActivity
                                 Log.d(TAG, "removeGroup Fail: " + reason);
                             }
                         });
-                    }else{
+                    } else {
                         Log.d(TAG, "group == null");
                         wifiDirectApp.mP2pMan.createGroup(wifiDirectApp.mP2pChannel, new WifiP2pManager.ActionListener() {
                             @Override
@@ -391,7 +344,7 @@ public class HostGameActivity
                     }
                 }
             });
-        }else{
+        } else {
             wifiDirectApp.mP2pMan.connect(wifiDirectApp.mP2pChannel, config,
                     new WifiP2pManager.ActionListener() {
                         @Override
@@ -399,6 +352,7 @@ public class HostGameActivity
                             // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
                             Toast.makeText(HostGameActivity.this, "Client: Connect success..", Toast.LENGTH_SHORT).show();
                         }
+
                         @Override
                         public void onFailure(int reason) {
                             Toast.makeText(HostGameActivity.this, "Client: Connect failed. Retry.", Toast.LENGTH_SHORT).show();
@@ -406,67 +360,6 @@ public class HostGameActivity
                     });
         }
     }
-
-
-//        What we have now
-//
-//        wifiDirectApp.mP2pMan.connect(wifiDirectApp.mP2pChannel, config,
-//                new WifiP2pManager.ActionListener() {
-//            @Override
-//            public void onSuccess() {
-//                // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
-//                Toast.makeText(HostGameActivity.this, "Connect success..", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onFailure(int reason) {
-//                Toast.makeText(HostGameActivity.this, "Connect failed. Retry.", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
-//        This is from stack overflow
-//
-//        manager.requestGroupInfo(channel, group -> {
-//            if (group != null) {
-//                Debug.d("group != null");
-//                manager.removeGroup(channel, new WifiP2pManager.ActionListener() {
-//                    @Override
-//                    public void onSuccess() {
-//                        Debug.d();
-//
-//                        manager.createGroup(channel, new WifiP2pManager.ActionListener() {
-//                            @Override
-//                            public void onSuccess() {
-//                                Debug.d();
-//                            }
-//
-//                            @Override
-//                            public void onFailure(int reason) {
-//                                Debug.d("" + reason);
-//                            }
-//                        });
-//                    }
-//
-//                    @Override
-//                    public void onFailure(int reason) {
-//                        Debug.d("" + reason);
-//                    }
-//                });
-//            } else {
-//                manager.createGroup(channel, new WifiP2pManager.ActionListener() {
-//                    @Override
-//                    public void onSuccess() {
-//                        Debug.d();
-//                    }
-//
-//                    @Override
-//                    public void onFailure(int reason) {
-//                        Debug.d("" + reason);
-//                    }
-//                });
-//            }
-//        });
-//    }
 
     @Override
     public void disconnect() {
