@@ -8,13 +8,13 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Unit Test the database for Card, TFCard, and MCCard
+ * Unit Test the database for Card,
  * @creation 10/16/2016
  */
 public class CardTest {
 
-    private Card tfCard = new TFCard();
-    private Card mcCard = new MCCard();
+    private Card tfCard = new Card();
+    private Card mcCard = new Card();
 
     /*
     * @author  chuna (10/15/2016)
@@ -67,8 +67,8 @@ public class CardTest {
      */
     @Test
     public void toStringTest(){
-        String tfString = "TF | Test Question | True, False | 1";
-        String mcString = "MC | Test Question MC | 1, 2, Yes, No | 3";
+        String tfString = "TF | Test Question | 1";
+        String mcString = "MC | Test Question MC | 3";
         assertEquals(tfString, tfCard.toString());
         assertEquals(mcString, mcCard.toString());
     }

@@ -8,96 +8,138 @@ import java.io.Serializable;
  * @creation    10/4/2016.
  */
 
-public abstract class Card implements Serializable {
+public class Card{
 
-    @SerializedName("superId")
-    protected long id;
+    private long id;
+    private String cardType;
+    private String question;
+    private String correctAnswer;
+    private String [] possibleAnswers;
+    private String moderatorNeeded;
+    private int points;
 
-    @SerializedName("superCardType")
-    protected String cardType;
+    private int maxPossibleAnswers;   //Can't have over 4 options
 
-    @SerializedName("superQuestion")
-    protected String question;
+    /*
+        * @author  chuna (10-7-2016)
+        */
 
-    @SerializedName("superCorrectAnswer")
-    protected String correctAnswer;
-
-    @SerializedName("superPossibleAnswers")
-    protected String [] possibleAnswers;
-
-    @SerializedName("superModeratorNeeded")
-    protected String moderatorNeeded;
-
-    @SerializedName("superPoints")
-    protected int points;
+    public String toString(){
+        return cardType + " | " + question + " | " +
+                " | " + points;
+    }
 
     /*
      * @author  chuna (10-5-2016)
      */
-    public abstract long getId();
+
+    public long getId() {
+        return id;
+    }
 
     /*
      * @author  chuna (10-5-2016)
      */
-    public abstract void setId(long id);
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     /*
      * @author  chuna (10-13-2016)
      */
-    public abstract String getCardType();
+
+    public String getCardType() {
+        return cardType;
+    }
 
     /*
      * @author  chuna (10-13-2016)
      */
-    public abstract void setCardType(String cardType);
+
+    public void setCardType(String cardType) {
+        this.cardType = cardType;
+        switch(cardType){
+            case("TF"):
+                this.maxPossibleAnswers = 2;
+                break;
+            case("MC"):
+                this.maxPossibleAnswers = 4;
+                break;
+        }
+    }
 
     /*
      * @author  chuna (10-5-2016)
      */
-    public abstract String getQuestion();
+
+    public String getQuestion() {
+        return question;
+    }
 
     /*
      * @author  chuna (10-5-2016)
      */
-    public abstract void setQuestion(String question);
+
+    public void setQuestion(String question) {
+        this.question = question;
+    }
+
+    /*
+     * @author  chuna (10-7-2016)
+     */
+    public String getCorrectAnswer() {
+        return correctAnswer;
+    }
+
+    /*
+     * @author  chuna (10-7-2016)
+     */
+    public void setCorrectAnswer(String correctAnswer) {
+        this.correctAnswer = correctAnswer;
+    }
 
     /*
      * @author  chuna (10-11-2016)
      */
-    public abstract String getCorrectAnswer();
+    public String[] getPossibleAnswers() {
+        return possibleAnswers;
+    }
 
-    /*
-     * @author  chuna (10-11-2016)
-     */
-    public abstract void setCorrectAnswer(String correctAnswer);
 
-    /*
-     * @author  chuna (10-11-2016)
-     */
-    public abstract String[] getPossibleAnswers();
-
-    /*
-     * @author  chuna (10-11-2016)
-     */
-    public abstract void setPossibleAnswers(String[] possibleAnswers);
+    public void setPossibleAnswers(String[] possibleAnswers) {
+        this.possibleAnswers = possibleAnswers;
+    }
 
     /*
      * @author  chuna (10-5-2016)
      */
-    public abstract int getPoints();
+
+    public String getModeratorNeeded() {
+        return moderatorNeeded;
+    }
 
     /*
      * @author  chuna (10-5-2016)
      */
-    public abstract void setPoints(int points);
+
+    public void setModeratorNeeded(String moderatorNeeded) {
+        this.moderatorNeeded = moderatorNeeded;
+    }
 
     /*
      * @author  chuna (10-5-2016)
      */
-    public abstract String getModeratorNeeded();
+
+    public int getPoints() {
+        return points;
+    }
 
     /*
      * @author  chuna (10-5-2016)
      */
-    public abstract void setModeratorNeeded(String moderatorNeeded);
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
 }

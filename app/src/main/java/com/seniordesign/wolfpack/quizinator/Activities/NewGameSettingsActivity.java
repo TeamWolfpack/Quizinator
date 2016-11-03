@@ -12,6 +12,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.google.gson.Gson;
+import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
+import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
+import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.Filters.NumberFilter;
@@ -19,6 +22,7 @@ import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
+import java.util.Arrays;
 import java.util.Calendar;
 
 import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_SEND_RULES_ACTIVITY;
@@ -39,6 +43,9 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     private Spinner cardTypeSpinner;
 
     private RulesDataSource rulesSource;
+    private DeckDataSource deckDataSource;
+
+    private Deck deck;
 
     WifiDirectApp wifiDirectApp = null;
 
@@ -54,6 +61,12 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         wifiDirectApp = (WifiDirectApp)getApplication();
         initializeDB();
 
+        if(deckDataSource.getAllDecks().size()>0){
+            deck = deckDataSource.getAllDecks().get(0);
+        }else{
+            deck = initializeDeck();
+        }
+
         cardTypeSpinner = (Spinner)findViewById(R.id.card_type_spinner);
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                     R.array.card_type_array, android.R.layout.simple_spinner_item);
@@ -61,10 +74,10 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             cardTypeSpinner.setAdapter(adapter);
 
         cardCountInput = (EditText)findViewById(R.id.card_count);
-            NumberFilter cardCountFilter = new NumberFilter(1, 10, false); // Max should be deck count, change when deck is done
+            NumberFilter cardCountFilter = new NumberFilter(1, deck.getCards().size(), false); // Max should be deck count, change when deck is done
             cardCountInput.setFilters(new InputFilter[]{ cardCountFilter });
             cardCountInput.setOnFocusChangeListener(cardCountFilter);
-            cardCountInput.setText("10"); // Should be deck count, change when deck is done
+            cardCountInput.setText(""+deck.getCards().size()); // Should be deck count, change when deck is done
 
         gameMinutesInput = (EditText)findViewById(R.id.game_minutes);
             NumberFilter gameMinuteFilter = new NumberFilter(1);
@@ -211,9 +224,6 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                                     "0" + cardCal.get(Calendar.SECOND) :
                                     "" + cardCal.get(Calendar.SECOND));
 
-        cardCountInput.setText("" + rule.getMaxCardCount());
-        cardCountInput.setText("" + rule.getMaxCardCount());
-
         int position = 0;
         String type = rule.getCardTypes();
         if (type.equals("True/False")) {
@@ -238,10 +248,68 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     /*
      * @author kuczynskij (09/28/2016)
      * @author leonardj (10/14/2016)
+     * @author farrowc (10/31/2016)
      */
     private boolean initializeDB(){
         rulesSource = new RulesDataSource(this);
-        return rulesSource.open();
+        deckDataSource = new DeckDataSource(this);
+        return rulesSource.open() && deckDataSource.open();
+    }
+
+    /*
+     * @author farrowc (10/31/2016)
+     * TEMP returns a sample deck for testing
+     */
+    private Deck initializeDeck() {
+        Deck newDeck = new Deck();
+        Card[] cards = new Card[10];
+        cards[0] = new Card();
+        cards[0].setQuestion("1+1 = ?");
+        cards[0].setCorrectAnswer("2");
+        String[] answerArea = {"1","2","3","4"};
+        cards[0].setPossibleAnswers(answerArea);
+        cards[0].setCardType("MC");
+        cards[1] = new Card();
+        cards[1].setQuestion("1*2 = 0");
+        cards[1].setCorrectAnswer("False");
+        cards[1].setCardType("TF");
+        cards[2] = new Card();
+        cards[2].setQuestion("4*5 = 20");
+        cards[2].setCorrectAnswer("True");
+        cards[2].setCardType("TF");
+        cards[3] = new Card();
+        cards[3].setQuestion("20*10 = 100");
+        cards[3].setCorrectAnswer("False");
+        cards[3].setCardType("TF");
+        cards[4] = new Card();
+        cards[4].setQuestion("10*91 = 901");
+        cards[4].setCorrectAnswer("False");
+        cards[4].setCardType("TF");
+        cards[5] = new Card();
+        cards[5].setQuestion("100^2 = 10000");
+        cards[5].setCorrectAnswer("True");
+        cards[5].setCardType("TF");
+        cards[6] = new Card();
+        cards[6].setQuestion("10*102 = 1002");
+        cards[6].setCorrectAnswer("False");
+        cards[6].setCardType("TF");
+        cards[7] = new Card();
+        cards[7].setQuestion("8/2 = 4");
+        cards[7].setCorrectAnswer("True");
+        cards[7].setCardType("TF");
+        cards[8] = new Card();
+        cards[8].setQuestion("120/4 = 30");
+        cards[8].setCorrectAnswer("True");
+        cards[8].setCardType("TF");
+        cards[9] = new Card();
+        cards[9].setQuestion("6*7 = 41");
+        cards[9].setCorrectAnswer("False");
+        cards[9].setCardType("TF");
+        newDeck.setCards(Arrays.asList(cards));
+
+        deckDataSource.createDeck("Default", Arrays.asList(cards));
+
+        return newDeck;
     }
 
     /*
@@ -251,6 +319,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
         rulesSource.open();
+        deckDataSource.open();
     }
 
     /*
@@ -260,5 +329,6 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     protected void onPause(){
         super.onPause();
         rulesSource.close();
+        deckDataSource.close();
     }
 }
