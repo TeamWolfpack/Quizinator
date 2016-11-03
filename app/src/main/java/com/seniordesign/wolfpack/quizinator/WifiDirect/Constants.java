@@ -27,4 +27,7 @@ public final class Constants {
     public static final int MSG_START_GAMEPLAY_ACTIVITY = 3000;
     public static final int MSG_SEND_RULES_ACTIVITY = 3001;
     public static final int MSG_SEND_CARD_ACTIVITY = 3002;
+
+    //Testing messages
+    public static final int MSG_TEST_HI_JIMMY = -1;
 }

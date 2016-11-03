@@ -381,13 +381,21 @@ public class ConnectionService
         String data = b.getString("DATA");
         Log.d(TAG, "onDataIn : recvd msg : " + data);
         mConnMan.onDataIn(schannel, data);  // pub to all client if this device is server.
-        int code = Integer.parseInt(data.substring(0,4));
-        data = data.substring(4);
+        int code;
+        try {
+            code = Integer.parseInt(data.substring(0, 4));
+            data = data.substring(4);
+        }catch(NumberFormatException nfe){
+            code = -1;
+        }
         switch(code){
             case MSG_SEND_RULES_ACTIVITY:
                 Gson g = new Gson();
                 Rules r = g.fromJson(data, Rules.class);
                 mApp.mHomeActivity.loadRuleInActivity(r);
+                break;
+            case MSG_TEST_HI_JIMMY:
+                data += " this works yay";
                 break;
         }
 //        MessageRow row = MessageRow.parseMessageRow(data);
