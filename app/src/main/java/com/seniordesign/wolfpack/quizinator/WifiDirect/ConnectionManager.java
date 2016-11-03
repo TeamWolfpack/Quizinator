@@ -31,7 +31,7 @@ import android.util.Log;
  */
 public class ConnectionManager {
 
-    private final String TAG = "ConnectionManager";
+    private final String TAG = "ConnMan";
 
     private Context mContext;
     ConnectionService mService;
@@ -52,6 +52,7 @@ public class ConnectionManager {
     String mServerAddr = null;
 
     public ConnectionManager(ConnectionService service) {
+        Log.d(TAG, "create a ConnectionManager()");
         mService = service;
         mApp = (WifiDirectApp) mService.getApplication();
     }
@@ -102,6 +103,7 @@ public class ConnectionManager {
      */
     public SocketChannel connectTo(String hostname, int port)
             throws Exception {
+        Log.d(TAG, "connectTo");
         SocketChannel sChannel = null;
 
         // connect to the remote host, port
@@ -123,6 +125,7 @@ public class ConnectionManager {
      * selector monitoring in an async task, infinite loop
      */
     public int startClientSelector(String host) {
+        Log.d(TAG, "startClientSelector, clientSocketChannel: " + mClientSocketChannel);
         closeServer();   // close linger server.
 
         if (mClientSocketChannel != null) {
@@ -161,6 +164,7 @@ public class ConnectionManager {
      * key which identifies the selector/socket channel pair.
      */
     public int startServerSelector() {
+        Log.d(TAG, "startServerSelector");
         closeClient();   // close linger client, if exists.
 
         try {
@@ -208,6 +212,7 @@ public class ConnectionManager {
      * to linger connection.
      */
     public void closeServer() {
+        Log.d(TAG, "closeServer");
         if (mServerSocketChannel != null) {
             try {
                 mServerSocketChannel.close();
@@ -225,6 +230,7 @@ public class ConnectionManager {
     }
 
     public void closeClient() {
+        Log.d(TAG, "closeClient");
         if (mClientSocketChannel != null) {
             try {
                 mClientSocketChannel.close();
@@ -342,6 +348,7 @@ public class ConnectionManager {
      *      for now.
      */
     public int pushOutData(String jsonString) {
+        Log.d(TAG, "pushOutData");
         if (!mApp.mIsServer) {   // device is client, can only send
             // to server
             sendDataToServer(jsonString);
