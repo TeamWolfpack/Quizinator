@@ -301,19 +301,94 @@ public class HostGameActivity
         // perform p2p connect upon users click the connect button.
         // after connection, manager request connection info.
 
-        wifiDirectApp.mP2pMan.connect(wifiDirectApp.mP2pChannel, config,
-                new WifiP2pManager.ActionListener() {
-            @Override
-            public void onSuccess() {
-                // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
-                Toast.makeText(HostGameActivity.this, "Connect success..", Toast.LENGTH_SHORT).show();
+        wifiDirectApp.mP2pMan.requestGroupInfo(wifiDirectApp.mP2pChannel, group -> {
+            if (group != null) {
+//                Debug.d("group != null");
+                wifiDirectApp.mP2pMan.removeGroup(wifiDirectApp.mP2pChannel, new WifiP2pManager.ActionListener() {
+                    @Override
+                    public void onSuccess() {
+//                        Debug.d();
+
+                        wifiDirectApp.mP2pMan.createGroup(wifiDirectApp.mP2pChannel, new WifiP2pManager.ActionListener() {
+                            @Override
+                            public void onSuccess() {
+                                Debug.d();
+                            }
+
+                            @Override
+                            public void onFailure(int reason) {
+                                Debug.d("" + reason);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(int reason) {
+                        Debug.d("" + reason);
+                    }
+                });
             }
 
-            @Override
-            public void onFailure(int reason) {
-                Toast.makeText(HostGameActivity.this, "Connect failed. Retry.", Toast.LENGTH_SHORT).show();
-            }
-        });
+
+//        What we have now
+//
+//        wifiDirectApp.mP2pMan.connect(wifiDirectApp.mP2pChannel, config,
+//                new WifiP2pManager.ActionListener() {
+//            @Override
+//            public void onSuccess() {
+//                // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
+//                Toast.makeText(HostGameActivity.this, "Connect success..", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onFailure(int reason) {
+//                Toast.makeText(HostGameActivity.this, "Connect failed. Retry.", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
+//        This is from stack overflow
+//
+//        manager.requestGroupInfo(channel, group -> {
+//            if (group != null) {
+//                Debug.d("group != null");
+//                manager.removeGroup(channel, new WifiP2pManager.ActionListener() {
+//                    @Override
+//                    public void onSuccess() {
+//                        Debug.d();
+//
+//                        manager.createGroup(channel, new WifiP2pManager.ActionListener() {
+//                            @Override
+//                            public void onSuccess() {
+//                                Debug.d();
+//                            }
+//
+//                            @Override
+//                            public void onFailure(int reason) {
+//                                Debug.d("" + reason);
+//                            }
+//                        });
+//                    }
+//
+//                    @Override
+//                    public void onFailure(int reason) {
+//                        Debug.d("" + reason);
+//                    }
+//                });
+//            } else {
+//                manager.createGroup(channel, new WifiP2pManager.ActionListener() {
+//                    @Override
+//                    public void onSuccess() {
+//                        Debug.d();
+//                    }
+//
+//                    @Override
+//                    public void onFailure(int reason) {
+//                        Debug.d("" + reason);
+//                    }
+//                });
+//            }
+//        });
+
     }
 
     @Override
