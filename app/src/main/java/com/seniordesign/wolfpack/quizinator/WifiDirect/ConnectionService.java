@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Activities.MainMenuActivity;
+import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 
 /**
@@ -365,6 +366,14 @@ public class ConnectionService
     }
 
     /*
+     * @author leonardj (10/31/2016)
+     */
+    private void pushCardOut(String data){
+        Log.d(TAG, "pushCardOut: " + data);
+        mConnMan.pushOutData(MSG_SEND_CARD_ACTIVITY + data);
+    }
+
+    /*
      * @author kuczynskij (11/01/2016)
      * @author leonardj (10/31/2016)
      */
@@ -383,11 +392,16 @@ public class ConnectionService
         mConnMan.onDataIn(schannel, data);  // pub to all client if this device is server.
         int code = Integer.parseInt(data.substring(0,4));
         data = data.substring(4);
+        Gson g = new Gson();
+
         switch(code){
             case MSG_SEND_RULES_ACTIVITY:
-                Gson g = new Gson();
                 Rules r = g.fromJson(data, Rules.class);
                 mApp.mHomeActivity.loadRuleInActivity(r);
+                break;
+            case MSG_SEND_CARD_ACTIVITY:
+                Card card = g.fromJson(data, Card.class);
+                mApp.mHomeActivity.loadCardInActivity(card);
                 break;
         }
 //        MessageRow row = MessageRow.parseMessageRow(data);

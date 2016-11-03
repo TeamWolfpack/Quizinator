@@ -25,6 +25,7 @@ import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 import java.util.Arrays;
 import java.util.Calendar;
 
+import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_SEND_CARD_ACTIVITY;
 import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_SEND_RULES_ACTIVITY;
 
 /*
@@ -140,7 +141,14 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             msg.obj = rulesToSend;
         ConnectionService.getInstance().getHandler().sendMessage(msg);
 
-        //somehow send r to everyone
+
+        //Send first card
+        String cardToSend = gson.toJson(deck.getCards().get(0));
+        msg = ConnectionService.getInstance().getHandler().obtainMessage();
+            msg.what = MSG_SEND_CARD_ACTIVITY;
+            msg.obj = cardToSend;
+        ConnectionService.getInstance().getHandler().sendMessage(msg);
+
 
 //        runOnUiThread(new Runnable() {
 //            @Override public void run() {
