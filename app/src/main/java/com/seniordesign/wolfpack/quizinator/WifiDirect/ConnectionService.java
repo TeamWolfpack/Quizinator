@@ -38,7 +38,7 @@ public class ConnectionService
         PeerListListener,
         ConnectionInfoListener {  // callback of requestPeers{
 
-    private static final String TAG = "PTP_Serv";
+    private static final String TAG = "ConnServ";
 
     private static ConnectionService _sinstance = null;
 
