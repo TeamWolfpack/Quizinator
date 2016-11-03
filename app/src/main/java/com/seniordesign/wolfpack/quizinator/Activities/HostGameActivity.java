@@ -348,8 +348,8 @@ public class HostGameActivity
 
     public boolean startGameSettingsActivity(View v){
         if(!wifiDirectApp.mP2pConnected ){
-            Log.d(TAG, "startChatActivity : p2p connection is " +
-                    "missing, do nothing...");
+            Toast.makeText(this, "You are not connected to anyone",
+                    Toast.LENGTH_SHORT).show();
             return false;
         }
 
