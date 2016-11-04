@@ -308,6 +308,8 @@ public class ConnectionService
      */
     private void processMessage(Message msg) {
 
+        Log.d(TAG, "processMessage: message - " + msg.toString()); //TODO remove later
+
         switch (msg.what) {
             case MSG_NULL:
                 break;
