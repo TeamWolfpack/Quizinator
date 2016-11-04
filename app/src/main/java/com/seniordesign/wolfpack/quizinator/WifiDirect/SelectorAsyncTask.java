@@ -37,6 +37,7 @@ public class SelectorAsyncTask extends AsyncTask<Void, Void, Void> {
 
     public SelectorAsyncTask(ConnectionService connservice,
                              Selector selector) {
+        Log.d(TAG, "async task created"); //TODO remove later
         mConnService = connservice;
         mSelector = selector;
     }
@@ -113,6 +114,8 @@ public class SelectorAsyncTask extends AsyncTask<Void, Void, Void> {
      */
     private boolean openHostSocket(Selector selector,
                            SelectionKey selKey) throws IOException{
+        Log.d(TAG, "openHostSocket: opening host socket"); //TODO remove later
+
         ServerSocketChannel ssChannel = (ServerSocketChannel) selKey.channel();
         // accept the connect and get a new socket channel.
         SocketChannel sChannel = ssChannel.accept();
@@ -134,6 +137,7 @@ public class SelectorAsyncTask extends AsyncTask<Void, Void, Void> {
      */
     private boolean openClientSocket(SelectionKey selKey)
             throws IOException{
+        Log.d(TAG, "openClientSocket: opening client socket"); //TODO remove later
         SocketChannel sChannel = (SocketChannel) selKey.channel();
 
         boolean success = sChannel.finishConnect();
@@ -170,6 +174,7 @@ public class SelectorAsyncTask extends AsyncTask<Void, Void, Void> {
      * @author kuczynskij (10/27/2016)
      */
     private boolean writeToSocket(SelectionKey selKey){
+        Log.d(TAG, "writeToSocket: writing to socket"); //TODO remove later
         // Not select on writable...endless loop.
         SocketChannel sChannel = (SocketChannel) selKey.channel();
         Log.d(TAG, "processSelectionKey : remote client is " +
