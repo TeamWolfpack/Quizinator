@@ -111,9 +111,10 @@ public class HostGameActivity
                 // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
 //                Toast.makeText(HostGameActivity.this,
 //                        "Discovery Initiated", Toast.LENGTH_SHORT).show();
-                wifiDirectApp.mP2pMan.requestGroupInfo(wifiDirectApp.mP2pChannel, new WifiP2pManager.GroupInfoListener() {
-                    @Override
-                    public void onGroupInfoAvailable(WifiP2pGroup group) {
+                if (wifiDirectApp.mIsServer) {
+                    wifiDirectApp.mP2pMan.requestGroupInfo(wifiDirectApp.mP2pChannel, new WifiP2pManager.GroupInfoListener() {
+                        @Override
+                        public void onGroupInfoAvailable(WifiP2pGroup group) {
                         if (group != null) {
                             Log.d(TAG, "onStart: group != null");
                             wifiDirectApp.mP2pMan.removeGroup(wifiDirectApp.mP2pChannel, new WifiP2pManager.ActionListener() {
@@ -153,8 +154,12 @@ public class HostGameActivity
                                 }
                             });
                         }
-                    }
-                });
+                        }
+                    });
+                } else {
+                    Log.d(TAG, "onStart: you are a client"); //TODO remove later
+                }
+
             }
 
             @Override
@@ -196,6 +201,29 @@ public class HostGameActivity
         super.onDestroy();
 
         Log.d(TAG, "onDestroy Called"); //TODO remove later
+
+        wifiDirectApp.mP2pMan.requestGroupInfo(wifiDirectApp.mP2pChannel, new WifiP2pManager.GroupInfoListener() {
+            @Override
+            public void onGroupInfoAvailable(WifiP2pGroup group) {
+                if (group != null) {
+                    Log.d(TAG, "group != null");
+                    wifiDirectApp.mP2pMan.removeGroup(wifiDirectApp.mP2pChannel, new WifiP2pManager.ActionListener() {
+                        @Override
+                        public void onSuccess() {
+                            Log.d(TAG, "removeGroup Success");
+                        }
+
+                        @Override
+                        public void onFailure(int reason) {
+                            Log.d(TAG, "removeGroup Fail: " + reason);
+                        }
+                    });
+                }
+            }
+        });
+
+
+
 //        wifiDirectApp.mP2pInfo.isGroupOwner = false;
         //unregisterReceiver(wifiDirectApp.mReceiver);
         //wifiDirectApp.mP2pMan.removeGroup(wifiDirectApp.mP2pChannel, null);
@@ -214,7 +242,9 @@ public class HostGameActivity
                 Log.d(TAG, "updateThisDevice: Runnable: update device in list fragment"); //TODO remove later
 
                 DeviceListFragment fragment = (DeviceListFragment)getFragmentManager().findFragmentById(R.id.frag_list);
-                fragment.updateThisDevice(device);
+                if (fragment != null) {
+                    fragment.updateThisDevice(device);
+                }
             }
         });
     }
@@ -382,29 +412,29 @@ public class HostGameActivity
                 public void onGroupInfoAvailable(WifiP2pGroup group) {
                     if (group != null) {
                         Log.d(TAG, "group != null");
-                        wifiDirectApp.mP2pMan.removeGroup(wifiDirectApp.mP2pChannel, new WifiP2pManager.ActionListener() {
-                            @Override
-                            public void onSuccess() {
-                                Log.d(TAG, "removeGroup Success");
-
-                                wifiDirectApp.mP2pMan.createGroup(wifiDirectApp.mP2pChannel, new WifiP2pManager.ActionListener() {
-                                    @Override
-                                    public void onSuccess() {
-                                        Log.d(TAG, "createGroup Success");
-                                    }
-
-                                    @Override
-                                    public void onFailure(int reason) {
-                                        Log.d(TAG, "createGroup Fail: " + reason);
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void onFailure(int reason) {
-                                Log.d(TAG, "removeGroup Fail: " + reason);
-                            }
-                        });
+//                        wifiDirectApp.mP2pMan.removeGroup(wifiDirectApp.mP2pChannel, new WifiP2pManager.ActionListener() {
+//                            @Override
+//                            public void onSuccess() {
+//                                Log.d(TAG, "removeGroup Success");
+//
+//                                wifiDirectApp.mP2pMan.createGroup(wifiDirectApp.mP2pChannel, new WifiP2pManager.ActionListener() {
+//                                    @Override
+//                                    public void onSuccess() {
+//                                        Log.d(TAG, "createGroup Success");
+//                                    }
+//
+//                                    @Override
+//                                    public void onFailure(int reason) {
+//                                        Log.d(TAG, "createGroup Fail: " + reason);
+//                                    }
+//                                });
+//                            }
+//
+//                            @Override
+//                            public void onFailure(int reason) {
+//                                Log.d(TAG, "removeGroup Fail: " + reason);
+//                            }
+//                        });
                     } else {
                         Log.d(TAG, "group == null");
                         wifiDirectApp.mP2pMan.createGroup(wifiDirectApp.mP2pChannel, new WifiP2pManager.ActionListener() {
