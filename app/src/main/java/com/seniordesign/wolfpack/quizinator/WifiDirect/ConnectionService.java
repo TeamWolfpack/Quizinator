@@ -503,7 +503,7 @@ public class ConnectionService
             case MSG_ANSWER_CONFIRMATION_ACTIVITY:
                 //TODO answer confirmation (HOST TO CLIENT)
                 break;
-            case MSG_END_OF_GAME_ACTIVITY;
+            case MSG_END_OF_GAME_ACTIVITY:
                 //TODO end of game message (HOST TO CLIENT)
                 break;
         }
