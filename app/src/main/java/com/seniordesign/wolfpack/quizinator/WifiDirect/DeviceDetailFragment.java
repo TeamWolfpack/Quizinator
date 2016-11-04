@@ -68,18 +68,21 @@ public class DeviceDetailFragment extends Fragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        Log.d(TAG, "onActivityCreated: Start"); //TODO Remove later, for debug purposes
         super.onActivityCreated(savedInstanceState);
         mApp = (WifiDirectApp) getActivity().getApplication();
     }
 
     @Override
     public void onAttach(Activity activity) {
+        Log.d(TAG, "onAttach: Start"); //TODO Remove later, for debug purposes
         super.onAttach(activity);
         // onAttach -> onCreate -> onCreateView -> onActivityCreated -> onStart -> onResume
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView: Start"); //TODO Remove later, for debug purposes
 
         mContentView = inflater.inflate(R.layout.device_detail, null);
 
@@ -87,6 +90,7 @@ public class DeviceDetailFragment extends Fragment {
         mContentView.findViewById(R.id.btn_connect).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "onCreateView: Connect Button pressed"); //TODO Remove later, for debug purposes
                 WifiP2pConfig config = new WifiP2pConfig();
                 config.deviceAddress = device.deviceAddress;
                 config.wps.setup = WpsInfo.PBC;
@@ -110,19 +114,19 @@ public class DeviceDetailFragment extends Fragment {
             }
         });
 
-        mContentView.findViewById(R.id.btn_disconnect).setOnClickListener(
-                new View.OnClickListener() {
+        mContentView.findViewById(R.id.btn_disconnect).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Log.d(TAG, "onCreateView: Disconnect Button pressed"); //TODO Remove later, for debug purposes
                         ((DeviceListFragment.DeviceActionListener) getActivity()).disconnect();
                     }
                 });
 
         // p2p connected, manager request connection info done, group owner elected. 
-        mContentView.findViewById(R.id.btn_start_client).setOnClickListener(
-                new View.OnClickListener() {
+        mContentView.findViewById(R.id.btn_start_client).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Log.d(TAG, "onCreateView: Send Message Button pressed"); //TODO Remove later, for debug purposes
 //                        // Allow user to pick an image from Gallery or other registered apps
 //                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 //                        intent.setType("image/*");
@@ -144,6 +148,7 @@ public class DeviceDetailFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult: Start"); //TODO Remove later, for debug purposes
         // User has picked an image. Transfer it to group owner i.e peer using
         // FileTransferService.
 
@@ -162,6 +167,7 @@ public class DeviceDetailFragment extends Fragment {
      * p2p connection setup, proceed to setup socket connection.
      */
     public void onConnectionInfoAvailable(final WifiP2pInfo info) {
+        Log.d(TAG, "onConnectionInfoAvailable: Start"); //TODO Remove later, for debug purposes
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
@@ -202,6 +208,7 @@ public class DeviceDetailFragment extends Fragment {
      * @param device the device to be displayed
      */
     public void showDetails(WifiP2pDevice device) {
+        Log.d(TAG, "showDetail: Start"); //TODO Remove later, for debug purposes
         this.device = device;
         this.getView().setVisibility(View.VISIBLE);
         TextView view = (TextView) mContentView.findViewById(R.id.device_address);
@@ -214,6 +221,7 @@ public class DeviceDetailFragment extends Fragment {
      * Clears the UI fields after a disconnect or direct mode disable operation.
      */
     public void resetViews() {
+        Log.d(TAG, "resetViews: Start"); //TODO Remove later, for debug purposes
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
