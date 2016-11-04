@@ -35,6 +35,9 @@ public class HostGameActivity
 
     private static final String TAG = "ACT_HG";
 
+    private Rules rulesForGame;
+    private Card currentCardForGame;
+
     private WifiDirectApp wifiDirectApp;
     private IntentFilter mIntentFilter;
 
@@ -342,16 +345,21 @@ public class HostGameActivity
     }
 
     public void loadRuleInActivity(Rules rule) {
-        RulesDataSource rulesDataSource = new RulesDataSource(this);
-        rulesDataSource.open();
-        rulesDataSource.createRule(rule.getMaxCardCount(), rule.getTimeLimit(),
-                rule.getCardDisplayTime(), rule.getCardTypes());
-        rulesDataSource.close();
+
+        //TODO Start Multiplayer gameplay with new rules as extra
+
+
+        // Can be deleted (saves rules in database)
+//        RulesDataSource rulesDataSource = new RulesDataSource(this);
+//        rulesDataSource.open();
+//        rulesDataSource.createRule(rule.getMaxCardCount(), rule.getTimeLimit(),
+//                rule.getCardDisplayTime(), rule.getCardTypes());
+//        rulesDataSource.close();
     }
 
-    public void loadCardInActivity(Card card) {
-        Toast.makeText(this, card.toString(), Toast.LENGTH_LONG).show();
-    }
+//    public void loadCardInActivity(Card card) {
+//        Toast.makeText(this, card.toString(), Toast.LENGTH_LONG).show();
+//    }
 
     /**
      * user taps on peer from discovered list of peers, show this peer's detail.

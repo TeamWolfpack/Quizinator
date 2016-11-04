@@ -21,7 +21,7 @@ public class MultiplayerGameplayActivity extends AppCompatActivity implements Tr
     private Card currentCard;
 
     private HighScoresDataSource highScoresDataSource;
-git 
+
     private int deckIndex;
     private int deckLength;
     private int score;
@@ -43,5 +43,16 @@ git
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_play);
+
+        //TODO load rules passed in by extra
+
+        //TODO send message that player is ready to start
+
+        //TODO wait for next card
+
+    }
+
+    public void receivedNextCard() {
+
     }
 }

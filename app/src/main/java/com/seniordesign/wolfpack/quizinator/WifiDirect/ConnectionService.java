@@ -344,6 +344,15 @@ public class ConnectionService
             case MSG_SEND_CARD_ACTIVITY:
                 pushCardOut((String) msg.obj);
                 break;
+
+            //TODO player is read to start (CLIENT TO HOST)
+
+            //TODO answer is received (CLIENT TO HOST)
+
+            //TODO answer confirmation (HOST TO CLIENT)
+
+            //TODO end of game message (HOST TO CLIENT)
+
             case MSG_SELECT_ERROR:
                 mConnMan.onSelectorError();
                 break;
@@ -380,12 +389,18 @@ public class ConnectionService
         mConnMan.pushOutData(data);
     }
 
+    private String createQuizMessage(int code, String message) {
+        return new Gson().toJson(new QuizMessage(code, message));
+    }
+
     /*
      * @author leonardj (10/31/2016)
      */
     private void pushCardOut(String data){
         Log.d(TAG, "pushCardOut: " + data);
-        mConnMan.pushOutData(MSG_SEND_CARD_ACTIVITY + data);
+
+        String message = createQuizMessage(MSG_SEND_CARD_ACTIVITY, data);
+        mConnMan.pushOutData(message);
     }
 
     /*
@@ -395,7 +410,9 @@ public class ConnectionService
     private void pushAllRulesOut(String data){
         Log.d(TAG, "pushAllRulesOut: " + data);
         //anything we may need to the rules string
-        mConnMan.pushOutData(MSG_SEND_RULES_ACTIVITY + data);
+
+        String message = createQuizMessage(MSG_SEND_RULES_ACTIVITY, data);
+        mConnMan.pushOutData(message);
     }
 
     /**
@@ -405,26 +422,30 @@ public class ConnectionService
         String data = b.getString("DATA");
         Log.d(TAG, "onDataIn : recvd msg : " + data);
         mConnMan.onDataIn(schannel, data);  // pub to all client if this device is server.
-        int code;
-        try {
-            code = Integer.parseInt(data.substring(0, 4));
-            data = data.substring(4);
-        }catch(NumberFormatException nfe){
-            code = -1;
-        }
-        Gson g = new Gson();
+
+        Gson gson = new Gson();
+
+        QuizMessage quizMessage = gson.fromJson(data, QuizMessage.class);
+        int code = quizMessage.getCode();
+        String message = quizMessage.getMessage();
+
         switch(code){
             case MSG_SEND_RULES_ACTIVITY:
-                Rules r = g.fromJson(data, Rules.class);
+                Rules r = gson.fromJson(message, Rules.class);
                 mApp.mHomeActivity.loadRuleInActivity(r);
                 break;
-            case MSG_TEST_HI_JIMMY:
-                data += " this works yay";
-                break;
             case MSG_SEND_CARD_ACTIVITY:
-                Card card = g.fromJson(data, Card.class);
-                mApp.mHomeActivity.loadCardInActivity(card);
+                Card card = gson.fromJson(message, Card.class);
+                //mApp.mHomeActivity.loadCardInActivity(card);
+                //TODO Multiplayer Gameplay showcard(card)
                 break;
+            //TODO player is read to start (CLIENT TO HOST)
+
+            //TODO answer is received (CLIENT TO HOST)
+
+            //TODO answer confirmation (HOST TO CLIENT)
+
+            //TODO end of game message (HOST TO CLIENT)
         }
 //        MessageRow row = MessageRow.parseMessageRow(data);
 //        // now first add to app json array
