@@ -202,7 +202,7 @@ public class SelectorAsyncTask extends AsyncTask<Void, Void, Void> {
      */
     public String readData(SocketChannel sChannel) {
         // let's cap json string to 4k for now.
-        ByteBuffer buf = ByteBuffer.allocate(1024 * 4);
+        ByteBuffer buf = ByteBuffer.allocate(1024 * 4); //TODO - we can increase this if we want
         String jsonString = null;
         try {
             buf.clear();  // Clear the buffer and read bytes from socket
@@ -233,6 +233,13 @@ public class SelectorAsyncTask extends AsyncTask<Void, Void, Void> {
     }
 
     private String readBuffer(ByteBuffer buf){
+        /*
+            TODO
+            This is were the buffer is read in, messages may be jumbled together,
+            So we need to parse the bytes and construct the messages ourselves
+         */
+
+
         byte[] bytes = null;
         Log.d(TAG, "readData: bufpos: limit : " +
                 buf.position() + ":" + buf.limit() + " : " +

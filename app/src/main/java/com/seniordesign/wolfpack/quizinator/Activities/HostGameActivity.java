@@ -346,14 +346,10 @@ public class HostGameActivity
         rulesDataSource.open();
         rulesDataSource.createRule(rule.getMaxCardCount(), rule.getTimeLimit(),
                 rule.getCardDisplayTime(), rule.getCardTypes());
+        rulesDataSource.close();
     }
 
     public void loadCardInActivity(Card card) {
-        CardDataSource cardDataSource = new CardDataSource(this);
-        cardDataSource.open();
-        cardDataSource.createCard(card.getCardType(), card.getQuestion(),
-                card.getCorrectAnswer(), card.getPossibleAnswers(), card.getPoints(),
-                card.getModeratorNeeded());
         Toast.makeText(this, card.toString(), Toast.LENGTH_LONG).show();
     }
 
