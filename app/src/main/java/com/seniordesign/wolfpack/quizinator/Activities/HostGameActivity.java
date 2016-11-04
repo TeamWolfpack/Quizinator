@@ -10,7 +10,6 @@ import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pGroup;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
-import android.nfc.Tag;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -474,7 +473,7 @@ public class HostGameActivity
         runOnUiThread(new Runnable() {
             @Override public void run() {
                 Intent i = wifiDirectApp.
-                        getLauchActivityIntent(
+                        getLaunchActivityIntent(
                                 NewGameSettingsActivity.class, null);
                 startActivity(i);
             }

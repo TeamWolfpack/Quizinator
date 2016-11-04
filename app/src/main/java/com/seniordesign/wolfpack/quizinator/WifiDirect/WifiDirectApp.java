@@ -54,6 +54,7 @@ public class WifiDirectApp extends Application {
      */
     @Override
     public void onCreate() {
+        Log.d(TAG, "onCreate: Start"); //TODO Remove later, for debug purposes
         super.onCreate();
     }
 
@@ -67,6 +68,7 @@ public class WifiDirectApp extends Application {
      * @author kuczynskij (10/26/2016)
      */
     public boolean isP2pEnabled() {
+        Log.d(TAG, "isP2pEnabled: Start"); //TODO Remove later, for debug purposes
         String state =
                 AppPreferences.getStringFromPref(
                         this,
@@ -76,6 +78,7 @@ public class WifiDirectApp extends Application {
     }
 
     public int isHost() {
+        Log.d(TAG, "isHost: Start"); //TODO Remove later, for debug purposes
         return mIsServer ? 15 : 0;
     }
 
@@ -87,6 +90,7 @@ public class WifiDirectApp extends Application {
      * @author kuczynskij (10/26/2016)
      */
     public void startSocketServer() {
+        Log.d(TAG, "startSocketServer: Start"); //TODO Remove later, for debug purposes
         Message msg = ConnectionService.getInstance().getHandler().obtainMessage();
         msg.what = MSG_STARTSERVER;
         ConnectionService.getInstance().getHandler().sendMessage(msg);
@@ -111,10 +115,19 @@ public class WifiDirectApp extends Application {
      * @author kuczynskij (10/26/2016)
      */
     public WifiP2pDevice getConnectedPeer() {
+        Log.d(TAG, "getConnectedPeer: Start"); //TODO Remove later, for debug purposes
         WifiP2pDevice peer = null;
         for (WifiP2pDevice d : mPeers) {
-            if (d.status == WifiP2pDevice.CONNECTED)
+            if (d.status == WifiP2pDevice.CONNECTED) {
                 peer = d;
+                Log.d(TAG, "getConnectedPeer: Device Connected" + d.toString()); //TODO Remove later, for debug purposes
+            }
+        }
+        //TODO Remove later, for debug purposes
+        if(peer == null) {
+            Log.d(TAG, "getConnectedPeer: Will return null"); //TODO Remove later, for debug purposes
+        }else{
+            Log.d(TAG, "getConnectedPeer: Device returned" + peer.toString()); //TODO Remove later, for debug purposes
         }
         return peer;
     }
@@ -123,6 +136,7 @@ public class WifiDirectApp extends Application {
      * @author kuczynskij (10/26/2016)
      */
     public void clearMessages() {
+        Log.d(TAG, "clearMessages: Start"); //TODO Remove later, for debug purposes
         mMessageArray = new JSONArray();
     }
 
@@ -130,14 +144,16 @@ public class WifiDirectApp extends Application {
      * @author kuczynskij (10/26/2016)
      */
     public void setMyAddress(String addr) {
+        Log.d(TAG, "setMyAddress: Start"); //TODO Remove later, for debug purposes
         mMyAddress = addr;
     }
 
     /*
      * @author kuczynskij (10/31/2016)
      */
-    public Intent getLauchActivityIntent(Class<?> cls,
-                                         String initmsg){
+    public Intent getLaunchActivityIntent(Class<?> cls,
+                                          String initmsg){
+        Log.d(TAG, "getLaunchActivityIntent: Start"); //TODO Remove later, for debug purposes
         //get the intent to launch any activity
         Intent i = new Intent(this, cls);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
