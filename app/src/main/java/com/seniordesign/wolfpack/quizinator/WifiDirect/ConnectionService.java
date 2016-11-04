@@ -344,15 +344,18 @@ public class ConnectionService
             case MSG_SEND_CARD_ACTIVITY:
                 pushCardOut((String) msg.obj);
                 break;
-
-            //TODO player is read to start (CLIENT TO HOST)
-
-            //TODO answer is received (CLIENT TO HOST)
-
-            //TODO answer confirmation (HOST TO CLIENT)
-
-            //TODO end of game message (HOST TO CLIENT)
-
+            case MSG_PLAYER_READY_ACTIVITY:
+                pushReadyOut((String) msg.obj);
+                break;
+            case MSG_SEND_ANSWER_ACTIVITY:
+                pushAnswerOut((String) msg.obj);
+                break;
+            case MSG_ANSWER_CONFIRMATION_ACTIVITY:
+                pushConfirmationOut((String) msg.obj);
+                break;
+            case MSG_END_OF_GAME_ACTIVITY:
+                pushEndOfGameOut((String) msg.obj);
+                break;
             case MSG_SELECT_ERROR:
                 mConnMan.onSelectorError();
                 break;
@@ -389,6 +392,19 @@ public class ConnectionService
         mConnMan.pushOutData(data);
     }
 
+    /*
+     * @author leonardj (11/4/16)
+     */
+    public static boolean sendMessage(int code, String message) {
+        Message answer = getInstance().getHandler().obtainMessage();
+        answer.what = code;
+        answer.obj = message;
+        return getInstance().getHandler().sendMessage(answer);
+    }
+
+    /*
+     * @author leonardj (11/4/16)
+     */
     private String createQuizMessage(int code, String message) {
         return new Gson().toJson(new QuizMessage(code, message));
     }
@@ -415,6 +431,46 @@ public class ConnectionService
         mConnMan.pushOutData(message);
     }
 
+    /*
+     * @author leonardj (11/4/16)
+     */
+    private void pushReadyOut(String data) {
+        Log.d(TAG, "pushReadyOut: " + data);
+
+        String message = createQuizMessage(MSG_PLAYER_READY_ACTIVITY, data);
+        mConnMan.pushOutData(message);
+    }
+
+    /*
+     * @author leonardj (11/4/16)
+     */
+    private void pushAnswerOut(String data) {
+        Log.d(TAG, "pushAnswerOut: " + data);
+
+        String message = createQuizMessage(MSG_SEND_ANSWER_ACTIVITY, data);
+        mConnMan.pushOutData(message);
+    }
+
+    /*
+     * @author leonardj (11/4/16)
+     */
+    private void pushConfirmationOut(String data) {
+        Log.d(TAG, "pushConfirmationOut: " + data);
+
+        String message = createQuizMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, data);
+        mConnMan.pushOutData(message);
+    }
+
+    /*
+     * @author leonardj (11/4/16)
+     */
+    private void pushEndOfGameOut(String data) {
+        Log.d(TAG, "pushEndOfGameOut: " + data);
+
+        String message = createQuizMessage(MSG_END_OF_GAME_ACTIVITY, data);
+        mConnMan.pushOutData(message);
+    }
+
     /**
      * service handle data in come from socket channel
      */
@@ -432,12 +488,11 @@ public class ConnectionService
         switch(code){
             case MSG_SEND_RULES_ACTIVITY:
                 Rules r = gson.fromJson(message, Rules.class);
-                mApp.mHomeActivity.loadRuleInActivity(r);
+                mApp.mHomeActivity.startMultiplayerGamePlay(r);
                 break;
             case MSG_SEND_CARD_ACTIVITY:
                 Card card = gson.fromJson(message, Card.class);
-                //mApp.mHomeActivity.loadCardInActivity(card);
-                //TODO Multiplayer Gameplay showcard(card)
+                mApp.mGameplayActivity.receivedNextCard(card);
                 break;
             //TODO player is read to start (CLIENT TO HOST)
 

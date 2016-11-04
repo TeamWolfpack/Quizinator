@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Card.CardDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
@@ -344,22 +345,27 @@ public class HostGameActivity
         info.show();
     }
 
-    public void loadRuleInActivity(Rules rule) {
+    /*
+     * @author leonardj (11/4/16)
+     */
+    public boolean startMultiplayerGamePlay(final Rules rules) {
+        if(!wifiDirectApp.mP2pConnected ){
+            Toast.makeText(this, "You are not connected to anyone",
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        }
 
-        //TODO Start Multiplayer gameplay with new rules as extra
-
-
-        // Can be deleted (saves rules in database)
-//        RulesDataSource rulesDataSource = new RulesDataSource(this);
-//        rulesDataSource.open();
-//        rulesDataSource.createRule(rule.getMaxCardCount(), rule.getTimeLimit(),
-//                rule.getCardDisplayTime(), rule.getCardTypes());
-//        rulesDataSource.close();
+        runOnUiThread(new Runnable() {
+            @Override public void run() {
+                Intent i = wifiDirectApp.
+                        getLaunchActivityIntent(
+                                MultiplayerGameplayActivity.class, null);
+                i.getExtras().putString("Rules", new Gson().toJson(rules));
+                startActivity(i);
+            }
+        });
+        return true;
     }
-
-//    public void loadCardInActivity(Card card) {
-//        Toast.makeText(this, card.toString(), Toast.LENGTH_LONG).show();
-//    }
 
     /**
      * user taps on peer from discovered list of peers, show this peer's detail.

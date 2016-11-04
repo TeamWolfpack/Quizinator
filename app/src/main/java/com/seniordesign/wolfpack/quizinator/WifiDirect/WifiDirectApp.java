@@ -9,6 +9,7 @@ import android.os.Message;
 import android.util.Log;
 
 import com.seniordesign.wolfpack.quizinator.Activities.HostGameActivity;
+import com.seniordesign.wolfpack.quizinator.Activities.MultiplayerGameplayActivity;
 
 import org.json.JSONArray;
 
@@ -44,6 +45,8 @@ public class WifiDirectApp extends Application {
     public boolean mIsServer;
 
     public HostGameActivity mHomeActivity;
+    public MultiplayerGameplayActivity mGameplayActivity;
+
     // update on every peers available
     public List<WifiP2pDevice> mPeers = new ArrayList<>();
     // limit to the latest 50 messages
