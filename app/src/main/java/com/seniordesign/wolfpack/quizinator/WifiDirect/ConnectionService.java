@@ -494,19 +494,19 @@ public class ConnectionService
                 Card card = gson.fromJson(message, Card.class);
                 mApp.mGameplayActivity.receivedNextCard(card);
                 break;
-            //TODO player is read to start (CLIENT TO HOST)
-
-            //TODO answer is received (CLIENT TO HOST)
-
-            //TODO answer confirmation (HOST TO CLIENT)
-
-            //TODO end of game message (HOST TO CLIENT)
+            case MSG_PLAYER_READY_ACTIVITY:
+                //TODO player is read to start (CLIENT TO HOST)
+                break;
+            case MSG_SEND_ANSWER_ACTIVITY:
+                //TODO answer is received (CLIENT TO HOST)
+                break;
+            case MSG_ANSWER_CONFIRMATION_ACTIVITY:
+                //TODO answer confirmation (HOST TO CLIENT)
+                break;
+            case MSG_END_OF_GAME_ACTIVITY;
+                //TODO end of game message (HOST TO CLIENT)
+                break;
         }
-//        MessageRow row = MessageRow.parseMessageRow(data);
-//        // now first add to app json array
-//        mApp.shiftInsertMessage(row);
-//        // add to activity if it is on focus.
-//        showInActivity(row);
         return data;
     }
 
