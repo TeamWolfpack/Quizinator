@@ -56,6 +56,7 @@ public class DeviceListFragment extends ListFragment {  // callback of requestPe
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        Log.d(TAG, "onActivityCreated: Start"); //TODO Remove later, for debug purposes
         super.onActivityCreated(savedInstanceState);
         // set list adapter with row layout to adapter data
         this.setListAdapter(new WiFiPeerListAdapter(getActivity(), R.layout.row_devices, peers));
@@ -65,6 +66,7 @@ public class DeviceListFragment extends ListFragment {  // callback of requestPe
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView: Start"); //TODO Remove later, for debug purposes
         mContentView = inflater.inflate(R.layout.device_list, null);
         return mContentView;
     }
@@ -81,6 +83,7 @@ public class DeviceListFragment extends ListFragment {  // callback of requestPe
      */
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
+        Log.d(TAG, "onListItemClick: Start"); //TODO Remove later, for debug purposes
         WifiP2pDevice device = (WifiP2pDevice) getListAdapter().getItem(position);
         ((DeviceActionListener) getActivity()).showDetails(device);
     }
@@ -105,6 +108,7 @@ public class DeviceListFragment extends ListFragment {  // callback of requestPe
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+            Log.d(TAG, "getView: Start"); //TODO Remove later, for debug purposes
             View v = convertView;
             if (v == null) {
                 LayoutInflater vi = (LayoutInflater) getActivity().getSystemService(
@@ -132,6 +136,7 @@ public class DeviceListFragment extends ListFragment {  // callback of requestPe
      * @param device WifiP2pDevice object
      */
     public void updateThisDevice(WifiP2pDevice device) { // callback of this device details changed bcast event.
+        Log.d(TAG, "updateThisDevice: Start"); //TODO Remove later, for debug purposes
         TextView nameview = (TextView) mContentView.findViewById(R.id.my_name);
         TextView statusview = (TextView) mContentView.findViewById(R.id.my_status);
         if (device != null) {
@@ -149,6 +154,7 @@ public class DeviceListFragment extends ListFragment {  // callback of requestPe
      * from WifiP2pManager.requestPeers(channel, PeerListListener);
      */
     public void onPeersAvailable(List<WifiP2pDevice> peerList) {   // the callback to collect peer list after discover.
+        Log.d(TAG, "onPeersAvailable: Start"); //TODO Remove later, for debug purposes
         if (progressDialog != null && progressDialog.isShowing()) {  // dismiss progressbar first.
             progressDialog.dismiss();
         }
@@ -156,15 +162,21 @@ public class DeviceListFragment extends ListFragment {  // callback of requestPe
 
         ArrayList<WifiP2pDevice> toRemove = new ArrayList();
         if (mApp.mIsServer) {
+            Log.d(TAG, "onPeersAvailable: mApp.mServer is true (HOST)"); //TODO Remove later, for debug purposes
             for (WifiP2pDevice device : peerList) {
                 if (device.isGroupOwner())
                     toRemove.add(device);
             }
         } else {
+            Log.d(TAG, "onPeersAvailable: mApp.mServer is false (CLIENT)"); //TODO Remove later, for debug purposes
             for (WifiP2pDevice device : peerList) {
                 if (!device.isGroupOwner())
                     toRemove.add(device);
             }
+        }
+        //TODO Remove later, for debug purposes
+        for(WifiP2pDevice device : toRemove){
+            Log.d(TAG, "Device to remove: " + device.toString());
         }
         peerList.removeAll(toRemove);
 
@@ -176,6 +188,7 @@ public class DeviceListFragment extends ListFragment {  // callback of requestPe
     }
 
     public void clearPeers() {
+        Log.d(TAG, "clearPeers: Start"); //TODO Remove later, for debug purposes
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -192,6 +205,7 @@ public class DeviceListFragment extends ListFragment {  // callback of requestPe
 
 
     public void onInitiateDiscovery() {
+        Log.d(TAG, "onInitiateDiscovery: Start"); //TODO Remove later, for debug purposes
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
