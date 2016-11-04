@@ -10,6 +10,7 @@ import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pGroup;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.nfc.Tag;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -46,6 +47,8 @@ public class HostGameActivity
         wifiDirectApp = (WifiDirectApp)getApplication();
         wifiDirectApp.mHomeActivity = this;
         wifiDirectApp.mIsServer = getIntent().getExtras().getBoolean("isServer");
+
+        Log.d(TAG, "onCreate: Is Server " + wifiDirectApp.mIsServer); //TODO remove later
 
         if (wifiDirectApp.mIsServer) {
             setTitle("Host Game");
@@ -84,6 +87,8 @@ public class HostGameActivity
             Toast.makeText(this, R.string.p2p_off_warning, Toast.LENGTH_LONG).show();
             return;
         }
+        Log.d(TAG, "onStart: P2P enabled - " + wifiDirectApp.isP2pEnabled()); //TODO remove later
+
         final DeviceListFragment fragment =
                 (DeviceListFragment)getFragmentManager().findFragmentById(R.id.frag_list);
         fragment.onInitiateDiscovery();
@@ -111,41 +116,41 @@ public class HostGameActivity
                     @Override
                     public void onGroupInfoAvailable(WifiP2pGroup group) {
                         if (group != null) {
-                            Log.d(TAG, "group != null");
+                            Log.d(TAG, "onStart: group != null");
                             wifiDirectApp.mP2pMan.removeGroup(wifiDirectApp.mP2pChannel, new WifiP2pManager.ActionListener() {
                                 @Override
                                 public void onSuccess() {
-                                    Log.d(TAG, "removeGroup Success");
+                                    Log.d(TAG, "onStart: removeGroup Success");
 
                                     wifiDirectApp.mP2pMan.createGroup(wifiDirectApp.mP2pChannel, new WifiP2pManager.ActionListener() {
                                         @Override
                                         public void onSuccess() {
-                                            Log.d(TAG, "createGroup Success");
+                                            Log.d(TAG, "onStart: createGroup Success");
                                         }
 
                                         @Override
                                         public void onFailure(int reason) {
-                                            Log.d(TAG, "createGroup Fail: " + reason);
+                                            Log.d(TAG, "onStart: createGroup Fail: " + reason);
                                         }
                                     });
                                 }
 
                                 @Override
                                 public void onFailure(int reason) {
-                                    Log.d(TAG, "removeGroup Fail: " + reason);
+                                    Log.d(TAG, "onStart: removeGroup Fail: " + reason);
                                 }
                             });
                         } else {
-                            Log.d(TAG, "group == null");
+                            Log.d(TAG, "onStart: group == null");
                             wifiDirectApp.mP2pMan.createGroup(wifiDirectApp.mP2pChannel, new WifiP2pManager.ActionListener() {
                                 @Override
                                 public void onSuccess() {
-                                    Log.d(TAG, "createGroup Success");
+                                    Log.d(TAG, "onStart: createGroup Success");
                                 }
 
                                 @Override
                                 public void onFailure(int reason) {
-                                    Log.d(TAG, "createGroup Fail: " + reason);
+                                    Log.d(TAG, "onStart: createGroup Fail: " + reason);
                                 }
                             });
                         }
@@ -160,6 +165,7 @@ public class HostGameActivity
                     "Connect failed. Retry.", Toast.LENGTH_SHORT).show();
 //                Toast.makeText(HostGameActivity.this,
 //                        "Discovery Failed, try again... ", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onStart: discoverPeers failed, reason: " + reasonCode); //TODO remove later
             }
         });
     }
@@ -171,6 +177,8 @@ public class HostGameActivity
         //receiver = new WiFiDirectBroadcastReceiver(wifiDirectApp.mP2pMan, wifiDirectApp.mP2pChannel, this);
         //receiver = new WiFiDirectBroadcastReceiver();
 
+        Log.d(TAG, "onResume Called"); //TODO remove later
+
         wifiDirectApp.mReceiver = new WiFiDirectBroadcastReceiver(
                 wifiDirectApp, this);
 
@@ -180,12 +188,15 @@ public class HostGameActivity
     @Override
     public void onPause() {
         super.onPause();
+        Log.d(TAG, "onPause Called"); //TODO remove later
         unregisterReceiver(wifiDirectApp.mReceiver);
     }
 
     @Override
     public void onDestroy(){
         super.onDestroy();
+
+        Log.d(TAG, "onDestroy Called"); //TODO remove later
 //        wifiDirectApp.mP2pInfo.isGroupOwner = false;
         //unregisterReceiver(wifiDirectApp.mReceiver);
         //wifiDirectApp.mP2pMan.removeGroup(wifiDirectApp.mP2pChannel, null);
@@ -195,8 +206,14 @@ public class HostGameActivity
      * process WIFI_P2P_THIS_DEVICE_CHANGED_ACTION intent, refresh this device.
      */
     public void updateThisDevice(final WifiP2pDevice device){
+        Log.d(TAG, "updateThisDevice: device name " + device.deviceName); //TODO remove later
+        Log.d(TAG, "updateThisDevice: device address " + device.deviceAddress); //TODO remove later
+        Log.d(TAG, "updateThisDevice: is group owner: " + device.isGroupOwner()); //TODO remove later
+
         runOnUiThread(new Runnable() {
             @Override public void run() {
+                Log.d(TAG, "updateThisDevice: Runnable: update device in list fragment"); //TODO remove later
+
                 DeviceListFragment fragment = (DeviceListFragment)getFragmentManager().findFragmentById(R.id.frag_list);
                 fragment.updateThisDevice(device);
             }
@@ -208,6 +225,7 @@ public class HostGameActivity
      * BroadcastReceiver receiving a state change event.
      */
     public void resetData() {
+        Log.d(TAG, "resetData: reseting the data"); //TODO remove later
         runOnUiThread(new Runnable() {
             @Override public void run() {
                 DeviceListFragment fragmentList =
@@ -215,9 +233,11 @@ public class HostGameActivity
                 DeviceDetailFragment fragmentDetails =
                         (DeviceDetailFragment) getFragmentManager().findFragmentById(R.id.frag_detail);
                 if (fragmentList != null) {
+                    Log.d(TAG, "resetData: clearing peer list in fragment list"); //TODO remove later
                     fragmentList.clearPeers();
                 }
                 if (fragmentDetails != null) {
+                    Log.d(TAG, "resetData: reseting view in fragment detail"); //TODO remove later
                     fragmentDetails.resetViews();
                 }
             }
@@ -228,6 +248,9 @@ public class HostGameActivity
      * handle p2p connection available, update UI.
      */
     public void onConnectionInfoAvailable(final WifiP2pInfo info) {
+        Log.d(TAG, "onConnectionInfoAvailable: sending the info to the fragment detail"); //TODO remove later
+        Log.d(TAG, "onConnectionInfoAvailable: info - " + info.toString()); //TODO remove later
+        Log.d(TAG, "onConnectionInfoAvailable: group owner - " + info.isGroupOwner); //TODO remove later
         runOnUiThread(new Runnable() {
             @Override public void run() {
                 DeviceDetailFragment fragmentDetails =
@@ -241,6 +264,13 @@ public class HostGameActivity
      * update the device list fragment.
      */
     public void onPeersAvailable(final WifiP2pDeviceList peerList){
+        Log.d(TAG, "onPeersAvailable: peer list available"); //TODO remove later
+
+        for (WifiP2pDevice device : peerList.getDeviceList()) {
+            Log.d(TAG, "onPeersAvailable: device in list - " + device.toString()); //TODO remove later
+            Log.d(TAG, "onPeersAvailable: device is group owner - " + device.isGroupOwner()); //TODO remove later
+        }
+
         runOnUiThread(new Runnable() {
             @Override public void run() {
                 DeviceListFragment fragmentList =
@@ -303,6 +333,7 @@ public class HostGameActivity
      */
     @Override
     public void showDetails(WifiP2pDevice device) {
+        Log.d(TAG, "showDetails: device - " + device.toString());
         DeviceDetailFragment fragment = (DeviceDetailFragment)
                 getFragmentManager().findFragmentById(R.id.frag_detail);
         fragment.showDetails(device);
@@ -410,8 +441,11 @@ public class HostGameActivity
 
     @Override
     public void disconnect() {
+        Log.d(TAG, "disconnect: disconnect was called"); //TODO remove later
+
         final DeviceDetailFragment fragment = (DeviceDetailFragment) getFragmentManager().findFragmentById(R.id.frag_detail);
         if (fragment != null) {
+            Log.d(TAG, "disconnect: resetting the detail fragment"); //TODO remove later
             fragment.resetViews();
         }
 
@@ -423,6 +457,7 @@ public class HostGameActivity
 
             @Override
             public void onSuccess() {
+                Log.d(TAG, "disconnect: resetting the detail fragment view to GONE"); //TODO remove later
                 fragment.getView().setVisibility(View.GONE);
             }
         });

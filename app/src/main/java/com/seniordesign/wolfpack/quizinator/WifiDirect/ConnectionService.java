@@ -52,6 +52,8 @@ public class ConnectionService
     ConnectionManager mConnMan;
 
     private void _initialize() {
+        Log.d(TAG, "_initialize: someone requested an instance"); //TODO remove later
+
         if (_sinstance != null) {
             return;
         }
@@ -81,6 +83,7 @@ public class ConnectionService
     public int onStartCommand(Intent intent, int flags, int startId) {
         _initialize();
         processIntent(intent);
+        Log.d(TAG, "onStartCommand: START_STICKY - " + START_STICKY); //TODO remove later
         return START_STICKY;
     }
 
@@ -91,15 +94,19 @@ public class ConnectionService
         if (intent == null)
             return;
         String action = intent.getAction();
+        Log.d(TAG, "processIntent: Action - " + action); //TODO remove later
         if (action == null)
             return;
         switch (action) {
             case WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION:
+                Log.d(TAG, "processIntent: State change"); //TODO remove later
                 int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
+                Log.d(TAG, "processIntent: State - " + state); //TODO remove later
                 deviceWifiStateChangedAction(state);
                 break;
             case WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION:
                 //find all peers
+                Log.d(TAG, "processIntent: peers changed"); //TODO remove later
                 deviceWifiPeersChangedAction();
                 break;
             case WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION:
@@ -107,12 +114,14 @@ public class ConnectionService
                 // device will be group owner automatically
                 if (mApp.mP2pMan == null)
                     return;
+                Log.d(TAG, "processIntent: connection changed"); //TODO remove later
                 deviceConnectionChangedAction(intent);
                 break;
             case WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION:
                 //p2p connected, for client, this device
                 // changed to connected first
                 deviceDetailsHaveChanged(intent);
+                Log.d(TAG, "processIntent: this device changed"); //TODO remove later
                 break;
             default:
                 break;
@@ -225,6 +234,7 @@ public class ConnectionService
      */
     @Override
     public void onPeersAvailable(WifiP2pDeviceList peerList) {
+        Log.d(TAG, "onPeersAvailable: peers available"); //TODO remove later
         mApp.mPeers.clear();
         mApp.mPeers.addAll(peerList.getDeviceList());
         WifiP2pDevice connectedPeer = mApp.getConnectedPeer();
