@@ -68,6 +68,8 @@ public class MultiplayerGameplayActivity
     private int g;
     private int b;
 
+    private boolean hasAnswered;
+
     private final Gson gson = new Gson();
 
     /*
@@ -97,6 +99,7 @@ public class MultiplayerGameplayActivity
         ConnectionService.sendMessage(MSG_PLAYER_READY_ACTIVITY, wifiDirectApp.mDeviceName);
 
         //wait for next card
+        hasAnswered = false;
     }
 
     /**
@@ -107,6 +110,7 @@ public class MultiplayerGameplayActivity
      * @author leonardj (11/5/16)
      */
     public void receivedNextCard(Card card) {
+        hasAnswered = false;
         initializeGamePlay();
         currentCard = card;
         showCard(currentCard);
@@ -124,6 +128,13 @@ public class MultiplayerGameplayActivity
     public void answerConfirmed(boolean correct) {
         if (correct)
             score++;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                ((TextView) findViewById(R.id.scoreText)).setText("Score: " + score);
+            }
+        });
         quickCorrectAnswerConfirmation(correct);
     }
 
@@ -226,6 +237,9 @@ public class MultiplayerGameplayActivity
      * @author farrowc (??/??/2016)
      */
     public long answerClicked(View v) {
+        if(hasAnswered)
+            return 0;
+        hasAnswered = true;
         cardTimerAreaBackgroundRunning.cancel();
         Button clickedButton = (Button) v;
         String answer = clickedButton.getText().toString();

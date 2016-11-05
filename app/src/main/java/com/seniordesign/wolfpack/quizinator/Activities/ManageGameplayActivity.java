@@ -15,6 +15,7 @@ import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
 import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_ANSWER_CONFIRMATION_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_END_OF_GAME_ACTIVITY;
 import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_SEND_CARD_ACTIVITY;
 
 public class ManageGameplayActivity extends AppCompatActivity {
@@ -50,6 +51,15 @@ public class ManageGameplayActivity extends AppCompatActivity {
         currentCard = deckDataSource.getAllDecks().get(0).getCards().get(0);
         String json = gson.toJson(currentCard);
         ConnectionService.sendMessage(MSG_SEND_CARD_ACTIVITY, json);
+    }
+
+    /*
+     * @author leonard (11/5/2016)
+     */
+    public void endGame(View v) {
+        long gameTime = 8008;
+        String json = gson.toJson(gameTime);
+        ConnectionService.sendMessage(MSG_END_OF_GAME_ACTIVITY, json);
     }
 
     /**
