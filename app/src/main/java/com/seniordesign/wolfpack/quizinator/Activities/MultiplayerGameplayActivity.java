@@ -160,6 +160,7 @@ public class MultiplayerGameplayActivity
     private void initializeGamePlay() {
         initializeCorrectnessColorController();
         cardTimerRunning = cardTimerStatic.start();
+        cardTimerRunning.cancel();
         cardTimerAreaBackgroundRunning = cardTimerAreaBackgroundStatic.start();
         cardTimerAreaBackgroundRunning.cancel();
     }
@@ -236,6 +237,7 @@ public class MultiplayerGameplayActivity
      * @author farrowc (??/??/2016)
      */
     public long answerClicked(View v) {
+        cardTimerRunning.cancel();
         if(hasAnswered)
             return 0;
         hasAnswered = true;
