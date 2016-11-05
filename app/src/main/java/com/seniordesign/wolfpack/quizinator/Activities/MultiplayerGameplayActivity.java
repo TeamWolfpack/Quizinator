@@ -23,6 +23,7 @@ import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.Fragments.MultipleChoiceAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.Fragments.TrueFalseChoiceAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.R;
+import com.seniordesign.wolfpack.quizinator.WifiDirect.Answer;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
@@ -33,8 +34,16 @@ import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_PLAY
 import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_SEND_ANSWER_ACTIVITY;
 import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_SEND_CARD_ACTIVITY;
 
-public class MultiplayerGameplayActivity extends AppCompatActivity implements TrueFalseChoiceAnswerFragment.OnFragmentInteractionListener,
-        MultipleChoiceAnswerFragment.OnFragmentInteractionListener{
+/**
+ * This Activity is started in ConnectionSerive.onPullInData(...) when rule message
+ * is received.
+ */
+public class MultiplayerGameplayActivity
+        extends
+            AppCompatActivity
+        implements
+            TrueFalseChoiceAnswerFragment.OnFragmentInteractionListener,
+            MultipleChoiceAnswerFragment.OnFragmentInteractionListener{
 
     private Rules rules;
     private Card currentCard;
@@ -43,7 +52,8 @@ public class MultiplayerGameplayActivity extends AppCompatActivity implements Tr
 
     private HighScoresDataSource highScoresDataSource;
 
-    private int score;
+    private int score = 0;
+    private int cardsPlayed = 0;
 
     private CountDownTimer cardTimerStatic;
     private CountDownTimer cardTimerRunning;
@@ -76,28 +86,49 @@ public class MultiplayerGameplayActivity extends AppCompatActivity implements Tr
         initializeCardTimer(rules.getCardDisplayTime());
 
         //send message that player is ready to start
-        Message ready = ConnectionService.getInstance().getHandler().obtainMessage();
-        ready.what = MSG_PLAYER_READY_ACTIVITY;
-        ready.obj = wifiDirectApp.mDeviceName;
-        ConnectionService.getInstance().getHandler().sendMessage(ready);
+        ConnectionService.sendMessage(MSG_PLAYER_READY_ACTIVITY, wifiDirectApp.mDeviceName);
 
         //wait for next card
     }
 
+    /**
+     * This is called in ConnectionSerive.onPullInData(...) when a card message
+     * is received.
+     */
+    /*
+     * @author leonardj (11/5/16)
+     */
     public void receivedNextCard(Card card) {
         initializeGamePlay();
         currentCard = card;
         showCard(currentCard);
+        cardsPlayed++;
         cardTimerRunning = cardTimerStatic.start();
+    }
+
+    /**
+     * This is called in ConnectionSerive.onPullInData(...) when a confirmation message
+     * is received.
+     */
+    /*
+     * @author leonardj (11/5/16)
+     */
+    public void answerConfirmed(boolean correct) {
+        if (correct)
+            score++;
+        quickCorrectAnswerConfirmation(correct);
     }
 
     /*
      * @author leonard (11/4/2016)
      */
     @Override
-    public void onFragmentInteraction(String answer) {
+    public void onFragmentInteraction(String choice) {
         //Send message to host for validation
-        ConnectionService.sendMessage(MSG_SEND_ANSWER_ACTIVITY, answer != null ? answer : "");
+        choice = choice == null ? "" : choice;
+        Answer answer = new Answer(wifiDirectApp.mDeviceName, choice);
+        String json = gson.toJson(answer);
+        ConnectionService.sendMessage(MSG_SEND_ANSWER_ACTIVITY, json);
 
         //wait for answer validation and next card
     }
@@ -152,14 +183,14 @@ public class MultiplayerGameplayActivity extends AppCompatActivity implements Tr
      * @author kuczynskij (10/13/2016)
      * @author leoanrdj (11/4/2016)
      */
-    public void endGamePlay(int totalNumberOfCardsPlayed, long totalGameTime) {
+    public void endGamePlay(long totalGameTime) {
         cardTimerRunning.cancel();
         final Intent intent =
                 new Intent(this, EndOfGameplayActivity.class);
         GamePlayStats s = new GamePlayStats();
         s.setScore(score);
         s.setTimeElapsed(totalGameTime);
-        s.setTotalCardsCompleted(totalNumberOfCardsPlayed);
+        s.setTotalCardsCompleted(cardsPlayed);
         checkGameStatsAgainstHighScoresDB(s);
         intent.putExtra("gameStats", s);
         startActivity(intent);
