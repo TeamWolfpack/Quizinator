@@ -7,6 +7,8 @@ import android.view.View;
 import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckDataSource;
+import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
+import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.Answer;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
@@ -20,6 +22,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
     private WifiDirectApp wifiDirectApp;
 
     private DeckDataSource deckDataSource;
+    private RulesDataSource rulesDataSource;
 
     private Card currentCard;
 
@@ -35,20 +38,44 @@ public class ManageGameplayActivity extends AppCompatActivity {
 
         deckDataSource = new DeckDataSource(this);
         deckDataSource.open();
+
+        rulesDataSource = new RulesDataSource(this);
+        rulesDataSource.open();
     }
 
+    /*
+     * @author leonard (11/5/2016)
+     */
     public void sendCard(View v) {
         currentCard = deckDataSource.getAllDecks().get(0).getCards().get(0);
         String json = gson.toJson(currentCard);
         ConnectionService.sendMessage(MSG_SEND_CARD_ACTIVITY, json);
     }
 
+    /**
+     * This is called in ConnectionSerive.onPullInData(...) when a ready message
+     * is received.
+     */
+    /*
+     * @author leonard (11/5/2016)
+     */
     public void deviceIsReady(String deviceName) {
         //TODO show that the device is ready
     }
 
+    /**
+     * This is called in ConnectionSerive.onPullInData(...) when a answer message
+     * is received.
+     */
+    /*
+     * @author leonard (11/5/2016)
+     */
     public void validateAnswer(Answer answer) {
         boolean correct = currentCard.getCorrectAnswer().equals(answer.getAnswer());
+
+        String playerName = answer.getDeviceName();
+        //TODO send confirmation to the specific player
+
         ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, String.valueOf(correct));
     }
 
@@ -59,6 +86,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         deckDataSource.open();
+        rulesDataSource.open();
     }
 
     /*
@@ -68,5 +96,6 @@ public class ManageGameplayActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         deckDataSource.close();
+        rulesDataSource.close();
     }
 }

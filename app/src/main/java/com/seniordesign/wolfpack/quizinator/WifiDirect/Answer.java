@@ -6,16 +6,16 @@ package com.seniordesign.wolfpack.quizinator.WifiDirect;
 
 public class Answer {
 
-    private String deviceName;
+    private String playerName;
     private String answer;
 
     public Answer(String deviceName, String answer) {
-        this.deviceName = deviceName;
+        this.playerName = deviceName;
         this.answer = answer;
     }
 
     public String getDeviceName() {
-        return deviceName;
+        return playerName;
     }
 
     public String getAnswer() {
