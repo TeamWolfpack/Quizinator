@@ -31,6 +31,8 @@ public class ManageGameplayActivity extends AppCompatActivity {
     private int currentCardPosition;
     private int cardLimit;
 
+    private int clientsResponded;
+
     private Rules rules;
 
     private Gson gson = new Gson();
@@ -58,7 +60,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
      * @author leonard (11/5/2016)
      */
     public void sendCard(View v) {
-        if(currentCardPosition<deck.getCards().size()) {
+        if(currentCardPosition<cardLimit) {
             currentCard = deck.getCards().get(currentCardPosition);
             currentCardPosition++;
             String json = gson.toJson(currentCard);
@@ -103,6 +105,11 @@ public class ManageGameplayActivity extends AppCompatActivity {
         //TODO send confirmation to the specific player
 
         ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, String.valueOf(correct));
+        clientsResponded++;
+        if(clientsResponded==wifiDirectApp.mPeers.size()){
+            sendCard(null);
+        }
+
     }
 
     /*
