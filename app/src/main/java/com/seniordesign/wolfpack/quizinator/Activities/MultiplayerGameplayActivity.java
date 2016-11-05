@@ -80,6 +80,9 @@ public class MultiplayerGameplayActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_play);
 
+        //TODO This is temporary, the game timer will be fixed later
+        findViewById(R.id.gamePlayTimeText).setVisibility(View.INVISIBLE);
+
         initializeDB();
 
         wifiDirectApp = (WifiDirectApp)getApplication();

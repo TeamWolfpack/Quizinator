@@ -1,8 +1,10 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
@@ -37,10 +39,16 @@ public class ManageGameplayActivity extends AppCompatActivity {
 
     private Gson gson = new Gson();
 
+    private CountDownTimer gameplayTimerStatic;
+    private CountDownTimer gameplayTimerRunning;
+    private long gameplayTimerRemaining;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_gameplay);
+
+        setTitle("Hosting Game");
 
         wifiDirectApp = (WifiDirectApp)getApplication();
         wifiDirectApp.mManageActivity = this;
@@ -54,6 +62,9 @@ public class ManageGameplayActivity extends AppCompatActivity {
         rules = rulesDataSource.getAllRules().get(rulesDataSource.getAllRules().size()-1);
 
         cardLimit = Math.min(deck.getCards().size(),rules.getMaxCardCount());
+
+        initializeGameTimer(rules.getTimeLimit());
+        gameplayTimerRunning = gameplayTimerStatic.start();
     }
 
     /*
@@ -75,8 +86,8 @@ public class ManageGameplayActivity extends AppCompatActivity {
      * @author leonard (11/5/2016)
      */
     public void endGame(View v) {
-        long gameTime = 8008;
-        String json = gson.toJson(gameTime);
+        gameplayTimerRunning.cancel();
+        String json = gson.toJson(rules.getTimeLimit() - gameplayTimerRemaining);
         ConnectionService.sendMessage(MSG_END_OF_GAME_ACTIVITY, json);
     }
 
@@ -128,8 +139,30 @@ public class ManageGameplayActivity extends AppCompatActivity {
      */
     @Override
     protected void onPause() {
+        gameplayTimerRunning.cancel();
         super.onPause();
         deckDataSource.close();
         rulesDataSource.close();
+    }
+
+    /*
+     * @author farrowc 10/14/2016
+     */
+    private boolean initializeGameTimer(long time) {
+        gameplayTimerStatic = new CountDownTimer(time, 10) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                ((TextView) findViewById(R.id.gamePlayTimeHostText)).setText(
+                        "Game Time: " + millisUntilFinished / 60000
+                );
+                gameplayTimerRemaining = millisUntilFinished;
+            }
+
+            @Override
+            public void onFinish() {
+                endGame(null);
+            }
+        };
+        return true;
     }
 }
