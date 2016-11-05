@@ -98,8 +98,8 @@ public class MultiplayerGameplayActivity
         //send message that player is ready to start
         ConnectionService.sendMessage(MSG_PLAYER_READY_ACTIVITY, wifiDirectApp.mDeviceName);
 
-        //wait for next card
         hasAnswered = false;
+        initializeGamePlay();
     }
 
     /**
@@ -111,7 +111,6 @@ public class MultiplayerGameplayActivity
      */
     public void receivedNextCard(Card card) {
         hasAnswered = false;
-        initializeGamePlay();
         currentCard = card;
         showCard(currentCard);
         cardsPlayed++;
@@ -161,7 +160,7 @@ public class MultiplayerGameplayActivity
     private void initializeGamePlay() {
         initializeCorrectnessColorController();
         cardTimerRunning = cardTimerStatic.start();
-        cardTimerAreaBackgroundRunning = cardTimerRunning.start();
+        cardTimerAreaBackgroundRunning = cardTimerAreaBackgroundStatic.start();
         cardTimerAreaBackgroundRunning.cancel();
     }
 

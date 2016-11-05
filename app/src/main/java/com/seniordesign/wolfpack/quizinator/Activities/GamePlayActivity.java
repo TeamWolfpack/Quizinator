@@ -165,7 +165,7 @@ public class GamePlayActivity
         //deckLength = Math.min(deck.getCards().length, rules.getMaxCardCount());
         cardTimerRunning = cardTimerStatic.start();
         gamePlayTimerRunning = gamePlayTimerStatic.start();
-        cardTimerAreaBackgroundRunning = cardTimerRunning.start();
+        cardTimerAreaBackgroundRunning = cardTimerAreaBackgroundStatic.start();
         cardTimerAreaBackgroundRunning.cancel();
         switchToNewCard(deck, deckIndex);
     }
