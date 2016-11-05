@@ -108,6 +108,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
         clientsResponded++;
         if(clientsResponded==wifiDirectApp.mPeers.size()){
             sendCard(null);
+            clientsResponded=0;
         }
 
     }
