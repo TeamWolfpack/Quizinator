@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
+import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
@@ -25,7 +26,12 @@ public class ManageGameplayActivity extends AppCompatActivity {
     private DeckDataSource deckDataSource;
     private RulesDataSource rulesDataSource;
 
+    private Deck deck;
     private Card currentCard;
+    private int currentCardPosition;
+    private int cardLimit;
+
+    private Rules rules;
 
     private Gson gson = new Gson();
 
@@ -39,18 +45,28 @@ public class ManageGameplayActivity extends AppCompatActivity {
 
         deckDataSource = new DeckDataSource(this);
         deckDataSource.open();
+        deck = deckDataSource.getAllDecks().get(0);
 
         rulesDataSource = new RulesDataSource(this);
         rulesDataSource.open();
+        rules = rulesDataSource.getAllRules().get(rulesDataSource.getAllRules().size()-1);
+
+        cardLimit = Math.min(deck.getCards().size(),rules.getMaxCardCount());
     }
 
     /*
      * @author leonard (11/5/2016)
      */
     public void sendCard(View v) {
-        currentCard = deckDataSource.getAllDecks().get(0).getCards().get(0);
-        String json = gson.toJson(currentCard);
-        ConnectionService.sendMessage(MSG_SEND_CARD_ACTIVITY, json);
+        if(currentCardPosition<deck.getCards().size()) {
+            currentCard = deck.getCards().get(currentCardPosition);
+            currentCardPosition++;
+            String json = gson.toJson(currentCard);
+            ConnectionService.sendMessage(MSG_SEND_CARD_ACTIVITY, json);
+        }
+        else {
+            endGame(null);
+        }
     }
 
     /*
