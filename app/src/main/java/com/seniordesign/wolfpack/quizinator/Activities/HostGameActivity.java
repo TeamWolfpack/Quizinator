@@ -348,19 +348,23 @@ public class HostGameActivity
     /*
      * @author leonardj (11/4/16)
      */
-    public boolean startMultiplayerGamePlay(final Rules rules) {
+    public boolean startMultiplayerGamePlay(Rules rules) {
         if(!wifiDirectApp.mP2pConnected ){
             Toast.makeText(this, "You are not connected to anyone",
                     Toast.LENGTH_SHORT).show();
             return false;
         }
 
+        rulesForGame = rules;
+
+        Log.d(TAG, rulesForGame.toString()); //TODO
+
         runOnUiThread(new Runnable() {
             @Override public void run() {
                 Intent i = wifiDirectApp.
                         getLaunchActivityIntent(
                                 MultiplayerGameplayActivity.class, null);
-                i.getExtras().putString("Rules", new Gson().toJson(rules));
+                i.putExtra("Rules", new Gson().toJson(rulesForGame));
                 startActivity(i);
             }
         });

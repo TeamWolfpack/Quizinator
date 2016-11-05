@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.os.Message;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -45,6 +47,8 @@ public class MultiplayerGameplayActivity
             TrueFalseChoiceAnswerFragment.OnFragmentInteractionListener,
             MultipleChoiceAnswerFragment.OnFragmentInteractionListener{
 
+    private static final String TAG = "ACT_MGA";
+
     private Rules rules;
     private Card currentCard;
 
@@ -79,8 +83,12 @@ public class MultiplayerGameplayActivity
         wifiDirectApp = (WifiDirectApp)getApplication();
         wifiDirectApp.mGameplayActivity = this;
 
+        Log.d(TAG, getIntent().getExtras().getString("Rules")); //TODO
+
         //load rules passed in by extra
         rules = gson.fromJson(getIntent().getExtras().getString("Rules"), Rules.class);
+
+        Log.d(TAG, rules.toString()); //TODO
 
         //initialize card timeout
         initializeCardTimer(rules.getCardDisplayTime());
@@ -140,6 +148,7 @@ public class MultiplayerGameplayActivity
     }
 
     private void initializeGamePlay() {
+        initializeCorrectnessColorController();
         cardTimerRunning = cardTimerStatic.start();
         cardTimerAreaBackgroundRunning = cardTimerRunning.start();
         cardTimerAreaBackgroundRunning.cancel();
@@ -148,29 +157,44 @@ public class MultiplayerGameplayActivity
     /*
      * @author farrowc (10/11/2016)
      */
-    private void showCard(Card card) {
+    private void showCard(final Card card) {
         switch(card.getCardType()){
             case("TF"):
-                getSupportFragmentManager().
-                        beginTransaction()
-                        .replace(R.id.answerArea, new TrueFalseChoiceAnswerFragment())
-                        .commitNow();
-                ((TextView) findViewById(R.id.questionTextArea))
-                        .setText(card.getQuestion());
-                getSupportFragmentManager().executePendingTransactions();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getSupportFragmentManager().
+                                beginTransaction()
+                                .replace(R.id.answerArea, new TrueFalseChoiceAnswerFragment())
+                                .commitNow();
+                        ((TextView) findViewById(R.id.questionTextArea))
+                                .setText(card.getQuestion());
+                        getSupportFragmentManager().executePendingTransactions();
+                    }
+                });
                 break;
             case("MC"):
-                MultipleChoiceAnswerFragment mcFragment = new MultipleChoiceAnswerFragment();
+                final MultipleChoiceAnswerFragment mcFragment = new MultipleChoiceAnswerFragment();
                 mcFragment.setChoiceA(card.getPossibleAnswers()[0]);
                 mcFragment.setChoiceB(card.getPossibleAnswers()[1]);
                 mcFragment.setChoiceC(card.getPossibleAnswers()[2]);
                 mcFragment.setChoiceD(card.getPossibleAnswers()[3]);
-                getSupportFragmentManager().
-                        beginTransaction()
-                        .replace(R.id.answerArea,mcFragment)
-                        .commitNow();
-                ((TextView) findViewById(R.id.questionTextArea))
-                        .setText(card.getQuestion());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getSupportFragmentManager().
+                                beginTransaction()
+                                .replace(R.id.answerArea,mcFragment)
+                                .commitNow();
+
+                        ((TextView) findViewById(R.id.questionTextArea))
+                                .setText(card.getQuestion());
+
+                    }
+                });
+
+
+
                 break;
             default:
                 break;
@@ -301,13 +325,22 @@ public class MultiplayerGameplayActivity
         cardTimerAreaBackgroundStatic = new CountDownTimer(1000, 10) {
             @Override
             public void onTick(long millisUntilFinished) {
-                adjustCardTimerColor();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adjustCardTimerColor();
+                    }
+                });
             }
 
             @Override
             public void onFinish() {
-                findViewById(R.id.cardTimeBackground).setBackgroundColor(Color.rgb(0, 0, 0));
-
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        findViewById(R.id.cardTimeBackground).setBackgroundColor(Color.rgb(0, 0, 0));
+                    }
+                });
             }
         };
         return true;

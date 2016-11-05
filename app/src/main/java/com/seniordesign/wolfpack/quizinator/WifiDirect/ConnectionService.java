@@ -488,6 +488,7 @@ public class ConnectionService
         switch(code){
             case MSG_SEND_RULES_ACTIVITY:
                 Rules r = gson.fromJson(message, Rules.class);
+                Log.d(TAG, r.toString()); //TODO
                 wifiDirectApp.mHomeActivity.startMultiplayerGamePlay(r);
                 break;
             case MSG_SEND_CARD_ACTIVITY:
