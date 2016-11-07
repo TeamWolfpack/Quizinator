@@ -37,7 +37,6 @@ public class HostGameActivity
     private static final String TAG = "ACT_HG";
 
     private Rules rulesForGame;
-    private Card currentCardForGame;
 
     private WifiDirectApp wifiDirectApp;
     private IntentFilter mIntentFilter;
