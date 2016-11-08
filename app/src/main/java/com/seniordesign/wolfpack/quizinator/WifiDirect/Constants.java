@@ -24,9 +24,12 @@ public final class Constants {
     public static final String MSG_CONTENT = "msg";
 
     //gameplay messages
-    public static final int MSG_START_GAMEPLAY_ACTIVITY = 3000;
+    public static final int MSG_PLAYER_READY_ACTIVITY = 3000;
     public static final int MSG_SEND_RULES_ACTIVITY = 3001;
     public static final int MSG_SEND_CARD_ACTIVITY = 3002;
+    public static final int MSG_SEND_ANSWER_ACTIVITY = 3003;
+    public static final int MSG_ANSWER_CONFIRMATION_ACTIVITY = 3004;
+    public static final int MSG_END_OF_GAME_ACTIVITY = 3005;
 
     //Testing messages
     public static final int MSG_TEST_HI_JIMMY = -1;

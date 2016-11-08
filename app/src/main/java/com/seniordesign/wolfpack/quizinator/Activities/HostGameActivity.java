@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Card.CardDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
@@ -34,6 +35,8 @@ public class HostGameActivity
         implements DeviceListFragment.DeviceActionListener {
 
     private static final String TAG = "ACT_HG";
+
+    private Rules rulesForGame;
 
     private WifiDirectApp wifiDirectApp;
     private IntentFilter mIntentFilter;
@@ -341,16 +344,30 @@ public class HostGameActivity
         info.show();
     }
 
-    public void loadRuleInActivity(Rules rule) {
-        RulesDataSource rulesDataSource = new RulesDataSource(this);
-        rulesDataSource.open();
-        rulesDataSource.createRule(rule.getMaxCardCount(), rule.getTimeLimit(),
-                rule.getCardDisplayTime(), rule.getCardTypes());
-        rulesDataSource.close();
-    }
+    /*
+     * @author leonardj (11/4/16)
+     */
+    public boolean startMultiplayerGamePlay(Rules rules) {
+        if(!wifiDirectApp.mP2pConnected ){
+            Toast.makeText(this, "You are not connected to anyone",
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        }
 
-    public void loadCardInActivity(Card card) {
-        Toast.makeText(this, card.toString(), Toast.LENGTH_LONG).show();
+        rulesForGame = rules;
+
+        Log.d(TAG, rulesForGame.toString()); //TODO
+
+        runOnUiThread(new Runnable() {
+            @Override public void run() {
+                Intent i = wifiDirectApp.
+                        getLaunchActivityIntent(
+                                MultiplayerGameplayActivity.class, null);
+                i.putExtra("Rules", new Gson().toJson(rulesForGame));
+                startActivity(i);
+            }
+        });
+        return true;
     }
 
     /**

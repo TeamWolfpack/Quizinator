@@ -47,7 +47,7 @@ public class ConnectionService
 
     boolean retryChannel = false;
 
-    WifiDirectApp mApp;
+    WifiDirectApp wifiDirectApp;
     MainMenuActivity mActivity; // shall I use weak reference here ?
     ConnectionManager mConnMan;
 
@@ -62,9 +62,9 @@ public class ConnectionService
         mWorkHandler = new WorkHandler(TAG);
         mHandler = new MessageHandler(mWorkHandler.getLooper());
 
-        mApp = (WifiDirectApp) getApplication();
-        mApp.mP2pMan = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
-        mApp.mP2pChannel = mApp.mP2pMan.initialize(this, mWorkHandler.getLooper(), null);
+        wifiDirectApp = (WifiDirectApp) getApplication();
+        wifiDirectApp.mP2pMan = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
+        wifiDirectApp.mP2pChannel = wifiDirectApp.mP2pMan.initialize(this, mWorkHandler.getLooper(), null);
 
         mConnMan = new ConnectionManager(this);
     }
@@ -112,7 +112,7 @@ public class ConnectionService
             case WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION:
                 //if select p2p server mode with create group, this
                 // device will be group owner automatically
-                if (mApp.mP2pMan == null)
+                if (wifiDirectApp.mP2pMan == null)
                     return;
                 Log.d(TAG, "processIntent: connection changed"); //TODO remove later
                 deviceConnectionChangedAction(intent);
@@ -134,20 +134,20 @@ public class ConnectionService
     private boolean deviceWifiStateChangedAction(int state) {
         if (state == WifiP2pManager.WIFI_P2P_STATE_ENABLED) {
             // Wifi Direct mode is enabled
-            mApp.mP2pChannel = mApp.mP2pMan.initialize(this,
+            wifiDirectApp.mP2pChannel = wifiDirectApp.mP2pMan.initialize(this,
                     mWorkHandler.getLooper(), null);
-            AppPreferences.setStringToPref(mApp,
+            AppPreferences.setStringToPref(wifiDirectApp,
                     AppPreferences.PREF_NAME, AppPreferences.P2P_ENABLED, "1");
             return true;
         } else {
-            mApp.mThisDevice = null;    // reset this device status
-            mApp.mP2pChannel = null;
-            mApp.mPeers.clear();
-            if (mApp.mHomeActivity != null) {
-                mApp.mHomeActivity.updateThisDevice(null);
-                mApp.mHomeActivity.resetData();
+            wifiDirectApp.mThisDevice = null;    // reset this device status
+            wifiDirectApp.mP2pChannel = null;
+            wifiDirectApp.mPeers.clear();
+            if (wifiDirectApp.mHomeActivity != null) {
+                wifiDirectApp.mHomeActivity.updateThisDevice(null);
+                wifiDirectApp.mHomeActivity.resetData();
             }
-            AppPreferences.setStringToPref(mApp,
+            AppPreferences.setStringToPref(wifiDirectApp,
                     AppPreferences.PREF_NAME, AppPreferences.P2P_ENABLED, "0");
             return false;
         }
@@ -163,8 +163,8 @@ public class ConnectionService
         // asynchronous call and the calling activity is
         // notified with callback on
         // PeerListListener.onPeersAvailable()
-        if (mApp.mP2pMan != null) {
-            mApp.mP2pMan.requestPeers(mApp.mP2pChannel, this);
+        if (wifiDirectApp.mP2pMan != null) {
+            wifiDirectApp.mP2pMan.requestPeers(wifiDirectApp.mP2pChannel, this);
             return true;
         }
         return false;
@@ -179,18 +179,18 @@ public class ConnectionService
             Log.d(TAG, "processIntent: WIFI_P2P_CONNECTION_CHANGED_ACTION: p2p connected ");
             // Connected with the other device, request connection
             // info for group owner IP. Callback inside details fragment.
-            mApp.mP2pMan.requestConnectionInfo(mApp.mP2pChannel, this);
+            wifiDirectApp.mP2pMan.requestConnectionInfo(wifiDirectApp.mP2pChannel, this);
             return true;
         } else {
             // It's a disconnect
             Log.d(TAG, "processIntent: WIFI_P2P_CONNECTION_CHANGED_ACTION: p2p " +
                     "disconnected, mP2pConnected = false..closeClient..");
-            mApp.mP2pConnected = false;
-            mApp.mP2pInfo = null;   // reset connection info
+            wifiDirectApp.mP2pConnected = false;
+            wifiDirectApp.mP2pInfo = null;   // reset connection info
             // after connection done.
             mConnMan.closeClient();
-            if (mApp.mHomeActivity != null)
-                mApp.mHomeActivity.resetData();
+            if (wifiDirectApp.mHomeActivity != null)
+                wifiDirectApp.mHomeActivity.resetData();
             return false;
         }
     }
@@ -199,10 +199,10 @@ public class ConnectionService
      * @author kuczynskij (10/26/2016)
      */
     private boolean deviceDetailsHaveChanged(Intent intent) {
-        mApp.mThisDevice = intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
-        mApp.mDeviceName = mApp.mThisDevice.deviceName;
-        if (mApp.mHomeActivity != null) {
-            mApp.mHomeActivity.updateThisDevice(mApp.mThisDevice);
+        wifiDirectApp.mThisDevice = intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
+        wifiDirectApp.mDeviceName = wifiDirectApp.mThisDevice.deviceName;
+        if (wifiDirectApp.mHomeActivity != null) {
+            wifiDirectApp.mHomeActivity.updateThisDevice(wifiDirectApp.mThisDevice);
             return true;
         }
         return false;
@@ -215,14 +215,14 @@ public class ConnectionService
     @Override
     public void onChannelDisconnected() {
         if (!retryChannel) {
-            mApp.mP2pChannel = mApp.mP2pMan.initialize(this, mWorkHandler.getLooper(), null);
-            if (mApp.mHomeActivity != null) {
-                mApp.mHomeActivity.resetData();
+            wifiDirectApp.mP2pChannel = wifiDirectApp.mP2pMan.initialize(this, mWorkHandler.getLooper(), null);
+            if (wifiDirectApp.mHomeActivity != null) {
+                wifiDirectApp.mHomeActivity.resetData();
             }
             retryChannel = true;
         } else {
-            if (mApp.mHomeActivity != null) {
-                mApp.mHomeActivity.onChannelDisconnected();
+            if (wifiDirectApp.mHomeActivity != null) {
+                wifiDirectApp.mHomeActivity.onChannelDisconnected();
             }
             stopSelf();
         }
@@ -235,23 +235,23 @@ public class ConnectionService
     @Override
     public void onPeersAvailable(WifiP2pDeviceList peerList) {
         Log.d(TAG, "onPeersAvailable: peers available"); //TODO remove later
-        mApp.mPeers.clear();
-        mApp.mPeers.addAll(peerList.getDeviceList());
-        WifiP2pDevice connectedPeer = mApp.getConnectedPeer();
+        wifiDirectApp.mPeers.clear();
+        wifiDirectApp.mPeers.addAll(peerList.getDeviceList());
+        WifiP2pDevice connectedPeer = wifiDirectApp.getConnectedPeer();
         if (connectedPeer != null) {
             //PTPLog.d(TAG, "onPeersAvailable : exist connected peer : " + connectedPeer.deviceName);
         }
-        if (mApp.mP2pInfo != null && connectedPeer != null) {
-            if (mApp.mP2pInfo.groupFormed && mApp.mP2pInfo.isGroupOwner) {
-                mApp.startSocketServer();
-            } else if (mApp.mP2pInfo.groupFormed && connectedPeer != null) {
+        if (wifiDirectApp.mP2pInfo != null && connectedPeer != null) {
+            if (wifiDirectApp.mP2pInfo.groupFormed && wifiDirectApp.mP2pInfo.isGroupOwner) {
+                wifiDirectApp.startSocketServer();
+            } else if (wifiDirectApp.mP2pInfo.groupFormed && connectedPeer != null) {
                 // XXX client path goes to connection info available after connection established.
                 // PTPLog.d(TAG, "onConnectionInfoAvailable: device is client, connect to group owner: startSocketClient ");
                 // mApp.startSocketClient(mApp.mP2pInfo.groupOwnerAddress.getHostAddress());
             }
         }
-        if (mApp.mHomeActivity != null) {
-            mApp.mHomeActivity.onPeersAvailable(peerList);
+        if (wifiDirectApp.mHomeActivity != null) {
+            wifiDirectApp.mHomeActivity.onPeersAvailable(peerList);
         }
     }
 
@@ -268,15 +268,15 @@ public class ConnectionService
             //PTPLog.d(TAG, "onConnectionInfoAvailable: device is groupOwner: startSocketServer ");
             // mApp.startSocketServer();
         } else if (info.groupFormed) {
-            mApp.startSocketClient(info.groupOwnerAddress.getHostAddress());
+            wifiDirectApp.startSocketClient(info.groupOwnerAddress.getHostAddress());
         }
-        mApp.mP2pConnected = true;
-        mApp.mP2pInfo = info;   // connection info available
+        wifiDirectApp.mP2pConnected = true;
+        wifiDirectApp.mP2pInfo = info;   // connection info available
     }
 
     private void enableStartChatActivity() {
-        if (mApp.mHomeActivity != null) {
-            mApp.mHomeActivity.onConnectionInfoAvailable(mApp.mP2pInfo);
+        if (wifiDirectApp.mHomeActivity != null) {
+            wifiDirectApp.mHomeActivity.onConnectionInfoAvailable(wifiDirectApp.mP2pInfo);
         }
     }
 
@@ -344,6 +344,18 @@ public class ConnectionService
             case MSG_SEND_CARD_ACTIVITY:
                 pushCardOut((String) msg.obj);
                 break;
+            case MSG_PLAYER_READY_ACTIVITY:
+                pushReadyOut((String) msg.obj);
+                break;
+            case MSG_SEND_ANSWER_ACTIVITY:
+                pushAnswerOut((String) msg.obj);
+                break;
+            case MSG_ANSWER_CONFIRMATION_ACTIVITY:
+                pushConfirmationOut((String) msg.obj);
+                break;
+            case MSG_END_OF_GAME_ACTIVITY:
+                pushEndOfGameOut((String) msg.obj);
+                break;
             case MSG_SELECT_ERROR:
                 mConnMan.onSelectorError();
                 break;
@@ -381,11 +393,30 @@ public class ConnectionService
     }
 
     /*
+     * @author leonardj (11/4/16)
+     */
+    public static boolean sendMessage(int code, String message) {
+        Message result = getInstance().getHandler().obtainMessage();
+        result.what = code;
+        result.obj = message;
+        return getInstance().getHandler().sendMessage(result);
+    }
+
+    /*
+     * @author leonardj (11/4/16)
+     */
+    private String createQuizMessage(int code, String message) {
+        return new Gson().toJson(new QuizMessage(code, message));
+    }
+
+    /*
      * @author leonardj (10/31/2016)
      */
     private void pushCardOut(String data){
         Log.d(TAG, "pushCardOut: " + data);
-        mConnMan.pushOutData(MSG_SEND_CARD_ACTIVITY + data);
+
+        String message = createQuizMessage(MSG_SEND_CARD_ACTIVITY, data);
+        mConnMan.pushOutData(message);
     }
 
     /*
@@ -395,7 +426,49 @@ public class ConnectionService
     private void pushAllRulesOut(String data){
         Log.d(TAG, "pushAllRulesOut: " + data);
         //anything we may need to the rules string
-        mConnMan.pushOutData(MSG_SEND_RULES_ACTIVITY + data);
+
+        String message = createQuizMessage(MSG_SEND_RULES_ACTIVITY, data);
+        mConnMan.pushOutData(message);
+    }
+
+    /*
+     * @author leonardj (11/4/16)
+     */
+    private void pushReadyOut(String data) {
+        Log.d(TAG, "pushReadyOut: " + data);
+
+        String message = createQuizMessage(MSG_PLAYER_READY_ACTIVITY, data);
+        mConnMan.pushOutData(message);
+    }
+
+    /*
+     * @author leonardj (11/4/16)
+     */
+    private void pushAnswerOut(String data) {
+        Log.d(TAG, "pushAnswerOut: " + data);
+
+        String message = createQuizMessage(MSG_SEND_ANSWER_ACTIVITY, data);
+        mConnMan.pushOutData(message);
+    }
+
+    /*
+     * @author leonardj (11/4/16)
+     */
+    private void pushConfirmationOut(String data) {
+        Log.d(TAG, "pushConfirmationOut: " + data);
+
+        String message = createQuizMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, data);
+        mConnMan.pushOutData(message);
+    }
+
+    /*
+     * @author leonardj (11/4/16)
+     */
+    private void pushEndOfGameOut(String data) {
+        Log.d(TAG, "pushEndOfGameOut: " + data);
+
+        String message = createQuizMessage(MSG_END_OF_GAME_ACTIVITY, data);
+        mConnMan.pushOutData(message);
     }
 
     /**
@@ -405,32 +478,40 @@ public class ConnectionService
         String data = b.getString("DATA");
         Log.d(TAG, "onDataIn : recvd msg : " + data);
         mConnMan.onDataIn(schannel, data);  // pub to all client if this device is server.
-        int code;
-        try {
-            code = Integer.parseInt(data.substring(0, 4));
-            data = data.substring(4);
-        }catch(NumberFormatException nfe){
-            code = -1;
-        }
-        Gson g = new Gson();
+
+        Gson gson = new Gson();
+
+        QuizMessage quizMessage = gson.fromJson(data, QuizMessage.class);
+        int code = quizMessage.getCode();
+        String message = quizMessage.getMessage();
+
         switch(code){
             case MSG_SEND_RULES_ACTIVITY:
-                Rules r = g.fromJson(data, Rules.class);
-                mApp.mHomeActivity.loadRuleInActivity(r);
-                break;
-            case MSG_TEST_HI_JIMMY:
-                data += " this works yay";
+                Rules r = gson.fromJson(message, Rules.class);
+                Log.d(TAG, r.toString()); //TODO
+                wifiDirectApp.mHomeActivity.startMultiplayerGamePlay(r);
                 break;
             case MSG_SEND_CARD_ACTIVITY:
-                Card card = g.fromJson(data, Card.class);
-                mApp.mHomeActivity.loadCardInActivity(card);
+                Card card = gson.fromJson(message, Card.class);
+                wifiDirectApp.mGameplayActivity.receivedNextCard(card);
+                break;
+            case MSG_PLAYER_READY_ACTIVITY:
+                String deviceName = message;
+                wifiDirectApp.mManageActivity.deviceIsReady(deviceName);
+                break;
+            case MSG_SEND_ANSWER_ACTIVITY:
+                Answer answer = gson.fromJson(message, Answer.class);
+                wifiDirectApp.mManageActivity.validateAnswer(answer);
+                break;
+            case MSG_ANSWER_CONFIRMATION_ACTIVITY:
+                boolean correct = Boolean.parseBoolean(message);
+                wifiDirectApp.mGameplayActivity.answerConfirmed(correct);
+                break;
+            case MSG_END_OF_GAME_ACTIVITY:
+                long totalGameTime = Long.parseLong(message);
+                wifiDirectApp.mGameplayActivity.endGamePlay(totalGameTime);
                 break;
         }
-//        MessageRow row = MessageRow.parseMessageRow(data);
-//        // now first add to app json array
-//        mApp.shiftInsertMessage(row);
-//        // add to activity if it is on focus.
-//        showInActivity(row);
         return data;
     }
 

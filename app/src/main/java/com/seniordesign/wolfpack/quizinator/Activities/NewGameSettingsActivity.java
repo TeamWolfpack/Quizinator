@@ -132,35 +132,24 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             return false;
         }
 
-        //send everyone the rules
         Gson gson = new Gson();
+
+        //send everyone the rules
         String rulesToSend = gson.toJson(r);
-
-        Message msg = ConnectionService.getInstance().getHandler().obtainMessage();
-            msg.what = MSG_SEND_RULES_ACTIVITY;
-            msg.obj = rulesToSend;
-        ConnectionService.getInstance().getHandler().sendMessage(msg);
-
+        ConnectionService.sendMessage(MSG_SEND_RULES_ACTIVITY, rulesToSend);
 
         //Send first card
-        String cardToSend = gson.toJson(deck.getCards().get(0));
-        msg = ConnectionService.getInstance().getHandler().obtainMessage();
-            msg.what = MSG_SEND_CARD_ACTIVITY;
-            msg.obj = cardToSend;
-        ConnectionService.getInstance().getHandler().sendMessage(msg);
+//        String cardToSend = gson.toJson(deck.getCards().get(0));
+//        ConnectionService.sendMessage(MSG_SEND_CARD_ACTIVITY, cardToSend);
 
-
-//        runOnUiThread(new Runnable() {
-//            @Override public void run() {
-//                Intent i = wifiDirectApp.
-//                        getLaunchActivityIntent(
-//                                HostGameActivity.class, null);
-//                i.putExtra("isServer", true);
-//                //tell everyone to start the game
-//
-//                startActivity(i);
-//            }
-//        });
+        runOnUiThread(new Runnable() {
+            @Override public void run() {
+                Intent i = wifiDirectApp.
+                        getLaunchActivityIntent(
+                                ManageGameplayActivity.class, null);//
+                startActivity(i);
+            }
+        });
         return true;
 
     }

@@ -164,21 +164,26 @@ public class ConnectionManager {
      * key which identifies the selector/socket channel pair.
      */
     public int startServerSelector() {
-        Log.d(TAG, "startServerSelector");
+        Log.d(TAG, "startServerSelector"); //TODO remove later
         closeClient();   // close linger client, if exists.
 
         try {
             // create server socket and register to selector to listen OP_ACCEPT event
             // BindException if already bind.
+            Log.d(TAG, "startServerSelector: before createServerSocketChanel"); //TODO remove later
             ServerSocketChannel sServerChannel = createServerSocketChannel(1080);
+            Log.d(TAG, "startServerSelector: createServerSocketChanel"); //TODO remove later
             mServerSocketChannel = sServerChannel;
             mServerAddr = mServerSocketChannel.socket().getInetAddress().getHostAddress();
+            Log.d(TAG, "startServerSelector: Before if"); //TODO remove later
             if ("0.0.0.0".equals(mServerAddr)) {
                 mServerAddr = "Master";
             }
             ((WifiDirectApp) mService.getApplication()).setMyAddress(mServerAddr);
 
+            Log.d(TAG, "startServerSelector: Before open"); //TODO remove later
             mServerSelector = Selector.open();
+            Log.d(TAG, "startServerSelector: Before register"); //TODO remove later
             SelectionKey acceptKey = sServerChannel.register(
                     mServerSelector, SelectionKey.OP_ACCEPT);
             acceptKey.attach("accept_channel");
@@ -187,7 +192,7 @@ public class ConnectionManager {
             //SocketChannel sChannel = createSocketChannel("hostname.com", 80);
             //sChannel.register(selector, SelectionKey.OP_CONNECT);  // listen to connect event.
             Log.d(TAG, "startServerSelector : started: " +
-                    sServerChannel.socket().getLocalSocketAddress().toString());
+                    sServerChannel.socket().getLocalSocketAddress().toString()); //TODO remove later
 
             new SelectorAsyncTask(mService, mServerSelector).execute();
             return 0;
