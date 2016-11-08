@@ -40,13 +40,15 @@
         <FrameLayout
             android:id="@+id/questionArea"
             android:layout_width="match_parent"
-            android:layout_weight="30"
-            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_height="0dp"
             android:layout_marginBottom="10dp">
             <TextView
                 android:id="@+id/questionTextArea"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textAlignment="center"/>
 
         </FrameLayout>
 
@@ -63,8 +65,8 @@
         <FrameLayout
             android:id="@+id/answerArea"
             android:layout_width="match_parent"
-            android:layout_weight="10"
-            android:layout_height="wrap_content">
+            android:layout_weight="1"
+            android:layout_height="0dp">
         </FrameLayout>
 
     </LinearLayout>

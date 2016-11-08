@@ -2,7 +2,35 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.seniordesign.wolfpack.quizinator">
 
+    <uses-permission
+        android:name="android.permission.ACCESS_WIFI_STATE"
+        android:required="true" />
+    <uses-permission
+        android:name="android.permission.CHANGE_WIFI_STATE"
+        android:required="true" />
+    <uses-permission
+        android:name="android.permission.INTERNET"
+        android:required="true" />
+    <uses-permission
+        android:name="android.permission.CHANGE_NETWORK_STATE"
+        android:required="true" />
+    <uses-permission
+        android:name="android.permission.ACCESS_NETWORK_STATE"
+        android:required="true" />
+    <uses-permission
+        android:name="android.permission.READ_PHONE_STATE"
+        android:required="true" />
+    <uses-permission
+        android:name="android.permission.INTERACT_ACROSS_USERS_FULL"
+        android:required="true" />
+
+    <!-- Market filtering -->
+    <uses-feature
+        android:name="android.hardware.wifi.direct"
+        android:required="true" />
+
     <application
+        android:name=".WifiDirect.WifiDirectApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -10,13 +38,14 @@
         android:theme="@style/AppTheme">
         <activity android:name=".Activities.EndOfGameplayActivity" />
         <activity android:name=".Activities.NewGameSettingsActivity" />
-        <activity android:name=".Activities.GamePlayActivity"
-            android:label="@string/title_activity_navigation_drawer"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+        <activity android:name=".Activities.HostGameActivity" />
+        <activity
+            android:name=".Activities.GamePlayActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.MainMenuActivity"
-            android:label="@string/title_activity_navigation_drawer"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,6 +53,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".WifiDirect.WiFiDirectBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.net.wifi.p2p.STATE_CHANGED" />
+                <action android:name="android.net.wifi.p2p.PEERS_CHANGED" />
+                <action android:name="android.net.wifi.p2p.THIS_DEVICE_CHANGED" />
+                <action android:name="android.net.wifi.p2p.CONNECTION_STATE_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".WifiDirect.ConnectionService"
+            android:enabled="true" />
+
+        <activity android:name=".Activities.MultiplayerGameplayActivity" />
+        <activity android:name=".Activities.ManageGameplayActivity"></activity>
     </application>
 
 </manifest>

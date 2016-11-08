@@ -32,10 +32,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.Matchers.containsString;
 
-/**
+/*
  * @author leonardj (10/14/2016)
  */
-
 public class RuleIntegration {
 
     // Needed to run in Travis

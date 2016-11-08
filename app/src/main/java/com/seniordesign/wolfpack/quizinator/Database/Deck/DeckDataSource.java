@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
-import com.seniordesign.wolfpack.quizinator.Database.Card.TFCard;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -133,7 +132,7 @@ public class DeckDataSource {
         Gson gson = new Gson();
         String json = cursor.getString(2);
 
-        Type listType = new TypeToken<List<TFCard>>(){}.getType();
+        Type listType = new TypeToken<List<Card>>(){}.getType();
         cards = new Gson().fromJson(json, listType);
         deck.setCards(cards);
 
