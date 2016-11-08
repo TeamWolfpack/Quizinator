@@ -13,7 +13,7 @@ import com.seniordesign.wolfpack.quizinator.R;
 
 import java.sql.Time;
 
-/**
+/*
  * The end of game play activity is...
  * @creation 09/28/2016
  */

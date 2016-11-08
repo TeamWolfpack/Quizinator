@@ -7,8 +7,6 @@ import android.view.WindowManager;
 
 import com.seniordesign.wolfpack.quizinator.Activities.MainMenuActivity;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
-import com.seniordesign.wolfpack.quizinator.Database.Card.MCCard;
-import com.seniordesign.wolfpack.quizinator.Database.Card.TFCard;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckSQLiteHelper;
@@ -63,8 +61,8 @@ public class DeckUITests {
         assertEquals(true, datasource.getDatabase().isOpen());
         dbHelper.onUpgrade(datasource.getDatabase(), 0, 1);
         List<Card> cards = new ArrayList<>();
-        cards.add(new TFCard());
-        cards.add(new MCCard());
+        cards.add(new Card());
+        cards.add(new Card());
         Deck deck = datasource.createDeck("TestDeck", cards);
         assertEquals("deck.db", datasource.getSQLiteHelper().getDatabaseName());
         assertEquals(1, datasource.getAllDecks().size());
