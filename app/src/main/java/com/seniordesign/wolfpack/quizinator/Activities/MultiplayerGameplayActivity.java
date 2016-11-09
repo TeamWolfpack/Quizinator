@@ -324,7 +324,7 @@ public class MultiplayerGameplayActivity
             @Override
             public void onTick(long millisUntilFinished) {
                 ((TextView) findViewById(R.id.cardTimeBackground)).setText(
-                        "Time Left: " + millisUntilFinished / 1000 + "." + millisUntilFinished / 10 % 100
+                        "Time Left: " + millisUntilFinished / 1000
                 );
             }
 
