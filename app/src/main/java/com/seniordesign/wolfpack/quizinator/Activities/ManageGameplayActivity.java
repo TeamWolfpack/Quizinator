@@ -94,7 +94,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
     public void endGame(View v) {
         gameplayTimerRunning.cancel();
         String json = gson.toJson(rules.getTimeLimit() - gameplayTimerRemaining);
-        ConnectionService.sendMessageNotDelayed(MSG_END_OF_GAME_ACTIVITY, json);
+        ConnectionService.sendMessage(MSG_END_OF_GAME_ACTIVITY, json);
         Intent i = new Intent(ManageGameplayActivity.this, MainMenuActivity.class);
         startActivity(i);
     }
@@ -148,6 +148,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         gameplayTimerRunning.cancel();
+        gameplayTimerStatic.cancel();
         super.onPause();
         deckDataSource.close();
         rulesDataSource.close();
