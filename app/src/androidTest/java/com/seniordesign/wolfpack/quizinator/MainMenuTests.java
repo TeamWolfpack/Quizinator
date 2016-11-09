@@ -42,7 +42,6 @@ import static org.hamcrest.Matchers.instanceOf;
 /*
  * @author leonardj (10/2/2016)
  */
-
 @RunWith(AndroidJUnit4.class)
 public class MainMenuTests {
 
