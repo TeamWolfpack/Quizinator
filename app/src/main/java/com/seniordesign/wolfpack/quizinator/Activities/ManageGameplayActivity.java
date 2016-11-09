@@ -1,10 +1,14 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
+import android.content.Intent;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
@@ -42,6 +46,8 @@ public class ManageGameplayActivity extends AppCompatActivity {
     private CountDownTimer gameplayTimerStatic;
     private CountDownTimer gameplayTimerRunning;
     private long gameplayTimerRemaining;
+
+    public static final String TAG = "ACT_MANAGE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +94,9 @@ public class ManageGameplayActivity extends AppCompatActivity {
     public void endGame(View v) {
         gameplayTimerRunning.cancel();
         String json = gson.toJson(rules.getTimeLimit() - gameplayTimerRemaining);
-        ConnectionService.sendMessage(MSG_END_OF_GAME_ACTIVITY, json);
+        ConnectionService.sendMessageNotDelayed(MSG_END_OF_GAME_ACTIVITY, json);
+        Intent i = new Intent(ManageGameplayActivity.this, MainMenuActivity.class);
+        startActivity(i);
     }
 
     /**
@@ -149,11 +157,12 @@ public class ManageGameplayActivity extends AppCompatActivity {
      * @author farrowc 10/14/2016
      */
     private boolean initializeGameTimer(long time) {
+        System.out.println("Time: "+time);
         gameplayTimerStatic = new CountDownTimer(time, 10) {
             @Override
             public void onTick(long millisUntilFinished) {
                 ((TextView) findViewById(R.id.gamePlayTimeHostText)).setText(
-                        "Game Time: " + millisUntilFinished / 60000
+                        "Game Time: " + millisUntilFinished / 60000 + ":" + millisUntilFinished / 1000 % 60
                 );
                 gameplayTimerRemaining = millisUntilFinished;
             }

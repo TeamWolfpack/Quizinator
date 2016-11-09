@@ -399,6 +399,16 @@ public class ConnectionService
         Message result = getInstance().getHandler().obtainMessage();
         result.what = code;
         result.obj = message;
+        return getInstance().getHandler().sendMessageDelayed(result,10);
+    }
+
+    /*
+     * @author farrowc (11/5/16)
+     */
+    public static boolean sendMessageNotDelayed(int code, String message) {
+        Message result = getInstance().getHandler().obtainMessage();
+        result.what = code;
+        result.obj = message;
         return getInstance().getHandler().sendMessage(result);
     }
 
