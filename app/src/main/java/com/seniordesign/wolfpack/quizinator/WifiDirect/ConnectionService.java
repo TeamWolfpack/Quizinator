@@ -201,11 +201,13 @@ public class ConnectionService
      * @author kuczynskij (10/26/2016)
      */
     private boolean deviceDetailsHaveChanged(Intent intent) {
-        wifiDirectApp.mThisDevice = intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
-        wifiDirectApp.mDeviceName = wifiDirectApp.mThisDevice.deviceName;
-        if (wifiDirectApp.mHomeActivity != null) {
-            wifiDirectApp.mHomeActivity.updateThisDevice(wifiDirectApp.mThisDevice);
-            return true;
+        if(intent.hasExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE)){
+            wifiDirectApp.mThisDevice = intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
+            wifiDirectApp.mDeviceName = wifiDirectApp.mThisDevice.deviceName;
+            if (wifiDirectApp.mHomeActivity != null) {
+                wifiDirectApp.mHomeActivity.updateThisDevice(wifiDirectApp.mThisDevice);
+                return true;
+            }
         }
         return false;
     }

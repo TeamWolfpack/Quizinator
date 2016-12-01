@@ -236,16 +236,16 @@ public class HostGameActivity
      * process WIFI_P2P_THIS_DEVICE_CHANGED_ACTION intent, refresh this device.
      */
     public void updateThisDevice(final WifiP2pDevice device){
-        Log.d(TAG, "updateThisDevice: device name " + device.deviceName); //TODO remove later
-        Log.d(TAG, "updateThisDevice: device address " + device.deviceAddress); //TODO remove later
-        Log.d(TAG, "updateThisDevice: is group owner: " + device.isGroupOwner()); //TODO remove later
+//        Log.d(TAG, "updateThisDevice: device name " + device.deviceName); //TODO remove later
+//        Log.d(TAG, "updateThisDevice: device address " + device.deviceAddress); //TODO remove later
+//        Log.d(TAG, "updateThisDevice: is group owner: " + device.isGroupOwner()); //TODO remove later
+//        Log.d(TAG, "updateThisDevice: Runnable: update device in list fragment"); //TODO remove later
 
         runOnUiThread(new Runnable() {
             @Override public void run() {
-                Log.d(TAG, "updateThisDevice: Runnable: update device in list fragment"); //TODO remove later
-
-                DeviceListFragment fragment = (DeviceListFragment)getFragmentManager().findFragmentById(R.id.frag_list);
-                if (fragment != null) {
+                DeviceListFragment fragment =
+                        (DeviceListFragment)getFragmentManager().findFragmentById(R.id.frag_list);
+                if (fragment != null && device != null) {
                     fragment.updateThisDevice(device);
                 }
             }
@@ -293,15 +293,13 @@ public class HostGameActivity
     }
 
     /**
-     * update the device list fragment.
+     * Update the device list fragment.
      */
     public void onPeersAvailable(final WifiP2pDeviceList peerList){
-        Log.d(TAG, "onPeersAvailable: peer list available"); //TODO remove later
+        if(peerList.getDeviceList().size() <= 0)
+            return;
 
-        for (WifiP2pDevice device : peerList.getDeviceList()) {
-            Log.d(TAG, "onPeersAvailable: device in list - " + device.toString()); //TODO remove later
-            Log.d(TAG, "onPeersAvailable: device is group owner - " + device.isGroupOwner()); //TODO remove later
-        }
+        Log.d(TAG, "onPeersAvailable: peer list available"); //TODO remove later
 
         runOnUiThread(new Runnable() {
             @Override public void run() {
