@@ -3,6 +3,8 @@ package com.seniordesign.wolfpack.quizinator.WifiDirect;
 import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.*;
 
 import java.nio.channels.SocketChannel;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Service;
 import android.content.Context;
@@ -481,39 +483,70 @@ public class ConnectionService
         mConnMan.onDataIn(schannel, data);  // pub to all client if this device is server.
 
         Gson gson = new Gson();
+        List<QuizMessage> messages = parseInData(data);
 
-        QuizMessage quizMessage = gson.fromJson(data, QuizMessage.class);
-        int code = quizMessage.getCode();
-        String message = quizMessage.getMessage();
+        for (QuizMessage msg: messages) {
+            int code = msg.getCode();
+            String message = msg.getMessage();
+            Log.d(TAG, "DataInMessage : code: " + code + ", msg: " + message);
 
-        switch(code){
-            case MSG_SEND_RULES_ACTIVITY:
-                Rules r = gson.fromJson(message, Rules.class);
-                Log.d(TAG, r.toString()); //TODO
-                wifiDirectApp.mHomeActivity.startMultiplayerGamePlay(r);
-                break;
-            case MSG_SEND_CARD_ACTIVITY:
-                Card card = gson.fromJson(message, Card.class);
-                wifiDirectApp.mGameplayActivity.receivedNextCard(card);
-                break;
-            case MSG_PLAYER_READY_ACTIVITY:
-                String deviceName = message;
-                wifiDirectApp.mManageActivity.deviceIsReady(deviceName);
-                break;
-            case MSG_SEND_ANSWER_ACTIVITY:
-                Answer answer = gson.fromJson(message, Answer.class);
-                wifiDirectApp.mManageActivity.validateAnswer(answer);
-                break;
-            case MSG_ANSWER_CONFIRMATION_ACTIVITY:
-                boolean correct = Boolean.parseBoolean(message);
-                wifiDirectApp.mGameplayActivity.answerConfirmed(correct);
-                break;
-            case MSG_END_OF_GAME_ACTIVITY:
-                long totalGameTime = Long.parseLong(message);
-                wifiDirectApp.mGameplayActivity.endGamePlay(totalGameTime);
-                break;
+            switch(code){
+                case MSG_SEND_RULES_ACTIVITY:
+                    Rules r = gson.fromJson(message, Rules.class);
+                    Log.d(TAG, r.toString()); //TODO
+                    wifiDirectApp.mHomeActivity.startMultiplayerGamePlay(r);
+                    break;
+                case MSG_SEND_CARD_ACTIVITY:
+                    Card card = gson.fromJson(message, Card.class);
+                    wifiDirectApp.mGameplayActivity.receivedNextCard(card);
+                    break;
+                case MSG_PLAYER_READY_ACTIVITY:
+                    String deviceName = message;
+                    wifiDirectApp.mManageActivity.deviceIsReady(deviceName);
+                    break;
+                case MSG_SEND_ANSWER_ACTIVITY:
+                    Answer answer = gson.fromJson(message, Answer.class);
+                    wifiDirectApp.mManageActivity.validateAnswer(answer);
+                    break;
+                case MSG_ANSWER_CONFIRMATION_ACTIVITY:
+                    boolean correct = Boolean.parseBoolean(message);
+                    wifiDirectApp.mGameplayActivity.answerConfirmed(correct);
+                    break;
+                case MSG_END_OF_GAME_ACTIVITY:
+                    long totalGameTime = Long.parseLong(message);
+                    wifiDirectApp.mGameplayActivity.endGamePlay(totalGameTime);
+                    break;
+            }
         }
         return data;
+    }
+
+    /*
+     * @author leonardj (11/29/16)
+     */
+    public  List<QuizMessage> parseInData(String data) {
+        Gson gson = new Gson();
+        ArrayList<QuizMessage> messages = new ArrayList<>();
+
+        Log.d(TAG, "inData : " + data);
+
+        String[] chunks = data.split("\\}\\{");
+        Log.d(TAG, "Message Count : " + chunks.length);
+        for (int i = 0; i < chunks.length; i++) {
+            String chunk = chunks[i];
+            if (i < chunks.length - 1) {
+                chunk += "}";
+            }
+            if (i > 0) {
+                chunk = "{" + chunk;
+            }
+
+            Log.d(TAG, "Chunk : " + chunk);
+            QuizMessage message = gson.fromJson(chunk, QuizMessage.class);
+            messages.add(message);
+            Log.d(TAG, "Messages in List : " + messages.size());
+        }
+        return messages;
     }
 
     /**
