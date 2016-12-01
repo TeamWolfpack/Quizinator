@@ -1,12 +1,8 @@
-package com.seniordesign.wolfpack.quizinator.Activities.GameplayHandler;
+package com.seniordesign.wolfpack.quizinator.GameplayHandler;
 
-import android.graphics.Color;
-import android.os.CountDownTimer;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.seniordesign.wolfpack.quizinator.Activities.GamePlayActivity;
-import com.seniordesign.wolfpack.quizinator.Activities.NewGameSettingsActivity;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckDataSource;
@@ -24,6 +20,9 @@ import java.util.List;
 
 public class SinglePlayerHandler implements GamePlayHandler {
 
+    /*
+     * @author farrowc (11/30/2016)
+     */
     @Override
     public boolean handleInitialization(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         initializeDB(gamePlayActivity,properties);
@@ -31,6 +30,9 @@ public class SinglePlayerHandler implements GamePlayHandler {
         return false;
     }
 
+    /*
+     * @author farrowc (11/30/2016)
+     */
     @Override
     public long handleAnswerClicked(GamePlayActivity gamePlayActivity, GamePlayProperties properties, String answer) {
         properties.getCardTimerAreaBackgroundRunning().cancel();
@@ -46,6 +48,9 @@ public class SinglePlayerHandler implements GamePlayHandler {
         return handleNextCard(gamePlayActivity, properties);
     }
 
+    /*
+     * @author farrowc (11/30/2016)
+     */
     @Override
     public boolean initializeDB(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         int positiveDBConnections = 0;
@@ -68,6 +73,9 @@ public class SinglePlayerHandler implements GamePlayHandler {
         return (positiveDBConnections == 3);
     }
 
+    /*
+     * @author farrowc (11/30/2016)
+     */
     @Override
     public long handleNextCard(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         properties.getCardTimerRunning().cancel();
@@ -88,6 +96,9 @@ public class SinglePlayerHandler implements GamePlayHandler {
         return properties.getCurrentCard().getId();
     }
 
+    /*
+     * @author farrowc (11/30/2016)
+     */
     @Override
     public boolean handleCleanup(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         properties.getRulesDataSource().close();
@@ -105,6 +116,9 @@ public class SinglePlayerHandler implements GamePlayHandler {
         return true;
     }
 
+    /*
+     * @author farrowc (11/30/2016)
+     */
     @Override
     public boolean handleResume(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         properties.getRulesDataSource().open();
@@ -112,11 +126,17 @@ public class SinglePlayerHandler implements GamePlayHandler {
         return true;
     }
 
+    /*
+     * @author farrowc (11/30/2016)
+     */
     @Override
     public boolean handlePause(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         return true;
     }
 
+    /*
+     * @author farrowc (11/30/2016)
+     */
     @Override
     public boolean handleInitializeGameplay(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         //Deck stuff
@@ -131,11 +151,17 @@ public class SinglePlayerHandler implements GamePlayHandler {
         return false;
     }
 
+    /*
+     * @author farrowc (11/30/2016)
+     */
     @Override
     public void onFragmentInteraction(GamePlayActivity gamePlayActivity, GamePlayProperties properties, String choice) {
         //Do nothing
     }
 
+    /*
+     * @author farrowc (11/30/2016)
+     */
     private Deck initializeDeck(GamePlayProperties properties) {
         Deck newDeck = new Deck();
         Card[] cards = new Card[10];

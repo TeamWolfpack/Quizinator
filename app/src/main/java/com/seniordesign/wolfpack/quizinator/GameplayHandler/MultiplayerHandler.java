@@ -1,7 +1,6 @@
-package com.seniordesign.wolfpack.quizinator.Activities.GameplayHandler;
+package com.seniordesign.wolfpack.quizinator.GameplayHandler;
 
 import android.view.View;
-import android.widget.Button;
 
 import com.seniordesign.wolfpack.quizinator.Activities.GamePlayActivity;
 import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresDataSource;
@@ -20,6 +19,9 @@ import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_SEND
 
 public class MultiplayerHandler implements GamePlayHandler {
 
+    /*
+     * @author farrowc (11/30/2016)
+     */
     @Override
     public boolean handleInitialization(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         //TODO This is temporary, the game timer will be fixed later
@@ -45,6 +47,9 @@ public class MultiplayerHandler implements GamePlayHandler {
         return true;
     }
 
+    /*
+     * @author farrowc (11/30/2016)
+     */
     @Override
     public long handleAnswerClicked(GamePlayActivity gamePlayActivity, GamePlayProperties properties, String answer) {
         if(properties.getHasAnswered())
@@ -55,12 +60,18 @@ public class MultiplayerHandler implements GamePlayHandler {
         return 0;
     }
 
+    /*
+     * @author farrowc (11/30/2016)
+     */
     @Override
     public boolean initializeDB(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         properties.setHighScoresDataSource(new HighScoresDataSource(gamePlayActivity));
         return properties.getHighScoresDataSource().open();
     }
 
+    /*
+     * @author farrowc (11/30/2016)
+     */
     @Override
     public long handleNextCard(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         properties.setHasAnswered(false);
@@ -70,6 +81,9 @@ public class MultiplayerHandler implements GamePlayHandler {
         return properties.getCurrentCard().getId();
     }
 
+    /*
+     * @author farrowc (11/30/2016)
+     */
     @Override
     public boolean handleCleanup(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         properties.getHighScoresDataSource().close();
@@ -82,18 +96,27 @@ public class MultiplayerHandler implements GamePlayHandler {
         return true;
     }
 
+    /*
+     * @author farrowc (11/30/2016)
+     */
     @Override
     public boolean handleResume(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         properties.getHighScoresDataSource().open();
         return true;
     }
 
+    /*
+     * @author farrowc (11/30/2016)
+     */
     @Override
     public boolean handlePause(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         handleCleanup(gamePlayActivity,properties);
         return true;
     }
 
+    /*
+     * @author farrowc (11/30/2016)
+     */
     @Override
     public boolean handleInitializeGameplay(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         properties.setCardTimerRunning(properties.getCardTimerStatic().start());

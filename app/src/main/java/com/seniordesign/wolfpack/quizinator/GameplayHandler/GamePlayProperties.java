@@ -1,4 +1,4 @@
-package com.seniordesign.wolfpack.quizinator.Activities.GameplayHandler;
+package com.seniordesign.wolfpack.quizinator.GameplayHandler;
 
 import android.os.CountDownTimer;
 

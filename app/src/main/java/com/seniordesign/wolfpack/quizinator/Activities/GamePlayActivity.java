@@ -2,7 +2,6 @@ package com.seniordesign.wolfpack.quizinator.Activities;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,25 +10,17 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.seniordesign.wolfpack.quizinator.Activities.GameplayHandler.GamePlayHandler;
-import com.seniordesign.wolfpack.quizinator.Activities.GameplayHandler.GamePlayProperties;
-import com.seniordesign.wolfpack.quizinator.Activities.GameplayHandler.MultiplayerHandler;
-import com.seniordesign.wolfpack.quizinator.Activities.GameplayHandler.SinglePlayerHandler;
+import com.seniordesign.wolfpack.quizinator.GameplayHandler.GamePlayHandler;
+import com.seniordesign.wolfpack.quizinator.GameplayHandler.GamePlayProperties;
+import com.seniordesign.wolfpack.quizinator.GameplayHandler.MultiplayerHandler;
+import com.seniordesign.wolfpack.quizinator.GameplayHandler.SinglePlayerHandler;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
-import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
-import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.GamePlayStats;
 import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScores;
-import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresDataSource;
-import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
-import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.Fragments.MultipleChoiceAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.Fragments.TrueFalseChoiceAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
-
-import java.util.Arrays;
-import java.util.List;
 
 /*
  * The game play activity is...
