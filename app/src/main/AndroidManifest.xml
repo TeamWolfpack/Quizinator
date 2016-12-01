@@ -67,7 +67,6 @@
             android:name=".WifiDirect.ConnectionService"
             android:enabled="true" />
 
-        <activity android:name=".Activities.MultiplayerGameplayActivity" />
         <activity android:name=".Activities.ManageGameplayActivity"></activity>
     </application>
 
