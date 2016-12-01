@@ -11,7 +11,6 @@ import android.util.Log;
 import com.seniordesign.wolfpack.quizinator.Activities.GamePlayActivity;
 import com.seniordesign.wolfpack.quizinator.Activities.HostGameActivity;
 import com.seniordesign.wolfpack.quizinator.Activities.ManageGameplayActivity;
-import com.seniordesign.wolfpack.quizinator.Activities.MultiplayerGameplayActivity;
 
 import org.json.JSONArray;
 

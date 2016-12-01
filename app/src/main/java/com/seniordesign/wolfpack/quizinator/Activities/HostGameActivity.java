@@ -362,8 +362,9 @@ public class HostGameActivity
             @Override public void run() {
                 Intent i = wifiDirectApp.
                         getLaunchActivityIntent(
-                                MultiplayerGameplayActivity.class, null);
+                                GamePlayActivity.class, null);
                 i.putExtra("Rules", new Gson().toJson(rulesForGame));
+                i.putExtra("GameMode",false);
                 startActivity(i);
             }
         });
