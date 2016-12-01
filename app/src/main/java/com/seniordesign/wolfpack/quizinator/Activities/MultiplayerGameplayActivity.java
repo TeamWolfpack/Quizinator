@@ -49,28 +49,6 @@ public class MultiplayerGameplayActivity
 
     private static final String TAG = "ACT_MGA";
 
-    private Rules rules;
-    private Card currentCard;
-
-    private WifiDirectApp wifiDirectApp;
-
-    private HighScoresDataSource highScoresDataSource;
-
-    private int score = 0;
-    private int cardsPlayed = 0;
-
-    private CountDownTimer cardTimerStatic;
-    private CountDownTimer cardTimerRunning;
-
-    private CountDownTimer cardTimerAreaBackgroundStatic;
-    private CountDownTimer cardTimerAreaBackgroundRunning;
-    private int r;
-    private int g;
-    private int b;
-
-    private boolean hasAnswered;
-
-    private final Gson gson = new Gson();
 
     /*
      * @author leonard (11/4/2016)
@@ -83,25 +61,6 @@ public class MultiplayerGameplayActivity
         //TODO This is temporary, the game timer will be fixed later
         findViewById(R.id.gamePlayTimeText).setVisibility(View.INVISIBLE);
 
-        initializeDB();
-
-        wifiDirectApp = (WifiDirectApp)getApplication();
-        wifiDirectApp.mGameplayActivity = this;
-
-        Log.d(TAG, getIntent().getExtras().getString("Rules")); //TODO
-
-        //load rules passed in by extra
-        rules = gson.fromJson(getIntent().getExtras().getString("Rules"), Rules.class);
-
-        Log.d(TAG, rules.toString()); //TODO
-
-        //initialize card timeout
-        initializeCardTimer(rules.getCardDisplayTime());
-
-        //send message that player is ready to start
-        ConnectionService.sendMessage(MSG_PLAYER_READY_ACTIVITY, wifiDirectApp.mDeviceName);
-
-        hasAnswered = false;
         initializeGamePlay();
     }
 
@@ -161,11 +120,7 @@ public class MultiplayerGameplayActivity
     }
 
     private void initializeGamePlay() {
-        initializeCorrectnessColorController();
-        cardTimerRunning = cardTimerStatic.start();
-        cardTimerRunning.cancel();
-        cardTimerAreaBackgroundRunning = cardTimerAreaBackgroundStatic.start();
-        cardTimerAreaBackgroundRunning.cancel();
+
     }
 
     /*

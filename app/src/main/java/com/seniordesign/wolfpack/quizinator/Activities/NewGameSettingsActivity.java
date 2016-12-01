@@ -115,6 +115,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             //single player
             final Intent startGameIntent = new Intent(this,
                     GamePlayActivity.class);
+            startGameIntent.putExtra("GameMode",true);
             startActivity(startGameIntent);
             return true;
         }

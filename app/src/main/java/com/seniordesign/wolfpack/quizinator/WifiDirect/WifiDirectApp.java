@@ -8,6 +8,7 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Message;
 import android.util.Log;
 
+import com.seniordesign.wolfpack.quizinator.Activities.GamePlayActivity;
 import com.seniordesign.wolfpack.quizinator.Activities.HostGameActivity;
 import com.seniordesign.wolfpack.quizinator.Activities.ManageGameplayActivity;
 import com.seniordesign.wolfpack.quizinator.Activities.MultiplayerGameplayActivity;
@@ -46,7 +47,7 @@ public class WifiDirectApp extends Application {
     public boolean mIsServer;
 
     public HostGameActivity mHomeActivity;
-    public MultiplayerGameplayActivity mGameplayActivity;
+    public GamePlayActivity mGameplayActivity;
     public ManageGameplayActivity mManageActivity;
 
     // update on every peers available
