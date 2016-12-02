@@ -1,6 +1,9 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.FeatureInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
@@ -104,6 +108,14 @@ public class MainMenuActivity extends AppCompatActivity
             Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
             startActivity(launchBrowser);
         }
+        else if(id == R.id.nav_P2P_compatibility_check) {
+            if(isWifiDirectSupported(this)){
+                Toast.makeText(this, "Device is compatible with P2P", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(this, "Device is not compatible with P2P", Toast.LENGTH_SHORT).show();
+            }
+        }
         /*
         else if (id == R.id.nav_application_settings) {
             // For later sprints
@@ -140,4 +152,18 @@ public class MainMenuActivity extends AppCompatActivity
         intent.putExtra("isServer", false);
         startActivity(intent);
     }
+
+    private boolean isWifiDirectSupported(Context ctx) {
+        PackageManager pm = ctx.getPackageManager();
+        FeatureInfo[] features = pm.getSystemAvailableFeatures();
+        for (FeatureInfo info : features) {
+            if (info != null && info.name != null && info.name.equalsIgnoreCase("android.hardware.wifi.direct")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
 }
