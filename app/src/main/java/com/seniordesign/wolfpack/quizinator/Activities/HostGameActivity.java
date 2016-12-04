@@ -76,15 +76,17 @@ public class HostGameActivity
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+
+        initiateDiscovery();
     }
 
     /*
      * @author leonardj (10/24/16)
+     * @update leonardj (12/2/16)
+     *  onStart is called before onResume when resuming the activity.
+     *  So by making this a different method, it is only called onCreate.
      */
-    @Override
-    protected void onStart(){
-        super.onStart();
-        //Initiate Discovery
+    private void initiateDiscovery(){
         if( !wifiDirectApp.isP2pEnabled() ){
             Toast.makeText(this, R.string.p2p_off_warning, Toast.LENGTH_LONG).show();
             return;
@@ -108,9 +110,6 @@ public class HostGameActivity
 
             @Override
             public void onSuccess() {
-                // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
-//                Toast.makeText(HostGameActivity.this,
-//                        "Discovery Initiated", Toast.LENGTH_SHORT).show();
                 if (wifiDirectApp.mIsServer) {
                     wifiDirectApp.mP2pMan.requestGroupInfo(wifiDirectApp.mP2pChannel, new WifiP2pManager.GroupInfoListener() {
                         @Override
@@ -159,7 +158,6 @@ public class HostGameActivity
                 } else {
                     Log.d(TAG, "onStart: you are a client"); //TODO remove later
                 }
-
             }
 
             @Override
@@ -167,8 +165,6 @@ public class HostGameActivity
                 fragment.clearPeers();
                 Toast.makeText(HostGameActivity.this,
                     "Connect failed. Retry.", Toast.LENGTH_SHORT).show();
-//                Toast.makeText(HostGameActivity.this,
-//                        "Discovery Failed, try again... ", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "onStart: discoverPeers failed, reason: " + reasonCode); //TODO remove later
             }
         });
