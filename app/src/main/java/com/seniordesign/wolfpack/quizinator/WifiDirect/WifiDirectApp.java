@@ -1,7 +1,9 @@
 package com.seniordesign.wolfpack.quizinator.WifiDirect;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pGroup;
 import android.net.wifi.p2p.WifiP2pInfo;
@@ -207,5 +209,26 @@ public class WifiDirectApp extends Application {
                     Intent.FLAG_ACTIVITY_CLEAR_TOP);
             i.putExtra("FIRST_MSG", initmsg);
         return i;
+    }
+
+    public void onResume(String tag,
+                         HostGameActivity activity,
+                         IntentFilter filter){
+        Log.d(tag, "onResume called");
+        mReceiver = new WiFiDirectBroadcastReceiver(this, activity);
+        registerReceiver(mReceiver, filter);
+        mHomeActivity = activity;
+    }
+
+    public void onPause(String tag){
+        Log.d(tag, "onPause called");
+        unregisterReceiver(mReceiver);
+        mHomeActivity = null;
+    }
+
+    public void onDestroy(String tag){
+        Log.d(tag, "onDestroy Called");
+        disconnectFromGroup();
+        mHomeActivity = null;
     }
 }

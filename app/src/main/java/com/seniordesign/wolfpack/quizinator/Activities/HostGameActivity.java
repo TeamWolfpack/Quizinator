@@ -19,10 +19,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
-import com.seniordesign.wolfpack.quizinator.Database.Card.CardDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
-import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.DeviceDetailFragment;
@@ -174,31 +171,22 @@ public class HostGameActivity
         });
     }
 
-    /** register the BroadcastReceiver with the intent values to be matched */
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume called");
-        wifiDirectApp.mReceiver = new WiFiDirectBroadcastReceiver(
-                wifiDirectApp, this);
-        registerReceiver(wifiDirectApp.mReceiver, mIntentFilter);
-        wifiDirectApp.mHomeActivity = this;
+        wifiDirectApp.onResume(TAG, this, mIntentFilter);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(TAG, "onPause called");
-        unregisterReceiver(wifiDirectApp.mReceiver);
-        wifiDirectApp.mHomeActivity = null;
+        wifiDirectApp.onPause(TAG);
     }
 
     @Override
     public void onDestroy(){
         super.onDestroy();
-        Log.d(TAG, "onDestroy Called"); //TODO remove later
-        wifiDirectApp.disconnectFromGroup();
-        wifiDirectApp.mHomeActivity = null;
+        wifiDirectApp.onDestroy(TAG);
     }
 
     /**
