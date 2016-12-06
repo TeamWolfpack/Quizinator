@@ -198,6 +198,7 @@ public class HostGameActivity
         super.onDestroy();
         Log.d(TAG, "onDestroy Called"); //TODO remove later
         wifiDirectApp.disconnectFromGroup();
+        wifiDirectApp.mIsServer = false;
         wifiDirectApp.mHomeActivity = null;
     }
 
