@@ -19,7 +19,10 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
+import com.seniordesign.wolfpack.quizinator.Database.Card.CardDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
+import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.DeviceDetailFragment;
@@ -193,27 +196,8 @@ public class HostGameActivity
     @Override
     public void onDestroy(){
         super.onDestroy();
-        Log.d(TAG, "onDestroy called");
-        wifiDirectApp.mP2pMan.requestGroupInfo(wifiDirectApp.mP2pChannel,
-                new WifiP2pManager.GroupInfoListener() {
-            @Override
-            public void onGroupInfoAvailable(WifiP2pGroup group) {
-                if (group != null) {
-                    Log.d(TAG, "group != null");
-                    wifiDirectApp.mP2pMan.removeGroup(wifiDirectApp.mP2pChannel,
-                            new WifiP2pManager.ActionListener() {
-                        @Override
-                        public void onSuccess() {
-                            Log.d(TAG, "removeGroup Success");
-                        }
-                        @Override
-                        public void onFailure(int reason) {
-                            Log.d(TAG, "removeGroup Fail: " + reason);
-                        }
-                    });
-                }
-            }
-        });
+        Log.d(TAG, "onDestroy Called"); //TODO remove later
+        wifiDirectApp.disconnectFromGroup();
         wifiDirectApp.mHomeActivity = null;
     }
 

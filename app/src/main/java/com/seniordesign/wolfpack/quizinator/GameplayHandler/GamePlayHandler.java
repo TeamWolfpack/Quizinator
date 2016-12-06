@@ -44,6 +44,11 @@ public interface GamePlayHandler {
     public boolean handlePause(GamePlayActivity gamePlayActivity, GamePlayProperties properties);
 
     /*
+     * @author leonardj (12/6/2016)
+     */
+    public boolean handleDestroy(GamePlayActivity gamePlayActivity, GamePlayProperties properties);
+
+    /*
      * @author farrowc (11/30/2016)
      */
     public boolean handleInitializeGameplay(GamePlayActivity gamePlayActivity, GamePlayProperties properties);

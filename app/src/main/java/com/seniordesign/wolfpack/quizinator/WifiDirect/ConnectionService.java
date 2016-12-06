@@ -462,8 +462,12 @@ public class ConnectionService
     private void pushConfirmationOut(String data) {
         Log.d(TAG, "pushConfirmationOut: " + data);
 
-        String message = createQuizMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, data);
-        mConnMan.pushOutData(message);
+        Confirmation confirmation = new Gson().fromJson(data, Confirmation.class);
+        String message = createQuizMessage(
+                MSG_ANSWER_CONFIRMATION_ACTIVITY,
+                String.valueOf(confirmation.getConfirmation())
+        );
+        mConnMan.publishDataToSingleClient(message, confirmation.getClientAddress());
     }
 
     /*
@@ -482,7 +486,6 @@ public class ConnectionService
     private String onPullInData(SocketChannel schannel, Bundle b){
         String data = b.getString("DATA");
         Log.d(TAG, "onDataIn : recvd msg : " + data);
-        mConnMan.onDataIn(schannel, data);  // pub to all client if this device is server.
 
         Gson gson = new Gson();
         List<QuizMessage> messages = parseInData(data);
@@ -504,6 +507,7 @@ public class ConnectionService
                     break;
                 case MSG_PLAYER_READY_ACTIVITY:
                     String deviceName = message;
+                    Log.d(TAG, "deviceName - " + deviceName);
                     wifiDirectApp.mManageActivity.deviceIsReady(deviceName);
                     break;
                 case MSG_SEND_ANSWER_ACTIVITY:

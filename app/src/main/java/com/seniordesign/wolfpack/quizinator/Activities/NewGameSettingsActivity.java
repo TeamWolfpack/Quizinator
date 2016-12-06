@@ -149,6 +149,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                         getLaunchActivityIntent(
                                 ManageGameplayActivity.class, null);//
                 startActivity(i);
+                finish();
             }
         });
         return true;

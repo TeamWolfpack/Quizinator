@@ -18,6 +18,7 @@ import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.Answer;
+import com.seniordesign.wolfpack.quizinator.WifiDirect.Confirmation;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
@@ -77,6 +78,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
      * @author leonard (11/5/2016)
      */
     public void sendCard(View v) {
+        clientsResponded=0;
         if(currentCardPosition<cardLimit) {
             currentCard = deck.getCards().get(currentCardPosition);
             currentCardPosition++;
@@ -97,6 +99,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
         ConnectionService.sendMessage(MSG_END_OF_GAME_ACTIVITY, json);
         Intent i = new Intent(ManageGameplayActivity.this, MainMenuActivity.class);
         startActivity(i);
+        finish();
     }
 
     /**
@@ -121,15 +124,19 @@ public class ManageGameplayActivity extends AppCompatActivity {
         boolean correct = currentCard.getCorrectAnswer().equals(answer.getAnswer());
 
         String playerName = answer.getDeviceName();
-        //TODO send confirmation to the specific player
+        String playerAddress = answer.getAddress();
 
-        ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, String.valueOf(correct));
+        String confirmation = gson.toJson(new Confirmation(playerAddress, correct));
+        ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
         clientsResponded++;
-        if(clientsResponded==wifiDirectApp.mPeers.size()){
+
+        Log.d(TAG, "Clients responded: " + clientsResponded);
+        Log.d(TAG, "Number of Peers: " + wifiDirectApp.mPeers.size());
+
+        if(clientsResponded==wifiDirectApp.getConnectedPeers().size()){
             sendCard(null);
             clientsResponded=0;
         }
-
     }
 
     /*
@@ -147,11 +154,20 @@ public class ManageGameplayActivity extends AppCompatActivity {
      */
     @Override
     protected void onPause() {
+        super.onPause();
         gameplayTimerRunning.cancel();
         gameplayTimerStatic.cancel();
-        super.onPause();
         deckDataSource.close();
         rulesDataSource.close();
+    }
+
+    /*
+     * @author leonard (11/4/2016)
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        wifiDirectApp.disconnectFromGroup();
     }
 
     /*
