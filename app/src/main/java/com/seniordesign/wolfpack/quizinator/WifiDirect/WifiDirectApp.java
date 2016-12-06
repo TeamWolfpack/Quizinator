@@ -36,7 +36,7 @@ public class WifiDirectApp extends Application {
     public WifiP2pManager.Channel mP2pChannel;
     public boolean mP2pConnected;
     public String mMyAddress;
-    // the p2p name that is configurated from UI.
+    // the p2p name that is configured from UI.
     public String mDeviceName;
     public WiFiDirectBroadcastReceiver mReceiver;
 
@@ -46,6 +46,7 @@ public class WifiDirectApp extends Application {
     public WifiP2pInfo mP2pInfo;
 
     public boolean mIsServer;
+    public IntentFilter mIntentFilter;
 
     public HostGameActivity mHomeActivity;
     public GamePlayActivity mGameplayActivity;
@@ -56,14 +57,9 @@ public class WifiDirectApp extends Application {
     // limit to the latest 50 messages
     JSONArray mMessageArray = new JSONArray();
 
-    public IntentFilter mIntentFilter;
-
-    /*
-     * @author kuczynskij (10/26/2016)
-     */
     @Override
     public void onCreate() {
-        Log.d(TAG, "onCreate: Start"); //TODO Remove later, for debug purposes
+        Log.d(TAG, "onCreate");
         super.onCreate();
         instantiateIntentFilter();
     }
@@ -83,17 +79,20 @@ public class WifiDirectApp extends Application {
      * @return true if P2P is enabled on device
      */
     public boolean isP2pEnabled() {
-        Log.d(TAG, "isP2pEnabled: Start"); //TODO Remove later, for debug purposes
         String state =
-                AppPreferences.getStringFromPref(
-                        this,
-                        AppPreferences.PREF_NAME,
-                        AppPreferences.P2P_ENABLED);
+                AppPreferences.getStringFromPref(this,
+                        AppPreferences.PREF_NAME, AppPreferences.P2P_ENABLED);
+        Log.d(TAG, "isP2pEnabled: " + (state != null && "1".equals(state.trim())));
         return state != null && "1".equals(state.trim());
     }
 
+    /**
+     * Determines if the instance of the WifiDirectApp is currently
+     * a host or not.
+     * @return true if device is host
+     */
     public int isHost() {
-        Log.d(TAG, "isHost: Start"); //TODO Remove later, for debug purposes
+        Log.d(TAG, "isHost: " + (mIsServer ? 15 : 0));
         return mIsServer ? 15 : 0;
     }
 
@@ -101,13 +100,11 @@ public class WifiDirectApp extends Application {
      * Upon p2p connection available, group owner start server socket
      * channel start socket server and select monitor the socket.
      */
-    /*
-     * @author kuczynskij (10/26/2016)
-     */
     public void startSocketServer() {
-        Log.d(TAG, "startSocketServer: Start"); //TODO Remove later, for debug purposes
-        Message msg = ConnectionService.getInstance().getHandler().obtainMessage();
-        msg.what = MSG_STARTSERVER;
+        Log.d(TAG, "startSocketServer");
+        Message msg =
+                ConnectionService.getInstance().getHandler().obtainMessage();
+            msg.what = MSG_STARTSERVER;
         ConnectionService.getInstance().getHandler().sendMessage(msg);
     }
 
@@ -115,72 +112,60 @@ public class WifiDirectApp extends Application {
      * Upon p2p connection available, non group owner start
      * socket channel connect to group owner.
      */
-    /*
-     * @author kuczynskij (10/26/2016)
-     */
     public void startSocketClient(String hostname) {
         Log.d(TAG, "startSocketClient : client connect to group owner : " + hostname);
         Message msg = ConnectionService.getInstance().getHandler().obtainMessage();
-        msg.what = MSG_STARTCLIENT;
-        msg.obj = hostname;
+            msg.what = MSG_STARTCLIENT;
+            msg.obj = hostname;
         ConnectionService.getInstance().getHandler().sendMessage(msg);
     }
 
-    /*
-     * @author kuczynskij (10/26/2016)
-     */
     public WifiP2pDevice getConnectedPeer() {
-        Log.d(TAG, "getConnectedPeer: Start"); //TODO Remove later, for debug purposes
+        Log.d(TAG, "getConnectedPeer");
         WifiP2pDevice peer = null;
         for (WifiP2pDevice d : mPeers) {
             if (d.status == WifiP2pDevice.CONNECTED) {
                 peer = d;
-                Log.d(TAG, "getConnectedPeer: Device Connected" + d.toString()); //TODO Remove later, for debug purposes
+                Log.d(TAG, "getConnectedPeer: Device Connected" + d.toString());
             }
         }
-        //TODO Remove later, for debug purposes
-        if(peer == null) {
-            Log.d(TAG, "getConnectedPeer: Will return null"); //TODO Remove later, for debug purposes
-        }else{
-            Log.d(TAG, "getConnectedPeer: Device returned" + peer.toString()); //TODO Remove later, for debug purposes
-        }
+        if(peer == null)
+            Log.d(TAG, "getConnectedPeer: Will return null");
+        else
+            Log.d(TAG, "getConnectedPeer: Device returned" + peer.toString());
         return peer;
     }
 
-    /*
-     * @author kuczynskij (10/26/2016)
-     */
     public List<WifiP2pDevice> getConnectedPeers() {
-        Log.d(TAG, "getConnectedPeers: Start"); //TODO Remove later, for debug purposes
+        Log.d(TAG, "getConnectedPeers");
         ArrayList<WifiP2pDevice> peers = new ArrayList<>();
         for (WifiP2pDevice d : mPeers) {
             if (d.status == WifiP2pDevice.CONNECTED) {
                 peers.add(d);
-                Log.d(TAG, "getConnectedPeers: Device Connected" + d.toString()); //TODO Remove later, for debug purposes
+                Log.d(TAG, "getConnectedPeers: Device Connected " + d.toString());
             }
         }
         return peers;
     }
 
     public void disconnectFromGroup() {
+        Log.d(TAG, "disconnectFromGroup");
         if (mP2pMan == null || mP2pChannel == null) {
             return;
         }
-
         mP2pMan.requestGroupInfo(mP2pChannel, new WifiP2pManager.GroupInfoListener() {
             @Override
             public void onGroupInfoAvailable(WifiP2pGroup group) {
                 if (group != null) {
-                    Log.d(TAG, "group != null");
                     mP2pMan.removeGroup(mP2pChannel, new WifiP2pManager.ActionListener() {
                         @Override
                         public void onSuccess() {
-                            Log.d(TAG, "removeGroup Success");
+                            Log.d(TAG, "disconnectFromGroup: removeGroup success");
                         }
 
                         @Override
                         public void onFailure(int reason) {
-                            Log.d(TAG, "removeGroup Fail: " + reason);
+                            Log.d(TAG, "disconnectFromGroup: removeGroup fail: " + reason);
                         }
                     });
                 }
@@ -188,36 +173,30 @@ public class WifiDirectApp extends Application {
         });
     }
 
-    /*
-     * @author kuczynskij (10/26/2016)
-     */
     public void clearMessages() {
-        Log.d(TAG, "clearMessages: Start"); //TODO Remove later, for debug purposes
+        Log.d(TAG, "clearMessages");
         mMessageArray = new JSONArray();
     }
 
-    /*
-     * @author kuczynskij (10/26/2016)
-     */
     public void setMyAddress(String addr) {
-        Log.d(TAG, "setMyAddress: Start"); //TODO Remove later, for debug purposes
+        Log.d(TAG, "setMyAddress");
         mMyAddress = addr;
     }
 
-    /*
-     * @author kuczynskij (10/31/2016)
-     */
-    public Intent getLaunchActivityIntent(Class<?> cls,
-                                          String initmsg){
-        Log.d(TAG, "getLaunchActivityIntent: Start"); //TODO Remove later, for debug purposes
+    public Intent getLaunchActivityIntent(Class<?> cls, String initializeMessage){
+        Log.d(TAG, "getLaunchActivityIntent");
         //get the intent to launch any activity
         Intent i = new Intent(this, cls);
-            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                    Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            i.putExtra("FIRST_MSG", initmsg);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            i.putExtra("FIRST_MSG", initializeMessage);
         return i;
     }
 
+    /**
+     * Properly resume the WifiDirectApp.
+     * @param tag
+     * @param activity
+     */
     public void onResume(String tag,
                          HostGameActivity activity){
         Log.d(tag, "onResume called");
@@ -226,14 +205,22 @@ public class WifiDirectApp extends Application {
         mHomeActivity = activity;
     }
 
+    /**
+     * Properly pause the WifiDirectApp.
+     * @param tag
+     */
     public void onPause(String tag){
         Log.d(tag, "onPause called");
         unregisterReceiver(mReceiver);
         mHomeActivity = null;
     }
 
+    /**
+     * Properly destroy the WifiDirectApp.
+     * @param tag
+     */
     public void onDestroy(String tag){
-        Log.d(tag, "onDestroy Called");
+        Log.d(tag, "onDestroy called");
         disconnectFromGroup();
         mHomeActivity = null;
     }

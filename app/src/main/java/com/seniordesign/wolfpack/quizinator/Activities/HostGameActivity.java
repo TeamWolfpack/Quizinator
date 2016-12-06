@@ -33,7 +33,7 @@ public class HostGameActivity
 
     private static final String TAG = "ACT_HG";
 
-    private Rules rulesForGame;
+    //private Rules rulesForGame;
 
     private WifiDirectApp wifiDirectApp;
 
@@ -300,21 +300,20 @@ public class HostGameActivity
     /*
      * @author leonardj (11/4/16)
      */
-    public boolean startMultiplayerGamePlay(Rules rules) {
+    public boolean startMultiplayerGamePlay(final Rules rules) {
         Log.d(TAG, "startMultiplayerGamePlay");
         if(!wifiDirectApp.mP2pConnected ){
             Toast.makeText(this, "You are not connected to anyone",
                     Toast.LENGTH_SHORT).show();
             return false;
         }
-        rulesForGame = rules;//TODO -> remove this line and just send rules along
         runOnUiThread(new Runnable() {
             @Override public void run() {
                 Intent i = wifiDirectApp.
                         getLaunchActivityIntent(
                                 GamePlayActivity.class, null);
-                i.putExtra("Rules", new Gson().toJson(rulesForGame));
-                i.putExtra("GameMode",false);
+                    i.putExtra("Rules", new Gson().toJson(rules));
+                    i.putExtra("GameMode",false);
                 startActivity(i);
             }
         });
