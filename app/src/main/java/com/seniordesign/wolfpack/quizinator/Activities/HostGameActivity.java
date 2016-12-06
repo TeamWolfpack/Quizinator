@@ -19,10 +19,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
-import com.seniordesign.wolfpack.quizinator.Database.Card.CardDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
-import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.DeviceDetailFragment;
@@ -36,10 +33,9 @@ public class HostGameActivity
 
     private static final String TAG = "ACT_HG";
 
-    private Rules rulesForGame;
+    //private Rules rulesForGame;
 
     private WifiDirectApp wifiDirectApp;
-    private IntentFilter mIntentFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +55,7 @@ public class HostGameActivity
             findViewById(R.id.start_game_settings).setVisibility(View.GONE);
         }
 
+        //TODO -> remove the instantiation of serviceIntent if left unused, still create object
         // If service not started yet, start it.
         Intent serviceIntent =
                 new Intent(this, ConnectionService.class);
@@ -70,12 +67,6 @@ public class HostGameActivity
                 this, getMainLooper(), null);
         wifiDirectApp.mReceiver = new WiFiDirectBroadcastReceiver(
                 wifiDirectApp, this);
-
-        mIntentFilter = new IntentFilter();
-        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
-        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
-        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
-        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
         initiateDiscovery();
     }
@@ -104,13 +95,18 @@ public class HostGameActivity
             Log.d(TAG, "mP2p channel is null");
         }
 
+        discoverPeers(fragment);
+    }
+
+    private void discoverPeers(final DeviceListFragment fragment){
         wifiDirectApp.mP2pMan.discoverPeers(wifiDirectApp.mP2pChannel,
                 new WifiP2pManager.ActionListener() {
-
             @Override
             public void onSuccess() {
                 if (wifiDirectApp.mIsServer) {
-                    wifiDirectApp.mP2pMan.requestGroupInfo(wifiDirectApp.mP2pChannel, new WifiP2pManager.GroupInfoListener() {
+                    wifiDirectApp.mP2pMan.requestGroupInfo(
+                            wifiDirectApp.mP2pChannel,
+                            new WifiP2pManager.GroupInfoListener() {
                         @Override
                         public void onGroupInfoAvailable(WifiP2pGroup group) {
                             if (group != null)
@@ -174,32 +170,22 @@ public class HostGameActivity
         });
     }
 
-    /** register the BroadcastReceiver with the intent values to be matched */
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume called");
-        wifiDirectApp.mReceiver = new WiFiDirectBroadcastReceiver(
-                wifiDirectApp, this);
-        registerReceiver(wifiDirectApp.mReceiver, mIntentFilter);
-        wifiDirectApp.mHomeActivity = this;
+        wifiDirectApp.onResume(TAG, this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(TAG, "onPause called");
-        unregisterReceiver(wifiDirectApp.mReceiver);
-        wifiDirectApp.mHomeActivity = null;
+        wifiDirectApp.onPause(TAG);
     }
 
     @Override
     public void onDestroy(){
         super.onDestroy();
-        Log.d(TAG, "onDestroy Called"); //TODO remove later
-        wifiDirectApp.disconnectFromGroup();
-        wifiDirectApp.mIsServer = false;
-        wifiDirectApp.mHomeActivity = null;
+        wifiDirectApp.onDestroy(TAG);
     }
 
     /**
@@ -314,21 +300,20 @@ public class HostGameActivity
     /*
      * @author leonardj (11/4/16)
      */
-    public boolean startMultiplayerGamePlay(Rules rules) {
+    public boolean startMultiplayerGamePlay(final Rules rules) {
         Log.d(TAG, "startMultiplayerGamePlay");
         if(!wifiDirectApp.mP2pConnected ){
             Toast.makeText(this, "You are not connected to anyone",
                     Toast.LENGTH_SHORT).show();
             return false;
         }
-        rulesForGame = rules;//TODO -> remove this line and just send rules along
         runOnUiThread(new Runnable() {
             @Override public void run() {
                 Intent i = wifiDirectApp.
                         getLaunchActivityIntent(
                                 GamePlayActivity.class, null);
-                i.putExtra("Rules", new Gson().toJson(rulesForGame));
-                i.putExtra("GameMode",false);
+                    i.putExtra("Rules", new Gson().toJson(rules));
+                    i.putExtra("GameMode",false);
                 startActivity(i);
             }
         });
