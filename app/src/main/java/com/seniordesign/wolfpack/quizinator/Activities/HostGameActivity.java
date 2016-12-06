@@ -198,36 +198,9 @@ public class HostGameActivity
     @Override
     public void onDestroy(){
         super.onDestroy();
-
         Log.d(TAG, "onDestroy Called"); //TODO remove later
-
-        wifiDirectApp.mP2pMan.requestGroupInfo(wifiDirectApp.mP2pChannel, new WifiP2pManager.GroupInfoListener() {
-            @Override
-            public void onGroupInfoAvailable(WifiP2pGroup group) {
-                if (group != null) {
-                    Log.d(TAG, "group != null");
-                    wifiDirectApp.mP2pMan.removeGroup(wifiDirectApp.mP2pChannel, new WifiP2pManager.ActionListener() {
-                        @Override
-                        public void onSuccess() {
-                            Log.d(TAG, "removeGroup Success");
-                        }
-
-                        @Override
-                        public void onFailure(int reason) {
-                            Log.d(TAG, "removeGroup Fail: " + reason);
-                        }
-                    });
-                }
-            }
-        });
-
+        wifiDirectApp.disconnectFromGroup();
         wifiDirectApp.mHomeActivity = null;
-
-
-
-//        wifiDirectApp.mP2pInfo.isGroupOwner = false;
-        //unregisterReceiver(wifiDirectApp.mReceiver);
-        //wifiDirectApp.mP2pMan.removeGroup(wifiDirectApp.mP2pChannel, null);
     }
 
     /**

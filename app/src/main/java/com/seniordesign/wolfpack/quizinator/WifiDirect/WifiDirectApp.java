@@ -3,6 +3,7 @@ package com.seniordesign.wolfpack.quizinator.WifiDirect;
 import android.app.Application;
 import android.content.Intent;
 import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pGroup;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Message;
@@ -135,6 +136,47 @@ public class WifiDirectApp extends Application {
             Log.d(TAG, "getConnectedPeer: Device returned" + peer.toString()); //TODO Remove later, for debug purposes
         }
         return peer;
+    }
+
+    /*
+     * @author kuczynskij (10/26/2016)
+     */
+    public List<WifiP2pDevice> getConnectedPeers() {
+        Log.d(TAG, "getConnectedPeers: Start"); //TODO Remove later, for debug purposes
+        ArrayList<WifiP2pDevice> peers = new ArrayList<>();
+        for (WifiP2pDevice d : mPeers) {
+            if (d.status == WifiP2pDevice.CONNECTED) {
+                peers.add(d);
+                Log.d(TAG, "getConnectedPeers: Device Connected" + d.toString()); //TODO Remove later, for debug purposes
+            }
+        }
+        return peers;
+    }
+
+    public void disconnectFromGroup() {
+        if (mP2pMan == null || mP2pChannel == null) {
+            return;
+        }
+
+        mP2pMan.requestGroupInfo(mP2pChannel, new WifiP2pManager.GroupInfoListener() {
+            @Override
+            public void onGroupInfoAvailable(WifiP2pGroup group) {
+                if (group != null) {
+                    Log.d(TAG, "group != null");
+                    mP2pMan.removeGroup(mP2pChannel, new WifiP2pManager.ActionListener() {
+                        @Override
+                        public void onSuccess() {
+                            Log.d(TAG, "removeGroup Success");
+                        }
+
+                        @Override
+                        public void onFailure(int reason) {
+                            Log.d(TAG, "removeGroup Fail: " + reason);
+                        }
+                    });
+                }
+            }
+        });
     }
 
     /*

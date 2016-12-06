@@ -115,6 +115,15 @@ public class MultiplayerHandler implements GamePlayHandler {
     }
 
     /*
+     * @author leonardj (12/6/16)
+     */
+    @Override
+    public boolean handleDestroy(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
+        properties.getWifiDirectApp().disconnectFromGroup();
+        return true;
+    }
+
+    /*
      * @author farrowc (11/30/2016)
      */
     @Override

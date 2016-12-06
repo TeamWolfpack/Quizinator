@@ -80,13 +80,19 @@ public class GamePlayActivity
         cleanUpOnExit();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        gamePlayHandler.handleDestroy(this, properties);
+        finish();
+    }
+
     /*
      * @author kuczynskij (10/13/2016)
      * @author leonardj (??/??/2016)
      */
     private void cleanUpOnExit() {
         gamePlayHandler.handleCleanup(this, properties);
-        this.finish();
     }
 
     /*
