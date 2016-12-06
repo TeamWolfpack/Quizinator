@@ -18,6 +18,7 @@ import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.Answer;
+import com.seniordesign.wolfpack.quizinator.WifiDirect.Confirmation;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
@@ -121,9 +122,10 @@ public class ManageGameplayActivity extends AppCompatActivity {
         boolean correct = currentCard.getCorrectAnswer().equals(answer.getAnswer());
 
         String playerName = answer.getDeviceName();
-        //TODO send confirmation to the specific player
+        String playerAddress = answer.getAddress();
 
-        ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, String.valueOf(correct));
+        String confirmation = gson.toJson(new Confirmation(playerAddress, correct));
+        ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
         clientsResponded++;
         if(clientsResponded==wifiDirectApp.mPeers.size()){
             sendCard(null);

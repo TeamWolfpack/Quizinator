@@ -293,17 +293,6 @@ public class ConnectionManager {
     }
 
     /**
-     * Client send data into server, server pub to all clients.
-     */
-    public void onDataIn(SocketChannel schannel, String data) {
-        Log.d(TAG, "connection onDataIn : " + data);
-        // push all _other_ clients if the device is the server
-        if (mApp.mIsServer) {
-            publishDataToAllClients(data, schannel);
-        }
-    }
-
-    /**
      * Write byte buf to the socket channel.
      */
     private int writeData(SocketChannel sChannel, String jsonString) {
@@ -346,6 +335,27 @@ public class ConnectionManager {
         }
     }
 
+    /*
+     * @author leonardj (12/5/16)
+     */
+    public void publishDataToSingleClient(String msg,
+                                          String clientAddress) {
+        Log.d(TAG, "publishDataToSingleClient : isServer ? " +
+                mApp.mIsServer + " msg: " + msg);
+        if (!mApp.mIsServer) {
+            return;
+        }
+
+        for (SocketChannel s : mClientChannels.values()) {
+            String peeraddr = s.socket().getInetAddress().getHostAddress();
+            if (peeraddr.equals(clientAddress)) {
+                Log.d(TAG, "publishDataToSingleClient : Server pub data to:  " + peeraddr);
+                writeData(s, msg);
+                return;
+            }
+        }
+    }
+
     /**
      * The device want to push out data.
      *  If the device is client, the only channel is to the server.
@@ -356,8 +366,10 @@ public class ConnectionManager {
         Log.d(TAG, "pushOutData");
         if (!mApp.mIsServer) {   // device is client, can only send
             // to server
+            Log.d(TAG, "Sending to Server");
             sendDataToServer(jsonString);
         } else {
+            Log.d(TAG, "Sending to all Clients");
             // server pub to all clients, msg already appended with
             // sender addr inside send button handler.
             publishDataToAllClients(jsonString, null);

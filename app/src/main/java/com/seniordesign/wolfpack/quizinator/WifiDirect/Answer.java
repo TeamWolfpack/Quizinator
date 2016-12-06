@@ -7,10 +7,12 @@ package com.seniordesign.wolfpack.quizinator.WifiDirect;
 public class Answer {
 
     private String playerName;
+    private String address;
     private String answer;
 
-    public Answer(String deviceName, String answer) {
+    public Answer(String deviceName, String address, String answer) {
         this.playerName = deviceName;
+        this.address = address;
         this.answer = answer;
     }
 
@@ -21,4 +23,6 @@ public class Answer {
     public String getAnswer() {
         return answer;
     }
+
+    public String getAddress() { return address; }
 }

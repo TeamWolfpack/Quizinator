@@ -132,7 +132,12 @@ public class MultiplayerHandler implements GamePlayHandler {
     public void onFragmentInteraction(GamePlayActivity gamePlayActivity, GamePlayProperties properties,String choice) {
         //Send message to host for validation
         choice = choice == null ? "" : choice;
-        Answer answer = new Answer(properties.getWifiDirectApp().mDeviceName, choice);
+        Answer answer = new Answer(
+                properties.getWifiDirectApp().mDeviceName,
+                properties.getWifiDirectApp().mMyAddress,
+                choice
+        );
+
         String json = properties.getGson().toJson(answer);
         ConnectionService.sendMessage(MSG_SEND_ANSWER_ACTIVITY, json);
 
