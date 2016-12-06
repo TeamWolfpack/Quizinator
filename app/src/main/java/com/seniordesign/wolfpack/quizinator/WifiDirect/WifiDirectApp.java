@@ -1,6 +1,5 @@
 package com.seniordesign.wolfpack.quizinator.WifiDirect;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -57,6 +56,8 @@ public class WifiDirectApp extends Application {
     // limit to the latest 50 messages
     JSONArray mMessageArray = new JSONArray();
 
+    public IntentFilter mIntentFilter;
+
     /*
      * @author kuczynskij (10/26/2016)
      */
@@ -64,6 +65,15 @@ public class WifiDirectApp extends Application {
     public void onCreate() {
         Log.d(TAG, "onCreate: Start"); //TODO Remove later, for debug purposes
         super.onCreate();
+        instantiateIntentFilter();
+    }
+
+    private void instantiateIntentFilter(){
+        mIntentFilter = new IntentFilter();
+            mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
+            mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
+            mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
+            mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
     }
 
     /**
@@ -71,9 +81,6 @@ public class WifiDirectApp extends Application {
      * and persists to shared pref.
      *
      * @return true if P2P is enabled on device
-     */
-    /*
-     * @author kuczynskij (10/26/2016)
      */
     public boolean isP2pEnabled() {
         Log.d(TAG, "isP2pEnabled: Start"); //TODO Remove later, for debug purposes
@@ -212,11 +219,10 @@ public class WifiDirectApp extends Application {
     }
 
     public void onResume(String tag,
-                         HostGameActivity activity,
-                         IntentFilter filter){
+                         HostGameActivity activity){
         Log.d(tag, "onResume called");
         mReceiver = new WiFiDirectBroadcastReceiver(this, activity);
-        registerReceiver(mReceiver, filter);
+        registerReceiver(mReceiver, mIntentFilter);
         mHomeActivity = activity;
     }
 

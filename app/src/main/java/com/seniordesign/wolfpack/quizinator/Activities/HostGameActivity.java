@@ -36,7 +36,6 @@ public class HostGameActivity
     private Rules rulesForGame;
 
     private WifiDirectApp wifiDirectApp;
-    private IntentFilter mIntentFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +55,7 @@ public class HostGameActivity
             findViewById(R.id.start_game_settings).setVisibility(View.GONE);
         }
 
+        //TODO -> remove the instantiation of serviceIntent if left unused, still create object
         // If service not started yet, start it.
         Intent serviceIntent =
                 new Intent(this, ConnectionService.class);
@@ -67,12 +67,6 @@ public class HostGameActivity
                 this, getMainLooper(), null);
         wifiDirectApp.mReceiver = new WiFiDirectBroadcastReceiver(
                 wifiDirectApp, this);
-
-        mIntentFilter = new IntentFilter();
-        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
-        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
-        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
-        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
         initiateDiscovery();
     }
@@ -101,13 +95,18 @@ public class HostGameActivity
             Log.d(TAG, "mP2p channel is null");
         }
 
+        discoverPeers(fragment);
+    }
+
+    private void discoverPeers(final DeviceListFragment fragment){
         wifiDirectApp.mP2pMan.discoverPeers(wifiDirectApp.mP2pChannel,
                 new WifiP2pManager.ActionListener() {
-
             @Override
             public void onSuccess() {
                 if (wifiDirectApp.mIsServer) {
-                    wifiDirectApp.mP2pMan.requestGroupInfo(wifiDirectApp.mP2pChannel, new WifiP2pManager.GroupInfoListener() {
+                    wifiDirectApp.mP2pMan.requestGroupInfo(
+                            wifiDirectApp.mP2pChannel,
+                            new WifiP2pManager.GroupInfoListener() {
                         @Override
                         public void onGroupInfoAvailable(WifiP2pGroup group) {
                             if (group != null)
@@ -174,7 +173,7 @@ public class HostGameActivity
     @Override
     public void onResume() {
         super.onResume();
-        wifiDirectApp.onResume(TAG, this, mIntentFilter);
+        wifiDirectApp.onResume(TAG, this);
     }
 
     @Override
