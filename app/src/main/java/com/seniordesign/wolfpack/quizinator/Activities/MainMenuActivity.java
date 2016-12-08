@@ -6,6 +6,7 @@ import android.content.pm.FeatureInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.seniordesign.wolfpack.quizinator.R;
@@ -52,6 +54,11 @@ public class MainMenuActivity extends AppCompatActivity
         // If service not started yet, start it.
         Intent serviceIntent = new Intent(this, ConnectionService.class);
         startService(serviceIntent);  // start the connection service
+
+        //Check if wifiDirect is supported
+        if(!isWifiDirectSupported(this)){
+            ((Button)findViewById(R.id.hostGameButton)).setTextColor(ContextCompat.getColor(this,R.color.colorGrayedOut));
+        }
     }
 
     /*
@@ -139,9 +146,13 @@ public class MainMenuActivity extends AppCompatActivity
      * @author leonardj (10/26/16)
      */
     public void initiateHostGame(View v) {
-        final Intent intent = new Intent(this, HostGameActivity.class);
-        intent.putExtra("isServer", true);
-        startActivity(intent);
+        if(isWifiDirectSupported(this)) {
+            final Intent intent = new Intent(this, HostGameActivity.class);
+            intent.putExtra("isServer", true);
+            startActivity(intent);
+        }else{
+            Toast.makeText(this, "Device is not compatible with P2P hardware and unable to host", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /*
