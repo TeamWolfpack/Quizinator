@@ -72,8 +72,6 @@ public class HostGameActivity
     }
 
     /*
-     * @author leonardj (10/24/16)
-     * @update leonardj (12/2/16)
      *  onStart is called before onResume when resuming the activity.
      *  So by making this a different method, it is only called onCreate.
      */
@@ -192,9 +190,9 @@ public class HostGameActivity
      * Process WIFI_P2P_THIS_DEVICE_CHANGED_ACTION intent, refresh this device.
      */
     public void updateThisDevice(final WifiP2pDevice device){
-        Log.d(TAG, "updateThisDevice: \n" +
-                "     device name: " + device.deviceName + "\n" +
-                "     device address: " + device.deviceAddress);
+//        Log.d(TAG, "updateThisDevice: \n" +
+//                "     device name: " + device.deviceName + "\n" +
+//                "     device address: " + device.deviceAddress);
 
         runOnUiThread(new Runnable() {
             @Override public void run() {
@@ -278,7 +276,7 @@ public class HostGameActivity
      */
     public void onChannelDisconnected() {
         Toast.makeText(this, "Severe! Channel is probably lost permanently. " +
-                "Try Disable/Re-Enable P2P.",Toast.LENGTH_LONG).show();
+                "Try Disable/Re-Enable P2P.", Toast.LENGTH_LONG).show();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("WiFi Direct down, please re-enable WiFi Direct")
                 .setCancelable(true)

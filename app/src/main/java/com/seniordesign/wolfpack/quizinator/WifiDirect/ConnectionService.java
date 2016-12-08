@@ -24,7 +24,6 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Activities.MainMenuActivity;
@@ -34,8 +33,7 @@ import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 /**
  * @creation 10/26/2016
  */
-public class ConnectionService
-        extends Service implements
+public class ConnectionService extends Service implements
         ChannelListener,
         PeerListListener,
         ConnectionInfoListener {  // callback of requestPeers{
@@ -53,8 +51,8 @@ public class ConnectionService
     MainMenuActivity mActivity; // shall I use weak reference here ?
     ConnectionManager mConnMan;
 
-    private void _initialize() {
-        Log.d(TAG, "_initialize: someone requested an instance"); //TODO remove later
+    private void initializeConnectionService() {
+        Log.d(TAG, "initializeConnectionService");
 
         if (_sinstance != null) {
             return;
@@ -78,12 +76,12 @@ public class ConnectionService
     @Override
     public void onCreate() {
         super.onCreate();
-        _initialize();
+        initializeConnectionService();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        _initialize();
+        initializeConnectionService();
         processIntent(intent);
         Log.d(TAG, "onStartCommand: START_STICKY - " + START_STICKY); //TODO remove later
         return START_STICKY;
@@ -238,7 +236,7 @@ public class ConnectionService
      */
     @Override
     public void onPeersAvailable(WifiP2pDeviceList peerList) {
-        Log.d(TAG, "onPeersAvailable: peers available"); //TODO remove later
+        Log.d(TAG, "onPeersAvailable: peers available");
         wifiDirectApp.mPeers.clear();
         wifiDirectApp.mPeers.addAll(peerList.getDeviceList());
         WifiP2pDevice connectedPeer = wifiDirectApp.getConnectedPeer();
@@ -265,11 +263,11 @@ public class ConnectionService
      */
     @Override
     public void onConnectionInfoAvailable(final WifiP2pInfo info) {
-        //Log.d(TAG, "onConnectionInfoAvailable: " + info.groupOwnerAddress.getHostAddress());
+        Log.d(TAG, "onConnectionInfoAvailable: " + info.groupOwnerAddress.getHostAddress());
         if (info.groupFormed && info.isGroupOwner) {
             // XXX server path goes to peer connected.
             //new FileServerAsyncTask(getActivity(), mContentView.findViewById(R.id.status_text)).execute();
-            //PTPLog.d(TAG, "onConnectionInfoAvailable: device is groupOwner: startSocketServer ");
+            //Log.d(TAG, "onConnectionInfoAvailable: device is groupOwner: startSocketServer ");
             // mApp.startSocketServer();
         } else if (info.groupFormed) {
             wifiDirectApp.startSocketClient(info.groupOwnerAddress.getHostAddress());
@@ -311,8 +309,7 @@ public class ConnectionService
      * The main message process loop.
      */
     private void processMessage(Message msg) {
-
-        Log.d(TAG, "processMessage: message - " + msg.toString()); //TODO remove later
+        Log.d(TAG, "processMessage: message - " + msg.toString());
 
         switch (msg.what) {
             case MSG_NULL:
@@ -470,8 +467,10 @@ public class ConnectionService
         mConnMan.publishDataToSingleClient(message, confirmation.getClientAddress());
     }
 
-    /*
-     * @author leonardj (11/4/16)
+    /**
+     * Allows the host to send out a message to end the game for all
+     * players in the game session.
+     * @param data
      */
     private void pushEndOfGameOut(String data) {
         Log.d(TAG, "pushEndOfGameOut: " + data);
@@ -569,8 +568,7 @@ public class ConnectionService
      * Write data in an async task to avoid
      * NetworkOnMainThreadException.
      */
-    public class SendDataAsyncTask
-            extends AsyncTask<Void, Void, Integer> {
+    public class SendDataAsyncTask extends AsyncTask<Void, Void, Integer> {
         private String data;
         private ConnectionManager connman;
 

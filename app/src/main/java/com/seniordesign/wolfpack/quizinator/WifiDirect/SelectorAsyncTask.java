@@ -4,6 +4,7 @@ import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.*;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.ClosedSelectorException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
@@ -37,7 +38,7 @@ public class SelectorAsyncTask extends AsyncTask<Void, Void, Void> {
 
     public SelectorAsyncTask(ConnectionService connservice,
                              Selector selector) {
-        Log.d(TAG, "async task created"); //TODO remove later
+        Log.d(TAG, "SelectorAsyncTask constructor");
         mConnService = connservice;
         mSelector = selector;
     }
@@ -52,32 +53,38 @@ public class SelectorAsyncTask extends AsyncTask<Void, Void, Void> {
         // Wait for events looper
         while (true) {
             try {
-                Log.d(TAG, "select : selector monitoring: ");
+                Log.d(TAG, "select: selector monitoring: ");
                 mSelector.select();   // blocked on waiting for event
-
-                Log.d(TAG, "select : selector evented out: ");
+                //Log.d(TAG, "select: selector evented out: ");
                 // Get list of selection keys with pending
                 // events, and process it.
-                Iterator<SelectionKey> keys =
-                        mSelector.selectedKeys().iterator();
+                Iterator<SelectionKey> keys = mSelector.selectedKeys().iterator();
                 while (keys.hasNext()) {
                     // Get the selection key, and remove it from the
                     // list to indicate that it's being processed
                     SelectionKey selKey = keys.next();
                     keys.remove();
-                    Log.d(TAG, "select : selectionkey: " +
-                            selKey.attachment());
+                    Log.d(TAG, "select : selectionkey: " + selKey.attachment());
 
                     try {
                         // process the selection key.
                         processSelectionKey(mSelector, selKey);
                     } catch (IOException e) {
                         selKey.cancel();
-                        Log.e(TAG, "select : io exception in " +
+                        Log.e(TAG, "select: io exception in " +
                                 "processing selector event: " +
                                 e.toString());
                     }
                 }
+            } catch(IOException e){
+                Log.e(TAG, "IOException in selector: " + e.toString());
+                notifyConnectionService(MSG_SELECT_ERROR, null, null);
+                break;
+            } catch (ClosedSelectorException e){
+                Log.e(TAG, "ClosedSelectorException in selector: " + e.toString());
+                notifyConnectionService(MSG_SELECT_ERROR, null, null);
+
+                break;
             } catch (Exception e) {
                 // catch all exception in select() and the
                 // following ops in mSelector.
@@ -90,9 +97,6 @@ public class SelectorAsyncTask extends AsyncTask<Void, Void, Void> {
 
     /**
      * Process the event popped to the selector.
-     */
-    /*
-     * @author kuczynskij (10/27/2016)
      */
     public void processSelectionKey(Selector selector,
                             SelectionKey selKey) throws IOException {
@@ -261,7 +265,8 @@ public class SelectorAsyncTask extends AsyncTask<Void, Void, Void> {
      * Notify connection manager event.
      */
     private void notifyConnectionService(int what,
-                                         Object obj, Bundle data) {
+                                         Object obj,
+                                         Bundle data) {
         Handler hdl = mConnService.getHandler();
         Message msg = hdl.obtainMessage();
         msg.what = what;

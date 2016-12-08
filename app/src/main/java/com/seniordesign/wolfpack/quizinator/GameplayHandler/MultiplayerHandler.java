@@ -120,6 +120,7 @@ public class MultiplayerHandler implements GamePlayHandler {
     @Override
     public boolean handleDestroy(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         properties.getWifiDirectApp().disconnectFromGroup();
+        properties.getWifiDirectApp().onDestroy("ACT_MGP");
         return true;
     }
 
