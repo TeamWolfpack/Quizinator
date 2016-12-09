@@ -77,21 +77,12 @@ public class GamePlayActivity
     protected void onPause() {
         super.onPause();
         gamePlayHandler.handlePause(this, properties);
-        cleanUpOnExit();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         gamePlayHandler.handleDestroy(this, properties);
-    }
-
-    /*
-     * @author kuczynskij (10/13/2016)
-     * @author leonardj (??/??/2016)
-     */
-    private void cleanUpOnExit() {
-        gamePlayHandler.handleCleanup(this, properties);
     }
 
     /*

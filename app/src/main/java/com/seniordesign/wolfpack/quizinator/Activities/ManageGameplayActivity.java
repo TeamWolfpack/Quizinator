@@ -168,6 +168,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         wifiDirectApp.disconnectFromGroup();
+        wifiDirectApp.mManageActivity = null;
     }
 
     /*
