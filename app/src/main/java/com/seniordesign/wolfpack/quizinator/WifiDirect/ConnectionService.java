@@ -248,8 +248,8 @@ public class ConnectionService extends Service implements
                 wifiDirectApp.startSocketServer();
             } else if (wifiDirectApp.mP2pInfo.groupFormed && connectedPeer != null) {
                 // XXX client path goes to connection info available after connection established.
-                // PTPLog.d(TAG, "onConnectionInfoAvailable: device is client, connect to group owner: startSocketClient ");
-                // mApp.startSocketClient(mApp.mP2pInfo.groupOwnerAddress.getHostAddress());
+                Log.d(TAG, "onConnectionInfoAvailable: device is client, connect to group owner: startSocketClient ");
+                wifiDirectApp.startSocketClient(wifiDirectApp.mP2pInfo.groupOwnerAddress.getHostAddress());
             }
         }
         if (wifiDirectApp.mHomeActivity != null) {

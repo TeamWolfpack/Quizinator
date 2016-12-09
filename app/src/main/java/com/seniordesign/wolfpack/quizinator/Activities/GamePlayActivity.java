@@ -84,7 +84,6 @@ public class GamePlayActivity
     protected void onDestroy() {
         super.onDestroy();
         gamePlayHandler.handleDestroy(this, properties);
-        finish();
     }
 
     /*
@@ -179,6 +178,7 @@ public class GamePlayActivity
         checkGameStatsAgainstHighScoresDB(s);
         intent.putExtra("gameStats", s);
         startActivity(intent);
+        finish();
     }
 
     /*
