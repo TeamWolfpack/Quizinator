@@ -312,6 +312,8 @@ public class ConnectionManager {
 
         for (SocketChannel s : mClientChannels.values()) {
             if (s != incomingChannel) {
+                if (s.socket().getInetAddress() == null)
+                    continue;
                 String peeraddr = s.socket().getInetAddress().getHostAddress();
                 Log.d(TAG, "publishDataToAllClients : Server pub data to:  " + peeraddr);
                 writeData(s, msg);
@@ -331,6 +333,8 @@ public class ConnectionManager {
         }
 
         for (SocketChannel s : mClientChannels.values()) {
+            if (s.socket().getInetAddress() == null)
+                continue;
             String peeraddr = s.socket().getInetAddress().getHostAddress();
             if (peeraddr.equals(clientAddress)) {
                 Log.d(TAG, "publishDataToSingleClient : Server pub data to:  " + peeraddr);
