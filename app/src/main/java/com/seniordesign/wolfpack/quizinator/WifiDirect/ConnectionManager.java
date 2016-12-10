@@ -324,12 +324,12 @@ public class ConnectionManager {
     /*
      * @author leonardj (12/5/16)
      */
-    public void publishDataToSingleClient(String msg,
+    public boolean publishDataToSingleClient(String msg,
                                           String clientAddress) {
         Log.d(TAG, "publishDataToSingleClient : isServer ? " +
                 mApp.mIsServer + " msg: " + msg);
         if (!mApp.mIsServer) {
-            return;
+            return false;
         }
 
         for (SocketChannel s : mClientChannels.values()) {
@@ -339,9 +339,10 @@ public class ConnectionManager {
             if (peeraddr.equals(clientAddress)) {
                 Log.d(TAG, "publishDataToSingleClient : Server pub data to:  " + peeraddr);
                 writeData(s, msg);
-                return;
+                return true;
             }
         }
+        return false;
     }
 
     /**
