@@ -18,6 +18,7 @@ import android.net.wifi.p2p.WifiP2pManager.ChannelListener;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.os.AsyncTask;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -248,8 +249,8 @@ public class ConnectionService extends Service implements
                 wifiDirectApp.startSocketServer();
             } else if (wifiDirectApp.mP2pInfo.groupFormed && connectedPeer != null) {
                 // XXX client path goes to connection info available after connection established.
-                Log.d(TAG, "onConnectionInfoAvailable: device is client, connect to group owner: startSocketClient ");
-                wifiDirectApp.startSocketClient(wifiDirectApp.mP2pInfo.groupOwnerAddress.getHostAddress());
+                // PTPLog.d(TAG, "onConnectionInfoAvailable: device is client, connect to group owner: startSocketClient ");
+                // mApp.startSocketClient(mApp.mP2pInfo.groupOwnerAddress.getHostAddress());
             }
         }
         if (wifiDirectApp.mHomeActivity != null) {
@@ -284,7 +285,7 @@ public class ConnectionService extends Service implements
 
     @Override
     public IBinder onBind(Intent arg0) {
-        return null;
+        return new Binder();
     }
 
     public Handler getHandler() {
