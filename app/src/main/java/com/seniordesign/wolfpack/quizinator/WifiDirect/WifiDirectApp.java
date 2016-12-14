@@ -223,5 +223,7 @@ public class WifiDirectApp extends Application {
         Log.d(tag, "onDestroy called");
         disconnectFromGroup();
         mHomeActivity = null;
+        mGameplayActivity = null;
+        mManageActivity = null;
     }
 }

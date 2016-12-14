@@ -113,7 +113,7 @@ public class GamePlayActivity
                         getSupportFragmentManager().
                                 beginTransaction()
                                 .replace(R.id.answerArea, new TrueFalseChoiceAnswerFragment())
-                                .commitNow();
+                                .commitNowAllowingStateLoss();
                         ((TextView) findViewById(R.id.questionTextArea))
                                 .setText(card.getQuestion());
                         getSupportFragmentManager().executePendingTransactions();
@@ -132,8 +132,7 @@ public class GamePlayActivity
                         getSupportFragmentManager().
                                 beginTransaction()
                                 .replace(R.id.answerArea,mcFragment)
-                                .commitNow();
-
+                                .commitNowAllowingStateLoss();
                         ((TextView) findViewById(R.id.questionTextArea))
                                 .setText(card.getQuestion());
 
@@ -148,6 +147,14 @@ public class GamePlayActivity
 
 
         }
+    }
+
+    /*
+     * @author leonardj (12/14/16)
+     */
+    public void endGamePlay() {
+        long time = properties.getRules().getCardDisplayTime() + properties.getCardsPlayed();
+        endGamePlay(time);
     }
 
     /*

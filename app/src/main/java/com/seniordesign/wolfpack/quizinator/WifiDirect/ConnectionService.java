@@ -192,6 +192,11 @@ public class ConnectionService extends Service implements
             mConnMan.closeClient();
             if (wifiDirectApp.mHomeActivity != null)
                 wifiDirectApp.mHomeActivity.resetData();
+
+            //End gameplay if client
+            if (wifiDirectApp.mGameplayActivity != null)
+                wifiDirectApp.mGameplayActivity.endGamePlay();
+
             return false;
         }
     }
