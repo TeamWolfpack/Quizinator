@@ -155,8 +155,8 @@ public class ManageGameplayActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        gameplayTimerRunning.cancel();
-        gameplayTimerStatic.cancel();
+        //gameplayTimerRunning.cancel();
+        //gameplayTimerStatic.cancel();
         deckDataSource.close();
         rulesDataSource.close();
     }
