@@ -104,17 +104,13 @@ public class ConnectionManager {
     public SocketChannel connectTo(String hostname, int port)
             throws Exception {
         Log.d(TAG, "connectTo");
-        SocketChannel sChannel = null;
-
         // connect to the remote host, port
-        sChannel = createSocketChannel(hostname, port);
-
+        SocketChannel sChannel = createSocketChannel(hostname, port);
         // Before the socket is usable, the connection must
         // be completed. finishConnect().
         while (!sChannel.finishConnect()) {
             // blocking spin lock
         }
-
         // Socket channel is now ready to use
         return sChannel;
     }
@@ -153,7 +149,6 @@ public class ConnectionManager {
             mClientSelector = null;
             mClientSocketChannel = null;
             mApp.setMyAddress(null);
-
             return -1;
         }
     }
@@ -164,41 +159,30 @@ public class ConnectionManager {
      * key which identifies the selector/socket channel pair.
      */
     public int startServerSelector() {
-        Log.d(TAG, "startServerSelector"); //TODO remove later
+        Log.d(TAG, "startServerSelector");
         closeClient();   // close linger client, if exists.
-
         try {
             // create server socket and register to selector to listen OP_ACCEPT event
             // BindException if already bind.
-            Log.d(TAG, "startServerSelector: before createServerSocketChanel"); //TODO remove later
-            ServerSocketChannel sServerChannel = createServerSocketChannel(1080);
-            Log.d(TAG, "startServerSelector: createServerSocketChanel"); //TODO remove later
+            ServerSocketChannel sServerChannel =
+                    createServerSocketChannel(1080);
             mServerSocketChannel = sServerChannel;
             mServerAddr = mServerSocketChannel.socket().getInetAddress().getHostAddress();
-            Log.d(TAG, "startServerSelector: Before if"); //TODO remove later
             if ("0.0.0.0".equals(mServerAddr)) {
                 mServerAddr = "Master";
             }
             ((WifiDirectApp) mService.getApplication()).setMyAddress(mServerAddr);
-
-            Log.d(TAG, "startServerSelector: Before open"); //TODO remove later
             mServerSelector = Selector.open();
-            Log.d(TAG, "startServerSelector: Before register"); //TODO remove later
             SelectionKey acceptKey = sServerChannel.register(
                     mServerSelector, SelectionKey.OP_ACCEPT);
             acceptKey.attach("accept_channel");
             mApp.mIsServer = true;
-
-            //SocketChannel sChannel = createSocketChannel("hostname.com", 80);
-            //sChannel.register(selector, SelectionKey.OP_CONNECT);  // listen to connect event.
-            Log.d(TAG, "startServerSelector : started: " +
-                    sServerChannel.socket().getLocalSocketAddress().toString()); //TODO remove later
-
+            Log.d(TAG, "startServerSelector: started " +
+                    sServerChannel.socket().getLocalSocketAddress().toString());
             new SelectorAsyncTask(mService, mServerSelector).execute();
             return 0;
-
         } catch (Exception e) {
-            Log.e(TAG, "startServerSelector : exception: " + e.toString());
+            Log.e(TAG, "startServerSelector: exception " + e.toString());
             return -1;
         }
     }
@@ -207,7 +191,7 @@ public class ConnectionManager {
      * Handle selector error, re-start.
      */
     public void onSelectorError() {
-        Log.e(TAG, " onSelectorError : do nothing for now.");
+        Log.e(TAG, "onSelectorError: do nothing for now.");
         // new SelectorAsyncTask(mService, mSelector).execute();
     }
 
@@ -223,7 +207,7 @@ public class ConnectionManager {
                 mServerSocketChannel.close();
                 mServerSelector.close();
             } catch (Exception e) {
-
+                Log.e(TAG, "exception: " + e.toString());
             } finally {
                 mApp.mIsServer = false;
                 mServerSocketChannel = null;
@@ -293,17 +277,6 @@ public class ConnectionManager {
     }
 
     /**
-     * Client send data into server, server pub to all clients.
-     */
-    public void onDataIn(SocketChannel schannel, String data) {
-        Log.d(TAG, "connection onDataIn : " + data);
-        // push all _other_ clients if the device is the server
-        if (mApp.mIsServer) {
-            publishDataToAllClients(data, schannel);
-        }
-    }
-
-    /**
      * Write byte buf to the socket channel.
      */
     private int writeData(SocketChannel sChannel, String jsonString) {
@@ -339,11 +312,37 @@ public class ConnectionManager {
 
         for (SocketChannel s : mClientChannels.values()) {
             if (s != incomingChannel) {
+                if (s.socket().getInetAddress() == null)
+                    continue;
                 String peeraddr = s.socket().getInetAddress().getHostAddress();
                 Log.d(TAG, "publishDataToAllClients : Server pub data to:  " + peeraddr);
                 writeData(s, msg);
             }
         }
+    }
+
+    /*
+     * @author leonardj (12/5/16)
+     */
+    public boolean publishDataToSingleClient(String msg,
+                                          String clientAddress) {
+        Log.d(TAG, "publishDataToSingleClient : isServer ? " +
+                mApp.mIsServer + " msg: " + msg);
+        if (!mApp.mIsServer) {
+            return false;
+        }
+
+        for (SocketChannel s : mClientChannels.values()) {
+            if (s.socket().getInetAddress() == null)
+                continue;
+            String peeraddr = s.socket().getInetAddress().getHostAddress();
+            if (peeraddr.equals(clientAddress)) {
+                Log.d(TAG, "publishDataToSingleClient : Server pub data to:  " + peeraddr);
+                writeData(s, msg);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -356,8 +355,10 @@ public class ConnectionManager {
         Log.d(TAG, "pushOutData");
         if (!mApp.mIsServer) {   // device is client, can only send
             // to server
+            Log.d(TAG, "Sending to Server");
             sendDataToServer(jsonString);
         } else {
+            Log.d(TAG, "Sending to all Clients");
             // server pub to all clients, msg already appended with
             // sender addr inside send button handler.
             publishDataToAllClients(jsonString, null);

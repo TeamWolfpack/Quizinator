@@ -19,6 +19,8 @@ import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_SEND
 
 public class MultiplayerHandler implements GamePlayHandler {
 
+    long timeTaken;
+
     /*
      * @author farrowc (11/30/2016)
      */
@@ -54,9 +56,9 @@ public class MultiplayerHandler implements GamePlayHandler {
     public long handleAnswerClicked(GamePlayActivity gamePlayActivity, GamePlayProperties properties, String answer) {
         if(properties.getHasAnswered())
             return 0;
-        properties.setHasAnswered(true);
         properties.getCardTimerAreaBackgroundRunning().cancel();
         onFragmentInteraction(gamePlayActivity, properties, answer);
+        properties.setHasAnswered(true);
         return 0;
     }
 
@@ -75,6 +77,7 @@ public class MultiplayerHandler implements GamePlayHandler {
     @Override
     public long handleNextCard(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         properties.setHasAnswered(false);
+        timeTaken = System.nanoTime();
         gamePlayActivity.showCard(properties.getCurrentCard());
         properties.setCardsPlayed(properties.getCardsPlayed()+1);
         properties.setCardTimerRunning(properties.getCardTimerStatic().start());
@@ -115,6 +118,15 @@ public class MultiplayerHandler implements GamePlayHandler {
     }
 
     /*
+     * @author leonardj (12/6/16)
+     */
+    @Override
+    public boolean handleDestroy(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
+        properties.getWifiDirectApp().onDestroy("ACT_MGP");
+        return true;
+    }
+
+    /*
      * @author farrowc (11/30/2016)
      */
     @Override
@@ -132,7 +144,17 @@ public class MultiplayerHandler implements GamePlayHandler {
     public void onFragmentInteraction(GamePlayActivity gamePlayActivity, GamePlayProperties properties,String choice) {
         //Send message to host for validation
         choice = choice == null ? "" : choice;
-        Answer answer = new Answer(properties.getWifiDirectApp().mDeviceName, choice);
+        timeTaken = System.nanoTime() - timeTaken;
+        Answer answer = new Answer(
+                properties.getWifiDirectApp().mDeviceName,
+                properties.getWifiDirectApp().mMyAddress,
+                choice,
+                timeTaken
+
+        );
+        if(properties.getHasAnswered())
+            return;
+        timeTaken = System.nanoTime();
         String json = properties.getGson().toJson(answer);
         ConnectionService.sendMessage(MSG_SEND_ANSWER_ACTIVITY, json);
 

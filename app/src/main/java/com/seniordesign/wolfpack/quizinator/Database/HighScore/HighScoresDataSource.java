@@ -108,6 +108,10 @@ public class HighScoresDataSource {
      * @author kuczynskij (10/10/2016)
      */
     public List<HighScores> getAllHighScores() {
+        if (!database.isOpen()) {
+            open();
+        }
+
         List<HighScores> items = new ArrayList<HighScores>();
         Cursor cursor = database.query(HighScoresSQLiteHelper.TABLE_HIGHSCORES,
                 allColumns, null, null, null, null, null);

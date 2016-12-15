@@ -18,13 +18,13 @@ import android.net.wifi.p2p.WifiP2pManager.ChannelListener;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.os.AsyncTask;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Activities.MainMenuActivity;
@@ -34,8 +34,7 @@ import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 /**
  * @creation 10/26/2016
  */
-public class ConnectionService
-        extends Service implements
+public class ConnectionService extends Service implements
         ChannelListener,
         PeerListListener,
         ConnectionInfoListener {  // callback of requestPeers{
@@ -53,8 +52,8 @@ public class ConnectionService
     MainMenuActivity mActivity; // shall I use weak reference here ?
     ConnectionManager mConnMan;
 
-    private void _initialize() {
-        Log.d(TAG, "_initialize: someone requested an instance"); //TODO remove later
+    private void initializeConnectionService() {
+        Log.d(TAG, "initializeConnectionService");
 
         if (_sinstance != null) {
             return;
@@ -78,12 +77,12 @@ public class ConnectionService
     @Override
     public void onCreate() {
         super.onCreate();
-        _initialize();
+        initializeConnectionService();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        _initialize();
+        initializeConnectionService();
         processIntent(intent);
         Log.d(TAG, "onStartCommand: START_STICKY - " + START_STICKY); //TODO remove later
         return START_STICKY;
@@ -193,6 +192,11 @@ public class ConnectionService
             mConnMan.closeClient();
             if (wifiDirectApp.mHomeActivity != null)
                 wifiDirectApp.mHomeActivity.resetData();
+
+            //End gameplay if client
+            if (wifiDirectApp.mGameplayActivity != null)
+                wifiDirectApp.mGameplayActivity.endGamePlay();
+
             return false;
         }
     }
@@ -201,11 +205,13 @@ public class ConnectionService
      * @author kuczynskij (10/26/2016)
      */
     private boolean deviceDetailsHaveChanged(Intent intent) {
-        wifiDirectApp.mThisDevice = intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
-        wifiDirectApp.mDeviceName = wifiDirectApp.mThisDevice.deviceName;
-        if (wifiDirectApp.mHomeActivity != null) {
-            wifiDirectApp.mHomeActivity.updateThisDevice(wifiDirectApp.mThisDevice);
-            return true;
+        if(intent.hasExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE)){
+            wifiDirectApp.mThisDevice = intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
+            wifiDirectApp.mDeviceName = wifiDirectApp.mThisDevice.deviceName;
+            if (wifiDirectApp.mHomeActivity != null) {
+                wifiDirectApp.mHomeActivity.updateThisDevice(wifiDirectApp.mThisDevice);
+                return true;
+            }
         }
         return false;
     }
@@ -236,7 +242,7 @@ public class ConnectionService
      */
     @Override
     public void onPeersAvailable(WifiP2pDeviceList peerList) {
-        Log.d(TAG, "onPeersAvailable: peers available"); //TODO remove later
+        Log.d(TAG, "onPeersAvailable: peers available");
         wifiDirectApp.mPeers.clear();
         wifiDirectApp.mPeers.addAll(peerList.getDeviceList());
         WifiP2pDevice connectedPeer = wifiDirectApp.getConnectedPeer();
@@ -263,11 +269,11 @@ public class ConnectionService
      */
     @Override
     public void onConnectionInfoAvailable(final WifiP2pInfo info) {
-        //Log.d(TAG, "onConnectionInfoAvailable: " + info.groupOwnerAddress.getHostAddress());
+        Log.d(TAG, "onConnectionInfoAvailable: " + info.groupOwnerAddress.getHostAddress());
         if (info.groupFormed && info.isGroupOwner) {
             // XXX server path goes to peer connected.
             //new FileServerAsyncTask(getActivity(), mContentView.findViewById(R.id.status_text)).execute();
-            //PTPLog.d(TAG, "onConnectionInfoAvailable: device is groupOwner: startSocketServer ");
+            //Log.d(TAG, "onConnectionInfoAvailable: device is groupOwner: startSocketServer ");
             // mApp.startSocketServer();
         } else if (info.groupFormed) {
             wifiDirectApp.startSocketClient(info.groupOwnerAddress.getHostAddress());
@@ -284,7 +290,7 @@ public class ConnectionService
 
     @Override
     public IBinder onBind(Intent arg0) {
-        return null;
+        return new Binder();
     }
 
     public Handler getHandler() {
@@ -309,8 +315,7 @@ public class ConnectionService
      * The main message process loop.
      */
     private void processMessage(Message msg) {
-
-        Log.d(TAG, "processMessage: message - " + msg.toString()); //TODO remove later
+        Log.d(TAG, "processMessage: message - " + msg.toString());
 
         switch (msg.what) {
             case MSG_NULL:
@@ -460,12 +465,18 @@ public class ConnectionService
     private void pushConfirmationOut(String data) {
         Log.d(TAG, "pushConfirmationOut: " + data);
 
-        String message = createQuizMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, data);
-        mConnMan.pushOutData(message);
+        Confirmation confirmation = new Gson().fromJson(data, Confirmation.class);
+        String message = createQuizMessage(
+                MSG_ANSWER_CONFIRMATION_ACTIVITY,
+                String.valueOf(confirmation.getConfirmation())
+        );
+        mConnMan.publishDataToSingleClient(message, confirmation.getClientAddress());
     }
 
-    /*
-     * @author leonardj (11/4/16)
+    /**
+     * Allows the host to send out a message to end the game for all
+     * players in the game session.
+     * @param data
      */
     private void pushEndOfGameOut(String data) {
         Log.d(TAG, "pushEndOfGameOut: " + data);
@@ -480,7 +491,6 @@ public class ConnectionService
     private String onPullInData(SocketChannel schannel, Bundle b){
         String data = b.getString("DATA");
         Log.d(TAG, "onDataIn : recvd msg : " + data);
-        mConnMan.onDataIn(schannel, data);  // pub to all client if this device is server.
 
         Gson gson = new Gson();
         List<QuizMessage> messages = parseInData(data);
@@ -502,6 +512,7 @@ public class ConnectionService
                     break;
                 case MSG_PLAYER_READY_ACTIVITY:
                     String deviceName = message;
+                    Log.d(TAG, "deviceName - " + deviceName);
                     wifiDirectApp.mManageActivity.deviceIsReady(deviceName);
                     break;
                 case MSG_SEND_ANSWER_ACTIVITY:
@@ -563,8 +574,7 @@ public class ConnectionService
      * Write data in an async task to avoid
      * NetworkOnMainThreadException.
      */
-    public class SendDataAsyncTask
-            extends AsyncTask<Void, Void, Integer> {
+    public class SendDataAsyncTask extends AsyncTask<Void, Void, Integer> {
         private String data;
         private ConnectionManager connman;
 

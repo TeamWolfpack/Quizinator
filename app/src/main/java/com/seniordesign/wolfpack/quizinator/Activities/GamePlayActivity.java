@@ -77,16 +77,12 @@ public class GamePlayActivity
     protected void onPause() {
         super.onPause();
         gamePlayHandler.handlePause(this, properties);
-        cleanUpOnExit();
     }
 
-    /*
-     * @author kuczynskij (10/13/2016)
-     * @author leonardj (??/??/2016)
-     */
-    private void cleanUpOnExit() {
-        gamePlayHandler.handleCleanup(this, properties);
-        this.finish();
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        gamePlayHandler.handleDestroy(this, properties);
     }
 
     /*
@@ -117,7 +113,7 @@ public class GamePlayActivity
                         getSupportFragmentManager().
                                 beginTransaction()
                                 .replace(R.id.answerArea, new TrueFalseChoiceAnswerFragment())
-                                .commitNow();
+                                .commitNowAllowingStateLoss();
                         ((TextView) findViewById(R.id.questionTextArea))
                                 .setText(card.getQuestion());
                         getSupportFragmentManager().executePendingTransactions();
@@ -136,8 +132,7 @@ public class GamePlayActivity
                         getSupportFragmentManager().
                                 beginTransaction()
                                 .replace(R.id.answerArea,mcFragment)
-                                .commitNow();
-
+                                .commitNowAllowingStateLoss();
                         ((TextView) findViewById(R.id.questionTextArea))
                                 .setText(card.getQuestion());
 
@@ -152,6 +147,14 @@ public class GamePlayActivity
 
 
         }
+    }
+
+    /*
+     * @author leonardj (12/14/16)
+     */
+    public void endGamePlay() {
+        long time = properties.getRules().getCardDisplayTime() + properties.getCardsPlayed();
+        endGamePlay(time);
     }
 
     /*
@@ -173,6 +176,7 @@ public class GamePlayActivity
         checkGameStatsAgainstHighScoresDB(s);
         intent.putExtra("gameStats", s);
         startActivity(intent);
+        finish();
     }
 
     /*
