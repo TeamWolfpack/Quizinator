@@ -164,6 +164,9 @@ public class ConnectionService extends Service implements
         // asynchronous call and the calling activity is
         // notified with callback on
         // PeerListListener.onPeersAvailable()
+        if(wifiDirectApp.mManageActivity!=null){
+            wifiDirectApp.mManageActivity.validateAnswer(null);
+        }
         if (wifiDirectApp.mP2pMan != null) {
             wifiDirectApp.mP2pMan.requestPeers(wifiDirectApp.mP2pChannel, this);
             return true;

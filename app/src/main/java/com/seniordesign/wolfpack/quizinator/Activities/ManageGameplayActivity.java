@@ -128,14 +128,14 @@ public class ManageGameplayActivity extends AppCompatActivity {
      * @author leonard (11/5/2016)
      */
     public void validateAnswer(Answer answer) {
-        boolean correct = currentCard.getCorrectAnswer().equals(answer.getAnswer());
+        //boolean correct = currentCard.getCorrectAnswer().equals(answer.getAnswer());
 
         //String playerName = answer.getDeviceName();
         //String playerAddress = answer.getAddress();
 
         //String confirmation = gson.toJson(new Confirmation(playerAddress, correct));
         //ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
-        if(answers!=null) {
+        if(answers!=null && answer!= null) {
             answers.add(answer);
         }
         clientsResponded++;
@@ -143,11 +143,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
         Log.d(TAG, "Clients responded: " + clientsResponded);
         Log.d(TAG, "Number of Peers: " + wifiDirectApp.mPeers.size());
 
-        if(clientsResponded>=wifiDirectApp.getConnectedPeers().size()){
-            selectAndRespondToFastestAnswer();
-            sendCard(null);
-            clientsResponded=0;
-        }
+        checkClientCount();
     }
 
     /*
@@ -236,5 +232,14 @@ public class ManageGameplayActivity extends AppCompatActivity {
         }
         answers = new ArrayList<>();
         return fastestCorrectAnswer == null ? -1 : fastestCorrectAnswer.getTimeTaken();
+    }
+
+    public int checkClientCount() {
+        if (clientsResponded >= wifiDirectApp.getConnectedPeers().size()) {
+            selectAndRespondToFastestAnswer();
+            sendCard(null);
+            clientsResponded = 0;
+        }
+        return wifiDirectApp.getConnectedPeers().size();
     }
 }
