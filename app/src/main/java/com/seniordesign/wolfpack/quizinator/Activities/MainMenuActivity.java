@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.FeatureInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -148,6 +149,7 @@ public class MainMenuActivity extends AppCompatActivity
      */
     public void initiateHostGame(View v) {
         if(isWifiDirectSupported(this)) {
+            enableWifi();
             final Intent intent = new Intent(this, HostGameActivity.class);
             intent.putExtra("isServer", true);
             startActivity(intent);
@@ -161,6 +163,7 @@ public class MainMenuActivity extends AppCompatActivity
      */
     public void initiateJoinGame(View v) {
         if(isWifiDirectSupported(this)) {
+            enableWifi();
             final Intent intent = new Intent(this, HostGameActivity.class);
             intent.putExtra("isServer", false);
             startActivity(intent);
@@ -180,6 +183,12 @@ public class MainMenuActivity extends AppCompatActivity
         return false;
     }
 
-
+    private void enableWifi(){
+        WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        if(!wifi.isWifiEnabled()) {
+            wifi.setWifiEnabled(true);
+            Toast.makeText(this, R.string.enabling_wifi, Toast.LENGTH_LONG).show();
+        }
+    }
 
 }

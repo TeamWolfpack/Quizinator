@@ -25,6 +25,7 @@
     <string name="game_over">Game Over</string>
     <string name="main_menu">Main Menu</string>
 
+    <string name="enabling_wifi">Enabling Wifi...</string>
     <string name="p2p_off_warning">P2P is disabled</string>
     <string name="yes">yes</string>
     <string name="no">no</string>
