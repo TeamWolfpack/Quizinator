@@ -58,6 +58,7 @@ public class MainMenuActivity extends AppCompatActivity
         //Check if wifiDirect is supported
         if(!isWifiDirectSupported(this)){
             ((Button)findViewById(R.id.hostGameButton)).setTextColor(ContextCompat.getColor(this,R.color.colorGrayedOut));
+            ((Button)findViewById(R.id.joinGameButton)).setTextColor(ContextCompat.getColor(this,R.color.colorGrayedOut));
         }
     }
 
@@ -159,9 +160,13 @@ public class MainMenuActivity extends AppCompatActivity
      * @author leonardj (10/26/16)
      */
     public void initiateJoinGame(View v) {
-        final Intent intent = new Intent(this, HostGameActivity.class);
-        intent.putExtra("isServer", false);
-        startActivity(intent);
+        if(isWifiDirectSupported(this)) {
+            final Intent intent = new Intent(this, HostGameActivity.class);
+            intent.putExtra("isServer", false);
+            startActivity(intent);
+        }else{
+            Toast.makeText(this, "Device is not compatible with P2P hardware and unable to join", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private boolean isWifiDirectSupported(Context ctx) {
