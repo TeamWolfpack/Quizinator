@@ -5,6 +5,10 @@
         <item
             android:id="@+id/nav_quiz_bowl_rules"
             android:title="@string/quiz_bowl_rules" />
+        <item
+            android:id="@+id/nav_P2P_compatibility_check"
+            android:title="Check P2P Compatibility"
+            />
     <!--
         <item
             android:id="@+id/nav_application_settings"

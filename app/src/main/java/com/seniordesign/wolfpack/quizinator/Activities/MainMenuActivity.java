@@ -1,8 +1,12 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.FeatureInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,6 +16,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
@@ -48,6 +54,12 @@ public class MainMenuActivity extends AppCompatActivity
         // If service not started yet, start it.
         Intent serviceIntent = new Intent(this, ConnectionService.class);
         startService(serviceIntent);  // start the connection service
+
+        //Check if wifiDirect is supported
+        if(!isWifiDirectSupported(this)){
+            ((Button)findViewById(R.id.hostGameButton)).setTextColor(ContextCompat.getColor(this,R.color.colorGrayedOut));
+            ((Button)findViewById(R.id.joinGameButton)).setTextColor(ContextCompat.getColor(this,R.color.colorGrayedOut));
+        }
     }
 
     /*
@@ -104,6 +116,14 @@ public class MainMenuActivity extends AppCompatActivity
             Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
             startActivity(launchBrowser);
         }
+        else if(id == R.id.nav_P2P_compatibility_check) {
+            if(isWifiDirectSupported(this)){
+                Toast.makeText(this, "Device is compatible with P2P", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(this, "Device is not compatible with P2P", Toast.LENGTH_SHORT).show();
+            }
+        }
         /*
         else if (id == R.id.nav_application_settings) {
             // For later sprints
@@ -127,17 +147,39 @@ public class MainMenuActivity extends AppCompatActivity
      * @author leonardj (10/26/16)
      */
     public void initiateHostGame(View v) {
-        final Intent intent = new Intent(this, HostGameActivity.class);
-        intent.putExtra("isServer", true);
-        startActivity(intent);
+        if(isWifiDirectSupported(this)) {
+            final Intent intent = new Intent(this, HostGameActivity.class);
+            intent.putExtra("isServer", true);
+            startActivity(intent);
+        }else{
+            Toast.makeText(this, "Device is not compatible with P2P hardware and unable to host", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /*
      * @author leonardj (10/26/16)
      */
     public void initiateJoinGame(View v) {
-        final Intent intent = new Intent(this, HostGameActivity.class);
-        intent.putExtra("isServer", false);
-        startActivity(intent);
+        if(isWifiDirectSupported(this)) {
+            final Intent intent = new Intent(this, HostGameActivity.class);
+            intent.putExtra("isServer", false);
+            startActivity(intent);
+        }else{
+            Toast.makeText(this, "Device is not compatible with P2P hardware and unable to join", Toast.LENGTH_SHORT).show();
+        }
     }
+
+    private boolean isWifiDirectSupported(Context ctx) {
+        PackageManager pm = ctx.getPackageManager();
+        FeatureInfo[] features = pm.getSystemAvailableFeatures();
+        for (FeatureInfo info : features) {
+            if (info != null && info.name != null && info.name.equalsIgnoreCase("android.hardware.wifi.direct")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
 }
