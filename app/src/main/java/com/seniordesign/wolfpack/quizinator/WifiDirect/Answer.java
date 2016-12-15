@@ -9,11 +9,13 @@ public class Answer {
     private String playerName;
     private String address;
     private String answer;
+    private long timeTaken;
 
-    public Answer(String deviceName, String address, String answer) {
+    public Answer(String deviceName, String address, String answer, long timeTaken) {
         this.playerName = deviceName;
         this.address = address;
         this.answer = answer;
+        this.timeTaken = timeTaken;
     }
 
     public String getDeviceName() {
@@ -25,4 +27,6 @@ public class Answer {
     }
 
     public String getAddress() { return address; }
+
+    public long getTimeTaken() { return timeTaken; }
 }

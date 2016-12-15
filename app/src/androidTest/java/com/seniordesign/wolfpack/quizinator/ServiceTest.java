@@ -54,7 +54,7 @@ public class ServiceTest {
 
     @Test
     public void testSingleMessage() {
-        String answer = gson.toJson(new Answer("Test Name", "Test Address", "0"));
+        String answer = gson.toJson(new Answer("Test Name", "Test Address", "0", System.nanoTime()));
         String message1 = gson.toJson(new QuizMessage(
                 MSG_SEND_ANSWER_ACTIVITY, answer));
 
@@ -67,7 +67,7 @@ public class ServiceTest {
 
     @Test
     public void testTwoMessages() {
-        String answer = gson.toJson(new Answer("Test Name", "Test Address", "0"));
+        String answer = gson.toJson(new Answer("Test Name", "Test Address", "0", System.nanoTime()));
         String confirmation = gson.toJson(new Confirmation("Test Address", true));
 
         String message1 = gson.toJson(new QuizMessage(
@@ -85,7 +85,7 @@ public class ServiceTest {
 
     @Test
     public void testMultipleMessages() {
-        String answer = gson.toJson(new Answer("Test Name", "Test Address", "0"));
+        String answer = gson.toJson(new Answer("Test Name", "Test Address", "0", System.nanoTime()));
         String confirmation = gson.toJson(new Confirmation("Test Address", true));
         String endGame = gson.toJson(0);
 
