@@ -2,6 +2,7 @@ package com.seniordesign.wolfpack.quizinator.Database.Deck;
 
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -45,6 +46,19 @@ public class Deck {
         long seed = System.nanoTime();
         Collections.shuffle(cards, new Random(seed));
         return true;
+    }
+
+    /*
+     * @author leonardj (12-16-16)
+     */
+    public List<String> getCardTypes() {
+        ArrayList<String> cardTypes = new ArrayList<>();
+        for (Card card: cards) {
+            if (!cardTypes.contains(card.getCardType())) {
+                cardTypes.add(card.getCardType());
+            }
+        }
+        return cardTypes;
     }
 
     /*

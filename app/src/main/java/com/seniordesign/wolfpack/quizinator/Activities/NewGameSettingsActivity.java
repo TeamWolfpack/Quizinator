@@ -9,9 +9,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckDataSource;
@@ -22,10 +23,15 @@ import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_SEND_CARD_ACTIVITY;
+import io.apptik.widget.multiselectspinner.BaseMultiSelectSpinner;
+import io.apptik.widget.multiselectspinner.MultiSelectSpinner;
+
 import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_SEND_RULES_ACTIVITY;
 
 /*
@@ -41,14 +47,19 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     private EditText gameSecondsInput;
     private EditText cardMinutesInput;
     private EditText cardSecondsInput;
-    private Spinner cardTypeSpinner;
+
+    private MultiSelectSpinner cardTypeSpinner;
+    private List<String> selectedCardTypes;
+    private List<String> cardTypeOptions;
 
     private RulesDataSource rulesSource;
     private DeckDataSource deckDataSource;
 
     private Deck deck;
 
-    WifiDirectApp wifiDirectApp = null;
+    WifiDirectApp wifiDirectApp;
+
+    Gson gson = new Gson();
 
     /*
      * @author kuczynskij (09/28/2016)
@@ -68,11 +79,27 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             deck = initializeDeck();
         }
 
-        cardTypeSpinner = (Spinner)findViewById(R.id.card_type_spinner);
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                    R.array.card_type_array, android.R.layout.simple_spinner_item);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            cardTypeSpinner.setAdapter(adapter);
+        cardTypeSpinner = (MultiSelectSpinner) findViewById(R.id.card_type_spinner);
+            selectedCardTypes = new ArrayList<>();
+            cardTypeOptions = formatCardTypes(deck);
+            ArrayAdapter<String> cardTypeAdapter = new ArrayAdapter<>(this,
+                    android.R.layout.simple_list_item_multiple_choice, cardTypeOptions);
+            cardTypeSpinner
+                    .setListAdapter(cardTypeAdapter)
+                    .setAllCheckedText("All Types")
+                    .setAllUncheckedText("None Selected")
+                    .setMinSelectedItems(1)
+                    .setListener(new BaseMultiSelectSpinner.MultiSpinnerListener() {
+                        @Override
+                        public void onItemsSelected(boolean[] selected) {
+                            selectedCardTypes.clear();
+
+                            for (int i = 0; i < selected.length; i++) {
+                                if (selected[i])
+                                    selectedCardTypes.add(shortFormCardType(cardTypeOptions.get(i)));
+                            }
+                        }
+                    });
 
         cardCountInput = (EditText)findViewById(R.id.card_count);
             NumberFilter cardCountFilter = new NumberFilter(1, deck.getCards().size(), false); // Max should be deck count, change when deck is done
@@ -108,6 +135,11 @@ public class NewGameSettingsActivity extends AppCompatActivity {
      * @author leonardj (10/4/2016)
      */
     public boolean startGame(View v){
+        if (selectedCardTypes.size() < 1) {
+            Toast.makeText(this, "Must select card type", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         Rules r = updateRuleSet();
         if(wifiDirectApp.isHost() == 15){
             return startMultiplayerGamePlay(r);
@@ -133,15 +165,9 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             return false;
         }
 
-        Gson gson = new Gson();
-
         //send everyone the rules
         String rulesToSend = gson.toJson(r);
         ConnectionService.sendMessage(MSG_SEND_RULES_ACTIVITY, rulesToSend);
-
-        //Send first card
-//        String cardToSend = gson.toJson(deck.getCards().get(0));
-//        ConnectionService.sendMessage(MSG_SEND_CARD_ACTIVITY, cardToSend);
 
         runOnUiThread(new Runnable() {
             @Override public void run() {
@@ -171,7 +197,8 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                 cardSecondsInput.getText().toString()) * 1000;
         int cardCount = Integer.valueOf(
                 cardCountInput.getText().toString());
-        String cardTypes = cardTypeSpinner.getSelectedItem().toString();
+
+        String cardTypes = gson.toJson(selectedCardTypes);
 
         if (rulesSource.getAllRules().size() < 1) {
             return rulesSource.createRule(cardCount,
@@ -223,17 +250,14 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                                     "0" + cardCal.get(Calendar.SECOND) :
                                     "" + cardCal.get(Calendar.SECOND));
 
-        int position = 0;
-        String type = rule.getCardTypes();
-        if (type.equals("True/False")) {
-            position = 0;
-        } else if (type.equals("Multiple Choice")) {
-            position = 1;
-        } else if (type.equals("Both")) {
-            position = 2;
-        }
+        Log.d(TAG, "Selected card types: " + rule.getCardTypes());
 
-        cardTypeSpinner.setSelection(position);
+        Type listType = new TypeToken<ArrayList<String>>(){}.getType();
+        List<String> cardTypes = gson.fromJson(rule.getCardTypes(), listType);
+
+        for (String type: cardTypes) {
+            cardTypeSpinner.selectItem(cardTypeOptions.indexOf(longFormCardType(type)), true);
+        }
         return true;
     }
 
@@ -309,6 +333,65 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         deckDataSource.createDeck("Default", Arrays.asList(cards));
 
         return newDeck;
+    }
+
+    /*
+     * @author leonardj (12/16/16)
+     */
+    public List<String> formatCardTypes(Deck deck) {
+        ArrayList<String> types = new ArrayList<>();
+
+        if (deck == null) {
+            return types;
+        }
+
+        for (String type: deck.getCardTypes()) {
+            if (type.equals("TF"))
+                types.add("True/False");
+            else if (type.equals("MC"))
+                types.add("Multi-Choice");
+            else if (type.equals("FR"))
+                types.add("Free Response");
+            else if (type.equals("VR"))
+                types.add("Verbal Response");
+        }
+        return types;
+    }
+
+    /*
+     * @author leonardj (12/16/16)
+     */
+    public String shortFormCardType(String type) {
+        String shortForm = null;
+
+        if (type.equals("True/False"))
+            shortForm = "TF";
+        else if (type.equals("Multi-Choice"))
+            shortForm = "MC";
+        else if (type.equals("Free Response"))
+            shortForm = "FR";
+        else if (type.equals("Verbal Response"))
+            shortForm = "VR";
+
+        return shortForm;
+    }
+
+    /*
+     * @author leonardj (12/16/16)
+     */
+    public String longFormCardType(String type) {
+        String longForm = null;
+
+        if (type.equals("TF"))
+            longForm = "True/False";
+        else if (type.equals("MC"))
+            longForm = "Multi-Choice";
+        else if (type.equals("FR"))
+            longForm = "Free Response";
+        else if (type.equals("VR"))
+            longForm = "Verbal Response";
+
+        return longForm;
     }
 
     /*
