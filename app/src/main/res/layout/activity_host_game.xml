@@ -20,14 +20,14 @@
     </Button>
 
     <fragment
-        class="com.seniordesign.wolfpack.quizinator.WifiDirect.DeviceListFragment"
+        class="com.seniordesign.wolfpack.quizinator.Fragments.DeviceListFragment"
         android:id="@+id/frag_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
     </fragment>
 
     <fragment
-        class="com.seniordesign.wolfpack.quizinator.WifiDirect.DeviceDetailFragment"
+        class="com.seniordesign.wolfpack.quizinator.Fragments.DeviceDetailFragment"
         android:id="@+id/frag_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >

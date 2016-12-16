@@ -1,20 +1,17 @@
 package com.seniordesign.wolfpack.quizinator;
 
 import android.content.Intent;
-import android.net.wifi.WifiManager;
-import android.os.IBinder;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.MediumTest;
 import android.support.test.rule.ServiceTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.text.format.Formatter;
 
 import com.google.gson.Gson;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.Answer;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.Confirmation;
+import com.seniordesign.wolfpack.quizinator.Messages.Answer;
+import com.seniordesign.wolfpack.quizinator.Messages.Confirmation;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionManager;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.QuizMessage;
+import com.seniordesign.wolfpack.quizinator.Messages.QuizMessage;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
 import org.junit.Before;
@@ -23,11 +20,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.nio.channels.SocketChannel;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
-import static android.content.Context.WIFI_SERVICE;
 import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.*;
 import static org.junit.Assert.*;
 
