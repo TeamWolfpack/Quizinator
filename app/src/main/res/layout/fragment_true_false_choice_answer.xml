@@ -15,6 +15,7 @@
             android:layout_height="match_parent"
             android:onClick="answerClicked"
             android:text="True"
+            android:textSize="20dp"
             />
         <Button
             android:id="@+id/falseButton"
@@ -23,6 +24,7 @@
             android:layout_height="match_parent"
             android:onClick="answerClicked"
             android:text="False"
+            android:textSize="20dp"
             />
     </LinearLayout>
 

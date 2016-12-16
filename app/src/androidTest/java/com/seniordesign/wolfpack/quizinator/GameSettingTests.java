@@ -29,7 +29,6 @@ import static org.hamcrest.Matchers.containsString;
 /*
  * @author leonardj (10/2/2016)
  */
-
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class GameSettingTests {
