@@ -15,7 +15,7 @@
     <string name="quiz_bowl_rules">Quiz Bowl Rules</string>
     <string name="card_count">Card Count:</string>
     <string name="card_time">Card Time:</string>
-    <string name="three_secs">03</string>
+    <string name="three_secs">10</string>
 
     <string name="new_game">New Game</string>
     <string name="solo_game">Solo Game</string>

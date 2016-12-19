@@ -123,7 +123,7 @@ public class GameSettingTests {
 
     @Test
     public void validateCardSecondInput_LowerBound() throws InterruptedException {
-        onView(withId(R.id.card_seconds)).check(matches(withText("03")));
+        onView(withId(R.id.card_seconds)).check(matches(withText("10")));
         onView(withId(R.id.card_seconds)).perform(clearText(), typeText("1"));
         onView(withId(R.id.card_seconds)).check(matches(withText("1")));
 
@@ -189,7 +189,7 @@ public class GameSettingTests {
         onView(withId(R.id.game_minutes)).check(matches(withText(containsString("01"))));
         onView(withId(R.id.game_seconds)).check(matches(withText(containsString("00"))));
         onView(withId(R.id.card_minutes)).check(matches(withText(containsString("00"))));
-        onView(withId(R.id.card_seconds)).check(matches(withText(containsString("03"))));
+        onView(withId(R.id.card_seconds)).check(matches(withText(containsString("10"))));
         onView(withId(R.id.card_count)).check(matches(withText(containsString("10"))));
     }
 }
