@@ -93,19 +93,24 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                         @Override
                         public void onItemsSelected(boolean[] selected) {
                             selectedCardTypes.clear();
-
                             for (int i = 0; i < selected.length; i++) {
                                 if (selected[i])
                                     selectedCardTypes.add(shortFormCardType(cardTypeOptions.get(i)));
                             }
+                            Rules tempRules = new Rules();
+                            tempRules.setCardTypes(gson.toJson(selectedCardTypes));
+                            Deck filteredDeck = deck.filter(tempRules);
+
+                            if (Integer.valueOf(cardCountInput.getText().toString()) > filteredDeck.getCards().size())
+                                cardCountInput.setText("" + filteredDeck.getCards().size());
+
+                            filterCardCount(filteredDeck);
                         }
                     });
 
         cardCountInput = (EditText)findViewById(R.id.card_count);
-            NumberFilter cardCountFilter = new NumberFilter(1, deck.getCards().size(), false); // Max should be deck count, change when deck is done
-            cardCountInput.setFilters(new InputFilter[]{ cardCountFilter });
-            cardCountInput.setOnFocusChangeListener(cardCountFilter);
-            cardCountInput.setText(""+deck.getCards().size()); // Should be deck count, change when deck is done
+            filterCardCount(deck);
+            cardCountInput.setText("" + deck.getCards().size());
 
         gameMinutesInput = (EditText)findViewById(R.id.game_minutes);
             NumberFilter gameMinuteFilter = new NumberFilter(1);
@@ -128,6 +133,15 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             cardSecondsInput.setOnFocusChangeListener(cardSecondsFilter);
 
         loadPreviousRules();
+    }
+
+    /*
+     * @author leoanrdj 12/19/16
+     */
+    private void filterCardCount(Deck deck) {
+        NumberFilter cardCountFilter = new NumberFilter(1, deck.getCards().size(), false);
+        cardCountInput.setFilters(new InputFilter[]{ cardCountFilter });
+        cardCountInput.setOnFocusChangeListener(cardCountFilter);
     }
 
     /*
