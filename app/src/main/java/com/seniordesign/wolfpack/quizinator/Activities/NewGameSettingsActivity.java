@@ -253,9 +253,8 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         Log.d(TAG, "Selected card types: " + rule.getCardTypes());
 
         Type listType = new TypeToken<ArrayList<String>>(){}.getType();
-        List<String> cardTypes = gson.fromJson(rule.getCardTypes(), listType);
-
-        for (String type: cardTypes) {
+        selectedCardTypes = gson.fromJson(rule.getCardTypes(), listType);
+        for (String type: selectedCardTypes) {
             cardTypeSpinner.selectItem(cardTypeOptions.indexOf(longFormCardType(type)), true);
         }
         return true;
