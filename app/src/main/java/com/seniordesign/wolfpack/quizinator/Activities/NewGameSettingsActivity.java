@@ -264,8 +264,12 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                                     "0" + cardCal.get(Calendar.SECOND) :
                                     "" + cardCal.get(Calendar.SECOND));
 
-        Log.d(TAG, "Selected card types: " + rule.getCardTypes());
+        if (rule.getMaxCardCount() > deck.filter(rule).getCards().size())
+            cardCountInput.setText("" + deck.filter(rule).getCards().size());
+        else
+            cardCountInput.setText("" + rule.getMaxCardCount());
 
+        Log.d(TAG, "Selected card types: " + rule.getCardTypes());
         Type listType = new TypeToken<ArrayList<String>>(){}.getType();
         selectedCardTypes = gson.fromJson(rule.getCardTypes(), listType);
         for (String type: selectedCardTypes) {
