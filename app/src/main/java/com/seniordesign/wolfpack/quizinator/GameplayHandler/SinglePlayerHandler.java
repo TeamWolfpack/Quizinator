@@ -67,7 +67,7 @@ public class SinglePlayerHandler implements GamePlayHandler {
         properties.setDeckDataSource(new DeckDataSource(gamePlayActivity));
         if (properties.getDeckDataSource().open()) {
             positiveDBConnections++;
-            properties.setDeck(properties.getDeckDataSource().getAllDecks().get(0));
+            properties.setDeck(properties.getDeckDataSource().getAllDecks().get(0).filter(properties.getRules()));
         }
         return (positiveDBConnections == 3);
     }

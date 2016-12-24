@@ -64,13 +64,13 @@ public class ManageGameplayActivity extends AppCompatActivity {
         wifiDirectApp = (WifiDirectApp)getApplication();
         wifiDirectApp.mManageActivity = this;
 
-        deckDataSource = new DeckDataSource(this);
-        deckDataSource.open();
-        deck = deckDataSource.getAllDecks().get(0);
-
         rulesDataSource = new RulesDataSource(this);
         rulesDataSource.open();
         rules = rulesDataSource.getAllRules().get(rulesDataSource.getAllRules().size()-1);
+
+        deckDataSource = new DeckDataSource(this);
+        deckDataSource.open();
+        deck = deckDataSource.getAllDecks().get(0).filter(rules);
 
         cardLimit = Math.min(deck.getCards().size(),rules.getMaxCardCount());
 
