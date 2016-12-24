@@ -101,7 +101,8 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                             tempRules.setCardTypes(gson.toJson(selectedCardTypes));
                             Deck filteredDeck = deck.filter(tempRules);
 
-                            if (Integer.valueOf(cardCountInput.getText().toString()) > filteredDeck.getCards().size())
+                            if (!isInputEmpty(cardCountInput) &&
+                                    Integer.valueOf(cardCountInput.getText().toString()) > filteredDeck.getCards().size())
                                 cardCountInput.setText("" + filteredDeck.getCards().size());
 
                             filterCardCount(filteredDeck);
@@ -155,6 +156,9 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         }
 
         Rules r = updateRuleSet();
+        if (r == null)
+            return false;
+
         if(wifiDirectApp.isHost() == 15){
             return startMultiplayerGamePlay(r);
         }else{
@@ -201,6 +205,27 @@ public class NewGameSettingsActivity extends AppCompatActivity {
      * @author kuczynskij (10/31/2016)
      */
     public Rules updateRuleSet() {
+        if (isInputEmpty(gameMinutesInput)) {
+            Toast.makeText(this, "Game Minutes can't be empty", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        if (isInputEmpty(gameSecondsInput)) {
+            Toast.makeText(this, "Game Seconds can't be empty", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        if (isInputEmpty(cardMinutesInput)) {
+            Toast.makeText(this, "Card Minutes can't be empty", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        if (isInputEmpty(cardSecondsInput)) {
+            Toast.makeText(this, "Card Seconds can't be empty", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        if (isInputEmpty(cardCountInput)) {
+            Toast.makeText(this, "Card Count can't be empty", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+
         long gameMinutesInMilli = Integer.valueOf(
                 gameMinutesInput.getText().toString()) * 60000;
         long gameSecondsInMilli = Integer.valueOf(
@@ -283,6 +308,13 @@ public class NewGameSettingsActivity extends AppCompatActivity {
      */
     public boolean loadDeck(){
         return false;
+    }
+
+    /*
+     * @author leonardj 12/23/16
+     */
+    private boolean isInputEmpty(EditText input) {
+        return input.getText().toString().equals("");
     }
 
     /*
