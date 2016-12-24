@@ -67,7 +67,8 @@
             android:name=".WifiDirect.ConnectionService"
             android:enabled="true" />
 
-        <activity android:name=".Activities.ManageGameplayActivity"></activity>
+        <activity android:name=".Activities.ManageGameplayActivity" />
+        <activity android:name=".Activities.CardCreationActivity"></activity>
     </application>
 
 </manifest>
