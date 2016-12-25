@@ -38,6 +38,7 @@
     <string name="empty_message">No devices found. Make sure P2P is enabled.</string>
     <string name="label_me">Me</string>
     <string name="label_peers">Players</string>
+    <string name="moderator_needed_filter">Moderator Needed</string>
 
     <string-array name="card_type_array">
         <item>True/False</item>
@@ -45,7 +46,16 @@
         <item>Both</item>
     </string-array>
 
-    <string-array name=""
+    <string-array name="card_creation_type_array">
+        <item>True/False</item>
+        <item>Multiple Choice</item>
+    </string-array>
+
+    <!-- TODO: should this be a spinner or just a checkbox -->
+    <string-array name="moderator_needed_array">
+        <item>Not Needed</item>
+        <item>Needed</item>
+    </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
