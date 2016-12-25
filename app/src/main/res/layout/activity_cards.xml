@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.seniordesign.wolfpack.quizinator.Activities.CardCreationActivity">
+    tools:context="com.seniordesign.wolfpack.quizinator.Activities.CardsActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,6 +34,7 @@
             <!--android:layout_weight="1"-->
             <!--android:entries="@array/moderator_needed_array" />-->
     </LinearLayout>
+
     <ListView
         android:id="@+id/list_of_cards"
         android:layout_width="match_parent"

@@ -172,6 +172,10 @@ public class MainMenuActivity extends AppCompatActivity
         }
     }
 
+    public void goToCardsList(View v) {
+        startActivity(new Intent(this, CardsActivity.class));
+    }
+
     private boolean isWifiDirectSupported(Context ctx) {
         PackageManager pm = ctx.getPackageManager();
         FeatureInfo[] features = pm.getSystemAvailableFeatures();

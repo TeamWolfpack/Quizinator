@@ -37,24 +37,31 @@
             <!--/>-->
         <Button
             android:id="@+id/newGameButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/solo_game"
             android:onClick="showGameSettings"
             />
         <Button
             android:id="@+id/joinGameButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/join_game"
             android:onClick="initiateJoinGame"
             />
         <Button
             android:id="@+id/hostGameButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/host_game"
             android:onClick="initiateHostGame"
+            />
+        <Button
+            android:id="@+id/CardCreationButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cards"
+            android:onClick="goToCardsList"
             />
     </LinearLayout>
 </RelativeLayout>

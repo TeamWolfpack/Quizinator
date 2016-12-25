@@ -21,6 +21,7 @@
     <string name="solo_game">Solo Game</string>
     <string name="join_game">Join Game</string>
     <string name="host_game">Host Game</string>
+    <string name="cards">Cards</string>
 
     <string name="game_over">Game Over</string>
     <string name="main_menu">Main Menu</string>
