@@ -103,7 +103,8 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
                             if (!isInputEmpty(cardCountInput) &&
                                     Integer.valueOf(cardCountInput.getText().toString()) > filteredDeck.getCards().size())
-                                cardCountInput.setText("" + filteredDeck.getCards().size());
+                                cardCountInput.setText(filteredDeck.getCards().size()); //TODO
+//                                cardCountInput.setText("" + filteredDeck.getCards().size());
 
                             filterCardCount(filteredDeck);
                         }
@@ -111,7 +112,8 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
         cardCountInput = (EditText)findViewById(R.id.card_count);
             filterCardCount(deck);
-            cardCountInput.setText("" + deck.getCards().size());
+            cardCountInput.setText(deck.getCards().size()); //TODO
+            // cardCountInput.setText("" + deck.getCards().size());
             cardCountInput.setText(deck.getCards().size()); // Should be deck count, change when deck is done
 
         gameMinutesInput = (EditText)findViewById(R.id.game_minutes);

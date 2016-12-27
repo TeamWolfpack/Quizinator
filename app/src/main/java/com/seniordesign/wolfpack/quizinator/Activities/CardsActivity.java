@@ -5,15 +5,13 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
-
+import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import io.apptik.widget.multiselectspinner.BaseMultiSelectSpinner;
@@ -23,7 +21,9 @@ public class CardsActivity extends AppCompatActivity {
 
     private MultiSelectSpinner cardTypeSpinner;
     private List<String> selectedCardTypes;
-    private List<String> cardTypeOptions;
+    private List<String> cardTypes = new ArrayList<>(Arrays.asList("True/False", "Multiple Choice"));
+
+    Gson gson = new Gson();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +32,13 @@ public class CardsActivity extends AppCompatActivity {
 
         cardTypeSpinner = (MultiSelectSpinner) findViewById(R.id.card_type_spinner);
         selectedCardTypes = new ArrayList<>();
-        cardTypeOptions = formatCardTypes(deck);
         ArrayAdapter<String> cardTypeAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_multiple_choice, cardTypeOptions);
+                android.R.layout.simple_list_item_multiple_choice, cardTypes);
         cardTypeSpinner
                 .setListAdapter(cardTypeAdapter)
                 .setAllCheckedText("All Types")
                 .setAllUncheckedText("None Selected")
+                .setSelectAll(true)
                 .setMinSelectedItems(1)
                 .setListener(new BaseMultiSelectSpinner.MultiSpinnerListener() {
                     @Override
@@ -46,17 +46,17 @@ public class CardsActivity extends AppCompatActivity {
                         selectedCardTypes.clear();
                         for (int i = 0; i < selected.length; i++) {
                             if (selected[i])
-                                selectedCardTypes.add(shortFormCardType(cardTypeOptions.get(i)));
+                                selectedCardTypes.add(shortFormCardType(cardTypes.get(i)));
                         }
                         Rules tempRules = new Rules();
                         tempRules.setCardTypes(gson.toJson(selectedCardTypes));
-                        Deck filteredDeck = deck.filter(tempRules);
+//                        Deck filteredDeck = deck.filter(tempRules);
 
-                        if (!isInputEmpty(cardCountInput) &&
-                                Integer.valueOf(cardCountInput.getText().toString()) > filteredDeck.getCards().size())
-                            cardCountInput.setText("" + filteredDeck.getCards().size());
-
-                        filterCardCount(filteredDeck);
+//                        if (!isInputEmpty(cardCountInput) &&
+//                                Integer.valueOf(cardCountInput.getText().toString()) > filteredDeck.getCards().size())
+//                            cardCountInput.setText("" + filteredDeck.getCards().size());
+//
+//                        filterCardCount(filteredDeck);
                     }
                 });
     }
