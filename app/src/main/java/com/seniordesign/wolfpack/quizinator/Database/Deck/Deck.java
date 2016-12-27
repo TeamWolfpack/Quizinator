@@ -1,7 +1,12 @@
 package com.seniordesign.wolfpack.quizinator.Database.Deck;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
+import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -48,6 +53,19 @@ public class Deck {
     }
 
     /*
+     * @author leonardj (12-16-16)
+     */
+    public List<String> getCardTypes() {
+        ArrayList<String> cardTypes = new ArrayList<>();
+        for (Card card: cards) {
+            if (!cardTypes.contains(card.getCardType())) {
+                cardTypes.add(card.getCardType());
+            }
+        }
+        return cardTypes;
+    }
+
+    /*
      * @author  chuna (10-5-2016)
      */
     public long getId() {
@@ -87,5 +105,26 @@ public class Deck {
      */
     public void setCards(List<Card> cards) {
         this.cards = cards;
+    }
+
+    /*
+     * @author leonardj (12/19/16)
+     */
+    public Deck filter(Rules rules) {
+        Deck filteredDeck = new Deck();
+        filteredDeck.setId(id);
+        filteredDeck.setDeckName(deckName);
+
+        Type listType = new TypeToken<ArrayList<String>>(){}.getType();
+        List<String> validCardTypes = new Gson().fromJson(rules.getCardTypes(), listType);
+
+        List<Card> validCards = new ArrayList<>();
+        for (Card card: cards) {
+            if (validCardTypes.contains(card.getCardType()))
+                validCards.add(card);
+        }
+        filteredDeck.setCards(validCards);
+
+        return filteredDeck;
     }
 }

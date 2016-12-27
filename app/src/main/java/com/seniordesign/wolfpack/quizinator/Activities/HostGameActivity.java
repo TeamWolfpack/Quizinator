@@ -3,7 +3,6 @@ package com.seniordesign.wolfpack.quizinator.Activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
@@ -22,8 +21,8 @@ import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.DeviceDetailFragment;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.DeviceListFragment;
+import com.seniordesign.wolfpack.quizinator.Fragments.DeviceDetailFragment;
+import com.seniordesign.wolfpack.quizinator.Fragments.DeviceListFragment;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WiFiDirectBroadcastReceiver;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 

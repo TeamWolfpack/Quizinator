@@ -1,14 +1,12 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
 import android.content.Intent;
-import android.net.wifi.p2p.WifiP2pManager;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
@@ -17,8 +15,8 @@ import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.Answer;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.Confirmation;
+import com.seniordesign.wolfpack.quizinator.Messages.Answer;
+import com.seniordesign.wolfpack.quizinator.Messages.Confirmation;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
@@ -66,13 +64,13 @@ public class ManageGameplayActivity extends AppCompatActivity {
         wifiDirectApp = (WifiDirectApp)getApplication();
         wifiDirectApp.mManageActivity = this;
 
-        deckDataSource = new DeckDataSource(this);
-        deckDataSource.open();
-        deck = deckDataSource.getAllDecks().get(0);
-
         rulesDataSource = new RulesDataSource(this);
         rulesDataSource.open();
         rules = rulesDataSource.getAllRules().get(rulesDataSource.getAllRules().size()-1);
+
+        deckDataSource = new DeckDataSource(this);
+        deckDataSource.open();
+        deck = deckDataSource.getAllDecks().get(0).filter(rules);
 
         cardLimit = Math.min(deck.getCards().size(),rules.getMaxCardCount());
 

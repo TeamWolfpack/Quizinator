@@ -1,4 +1,4 @@
-package com.seniordesign.wolfpack.quizinator.WifiDirect;
+package com.seniordesign.wolfpack.quizinator.Messages;
 
 /**
  * Created by leonardj on 12/5/2016.

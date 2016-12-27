@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
 import android.view.WindowManager;
 
+import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Activities.GamePlayActivity;
 import com.seniordesign.wolfpack.quizinator.Activities.NewGameSettingsActivity;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
@@ -13,8 +14,12 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 /*
@@ -23,6 +28,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
  */
 public class GamePlayTests {
 
+    private Gson gson = new Gson();
     private RulesDataSource rulesource;
 
     // Needed to run in Travis
@@ -60,19 +66,19 @@ public class GamePlayTests {
     private boolean setUpRules(){
         rulesource = new RulesDataSource(mActivityRule.getActivity());
         rulesource.open();
-        rulesource.createRule(1, 60000, 5000, "Both");
+
+        List<String> types = new ArrayList<>();
+        types.add("TF");
+        types.add("MC");
+        String cardTypes = gson.toJson(types);
+        rulesource.createRule(1, 60000, 3000, cardTypes);
         mActivityRule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mActivityRule.getActivity().loadPreviousRules();
             }
         });
-        onView(withId(R.id.new_game)).perform(click());
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        onView(withId(R.id.new_game)).perform(scrollTo(), click());
         return true;
     }
 
