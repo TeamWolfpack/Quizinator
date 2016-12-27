@@ -12,13 +12,20 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Spinner
-            android:id="@+id/card_type_filter_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingRight="5dp"
-            android:entries="@array/card_creation_type_array" />
+        <!--<Spinner-->
+            <!--android:id="@+id/card_type_filter_spinner"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:paddingRight="5dp"-->
+            <!--android:entries="@array/card_creation_type_array" />-->
+
+        <io.apptik.widget.multiselectspinner.MultiSelectSpinner
+            android:id="@+id/card_type_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
         <CheckBox
             android:id="@+id/moderator_needed_filter_checkbox"
             android:layout_width="match_parent"

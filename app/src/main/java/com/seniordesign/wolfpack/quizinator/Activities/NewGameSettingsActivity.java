@@ -78,7 +78,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             NumberFilter cardCountFilter = new NumberFilter(1, deck.getCards().size(), false); // Max should be deck count, change when deck is done
             cardCountInput.setFilters(new InputFilter[]{ cardCountFilter });
             cardCountInput.setOnFocusChangeListener(cardCountFilter);
-            cardCountInput.setText(""+deck.getCards().size()); // Should be deck count, change when deck is done
+            cardCountInput.setText(deck.getCards().size()); // Should be deck count, change when deck is done
 
         gameMinutesInput = (EditText)findViewById(R.id.game_minutes);
             NumberFilter gameMinuteFilter = new NumberFilter(1);
