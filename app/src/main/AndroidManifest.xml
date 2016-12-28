@@ -68,7 +68,8 @@
             android:enabled="true" />
 
         <activity android:name=".Activities.ManageGameplayActivity" />
-        <activity android:name=".Activities.CardsActivity"></activity>
+        <activity android:name=".Activities.CardsActivity" />
+        <activity android:name=".Activities.EditCardActivity"></activity>
     </application>
 
 </manifest>

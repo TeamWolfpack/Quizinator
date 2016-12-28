@@ -47,19 +47,9 @@
         <item>Both</item>
     </string-array>
 
-    <string-array name="card_creation_type_array">
-        <item>True/False</item>
-        <item>Multiple Choice</item>
-    </string-array>
-
-    <!-- TODO: should this be a spinner or just a checkbox -->
-    <string-array name="moderator_needed_array">
-        <item>Not Needed</item>
-        <item>Needed</item>
-    </string-array>
-
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="send_card">Send Card</string>
     <string name="end_game">End Game</string>
+    <string name="question">Question</string>
 </resources>

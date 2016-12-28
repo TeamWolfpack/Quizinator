@@ -1,11 +1,18 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 
 import com.google.gson.Gson;
+import com.seniordesign.wolfpack.quizinator.Adapters.CardAdapter;
+import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.R;
@@ -22,6 +29,7 @@ public class CardsActivity extends AppCompatActivity {
     private MultiSelectSpinner cardTypeSpinner;
     private List<String> selectedCardTypes;
     private List<String> cardTypes = new ArrayList<>(Arrays.asList("True/False", "Multiple Choice"));
+//    private List<String> cardTypes = new ArrayList<>(Arrays.asList("True/False", "Multiple Choice", "Free Response", "Verbal Response"));
 
     Gson gson = new Gson();
 
@@ -48,8 +56,6 @@ public class CardsActivity extends AppCompatActivity {
                             if (selected[i])
                                 selectedCardTypes.add(shortFormCardType(cardTypes.get(i)));
                         }
-                        Rules tempRules = new Rules();
-                        tempRules.setCardTypes(gson.toJson(selectedCardTypes));
 //                        Deck filteredDeck = deck.filter(tempRules);
 
 //                        if (!isInputEmpty(cardCountInput) &&
@@ -59,6 +65,25 @@ public class CardsActivity extends AppCompatActivity {
 //                        filterCardCount(filteredDeck);
                     }
                 });
+    }
+
+    private void fillListOfCards(List<Card> values){
+        final ListView listView = (ListView)findViewById(R.id.list_of_cards);
+        final CardAdapter adapter = new CardAdapter(this,
+                R.layout.array_adapter_list_of_cards, values);
+//        final CardAdapter adapter = new CardAdapter(this,
+//                android.R.layout.simple_list_item_1, values);
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                Intent intent = new Intent(parent.getContext(), EditCardActivity.class);
+                intent.putExtra("_id", ((Card)listView.getItemAtPosition(position)).getId()); //
+                startActivity(intent);
+            }
+        });
     }
 
     /*

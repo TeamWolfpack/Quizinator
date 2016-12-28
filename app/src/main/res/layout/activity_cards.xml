@@ -12,34 +12,21 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <!--<Spinner-->
-            <!--android:id="@+id/card_type_filter_spinner"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:paddingRight="5dp"-->
-            <!--android:entries="@array/card_creation_type_array" />-->
-
         <io.apptik.widget.multiselectspinner.MultiSelectSpinner
             android:id="@+id/card_type_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-
-        <CheckBox
-            android:id="@+id/moderator_needed_filter_checkbox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:button="@null"
-            android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
-            android:text="@string/moderator_needed_filter" />
-        <!--<Spinner-->
-            <!--android:id="@+id/moderator_needed_filter_spinner"-->
+            android:layout_weight="1"/>
+
+        <!-- TODO For when we add the Moderator class later -->
+        <!--<CheckBox-->
+            <!--android:id="@+id/moderator_needed_filter_checkbox"-->
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:entries="@array/moderator_needed_array" />-->
+            <!--android:layout_weight="3"-->
+            <!--android:button="@null"-->
+            <!--android:drawableRight="?android:attr/listChoiceIndicatorMultiple"-->
+            <!--android:text="@string/moderator_needed_filter" />-->
     </LinearLayout>
 
     <ListView
