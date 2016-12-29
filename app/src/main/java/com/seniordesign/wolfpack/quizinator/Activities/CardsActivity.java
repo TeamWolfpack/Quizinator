@@ -2,8 +2,10 @@ package com.seniordesign.wolfpack.quizinator.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.nfc.Tag;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -31,7 +33,7 @@ public class CardsActivity extends AppCompatActivity {
     private List<String> cardTypes = new ArrayList<>(Arrays.asList("True/False", "Multiple Choice"));
 //    private List<String> cardTypes = new ArrayList<>(Arrays.asList("True/False", "Multiple Choice", "Free Response", "Verbal Response"));
 
-    Gson gson = new Gson();
+    private static final String TAG = "ACT_CA";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +55,13 @@ public class CardsActivity extends AppCompatActivity {
                     public void onItemsSelected(boolean[] selected) {
                         selectedCardTypes.clear();
                         for (int i = 0; i < selected.length; i++) {
-                            if (selected[i])
-                                selectedCardTypes.add(shortFormCardType(cardTypes.get(i)));
+                            if (selected[i]) {
+                                try{
+                                    selectedCardTypes.add(shortFormCardType(cardTypes.get(i)));
+                                }catch (Exception e){
+                                    System.out.println(e.getMessage());
+                                }
+                            }
                         }
 //                        Deck filteredDeck = deck.filter(tempRules);
 
@@ -63,6 +70,10 @@ public class CardsActivity extends AppCompatActivity {
 //                            cardCountInput.setText("" + filteredDeck.getCards().size());
 //
 //                        filterCardCount(filteredDeck);
+                        ArrayList<String> chosenTypes = new ArrayList<>();
+                        for(int i = 0; i < selectedCardTypes.size(); i++){
+                            chosenTypes.add(selectedCardTypes.get(i));
+                        }
                     }
                 });
     }
@@ -117,17 +128,19 @@ public class CardsActivity extends AppCompatActivity {
     /*
      * @author leonardj (12/16/16)
      */
-    public String shortFormCardType(String type) {
+    public String shortFormCardType(String type) throws Exception {
         String shortForm = null;
 
         if (type.equals("True/False"))
             shortForm = "TF";
-        else if (type.equals("Multi-Choice"))
+        else if (type.equals("Multiple Choice"))
             shortForm = "MC";
         else if (type.equals("Free Response"))
             shortForm = "FR";
         else if (type.equals("Verbal Response"))
             shortForm = "VR";
+        else
+            throw new Exception("Invalid Card Type");
         return shortForm;
     }
 
