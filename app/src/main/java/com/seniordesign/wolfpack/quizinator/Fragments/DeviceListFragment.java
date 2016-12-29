@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.seniordesign.wolfpack.quizinator.WifiDirect;
+package com.seniordesign.wolfpack.quizinator.Fragments;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -38,6 +38,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.seniordesign.wolfpack.quizinator.R;
+import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
+import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
 /**
  * A ListFragment that displays available peers on discovery and requests the

@@ -7,11 +7,11 @@ import android.support.test.rule.ServiceTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.google.gson.Gson;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.Answer;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.Confirmation;
+import com.seniordesign.wolfpack.quizinator.Messages.Answer;
+import com.seniordesign.wolfpack.quizinator.Messages.Confirmation;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionManager;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.QuizMessage;
+import com.seniordesign.wolfpack.quizinator.Messages.QuizMessage;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
 import org.junit.Before;
@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
+import static android.content.Context.WIFI_SERVICE;
 import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.*;
 import static org.junit.Assert.*;
 
