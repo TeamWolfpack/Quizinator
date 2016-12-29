@@ -77,7 +77,7 @@ public class CardDataSource {
         values.put(CardSQLiteHelper.COLUMN_QUESTION, question);
         values.put(CardSQLiteHelper.COLUMN_CORRECTANSWER, correctAnswer);
 
-        //TODO make sure this works
+        //TODO need to make sure that depending on card type, the correct number of possible answers is inputted... can be done here or in code calling this method
         Gson gson = new Gson();
         String stringPossibleAnswers = gson.toJson(possibleCorrectAnswers);
         values.put(CardSQLiteHelper.COLUMN_POSSIBLEANSWERS, stringPossibleAnswers);
@@ -124,27 +124,48 @@ public class CardDataSource {
         return cards;
     }
 
+    // TODO will update later as more filtering options are created
+    // TODO can also replace getAllCards just by passing in nulls but can be looked into later
+    public List<Card> filterCards(List<String> cardTypes) {
+        List<Card> cards = new ArrayList<Card>();
+        Cursor cursor = database.query(CardSQLiteHelper.TABLE_CARDS,
+                allColumns, buildWhereClause(cardTypes), null, null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Card card = cursorToCard(cursor);
+            cards.add(card);
+            cursor.moveToNext();
+        }
+        // make sure to close the cursor
+        cursor.close();
+        return cards;
+    }
+
+    private String buildWhereClause(List<String> cardTypes) {
+        if (cardTypes == null || cardTypes.size() == 0) {
+            return null;
+        }
+        StringBuilder whereClause = new StringBuilder("WHERE ");
+        int i = 0;
+        while (cardTypes.size() == i + 1) {
+            whereClause.append(CardSQLiteHelper.COLUMN_CARDTYPE)
+                    .append("=")
+                    .append(cardTypes.get(i))
+                    .append(" || ");
+            i++;
+        }
+        whereClause.append(CardSQLiteHelper.COLUMN_CARDTYPE)
+                .append("=")
+                .append(cardTypes.get(i));
+        return whereClause.toString();
+    }
+
+
     /*
      * @author  chuna (10/4/2016)
      */
     public Card cursorToCard(Cursor cursor) {
-        String cardType = cursor.getString(1);
         Card card = new Card();
-//        switch(cardType) {
-//            case "TF":
-//                card = new TFCard();
-//                break;
-//            case "MC":
-//                card = new MCCard();
-//                break;
-//            //TODO will implement later
-////            case "FR":
-////                card = new FRCard();
-////                break;
-////            case "VR":
-////                card = new VRCard();
-////                break;
-//        }
         card.setId(cursor.getLong(0));
         card.setCardType(cursor.getString(1));
         card.setQuestion(cursor.getString(2));

@@ -1,23 +1,19 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.nfc.Tag;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Adapters.CardAdapter;
 import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
+import com.seniordesign.wolfpack.quizinator.Database.Card.CardDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
-import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.R;
 
 import java.util.ArrayList;
@@ -34,12 +30,16 @@ public class CardsActivity extends AppCompatActivity {
     private List<String> cardTypes = new ArrayList<>(Arrays.asList(Constants.LONG_TRUE_FALSE, Constants.LONG_MULTIPLE_CHOICE));
 //    private List<String> cardTypes = new ArrayList<>(Arrays.asList(Constants.LONG_TRUE_FALSE, Constants.LONG_MULTIPLE_CHOICE, Constants.LONG_FREE_RESPONSE, Constants.LONG_VERBAL_RESPONSE));
 
+    private CardDataSource cardDataSource;
+
     private static final String TAG = "ACT_CA";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cards);
+        setTitle(Constants.CARDS);
+        initializeDB();
 
         cardTypeSpinner = (MultiSelectSpinner) findViewById(R.id.card_type_spinner);
         selectedCardTypes = new ArrayList<>();
@@ -74,8 +74,14 @@ public class CardsActivity extends AppCompatActivity {
                         for(int i = 0; i < selectedCardTypes.size(); i++){
                             chosenTypes.add(selectedCardTypes.get(i));
                         }
+                        fillListOfCards(cardDataSource.filterCards(chosenTypes));
                     }
                 });
+    }
+
+    private boolean initializeDB(){
+        cardDataSource = new CardDataSource(this);
+        return cardDataSource.open();
     }
 
     private void fillListOfCards(List<Card> values){
@@ -100,30 +106,30 @@ public class CardsActivity extends AppCompatActivity {
     /*
      * @author leonardj (12/23/16)
      */
-    private boolean isInputEmpty(EditText input) {
-        return input.getText().toString().equals("");
-    }
+//    private boolean isInputEmpty(EditText input) {
+//        return input.getText().toString().equals("");
+//    }
 
     /*
      * @author leonardj (12/16/16)
      */
-    public List<String> formatCardTypes(Deck deck) {
-        ArrayList<String> types = new ArrayList<>();
-        if (deck == null) {
-            return types;
-        }
-        for (String type : deck.getCardTypes()) {
-            if (type.equals(Constants.SHORT_TRUE_FALSE))
-                types.add(Constants.LONG_TRUE_FALSE);
-            else if (type.equals(Constants.SHORT_MULTIPLE_CHOICE))
-                types.add(Constants.LONG_MULTIPLE_CHOICE);
-            else if (type.equals(Constants.SHORT_FREE_RESPONSE))
-                types.add(Constants.LONG_FREE_RESPONSE);
-            else if (type.equals(Constants.SHORT_VERBAL_RESPONSE))
-                types.add(Constants.LONG_VERBAL_RESPONSE);
-        }
-        return types;
-    }
+//    public List<String> formatCardTypes(Deck deck) {
+//        ArrayList<String> types = new ArrayList<>();
+//        if (deck == null) {
+//            return types;
+//        }
+//        for (String type : deck.getCardTypes()) {
+//            if (type.equals(Constants.SHORT_TRUE_FALSE))
+//                types.add(Constants.LONG_TRUE_FALSE);
+//            else if (type.equals(Constants.SHORT_MULTIPLE_CHOICE))
+//                types.add(Constants.LONG_MULTIPLE_CHOICE);
+//            else if (type.equals(Constants.SHORT_FREE_RESPONSE))
+//                types.add(Constants.LONG_FREE_RESPONSE);
+//            else if (type.equals(Constants.SHORT_VERBAL_RESPONSE))
+//                types.add(Constants.LONG_VERBAL_RESPONSE);
+//        }
+//        return types;
+//    }
 
     /*
      * @author leonardj (12/16/16)

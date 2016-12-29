@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
@@ -30,6 +31,8 @@ import java.util.List;
 
 import io.apptik.widget.multiselectspinner.BaseMultiSelectSpinner;
 import io.apptik.widget.multiselectspinner.MultiSelectSpinner;
+
+import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_SEND_RULES_ACTIVITY;
 
 
 /*
@@ -292,10 +295,8 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
         if (rule.getMaxCardCount() > deck.filter(rule).getCards().size())
             cardCountInput.setText("" + deck.filter(rule).getCards().size());
-        if (type.equals(Constants.LONG_TRUE_FALSE)) {
+        else
             cardCountInput.setText("" + rule.getMaxCardCount());
-        } else if (type.equals(Constants.LONG_MULTIPLE_CHOICE)) {
-        } else if (type.equals("Both")) { // TODO make as a constant
 
         Log.d(TAG, "Selected card types: " + rule.getCardTypes());
         Type listType = new TypeToken<ArrayList<String>>(){}.getType();
