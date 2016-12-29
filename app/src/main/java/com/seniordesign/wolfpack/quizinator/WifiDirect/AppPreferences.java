@@ -19,7 +19,7 @@ public class AppPreferences {
 
     private static final String TAG = "PTP_Pref";
 
-    public static final String PREF_NAME = Constants.PACKAGE_NAME;
+    public static final String PREF_NAME = MessageCodes.PACKAGE_NAME;
 
     public static final String P2P_ENABLED = "p2pEnabled";
 
@@ -28,7 +28,7 @@ public class AppPreferences {
 
     public AppPreferences(WifiDirectApp app) {
         mApp = app;
-        mPref = mApp.getSharedPreferences(Constants.PACKAGE_NAME, 0);
+        mPref = mApp.getSharedPreferences(MessageCodes.PACKAGE_NAME, 0);
     }
 
     public String getString(String key) {

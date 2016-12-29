@@ -37,7 +37,7 @@ import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_PUSHOUT_DATA;
+import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_PUSHOUT_DATA;
 
 /**
  * A fragment that manages a particular peer and allows interaction with device

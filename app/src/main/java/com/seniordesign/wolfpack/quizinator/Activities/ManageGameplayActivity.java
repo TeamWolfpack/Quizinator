@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckDataSource;
@@ -22,9 +23,9 @@ import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
 import java.util.ArrayList;
 
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_ANSWER_CONFIRMATION_ACTIVITY;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_END_OF_GAME_ACTIVITY;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_SEND_CARD_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_ANSWER_CONFIRMATION_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_END_OF_GAME_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_SEND_CARD_ACTIVITY;
 
 public class ManageGameplayActivity extends AppCompatActivity {
 
@@ -59,7 +60,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
 
         answers = new ArrayList<>();
 
-        setTitle("Hosting Game");
+        setTitle(Constants.HOSTING_GAME);
 
         wifiDirectApp = (WifiDirectApp)getApplication();
         wifiDirectApp.mManageActivity = this;

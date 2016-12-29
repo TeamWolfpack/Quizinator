@@ -10,8 +10,8 @@ import com.seniordesign.wolfpack.quizinator.Messages.Answer;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_PLAYER_READY_ACTIVITY;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_SEND_ANSWER_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_PLAYER_READY_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_SEND_ANSWER_ACTIVITY;
 
 /**
  * Created by farrowc on 11/29/2016.
