@@ -14,6 +14,7 @@ import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Adapters.CardAdapter;
+import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
@@ -30,8 +31,8 @@ public class CardsActivity extends AppCompatActivity {
 
     private MultiSelectSpinner cardTypeSpinner;
     private List<String> selectedCardTypes;
-    private List<String> cardTypes = new ArrayList<>(Arrays.asList("True/False", "Multiple Choice"));
-//    private List<String> cardTypes = new ArrayList<>(Arrays.asList("True/False", "Multiple Choice", "Free Response", "Verbal Response"));
+    private List<String> cardTypes = new ArrayList<>(Arrays.asList(Constants.LONG_TRUE_FALSE, Constants.LONG_MULTIPLE_CHOICE));
+//    private List<String> cardTypes = new ArrayList<>(Arrays.asList(Constants.LONG_TRUE_FALSE, Constants.LONG_MULTIPLE_CHOICE, Constants.LONG_FREE_RESPONSE, Constants.LONG_VERBAL_RESPONSE));
 
     private static final String TAG = "ACT_CA";
 
@@ -46,8 +47,7 @@ public class CardsActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_multiple_choice, cardTypes);
         cardTypeSpinner
                 .setListAdapter(cardTypeAdapter)
-                .setAllCheckedText("All Types")
-                .setAllUncheckedText("None Selected")
+                .setAllCheckedText(Constants.ALL_CARD_TYPES)
                 .setSelectAll(true)
                 .setMinSelectedItems(1)
                 .setListener(new BaseMultiSelectSpinner.MultiSpinnerListener() {
@@ -113,14 +113,14 @@ public class CardsActivity extends AppCompatActivity {
             return types;
         }
         for (String type : deck.getCardTypes()) {
-            if (type.equals("TF"))
-                types.add("True/False");
-            else if (type.equals("MC"))
-                types.add("Multi-Choice");
-            else if (type.equals("FR"))
-                types.add("Free Response");
-            else if (type.equals("VR"))
-                types.add("Verbal Response");
+            if (type.equals(Constants.SHORT_TRUE_FALSE))
+                types.add(Constants.LONG_TRUE_FALSE);
+            else if (type.equals(Constants.SHORT_MULTIPLE_CHOICE))
+                types.add(Constants.LONG_MULTIPLE_CHOICE);
+            else if (type.equals(Constants.SHORT_FREE_RESPONSE))
+                types.add(Constants.LONG_FREE_RESPONSE);
+            else if (type.equals(Constants.SHORT_VERBAL_RESPONSE))
+                types.add(Constants.LONG_VERBAL_RESPONSE);
         }
         return types;
     }
@@ -128,39 +128,33 @@ public class CardsActivity extends AppCompatActivity {
     /*
      * @author leonardj (12/16/16)
      */
-    public String shortFormCardType(String type) throws Exception {
-        String shortForm = null;
-
-        if (type.equals("True/False"))
-            shortForm = "TF";
-        else if (type.equals("Multiple Choice"))
-            shortForm = "MC";
-        else if (type.equals("Free Response"))
-            shortForm = "FR";
-        else if (type.equals("Verbal Response"))
-            shortForm = "VR";
+    private String shortFormCardType(String type) throws Exception {
+        if (type.equals(Constants.LONG_TRUE_FALSE))
+            return Constants.SHORT_TRUE_FALSE;
+        else if (type.equals(Constants.LONG_MULTIPLE_CHOICE))
+            return Constants.SHORT_MULTIPLE_CHOICE;
+        else if (type.equals(Constants.LONG_FREE_RESPONSE))
+            return Constants.SHORT_FREE_RESPONSE;
+        else if (type.equals(Constants.LONG_VERBAL_RESPONSE))
+            return Constants.SHORT_VERBAL_RESPONSE;
         else
             throw new Exception("Invalid Card Type");
-        return shortForm;
     }
 
     /*
   * @author leonardj (12/16/16)
   */
 
-
-    public String longFormCardType(String type) {
-        String longForm = null;
-
-        if (type.equals("TF"))
-            longForm = "True/False";
-        else if (type.equals("MC"))
-            longForm = "Multi-Choice";
-        else if (type.equals("FR"))
-            longForm = "Free Response";
-        else if (type.equals("VR"))
-            longForm = "Verbal Response";
-        return longForm;
-
+    private String longFormCardType(String type) throws Exception {
+        if (type.equals(Constants.SHORT_TRUE_FALSE))
+            return Constants.LONG_TRUE_FALSE;
+        else if (type.equals(Constants.SHORT_MULTIPLE_CHOICE))
+            return Constants.LONG_MULTIPLE_CHOICE;
+        else if (type.equals(Constants.SHORT_FREE_RESPONSE))
+            return Constants.LONG_FREE_RESPONSE;
+        else if (type.equals(Constants.SHORT_VERBAL_RESPONSE))
+            return Constants.LONG_VERBAL_RESPONSE;
+        else
+            throw new Exception("Invalid Card Type");
     }
 }
