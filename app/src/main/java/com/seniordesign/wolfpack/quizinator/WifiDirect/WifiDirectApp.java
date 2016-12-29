@@ -19,8 +19,8 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_STARTCLIENT;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_STARTSERVER;
+import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_STARTCLIENT;
+import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_STARTSERVER;
 
 /**
  * Creates an instance of a WifiDirect Application because it is a

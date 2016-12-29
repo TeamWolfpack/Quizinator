@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
@@ -49,9 +50,9 @@ public class HostGameActivity
         Log.d(TAG, "onCreate: is server - " + wifiDirectApp.mIsServer);
 
         if (wifiDirectApp.mIsServer) {
-            setTitle("Host Game");
+            setTitle(Constants.HOST_GAME);
         } else {
-            setTitle("Join Game");
+            setTitle(Constants.JOIN_GAME);
             findViewById(R.id.start_game_settings).setVisibility(View.GONE);
         }
 
@@ -310,8 +311,8 @@ public class HostGameActivity
                 Intent i = wifiDirectApp.
                         getLaunchActivityIntent(
                                 GamePlayActivity.class, null);
-                    i.putExtra("Rules", new Gson().toJson(rules));
-                    i.putExtra("GameMode",false);
+                    i.putExtra(Constants.RULES, new Gson().toJson(rules));
+                    i.putExtra(Constants.GAME_MODE,false);
                 startActivity(i);
             }
         });

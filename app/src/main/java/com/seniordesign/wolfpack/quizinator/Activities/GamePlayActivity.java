@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.GameplayHandler.GamePlayHandler;
 import com.seniordesign.wolfpack.quizinator.GameplayHandler.GamePlayProperties;
 import com.seniordesign.wolfpack.quizinator.GameplayHandler.MultiplayerHandler;
@@ -47,10 +48,10 @@ public class GamePlayActivity
 
         properties.setWifiDirectApp((WifiDirectApp)getApplication());
         if(getIntent().getExtras().getBoolean("GameMode")){
-            System.out.println("SP");
+            System.out.println("SP"); //TODO might not be necessary
             gamePlayHandler = new SinglePlayerHandler();
         }else{
-            System.out.println("MP");
+            System.out.println("MP"); //TODO might not be necessary
             gamePlayHandler = new MultiplayerHandler();
         }
 
@@ -106,7 +107,7 @@ public class GamePlayActivity
      */
     public void showCard(final Card card) {
         switch(card.getCardType()){
-            case("TF"):
+            case(Constants.SHORT_TRUE_FALSE):
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -120,7 +121,7 @@ public class GamePlayActivity
                     }
                 });
                 break;
-            case("MC"):
+            case(Constants.SHORT_MULTIPLE_CHOICE):
                 final MultipleChoiceAnswerFragment mcFragment = new MultipleChoiceAnswerFragment();
                 mcFragment.setChoiceA(card.getPossibleAnswers()[0]);
                 mcFragment.setChoiceB(card.getPossibleAnswers()[1]);
@@ -138,9 +139,6 @@ public class GamePlayActivity
 
                     }
                 });
-
-
-
                 break;
             default:
                 break;

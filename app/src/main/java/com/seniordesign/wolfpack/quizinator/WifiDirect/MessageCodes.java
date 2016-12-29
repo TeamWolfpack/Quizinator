@@ -1,8 +1,8 @@
 package com.seniordesign.wolfpack.quizinator.WifiDirect;
 
-public final class Constants {
+public final class MessageCodes {
 
-    public static final String PACKAGE_NAME = Constants.class.getPackage().getName();
+    public static final String PACKAGE_NAME = MessageCodes.class.getPackage().getName();
 
     public static final int MSG_NULL = 0;
     public static final int MSG_STARTSERVER = 1001;

@@ -1,7 +1,6 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
 import android.content.Intent;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputFilter;
@@ -12,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.google.gson.Gson;
+import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckDataSource;
@@ -25,8 +25,7 @@ import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 import java.util.Arrays;
 import java.util.Calendar;
 
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_SEND_CARD_ACTIVITY;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_SEND_RULES_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_SEND_RULES_ACTIVITY;
 
 /*
  * The new game settings activity is...
@@ -58,7 +57,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_game_settings);
-        setTitle("Game Settings");
+        setTitle(Constants.GAME_SETTINGS);
         wifiDirectApp = (WifiDirectApp)getApplication();
         initializeDB();
 
@@ -115,7 +114,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             //single player
             final Intent startGameIntent = new Intent(this,
                     GamePlayActivity.class);
-            startGameIntent.putExtra("GameMode",true);
+            startGameIntent.putExtra(Constants.GAME_MODE,true);
             startActivity(startGameIntent);
             return true;
         }
@@ -225,11 +224,11 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
         int position = 0;
         String type = rule.getCardTypes();
-        if (type.equals("True/False")) {
+        if (type.equals(Constants.LONG_TRUE_FALSE)) {
             position = 0;
-        } else if (type.equals("Multiple Choice")) {
+        } else if (type.equals(Constants.LONG_MULTIPLE_CHOICE)) {
             position = 1;
-        } else if (type.equals("Both")) {
+        } else if (type.equals("Both")) { // TODO make as a constant
             position = 2;
         }
 
@@ -267,43 +266,43 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         cards[0].setCorrectAnswer("2");
         String[] answerArea = {"1","2","3","4"};
         cards[0].setPossibleAnswers(answerArea);
-        cards[0].setCardType("MC");
+        cards[0].setCardType(Constants.SHORT_MULTIPLE_CHOICE);
         cards[1] = new Card();
         cards[1].setQuestion("1*2 = 0");
         cards[1].setCorrectAnswer("False");
-        cards[1].setCardType("TF");
+        cards[1].setCardType(Constants.SHORT_TRUE_FALSE);
         cards[2] = new Card();
         cards[2].setQuestion("4*5 = 20");
         cards[2].setCorrectAnswer("True");
-        cards[2].setCardType("TF");
+        cards[2].setCardType(Constants.SHORT_TRUE_FALSE);
         cards[3] = new Card();
         cards[3].setQuestion("20*10 = 100");
         cards[3].setCorrectAnswer("False");
-        cards[3].setCardType("TF");
+        cards[3].setCardType(Constants.SHORT_TRUE_FALSE);
         cards[4] = new Card();
         cards[4].setQuestion("10*91 = 901");
         cards[4].setCorrectAnswer("False");
-        cards[4].setCardType("TF");
+        cards[4].setCardType(Constants.SHORT_TRUE_FALSE);
         cards[5] = new Card();
         cards[5].setQuestion("100^2 = 10000");
         cards[5].setCorrectAnswer("True");
-        cards[5].setCardType("TF");
+        cards[5].setCardType(Constants.SHORT_TRUE_FALSE);
         cards[6] = new Card();
         cards[6].setQuestion("10*102 = 1002");
         cards[6].setCorrectAnswer("False");
-        cards[6].setCardType("TF");
+        cards[6].setCardType(Constants.SHORT_TRUE_FALSE);
         cards[7] = new Card();
         cards[7].setQuestion("8/2 = 4");
         cards[7].setCorrectAnswer("True");
-        cards[7].setCardType("TF");
+        cards[7].setCardType(Constants.SHORT_TRUE_FALSE);
         cards[8] = new Card();
         cards[8].setQuestion("120/4 = 30");
         cards[8].setCorrectAnswer("True");
-        cards[8].setCardType("TF");
+        cards[8].setCardType(Constants.SHORT_TRUE_FALSE);
         cards[9] = new Card();
         cards[9].setQuestion("6*7 = 41");
         cards[9].setCorrectAnswer("False");
-        cards[9].setCardType("TF");
+        cards[9].setCardType(Constants.SHORT_TRUE_FALSE);
         newDeck.setCards(Arrays.asList(cards));
 
         deckDataSource.createDeck("Default", Arrays.asList(cards));
