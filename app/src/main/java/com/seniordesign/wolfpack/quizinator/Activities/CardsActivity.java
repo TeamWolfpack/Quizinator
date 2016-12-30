@@ -1,6 +1,7 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -86,21 +87,21 @@ public class CardsActivity extends AppCompatActivity {
 
     private void fillListOfCards(List<Card> values){
         final ListView listView = (ListView)findViewById(R.id.list_of_cards);
-        final CardAdapter adapter = new CardAdapter(this,
-                R.layout.array_adapter_list_of_cards, values);
 //        final CardAdapter adapter = new CardAdapter(this,
-//                android.R.layout.simple_list_item_1, values);
+//                R.layout.array_adapter_list_of_cards, values);
+        final CardAdapter adapter = new CardAdapter(this,
+                android.R.layout.simple_list_item_1, values);
         listView.setAdapter(adapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                Intent intent = new Intent(parent.getContext(), EditCardActivity.class);
-                intent.putExtra("_id", ((Card)listView.getItemAtPosition(position)).getId()); //
-                startActivity(intent);
-            }
-        });
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view,
+//                                    int position, long id) {
+//                Intent intent = new Intent(parent.getContext(), EditCardActivity.class);
+//                intent.putExtra("_id", ((Card)listView.getItemAtPosition(position)).getId()); //
+//                startActivity(intent);
+//            }
+//        });
     }
 
     /*

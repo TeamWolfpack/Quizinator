@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
+import com.seniordesign.wolfpack.quizinator.Database.Card.CardDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
@@ -55,6 +56,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
     private RulesDataSource rulesSource;
     private DeckDataSource deckDataSource;
+    private CardDataSource cardDataSource;
 
     private Deck deck;
 
@@ -104,8 +106,8 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
                             if (!isInputEmpty(cardCountInput) &&
                                     Integer.valueOf(cardCountInput.getText().toString()) > filteredDeck.getCards().size())
-                                cardCountInput.setText(filteredDeck.getCards().size()); //TODO
-//                                cardCountInput.setText("" + filteredDeck.getCards().size());
+//                                cardCountInput.setText(filteredDeck.getCards().size()); //TODO
+                                cardCountInput.setText("" + filteredDeck.getCards().size());
 
                             filterCardCount(filteredDeck);
                         }
@@ -113,9 +115,9 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
         cardCountInput = (EditText)findViewById(R.id.card_count);
             filterCardCount(deck);
-            cardCountInput.setText(deck.getCards().size()); //TODO
-            // cardCountInput.setText("" + deck.getCards().size());
-            cardCountInput.setText(deck.getCards().size()); // Should be deck count, change when deck is done
+//            cardCountInput.setText(deck.getCards().size()); //TODO
+             cardCountInput.setText("" + deck.getCards().size());
+//            cardCountInput.setText(deck.getCards().size()); // Should be deck count, change when deck is done
 
         gameMinutesInput = (EditText)findViewById(R.id.game_minutes);
             NumberFilter gameMinuteFilter = new NumberFilter(1);
@@ -329,7 +331,8 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     private boolean initializeDB(){
         rulesSource = new RulesDataSource(this);
         deckDataSource = new DeckDataSource(this);
-        return rulesSource.open() && deckDataSource.open();
+        cardDataSource = new CardDataSource(this);
+        return rulesSource.open() && deckDataSource.open() && cardDataSource.open();
     }
 
     /*
@@ -345,44 +348,73 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         String[] answerArea = {"1","2","3","4"};
         cards[0].setPossibleAnswers(answerArea);
         cards[0].setCardType(Constants.SHORT_MULTIPLE_CHOICE);
+        cards[0].setPoints(1);
+        cards[0].setModeratorNeeded("False");
         cards[1] = new Card();
         cards[1].setQuestion("1*2 = 0");
         cards[1].setCorrectAnswer("False");
         cards[1].setCardType(Constants.SHORT_TRUE_FALSE);
+        String[] answerAreaTF = {"True", "False"};
+        cards[1].setPossibleAnswers(answerAreaTF);
+        cards[1].setPoints(1);
+        cards[1].setModeratorNeeded("False");
         cards[2] = new Card();
         cards[2].setQuestion("4*5 = 20");
         cards[2].setCorrectAnswer("True");
         cards[2].setCardType(Constants.SHORT_TRUE_FALSE);
+        cards[2].setPossibleAnswers(answerAreaTF);
+        cards[2].setPoints(1);
+        cards[2].setModeratorNeeded("False");
         cards[3] = new Card();
         cards[3].setQuestion("20*10 = 100");
         cards[3].setCorrectAnswer("False");
         cards[3].setCardType(Constants.SHORT_TRUE_FALSE);
+        cards[3].setPossibleAnswers(answerAreaTF);
+        cards[3].setPoints(1);
+        cards[3].setModeratorNeeded("False");
         cards[4] = new Card();
         cards[4].setQuestion("10*91 = 901");
         cards[4].setCorrectAnswer("False");
         cards[4].setCardType(Constants.SHORT_TRUE_FALSE);
+        cards[4].setPossibleAnswers(answerAreaTF);
+        cards[4].setPoints(1);
+        cards[4].setModeratorNeeded("False");
         cards[5] = new Card();
         cards[5].setQuestion("100^2 = 10000");
         cards[5].setCorrectAnswer("True");
         cards[5].setCardType(Constants.SHORT_TRUE_FALSE);
+        cards[5].setPossibleAnswers(answerAreaTF);
+        cards[5].setPoints(1);
+        cards[5].setModeratorNeeded("False");
         cards[6] = new Card();
         cards[6].setQuestion("10*102 = 1002");
         cards[6].setCorrectAnswer("False");
         cards[6].setCardType(Constants.SHORT_TRUE_FALSE);
+        cards[6].setPossibleAnswers(answerAreaTF);
+        cards[6].setPoints(1);
+        cards[6].setModeratorNeeded("False");
         cards[7] = new Card();
         cards[7].setQuestion("8/2 = 4");
         cards[7].setCorrectAnswer("True");
         cards[7].setCardType(Constants.SHORT_TRUE_FALSE);
+        cards[7].setPossibleAnswers(answerAreaTF);
+        cards[7].setPoints(1);
+        cards[7].setModeratorNeeded("False");
         cards[8] = new Card();
         cards[8].setQuestion("120/4 = 30");
         cards[8].setCorrectAnswer("True");
         cards[8].setCardType(Constants.SHORT_TRUE_FALSE);
+        cards[8].setPossibleAnswers(answerAreaTF);
+        cards[8].setPoints(1);
+        cards[8].setModeratorNeeded("False");
         cards[9] = new Card();
         cards[9].setQuestion("6*7 = 41");
         cards[9].setCorrectAnswer("False");
         cards[9].setCardType(Constants.SHORT_TRUE_FALSE);
+        cards[9].setPossibleAnswers(answerAreaTF);
+        cards[9].setPoints(1);
+        cards[9].setModeratorNeeded("False");
         newDeck.setCards(Arrays.asList(cards));
-
         deckDataSource.createDeck("Default", Arrays.asList(cards));
 
         return newDeck;
