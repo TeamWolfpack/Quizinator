@@ -42,7 +42,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
      */
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, "onReceive: intent reveived by broadcast receiver"); //TODO remove later
+        Log.d(TAG, "onReceive: intent reveived by broadcast receiver");
         String action = intent.getAction();
         // start ConnectionService
         Intent serviceIntent = new Intent(

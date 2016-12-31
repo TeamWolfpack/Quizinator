@@ -1,23 +1,6 @@
-/*
- * Copyright (C) 2011 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.seniordesign.wolfpack.quizinator.Fragments;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import android.app.ListFragment;
@@ -26,7 +9,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
-import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
@@ -45,20 +26,20 @@ import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
  * A ListFragment that displays available peers on discovery and requests the
  * parent activity to handle user interaction events
  */
-public class DeviceListFragment extends ListFragment {  // callback of requestPeers
+public class DeviceListFragment extends ListFragment {
 
     private static final String TAG = "PTP_ListFrag";
 
     WifiDirectApp mApp = null;
 
-    private List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
+    private List<WifiP2pDevice> peers = new ArrayList<>();
     ProgressDialog progressDialog = null;
     View mContentView = null;
     private WifiP2pDevice device;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        Log.d(TAG, "onActivityCreated: Start"); //TODO Remove later, for debug purposes
+        Log.d(TAG, "onActivityCreated");
         super.onActivityCreated(savedInstanceState);
         // set list adapter with row layout to adapter data
         this.setListAdapter(new WiFiPeerListAdapter(getActivity(), R.layout.row_devices, peers));
@@ -68,7 +49,7 @@ public class DeviceListFragment extends ListFragment {  // callback of requestPe
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView: Start"); //TODO Remove later, for debug purposes
+        Log.d(TAG, "onCreateView");
         mContentView = inflater.inflate(R.layout.device_list, null);
         return mContentView;
     }
@@ -85,7 +66,7 @@ public class DeviceListFragment extends ListFragment {  // callback of requestPe
      */
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Log.d(TAG, "onListItemClick: Start"); //TODO Remove later, for debug purposes
+        Log.d(TAG, "onListItemClick");
         WifiP2pDevice device = (WifiP2pDevice) getListAdapter().getItem(position);
         ((DeviceActionListener) getActivity()).showDetails(device);
     }
@@ -110,7 +91,7 @@ public class DeviceListFragment extends ListFragment {  // callback of requestPe
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            Log.d(TAG, "getView: Start"); //TODO Remove later, for debug purposes
+            Log.d(TAG, "getView");
             View v = convertView;
             if (v == null) {
                 LayoutInflater vi = (LayoutInflater) getActivity().getSystemService(
@@ -138,7 +119,7 @@ public class DeviceListFragment extends ListFragment {  // callback of requestPe
      * @param device WifiP2pDevice object
      */
     public void updateThisDevice(WifiP2pDevice device) { // callback of this device details changed bcast event.
-        Log.d(TAG, "updateThisDevice: Start"); //TODO Remove later, for debug purposes
+        Log.d(TAG, "updateThisDevice");
         TextView nameview = (TextView) mContentView.findViewById(R.id.my_name);
         TextView statusview = (TextView) mContentView.findViewById(R.id.my_status);
         if (device != null) {
@@ -156,7 +137,7 @@ public class DeviceListFragment extends ListFragment {  // callback of requestPe
      * from WifiP2pManager.requestPeers(channel, PeerListListener);
      */
     public void onPeersAvailable(List<WifiP2pDevice> peerList) {   // the callback to collect peer list after discover.
-        Log.d(TAG, "onPeersAvailable: Start"); //TODO Remove later, for debug purposes
+        Log.d(TAG, "onPeersAvailable");
         if (progressDialog != null && progressDialog.isShowing()) {  // dismiss progressbar first.
             progressDialog.dismiss();
         }
@@ -164,21 +145,17 @@ public class DeviceListFragment extends ListFragment {  // callback of requestPe
 
         ArrayList<WifiP2pDevice> toRemove = new ArrayList();
         if (mApp.mIsServer) {
-            Log.d(TAG, "onPeersAvailable: mApp.mServer is true (HOST)"); //TODO Remove later, for debug purposes
+            Log.d(TAG, "onPeersAvailable: mApp.mServer is true (HOST)");
             for (WifiP2pDevice device : peerList) {
                 if (device.isGroupOwner())
                     toRemove.add(device);
             }
         } else {
-            Log.d(TAG, "onPeersAvailable: mApp.mServer is false (CLIENT)"); //TODO Remove later, for debug purposes
+            Log.d(TAG, "onPeersAvailable: mApp.mServer is false (CLIENT)");
             for (WifiP2pDevice device : peerList) {
                 if (!device.isGroupOwner())
                     toRemove.add(device);
             }
-        }
-        //TODO Remove later, for debug purposes
-        for(WifiP2pDevice device : toRemove){
-            Log.d(TAG, "Device to remove: " + device.toString());
         }
         peerList.removeAll(toRemove);
 
@@ -190,7 +167,7 @@ public class DeviceListFragment extends ListFragment {  // callback of requestPe
     }
 
     public void clearPeers() {
-        Log.d(TAG, "clearPeers: Start"); //TODO Remove later, for debug purposes
+        Log.d(TAG, "clearPeers");
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -207,7 +184,7 @@ public class DeviceListFragment extends ListFragment {  // callback of requestPe
 
 
     public void onInitiateDiscovery() {
-        Log.d(TAG, "onInitiateDiscovery: Start"); //TODO Remove later, for debug purposes
+        Log.d(TAG, "onInitiateDiscovery");
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }

@@ -190,9 +190,9 @@ public class HostGameActivity
      * Process WIFI_P2P_THIS_DEVICE_CHANGED_ACTION intent, refresh this device.
      */
     public void updateThisDevice(final WifiP2pDevice device){
-//        Log.d(TAG, "updateThisDevice: \n" +
-//                "     device name: " + device.deviceName + "\n" +
-//                "     device address: " + device.deviceAddress);
+        Log.d(TAG, "updateThisDevice: \n" +
+                "     device name: " + device.deviceName + "\n" +
+                "     device address: " + device.deviceAddress);
 
         runOnUiThread(new Runnable() {
             @Override public void run() {
@@ -295,9 +295,6 @@ public class HostGameActivity
         info.show();
     }
 
-    /*
-     * @author leonardj (11/4/16)
-     */
     public boolean startMultiplayerGamePlay(final Rules rules) {
         Log.d(TAG, "startMultiplayerGamePlay");
         if(!wifiDirectApp.mP2pConnected ){
