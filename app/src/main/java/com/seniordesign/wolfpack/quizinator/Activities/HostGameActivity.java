@@ -55,12 +55,10 @@ public class HostGameActivity
             findViewById(R.id.start_game_settings).setVisibility(View.GONE);
         }
 
-        //TODO -> remove the instantiation of serviceIntent if left unused, still create object
         // If service not started yet, start it.
-        Intent serviceIntent =
-                new Intent(this, ConnectionService.class);
-        // start the connection service
+        new Intent(this, ConnectionService.class);
 
+        // start the connection service
         wifiDirectApp.mP2pMan = (WifiP2pManager) getSystemService(
                 Context.WIFI_P2P_SERVICE);
         wifiDirectApp.mP2pChannel = wifiDirectApp.mP2pMan.initialize(
@@ -323,6 +321,8 @@ public class HostGameActivity
         Log.d(TAG, "showDetails: device - " + device.toString());
         DeviceDetailFragment fragment = (DeviceDetailFragment)
                 getFragmentManager().findFragmentById(R.id.frag_detail);
+        //TODO -> gonna need to extend implementation here
+            //TODO - would be nice to make connection button disappear on second click
         fragment.showDetails(device);
     }
 
