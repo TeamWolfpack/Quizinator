@@ -103,7 +103,6 @@ public class DeviceDetailFragment extends Fragment {
      *
      * @param device the device to be displayed
      */
-    //TODO -> this whole method updates the detail
     public void showDetails(WifiP2pDevice device) {
         Log.d(TAG, "showDetail");
         this.device = device;

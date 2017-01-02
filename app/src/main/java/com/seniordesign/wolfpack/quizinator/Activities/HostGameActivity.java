@@ -3,6 +3,7 @@ package com.seniordesign.wolfpack.quizinator.Activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
@@ -68,6 +69,20 @@ public class HostGameActivity
 
         initiateDiscovery();
     }
+
+    public void onClick(View v){
+        DeviceListFragment listFragment = (DeviceListFragment)getFragmentManager().findFragmentById(R.id.frag_list);
+        switch (v.getId()){
+            case R.id.btn_connect:
+                listFragment.onConnectButtonClicked();
+                break;
+            case R.id.btn_disconnect:
+                listFragment.onDisconnectButtonClicked();
+                break;
+        }
+    }
+
+
 
     /*
      *  onStart is called before onResume when resuming the activity.
@@ -214,16 +229,16 @@ public class HostGameActivity
             @Override public void run() {
                 DeviceListFragment fragmentList =
                         (DeviceListFragment) getFragmentManager().findFragmentById(R.id.frag_list);
-                DeviceDetailFragment fragmentDetails =
-                        (DeviceDetailFragment) getFragmentManager().findFragmentById(R.id.frag_detail);
-                if (fragmentList != null) {
-                    Log.d(TAG, "resetData: clearing peer list in fragment list");
-                    fragmentList.clearPeers();
-                }
-                if (fragmentDetails != null) {
-                    Log.d(TAG, "resetData: resetting view in fragment detail");
-                    fragmentDetails.resetViews();
-                }
+//                DeviceDetailFragment fragmentDetails =
+//                        (DeviceDetailFragment) getFragmentManager().findFragmentById(R.id.frag_detail);
+//                if (fragmentList != null) {
+//                    Log.d(TAG, "resetData: clearing peer list in fragment list");
+//                    fragmentList.clearPeers();
+//                }
+//                if (fragmentDetails != null) {
+//                    Log.d(TAG, "resetData: resetting view in fragment detail");
+//                    fragmentDetails.resetViews();
+//                }
             }
         });
     }
@@ -238,8 +253,8 @@ public class HostGameActivity
                 "group owner - " + info.isGroupOwner);
         runOnUiThread(new Runnable() {
             @Override public void run() {
-                DeviceDetailFragment fragmentDetails =
-                        (DeviceDetailFragment) getFragmentManager().findFragmentById(R.id.frag_detail);
+                DeviceListFragment fragmentDetails =
+                        (DeviceListFragment) getFragmentManager().findFragmentById(R.id.frag_list);
                 fragmentDetails.onConnectionInfoAvailable(info);
             }
         });
@@ -256,14 +271,14 @@ public class HostGameActivity
                 DeviceListFragment fragmentList =
                         (DeviceListFragment) getFragmentManager().findFragmentById(R.id.frag_list);
                     fragmentList.onPeersAvailable(wifiDirectApp.mPeers);  // use application cached list.
-                DeviceDetailFragment fragmentDetails =
-                        (DeviceDetailFragment) getFragmentManager().findFragmentById(R.id.frag_detail);
-
-                for(WifiP2pDevice d : peerList.getDeviceList()){
-                    if( d.status == WifiP2pDevice.FAILED ){
-                        fragmentDetails.resetViews();
-                    }
-                }
+//                DeviceDetailFragment fragmentDetails =
+//                        (DeviceDetailFragment) getFragmentManager().findFragmentById(R.id.frag_detail);
+//
+//                for(WifiP2pDevice d : peerList.getDeviceList()){
+//                    if( d.status == WifiP2pDevice.FAILED ){
+//                        fragmentDetails.resetViews();
+//                    }
+//                }
             }
         });
     }
@@ -319,8 +334,8 @@ public class HostGameActivity
     @Override
     public void showDetails(WifiP2pDevice device) {
         Log.d(TAG, "showDetails: device - " + device.toString());
-        DeviceDetailFragment fragment = (DeviceDetailFragment)
-                getFragmentManager().findFragmentById(R.id.frag_detail);
+        DeviceListFragment fragment = (DeviceListFragment)
+                getFragmentManager().findFragmentById(R.id.frag_list);
         //TODO -> gonna need to extend implementation here
             //TODO - would be nice to make connection button disappear on second click
         fragment.showDetails(device);
@@ -414,8 +429,8 @@ public class HostGameActivity
     @Override
     public void disconnect() {
         Log.d(TAG, "disconnect()");
-        final DeviceDetailFragment fragment = (DeviceDetailFragment)
-                getFragmentManager().findFragmentById(R.id.frag_detail);
+        final DeviceListFragment fragment = (DeviceListFragment)
+                getFragmentManager().findFragmentById(R.id.frag_list);
         if (fragment != null) {
             Log.d(TAG, "disconnect: resetting the detail fragment");
             fragment.resetViews();
@@ -429,7 +444,7 @@ public class HostGameActivity
             @Override
             public void onSuccess() {
                 Log.d(TAG, "disconnect: resetting the detail fragment view to GONE");
-                fragment.getView().setVisibility(View.GONE);
+//                fragment.getView().setVisibility(View.GONE);
             }
         });
 
