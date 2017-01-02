@@ -329,6 +329,7 @@ public class HostGameActivity
         fragment.showDetails(device);
     }
 
+    //TODO -> not positive what I removed to make this no longer needed
 //    @Override
     public void cancelDisconnect() {
         /*
