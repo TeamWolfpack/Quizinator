@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -33,10 +32,11 @@ public class DeviceListFragment extends ListFragment {
     private static final String TAG = "PTP_ListFrag";
 
     private List<WifiP2pDevice> peers = new ArrayList<>();
+
     private ProgressDialog progressDialog = null;
     private View mContentView = null;
     private WifiP2pDevice device;
-    private WifiP2pInfo info;
+    WifiP2pInfo info;
 
     private WifiDirectApp mApp = null;
     private PeerListAdapter peerListAdapter;
@@ -57,7 +57,7 @@ public class DeviceListFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
-        mContentView = inflater.inflate(R.layout.device_list, null);
+        mContentView = inflater.inflate(R.layout.device_list, container);
         return mContentView;
     }
 
@@ -102,8 +102,7 @@ public class DeviceListFragment extends ListFragment {
      *
      * @param device WifiP2pDevice object
      */
-    //TODO -> move to peer adapter if possible
-    public void updateThisDevice(WifiP2pDevice device) { // callback of this device details changed bcast event.
+    public void updateThisDevice(WifiP2pDevice device) {
         Log.d(TAG, "updateThisDevice");
         TextView nameview = (TextView) mContentView.findViewById(R.id.my_name);
         TextView statusview = (TextView) mContentView.findViewById(R.id.my_status);
@@ -113,8 +112,7 @@ public class DeviceListFragment extends ListFragment {
             statusview.setText(ConnectionService.getDeviceStatus(device.status));
         } else if (this.device != null) {
             nameview.setText(this.device.deviceName);
-            //TODO -> move this string to the Android strings for this app
-            statusview.setText("WiFi Direct Disabled, please re-enable.");
+            statusview.setText(R.string.wifi_direct_disabled);
         }
     }
 
@@ -122,14 +120,13 @@ public class DeviceListFragment extends ListFragment {
      * the callback defined in PeerListListener to get the async result
      * from WifiP2pManager.requestPeers(channel, PeerListListener);
      */
-    public void onPeersAvailable(List<WifiP2pDevice> peerList) {   // the callback to collect peer list after discover.
+    public void onPeersAvailable(List<WifiP2pDevice> peerList) {
         Log.d(TAG, "onPeersAvailable");
-        if (progressDialog != null && progressDialog.isShowing()) {  // dismiss progressbar first.
+        if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
         peers.clear();
-
-        ArrayList<WifiP2pDevice> toRemove = new ArrayList();
+        ArrayList<WifiP2pDevice> toRemove = new ArrayList<>();
         if (mApp.mIsServer) {
             Log.d(TAG, "onPeersAvailable: mApp.mServer is true (HOST)");
             for (WifiP2pDevice device : peerList) {
@@ -144,14 +141,8 @@ public class DeviceListFragment extends ListFragment {
             }
         }
         peerList.removeAll(toRemove);
-
         peers.addAll(peerList);
-        //TODO -> fix whatever this is
         ((PeerListAdapter) getListAdapter()).notifyDataSetChanged();
-
-        if (peers.size() == 0) {
-            return;
-        }
     }
 
     public void clearPeers() {
@@ -163,11 +154,9 @@ public class DeviceListFragment extends ListFragment {
                     progressDialog.dismiss();
                 }
                 peers.clear();
-                //TODO -> fix whatever this is
                 ((PeerListAdapter) getListAdapter()).notifyDataSetChanged();
             }
         });
-
     }
 
     public void onInitiateDiscovery() {
@@ -175,12 +164,13 @@ public class DeviceListFragment extends ListFragment {
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
-        progressDialog = ProgressDialog.show(getActivity(), "Press back to cancel", "finding peers", true,
-            true, new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                }
-            });
+        progressDialog = ProgressDialog.show(getActivity(),
+                "Press back to cancel", "finding peers", true, true,
+                new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+            }
+        });
     }
 
     /**
@@ -192,41 +182,36 @@ public class DeviceListFragment extends ListFragment {
             progressDialog.dismiss();
         }
         this.info = info;
-        this.getView().setVisibility(View.VISIBLE);
     }
 
     /**
      * Updates the UI with device data
-     *
-     * @param device the device to be displayed
      */
     public void showDetails(WifiP2pDevice device) {
         Log.d(TAG, "showDetail");
         this.device = device;
-        this.getView().setVisibility(View.VISIBLE);
     }
 
     /**
-     * Clears the UI fields after a disconnect or direct mode disable operation.
+     * Clears the UI fields after a disconnect or direct mode disable
+     * operation.
      */
     public void resetViews() {
         Log.d(TAG, "resetViews");
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
-
-        this.getView().setVisibility(View.GONE);
     }
 
     /**
-     * An interface-callback for the activity to listen to fragment interaction
-     * events.
+     * An interface-callback for the activity to listen to fragment
+     * interaction events.
      */
     public interface DeviceActionListener {
 
         void showDetails(WifiP2pDevice device);
 
-        void cancelDisconnect();
+//        void cancelDisconnect();
 
         void connect(WifiP2pConfig config);
 

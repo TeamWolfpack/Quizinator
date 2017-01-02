@@ -3,7 +3,6 @@ package com.seniordesign.wolfpack.quizinator.Activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
@@ -23,7 +22,6 @@ import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
-import com.seniordesign.wolfpack.quizinator.Fragments.DeviceDetailFragment;
 import com.seniordesign.wolfpack.quizinator.Fragments.DeviceListFragment;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WiFiDirectBroadcastReceiver;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
@@ -229,16 +227,11 @@ public class HostGameActivity
             @Override public void run() {
                 DeviceListFragment fragmentList =
                         (DeviceListFragment) getFragmentManager().findFragmentById(R.id.frag_list);
-//                DeviceDetailFragment fragmentDetails =
-//                        (DeviceDetailFragment) getFragmentManager().findFragmentById(R.id.frag_detail);
-//                if (fragmentList != null) {
-//                    Log.d(TAG, "resetData: clearing peer list in fragment list");
-//                    fragmentList.clearPeers();
-//                }
-//                if (fragmentDetails != null) {
-//                    Log.d(TAG, "resetData: resetting view in fragment detail");
-//                    fragmentDetails.resetViews();
-//                }
+                if (fragmentList != null) {
+                    Log.d(TAG, "resetData: clearing peer list in fragment list");
+                    fragmentList.clearPeers();
+                    fragmentList.resetViews();
+                }
             }
         });
     }
@@ -271,14 +264,12 @@ public class HostGameActivity
                 DeviceListFragment fragmentList =
                         (DeviceListFragment) getFragmentManager().findFragmentById(R.id.frag_list);
                     fragmentList.onPeersAvailable(wifiDirectApp.mPeers);  // use application cached list.
-//                DeviceDetailFragment fragmentDetails =
-//                        (DeviceDetailFragment) getFragmentManager().findFragmentById(R.id.frag_detail);
-//
-//                for(WifiP2pDevice d : peerList.getDeviceList()){
-//                    if( d.status == WifiP2pDevice.FAILED ){
-//                        fragmentDetails.resetViews();
-//                    }
-//                }
+
+                for(WifiP2pDevice d : peerList.getDeviceList()){
+                    if( d.status == WifiP2pDevice.FAILED ){
+                        fragmentList.resetViews();
+                    }
+                }
             }
         });
     }
@@ -334,14 +325,11 @@ public class HostGameActivity
     @Override
     public void showDetails(WifiP2pDevice device) {
         Log.d(TAG, "showDetails: device - " + device.toString());
-        DeviceListFragment fragment = (DeviceListFragment)
-                getFragmentManager().findFragmentById(R.id.frag_list);
-        //TODO -> gonna need to extend implementation here
-            //TODO - would be nice to make connection button disappear on second click
+        DeviceListFragment fragment = (DeviceListFragment) getFragmentManager().findFragmentById(R.id.frag_list);
         fragment.showDetails(device);
     }
 
-    @Override
+//    @Override
     public void cancelDisconnect() {
         /*
          * A cancel abort request by user. Disconnect i.e. removeGroup if
