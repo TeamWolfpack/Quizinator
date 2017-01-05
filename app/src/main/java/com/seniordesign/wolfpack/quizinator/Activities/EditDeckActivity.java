@@ -1,7 +1,10 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -12,17 +15,19 @@ import com.seniordesign.wolfpack.quizinator.Adapters.DeckAdapter;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Card.CardDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
+import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
 
 import java.util.List;
 
-public class EditDeckActivity extends AppCompatActivity {
+public class EditDeckActivity extends AppCompatActivity  implements AdapterView.OnItemClickListener{
 
     Deck deck;
     List<Card> cardsAvailable;
     CardAdapter deckCardAdapter;
     CardAdapter totalCardAdapter;
     CardDataSource cardDataSource;
+    DeckDataSource deckDataSource;
 
 
     @Override
@@ -41,7 +46,8 @@ public class EditDeckActivity extends AppCompatActivity {
 
     private boolean initializeDB(){
         cardDataSource = new CardDataSource(this);
-        return cardDataSource.open();
+        deckDataSource = new DeckDataSource(this);
+        return deckDataSource.open() && cardDataSource.open();
     }
 
     private void populateMenus(Deck deck, List<Card> cardsAvailable){
@@ -51,9 +57,65 @@ public class EditDeckActivity extends AppCompatActivity {
         deckCardAdapter = new CardAdapter(this,
                 android.R.layout.simple_list_item_1, deck.getCards());
         deckCardList.setAdapter(deckCardAdapter);
+        deckCardList.setOnItemClickListener(this);
         final ListView totalCardList = (ListView)findViewById(R.id.cards_in_database);
         totalCardAdapter = new CardAdapter(this,
                 android.R.layout.simple_list_item_1, cardsAvailable);
         totalCardList.setAdapter(totalCardAdapter);
+        totalCardList.setOnItemClickListener(this);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if(parent.getId()==R.id.cards_in_deck){
+            //Remove card from deck
+            deck.removeCard(deck.getCards().get(position));
+        }
+        else{
+            //Remove card from deck
+            deck.addCard(cardsAvailable.get(position));
+
+        }
+        deckCardAdapter.notifyDataSetChanged();
+    }
+
+    public void onSaveClick(View view){
+        String deckName = ((EditText)findViewById(R.id.edit_deck_name)).getText().toString();
+        deck.setDeckName(deckName);
+        deckDataSource.updateDeck(deck);
+        Intent intent = new Intent(this, DecksActivity.class);
+        startActivity(intent);
+    }
+
+    public void onCancelClick(View view){
+        Intent intent = new Intent(this, DecksActivity.class);
+        startActivity(intent);
+    }
+
+    /*
+     * @author kuczynskij (10/13/2016)
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        deckDataSource.open();
+        cardDataSource.open();
+    }
+
+    /*
+     * @author kuczynskij (10/13/2016)
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        deckDataSource.close();
+        cardDataSource.close();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        deckDataSource.close();
+        cardDataSource.close();
     }
 }

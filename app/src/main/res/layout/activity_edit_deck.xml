@@ -62,7 +62,8 @@
         <Button
             android:text="@string/cancel"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:onClick="onCancelClick" />
         <Button
             android:text="@string/Delete"
             android:layout_width="wrap_content"
@@ -70,7 +71,8 @@
         <Button
             android:text="@string/save"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:onClick="onSaveClick" />
     </LinearLayout>
 
 </LinearLayout>
