@@ -4,18 +4,22 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="3dp">
+    android:paddingTop="3dp"
+    >
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:text="@string/label_me" />
+        android:text="@string/label_me"
+        />
+
     <View
         android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:gravity="center_vertical"
-        android:background="@android:color/holo_blue_light" />
+        android:background="@android:color/holo_blue_light"
+        />
 
     <!-- Self information -->
     <LinearLayout
@@ -23,58 +27,77 @@
         android:layout_width="fill_parent"
         android:layout_height="?android:attr/listPreferredItemHeight"
         android:background="?android:attr/activatedBackgroundIndicator"
-        android:padding="3dip">
+        android:padding="3dip"
+        >
+
         <ImageView
             android:id="@+id/icon"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_marginRight="2dp"
-            android:src="@drawable/machine" />
+            android:src="@drawable/machine"
+            />
+
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="fill_parent">
+            android:layout_height="fill_parent"
+            >
+
             <TextView
                 android:id="@+id/my_name"
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center_vertical" />
+                android:gravity="center_vertical"
+                />
+
             <TextView
                 android:id="@+id/my_status"
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:singleLine="true"
-                android:ellipsize="marquee" />
-        </LinearLayout>
-    </LinearLayout>
+                android:maxLines="1"
+                android:ellipsize="marquee"
+                />
 
+        </LinearLayout>
+
+    </LinearLayout>
+    <!--TODO -> if the above code does not break then we can remove this code-->
+    <!--android:singleLine="true"-->
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:text="@string/label_peers" />
+        android:text="@string/label_peers"
+        />
 
     <View
         android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:gravity="center_vertical"
-        android:background="@android:color/holo_blue_light" />
+        android:background="@android:color/holo_blue_light"
+        />
 
     <!-- Available peers -->
     <ListView
         android:id="@id/android:list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
-        android:drawSelectorOnTop="false" />
+        android:drawSelectorOnTop="false"
+        />
+    <!--TODO -> code snippet below was a part of the above ui element, remove if it does not break things-->
+    <!--android:layout_height="match_parent"-->
 
     <TextView
         android:id="@id/android:empty"
         android:layout_width="match_parent"
         android:layout_gravity="center"
         android:layout_height="match_parent"
-        android:text="@string/empty_message" />
+        android:text="@string/empty_message"
+        />
+
 </LinearLayout>

@@ -340,9 +340,9 @@ public class HostGameActivity
         if (wifiDirectApp.mP2pMan != null) {
             final DeviceListFragment fragment = (DeviceListFragment)
                     getFragmentManager().findFragmentById(R.id.frag_list);
-            if (fragment.getDevice() == null || fragment.getDevice().status == WifiP2pDevice.CONNECTED) {
+            if (fragment.getMyDevice() == null || fragment.getMyDevice().status == WifiP2pDevice.CONNECTED) {
                 disconnect();
-            } else if (fragment.getDevice().status == WifiP2pDevice.AVAILABLE || fragment.getDevice().status == WifiP2pDevice.INVITED) {
+            } else if (fragment.getMyDevice().status == WifiP2pDevice.AVAILABLE || fragment.getMyDevice().status == WifiP2pDevice.INVITED) {
                 wifiDirectApp.mP2pMan.cancelConnect(wifiDirectApp.mP2pChannel, new WifiP2pManager.ActionListener() {
                     @Override
                     public void onSuccess() {
