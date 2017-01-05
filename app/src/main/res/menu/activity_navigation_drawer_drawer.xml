@@ -9,6 +9,10 @@
             android:id="@+id/nav_P2P_compatibility_check"
             android:title="Check P2P Compatibility"
             />
+        <item
+            android:id="@+id/nav_show_decks"
+            android:title="View and Edit Decks"
+            />
     <!--
         <item
             android:id="@+id/nav_application_settings"

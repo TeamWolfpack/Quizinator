@@ -52,4 +52,12 @@
     <string name="send_card">Send Card</string>
     <string name="end_game">End Game</string>
     <string name="question">Question</string>
+
+    <string name="deck_name">Deck Name</string>
+    <string name="deck_size">Deck Size</string>
+    <string name="MC_count">MC: 0</string>
+    <string name="TF_count">TF: 0</string>
+    <string name="FR_count">FR: 0</string>
+    <string name="VR_count">VR: 0</string>
+    <string name="new_deck">New Deck</string>
 </resources>
