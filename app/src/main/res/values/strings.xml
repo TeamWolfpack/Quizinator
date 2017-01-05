@@ -60,4 +60,8 @@
     <string name="FR_count">FR: 0</string>
     <string name="VR_count">VR: 0</string>
     <string name="new_deck">New Deck</string>
+    <string name="available_cards">Available Cards</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="Delete">Delete</string>
 </resources>
