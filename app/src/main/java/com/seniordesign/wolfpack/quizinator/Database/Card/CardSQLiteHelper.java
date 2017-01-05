@@ -54,7 +54,7 @@ public class CardSQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(DATABASE_CREATE);
-        setDefaultCardSet();
+        //setDefaultCardSet();
     }
 
     /*

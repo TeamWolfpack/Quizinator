@@ -36,7 +36,7 @@ public class DeckAdapter extends ArrayAdapter<Deck> {
         if (v == null) {
             LayoutInflater vi;
             vi = LayoutInflater.from(getContext());
-            v = vi.inflate(R.layout.array_adapter_list_of_cards, null);
+            v = vi.inflate(R.layout.array_adapter_list_of_decks, null);
         }
 
         Deck deck = getItem(position);
@@ -64,12 +64,12 @@ public class DeckAdapter extends ArrayAdapter<Deck> {
                 }
             }
 
-            TextView name = (TextView) v.findViewById(R.id.array_adapter_card_question);
-            TextView size = (TextView) v.findViewById(R.id.array_adapter_card_question);
-            TextView mcCountView = (TextView) v.findViewById(R.id.array_adapter_card_question);
-            TextView tfCountView = (TextView) v.findViewById(R.id.array_adapter_card_question);
-            TextView frCountView = (TextView) v.findViewById(R.id.array_adapter_card_question);
-            TextView vrCountView = (TextView) v.findViewById(R.id.array_adapter_card_question);
+            TextView name = (TextView) v.findViewById(R.id.array_adapter_deck_name);
+            TextView size = (TextView) v.findViewById(R.id.array_adapter_deck_size);
+            TextView mcCountView = (TextView) v.findViewById(R.id.array_adapter_deck_MC_count);
+            TextView tfCountView = (TextView) v.findViewById(R.id.array_adapter_deck_TF_count);
+            TextView frCountView = (TextView) v.findViewById(R.id.array_adapter_deck_FR_count);
+            TextView vrCountView = (TextView) v.findViewById(R.id.array_adapter_deck_VR_count);
 
             name.setText(deck.getDeckName());
             size.setText(""+deck.getCards().size()+" Cards");
