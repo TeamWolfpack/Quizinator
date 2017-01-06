@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.text.InputFilter;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -28,12 +30,14 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.List;
 
 import io.apptik.widget.multiselectspinner.BaseMultiSelectSpinner;
 import io.apptik.widget.multiselectspinner.MultiSelectSpinner;
 
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_SEND_RULES_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.Constants.*;
+import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.*;
 
 
 /*
@@ -49,6 +53,8 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     private EditText gameSecondsInput;
     private EditText cardMinutesInput;
     private EditText cardSecondsInput;
+
+    private Spinner deckSpinner;
 
     private MultiSelectSpinner cardTypeSpinner;
     private List<String> selectedCardTypes;
@@ -82,6 +88,46 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             deck = initializeDeck();
         }
 
+        deckSpinner = (Spinner)findViewById(R.id.deck_spinner);
+            List<String> deckNames = new ArrayList<>();
+            for (Deck deck: deckDataSource.getAllDecks()) {
+                deckNames.add(deck.getDeckName());
+            }
+            final ArrayAdapter<String> deckAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, deckNames);
+            deckAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            deckSpinner.setAdapter(deckAdapter);
+            deckSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    Log.d(TAG, "Item Selected");
+                    String name = deckAdapter.getItem(position);
+                    for (Deck deck: deckDataSource.getAllDecks()) {
+                        if (deck.getDeckName().equals(name)) {
+                            initializeCardInput(deck);
+                            break;
+                        }
+                    }
+                    // TODO update the card count and card type spinner with the newly selected deck
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    Log.d(TAG, "No Change in deck selection");
+                    // Do nothing
+                }
+            });
+
+        initializeCardInput(deck);
+        initializeTimeInput();
+
+        loadPreviousRules();
+    }
+
+    /*
+     * @author leonardj 1/6/17
+     */
+    private void initializeCardInput(final Deck deck) {
         cardTypeSpinner = (MultiSelectSpinner) findViewById(R.id.card_type_spinner);
             selectedCardTypes = new ArrayList<>();
             cardTypeOptions = formatCardTypes(deck);
@@ -89,8 +135,8 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                     android.R.layout.simple_list_item_multiple_choice, cardTypeOptions);
             cardTypeSpinner
                     .setListAdapter(cardTypeAdapter)
-                    .setAllCheckedText("All Types")
-                    .setAllUncheckedText("None Selected")
+                    .setAllCheckedText(ALL_CARD_TYPES)
+                    .setAllUncheckedText(NO_CARD_TYPES)
                     .setMinSelectedItems(1)
                     .setListener(new BaseMultiSelectSpinner.MultiSpinnerListener() {
                         @Override
@@ -106,7 +152,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
                             if (!isInputEmpty(cardCountInput) &&
                                     Integer.valueOf(cardCountInput.getText().toString()) > filteredDeck.getCards().size())
-//                                cardCountInput.setText(filteredDeck.getCards().size()); //TODO
+    //                                cardCountInput.setText(filteredDeck.getCards().size()); //TODO
                                 cardCountInput.setText("" + filteredDeck.getCards().size());
 
                             filterCardCount(filteredDeck);
@@ -115,10 +161,15 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
         cardCountInput = (EditText)findViewById(R.id.card_count);
             filterCardCount(deck);
-//            cardCountInput.setText(deck.getCards().size()); //TODO
-             cardCountInput.setText("" + deck.getCards().size());
-//            cardCountInput.setText(deck.getCards().size()); // Should be deck count, change when deck is done
+//                cardCountInput.setText(deck.getCards().size()); //TODO
+            cardCountInput.setText("" + deck.getCards().size());
+    //            cardCountInput.setText(deck.getCards().size()); // Should be deck count, change when deck is done
+    }
 
+    /*
+     * @author leonardj 1/6/17
+     */
+    private void initializeTimeInput() {
         gameMinutesInput = (EditText)findViewById(R.id.game_minutes);
             NumberFilter gameMinuteFilter = new NumberFilter(1);
             gameMinutesInput.setFilters(new InputFilter[]{ gameMinuteFilter });
@@ -138,8 +189,6 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             NumberFilter cardSecondsFilter = new NumberFilter(1);
             cardSecondsInput.setFilters(new InputFilter[]{ cardSecondsFilter });
             cardSecondsInput.setOnFocusChangeListener(cardSecondsFilter);
-
-        loadPreviousRules();
     }
 
     /*
@@ -212,23 +261,23 @@ public class NewGameSettingsActivity extends AppCompatActivity {
      */
     public Rules updateRuleSet() {
         if (isInputEmpty(gameMinutesInput)) {
-            Toast.makeText(this, "Game Minutes can't be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, GAME_MINUTES_ERROR, Toast.LENGTH_SHORT).show();
             return null;
         }
         if (isInputEmpty(gameSecondsInput)) {
-            Toast.makeText(this, "Game Seconds can't be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, GAME_SECONDS_ERROR, Toast.LENGTH_SHORT).show();
             return null;
         }
         if (isInputEmpty(cardMinutesInput)) {
-            Toast.makeText(this, "Card Minutes can't be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, CARD_MINUTES_ERROR, Toast.LENGTH_SHORT).show();
             return null;
         }
         if (isInputEmpty(cardSecondsInput)) {
-            Toast.makeText(this, "Card Seconds can't be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, CARD_SECONDS_ERROR, Toast.LENGTH_SHORT).show();
             return null;
         }
         if (isInputEmpty(cardCountInput)) {
-            Toast.makeText(this, "Card Count can't be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, CARD_COUNT_ERROR, Toast.LENGTH_SHORT).show();
             return null;
         }
 
@@ -431,14 +480,9 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         }
 
         for (String type: deck.getCardTypes()) {
-            if (type.equals("TF"))
-                types.add("True/False");
-            else if (type.equals("MC"))
-                types.add("Multi-Choice");
-            else if (type.equals("FR"))
-                types.add("Free Response");
-            else if (type.equals("VR"))
-                types.add("Verbal Response");
+            String longType = longFormCardType(type);
+            if (longType != null)
+                types.add(longType);
         }
         return types;
     }
@@ -449,14 +493,14 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     public String shortFormCardType(String type) {
         String shortForm = null;
 
-        if (type.equals("True/False"))
-            shortForm = "TF";
-        else if (type.equals("Multi-Choice"))
-            shortForm = "MC";
-        else if (type.equals("Free Response"))
-            shortForm = "FR";
-        else if (type.equals("Verbal Response"))
-            shortForm = "VR";
+        if (type.equals(LONG_TRUE_FALSE))
+            shortForm = SHORT_TRUE_FALSE;
+        else if (type.equals(LONG_MULTIPLE_CHOICE))
+            shortForm = SHORT_MULTIPLE_CHOICE;
+        else if (type.equals(LONG_FREE_RESPONSE))
+            shortForm = SHORT_FREE_RESPONSE;
+        else if (type.equals(LONG_VERBAL_RESPONSE))
+            shortForm = SHORT_VERBAL_RESPONSE;
 
         return shortForm;
     }
@@ -467,14 +511,14 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     public String longFormCardType(String type) {
         String longForm = null;
 
-        if (type.equals("TF"))
-            longForm = "True/False";
-        else if (type.equals("MC"))
-            longForm = "Multi-Choice";
-        else if (type.equals("FR"))
-            longForm = "Free Response";
-        else if (type.equals("VR"))
-            longForm = "Verbal Response";
+        if (type.equals(SHORT_TRUE_FALSE))
+            longForm = LONG_TRUE_FALSE;
+        else if (type.equals(SHORT_MULTIPLE_CHOICE))
+            longForm = LONG_MULTIPLE_CHOICE;
+        else if (type.equals(SHORT_FREE_RESPONSE))
+            longForm = LONG_FREE_RESPONSE;
+        else if (type.equals(SHORT_VERBAL_RESPONSE))
+            longForm = LONG_VERBAL_RESPONSE;
 
         return longForm;
     }
