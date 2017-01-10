@@ -120,11 +120,6 @@ public class DeviceListFragment extends ListFragment {
             deviceNameTextView.setText(this.myDevice.deviceName);
             deviceDetailsTextView.setText(R.string.wifi_direct_disabled);
         }
-
-        else{
-            //deviceNameTextView.setText(this.myDevice.deviceName);
-            deviceDetailsTextView.setText("Unavailable");
-        }
     }
 
     /**
