@@ -107,15 +107,23 @@ public class DeviceListFragment extends ListFragment {
      */
     public void updateThisDevice(WifiP2pDevice myDevice) {
         Log.d(TAG, "updateThisDevice");
+
         TextView deviceNameTextView = (TextView) mContentView.findViewById(R.id.my_name);
         TextView deviceDetailsTextView = (TextView) mContentView.findViewById(R.id.my_status);
+
         if (myDevice != null) {
             this.myDevice = myDevice;
             deviceNameTextView.setText(myDevice.deviceName);
             deviceDetailsTextView.setText(ConnectionService.getDeviceStatus(myDevice.status));
-        } else if (this.myDevice != null) {
+        }
+        else if (this.myDevice != null) {
             deviceNameTextView.setText(this.myDevice.deviceName);
             deviceDetailsTextView.setText(R.string.wifi_direct_disabled);
+        }
+
+        else{
+            //deviceNameTextView.setText(this.myDevice.deviceName);
+            deviceDetailsTextView.setText("Unavailable");
         }
     }
 
