@@ -73,7 +73,7 @@ public class DeviceListFragment extends ListFragment {
         Log.d(TAG, "onListItemClick");
         WifiP2pDevice device = (WifiP2pDevice) getListAdapter().getItem(position);
         ((DeviceActionListener) getActivity()).showDetails(device);
-        peerListAdapter.setSelectedIndex(position);
+        peerListAdapter.setSelectedIndex(position, wifiDirectApp.mIsServer);
     }
 
     public void onConnectButtonClicked(){
@@ -103,19 +103,19 @@ public class DeviceListFragment extends ListFragment {
     /**
      * Update UI for this myDevice.
      *
-     * @param device WifiP2pDevice object
+     * @param myDevice WifiP2pDevice object
      */
-    public void updateThisDevice(WifiP2pDevice device) {
+    public void updateThisDevice(WifiP2pDevice myDevice) {
         Log.d(TAG, "updateThisDevice");
-        TextView myNameTextView = (TextView) mContentView.findViewById(R.id.my_name);
-        TextView myStatusTextView = (TextView) mContentView.findViewById(R.id.my_status);
-        if (device != null) {
-            this.myDevice = device;
-            myNameTextView.setText(device.deviceName);
-            myStatusTextView.setText(ConnectionService.getDeviceStatus(device.status));
+        TextView deviceNameTextView = (TextView) mContentView.findViewById(R.id.my_name);
+        TextView deviceDetailsTextView = (TextView) mContentView.findViewById(R.id.my_status);
+        if (myDevice != null) {
+            this.myDevice = myDevice;
+            deviceNameTextView.setText(myDevice.deviceName);
+            deviceDetailsTextView.setText(ConnectionService.getDeviceStatus(myDevice.status));
         } else if (this.myDevice != null) {
-            myNameTextView.setText(this.myDevice.deviceName);
-            myStatusTextView.setText(R.string.wifi_direct_disabled);
+            deviceNameTextView.setText(this.myDevice.deviceName);
+            deviceDetailsTextView.setText(R.string.wifi_direct_disabled);
         }
     }
 
@@ -146,9 +146,8 @@ public class DeviceListFragment extends ListFragment {
         Iterator<WifiP2pDevice> iteratorOfPeersToRemove = toRemove.iterator();
         while (iteratorOfPeersToRemove.hasNext()) {
             WifiP2pDevice deviceToRemove = iteratorOfPeersToRemove.next();
-            if (peerList.contains(deviceToRemove)){
+            if (peerList.contains(deviceToRemove))
                 peerList.remove(deviceToRemove);
-            }
         }
         peerDevicesList.addAll(peerList);
         ((PeerListAdapter) getListAdapter()).notifyDataSetChanged();

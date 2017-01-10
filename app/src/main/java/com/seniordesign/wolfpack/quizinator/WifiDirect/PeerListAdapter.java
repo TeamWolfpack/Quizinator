@@ -18,6 +18,7 @@ import java.util.List;
 public class PeerListAdapter extends ArrayAdapter<WifiP2pDevice>{
 
     private int selectedIndex = ListView.NO_ID;
+    private boolean isHost;
     private List<WifiP2pDevice> devices;
 
     /**
@@ -31,8 +32,9 @@ public class PeerListAdapter extends ArrayAdapter<WifiP2pDevice>{
         this.devices = devices;
     }
 
-    public void setSelectedIndex(int index){
+    public void setSelectedIndex(int index, boolean isHost){
         this.selectedIndex = index;
+        this.isHost = isHost;
 
         // re-draw the list by informing the view of the changes
         notifyDataSetChanged();
@@ -44,7 +46,6 @@ public class PeerListAdapter extends ArrayAdapter<WifiP2pDevice>{
 
         if (v == null) {
             LayoutInflater vi;
-            //vi = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             vi = LayoutInflater.from(getContext());
             v = vi.inflate(R.layout.row_devices, null);
         }
@@ -66,7 +67,7 @@ public class PeerListAdapter extends ArrayAdapter<WifiP2pDevice>{
 
             LinearLayout buttons = (LinearLayout) v.findViewById(R.id.buttonsPanel);
 
-            if(position == selectedIndex){
+            if(!isHost && position == selectedIndex){
                 buttons.setVisibility(View.VISIBLE);
             }else{
                 buttons.setVisibility(View.GONE);

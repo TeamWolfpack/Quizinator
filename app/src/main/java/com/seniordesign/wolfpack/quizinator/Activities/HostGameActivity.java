@@ -210,7 +210,7 @@ public class HostGameActivity
                 DeviceListFragment fragment =
                         (DeviceListFragment)getFragmentManager().
                                 findFragmentById(R.id.frag_list);
-                if (fragment != null && device != null) {
+                if (fragment != null) {
                     fragment.updateThisDevice(device);
                 }
             }
