@@ -1,6 +1,8 @@
 package com.seniordesign.wolfpack.quizinator.Fragments;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import android.app.ListFragment;
@@ -125,7 +127,7 @@ public class DeviceListFragment extends ListFragment {
         Log.d(TAG, "onPeersAvailable");
         dismissProgressDialog();
         peerDevicesList.clear();
-        ArrayList<WifiP2pDevice> toRemove = new ArrayList<>();
+        List<WifiP2pDevice> toRemove = new ArrayList<>();
         if (wifiDirectApp.mIsServer) {
             Log.d(TAG, "onPeersAvailable: wifiDirectApp.mServer is true (HOST)");
             for (WifiP2pDevice device : peerList) {
@@ -139,7 +141,15 @@ public class DeviceListFragment extends ListFragment {
                     toRemove.add(device);
             }
         }
-        peerList.removeAll(toRemove);
+        //concurrent modification exception thrown if the user joins and leaves quickly
+        //use of iterator instead of collection.removeAll resolves threading problem
+        Iterator<WifiP2pDevice> iteratorOfPeersToRemove = toRemove.iterator();
+        while (iteratorOfPeersToRemove.hasNext()) {
+            WifiP2pDevice deviceToRemove = iteratorOfPeersToRemove.next();
+            if (peerList.contains(deviceToRemove)){
+                peerList.remove(deviceToRemove);
+            }
+        }
         peerDevicesList.addAll(peerList);
         ((PeerListAdapter) getListAdapter()).notifyDataSetChanged();
     }

@@ -275,7 +275,8 @@ public class ConnectionService extends Service implements
      */
     @Override
     public void onConnectionInfoAvailable(final WifiP2pInfo info) {
-        Log.d(TAG, "onConnectionInfoAvailable: " + info.groupOwnerAddress.getHostAddress());
+        if(info.groupOwnerAddress != null)
+            Log.d(TAG, "onConnectionInfoAvailable: " + info.groupOwnerAddress.getHostAddress());
         if (info.groupFormed && info.isGroupOwner) {
             // XXX server path goes to peer connected.
             //new FileServerAsyncTask(getActivity(), mContentView.findViewById(R.id.status_text)).execute();
