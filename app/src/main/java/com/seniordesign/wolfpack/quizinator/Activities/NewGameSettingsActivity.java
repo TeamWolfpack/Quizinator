@@ -384,7 +384,8 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         Type listType = new TypeToken<ArrayList<String>>(){}.getType();
         selectedCardTypes = gson.fromJson(rule.getCardTypes(), listType);
         for (String type: selectedCardTypes) {
-            cardTypeSpinner.selectItem(cardTypeOptions.indexOf(longFormCardType(type)), true);
+            if (cardTypeOptions.indexOf(longFormCardType(type)) > -1)
+                cardTypeSpinner.selectItem(cardTypeOptions.indexOf(longFormCardType(type)), true);
         }
         return true;
     }

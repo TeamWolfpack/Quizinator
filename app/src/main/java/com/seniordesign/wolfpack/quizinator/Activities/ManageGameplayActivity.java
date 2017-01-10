@@ -71,7 +71,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
 
         deckDataSource = new DeckDataSource(this);
         deckDataSource.open();
-        deck = deckDataSource.getAllDecks().get(0).filter(rules);
+        deck = deckDataSource.getDeckWithId(rules.getDeckId());
 
         cardLimit = Math.min(deck.getCards().size(),rules.getMaxCardCount());
 
