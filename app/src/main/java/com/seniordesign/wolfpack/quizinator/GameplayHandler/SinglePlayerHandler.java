@@ -67,7 +67,7 @@ public class SinglePlayerHandler implements GamePlayHandler {
         properties.setDeckDataSource(new DeckDataSource(gamePlayActivity));
         if (properties.getDeckDataSource().open()) {
             positiveDBConnections++;
-            properties.setDeck(properties.getDeckDataSource().getAllDecks().get(0).filter(properties.getRules()));
+            properties.setDeck(properties.getDeckDataSource().getDeckWithId(properties.getRules().getDeckId()).filter(properties.getRules()));
         }
         return (positiveDBConnections == 3);
     }
@@ -146,10 +146,8 @@ public class SinglePlayerHandler implements GamePlayHandler {
      */
     @Override
     public boolean handleInitializeGameplay(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
-        //Deck stuff
-        properties.getDeck().setDeckName("Sample");
-        properties.setDeckLength(Math.min(properties.getRules().getMaxCardCount(),properties.getDeck().getCards().size()));
-        //deckLength = Math.min(deck.getCards().length, rules.getMaxCardCount());
+        Rules rules = properties.getRules();
+        properties.setDeckLength(Math.min(rules.getMaxCardCount(), properties.getDeck().getCards().size()));
         properties.setCardTimerRunning(properties.getCardTimerStatic().start());
         properties.setGamePlayTimerRunning(properties.getGamePlayTimerStatic().start());
         properties.setCardTimerAreaBackgroundRunning(properties.getCardTimerAreaBackgroundStatic().start());
