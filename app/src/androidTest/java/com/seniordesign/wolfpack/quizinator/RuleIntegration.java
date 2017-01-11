@@ -64,7 +64,7 @@ public class RuleIntegration {
     public void validateUpdatingRuleOnGameStart() {
         RulesDataSource rulesource = new RulesDataSource(mActivityRule.getActivity());
         rulesource.open();
-        rulesource.createRule(5, 90000, 9000, getCardTypeString());
+        rulesource.createRule(5, 90000, 9000, getCardTypeString(), 1);
         mActivityRule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -104,7 +104,7 @@ public class RuleIntegration {
     public void validateLoadingFromDatabase() {
         RulesDataSource rulesource = new RulesDataSource(mActivityRule.getActivity());
         rulesource.open();
-        rulesource.createRule(5, 603000, 9000, getCardTypeString());
+        rulesource.createRule(5, 603000, 9000, getCardTypeString(), 1);
         mActivityRule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -125,7 +125,7 @@ public class RuleIntegration {
         onView(withId(R.id.card_count)).check(matches(withText(containsString("5"))));
         onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString("All Types"))));
 
-        rulesource.createRule(5, 90000, 10000, getCardTypeString());
+        rulesource.createRule(5, 90000, 10000, getCardTypeString(), 1);
         mActivityRule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -151,7 +151,7 @@ public class RuleIntegration {
     public void validateCardLimit() {
         RulesDataSource rulesource = new RulesDataSource(mActivityRule.getActivity());
         rulesource.open();
-        rulesource.createRule(1, 60000, 5000, getCardTypeString());
+        rulesource.createRule(1, 60000, 5000, getCardTypeString(), 1);
         mActivityRule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {

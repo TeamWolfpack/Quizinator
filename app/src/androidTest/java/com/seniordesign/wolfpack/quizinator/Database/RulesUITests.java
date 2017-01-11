@@ -59,10 +59,10 @@ public class RulesUITests {
         assertEquals(true, dao.open());
         assertEquals(true, dao.getDatabase().isOpen());
         sql.onUpgrade(dao.getDatabase(), 0, 1);
-        Rules r = dao.createRule(4, 350000, 350000, "true/false");
+        Rules r = dao.createRule(4, 350000, 350000, "['TF', 'MC']", 1);
         assertEquals("rules.db", dao.getSQLiteHelper().getDatabaseName());
         assertEquals(1, dao.getAllRules().size());
-        assertEquals(5, dao.getAllColumns().length);
+        assertEquals(6, dao.getAllColumns().length);
         assertEquals(true, dao.deleteRule(r));
         assertEquals(true, dao.close());
     }
@@ -75,10 +75,10 @@ public class RulesUITests {
         assertEquals(true, dao.open());
         assertEquals(true, dao.getDatabase().isOpen());
         sql.onUpgrade(dao.getDatabase(), 0, 1);
-        Rules r = dao.createRule(4, 350000, 350000, "true/false");
+        Rules r = dao.createRule(4, 350000, 350000, "['TF', 'MC']", 1);
         assertEquals("rules.db", dao.getSQLiteHelper().getDatabaseName());
         assertEquals(1, dao.getAllRules().size());
-        assertEquals(5, dao.getAllColumns().length);
+        assertEquals(6, dao.getAllColumns().length);
 
         r.setMaxCardCount(5);
         r.setTimeLimit(90000);
