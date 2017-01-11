@@ -25,7 +25,7 @@ public class Card{
         */
 
     public String toString(){
-        return cardType + " | " + question + " | " +
+        return cardType + " | " + question +
                 " | " + points;
     }
 

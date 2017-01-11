@@ -13,6 +13,11 @@ public final class Constants {
     public static final String SHORT_FREE_RESPONSE = "FR";
     public static final String SHORT_VERBAL_RESPONSE = "VR";
 
+    public static final String TRUE_FALSE = "True/False";
+    public static final String MULTIPLE_CHOICE = "Multiple Choice";
+    public static final String FREE_RESPONSE = "Free Response";
+    public static final String VERBAL_RESPONSE = "Verbal Response";
+
     public static final String LONG_TRUE_FALSE = "True/False";
     public static final String LONG_MULTIPLE_CHOICE = "Multiple Choice";
     public static final String LONG_FREE_RESPONSE = "Free Response";

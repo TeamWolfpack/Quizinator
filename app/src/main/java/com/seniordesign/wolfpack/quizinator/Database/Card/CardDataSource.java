@@ -175,6 +175,15 @@ public class CardDataSource {
         return cards;
     }
 
+    /*
+     * Need to check to make sure that the cardType string is shortFormatted
+     * before building whereClause.
+     */
+    private List<String> checkCardTypeForm(List<String> cardTypes){
+
+        return cardTypes;
+    }
+
     private String buildWhereClause(List<String> cardTypes) {
         if (cardTypes == null || cardTypes.size() == 0) {
             return null;
@@ -183,15 +192,15 @@ public class CardDataSource {
         int i = 0;
         while (cardTypes.size() != i + 1) {
             whereClause.append(CardSQLiteHelper.COLUMN_CARDTYPE)
-                    .append("=\"")
+                    .append("=\'")
                     .append(cardTypes.get(i))
-                    .append("\" OR ");
+                    .append("\' OR ");
             i++;
         }
         whereClause.append(CardSQLiteHelper.COLUMN_CARDTYPE)
-                .append("=\"")
+                .append("=\'")
                 .append(cardTypes.get(i))
-                .append("\"");
+                .append("\'");
         Log.d("DATABASE", "whereClause: " + whereClause.toString());
         return whereClause.toString();
     }
@@ -245,86 +254,4 @@ public class CardDataSource {
         String where = CardSQLiteHelper.COLUMN_ID + " = " + card.getId();
         return database.update(CardSQLiteHelper.TABLE_CARDS, values, where, null);
     }
-
-//    void setDefaultCardSet() {
-//        Card[] cards = new Card[10];
-//        cards[0] = new Card();
-//        cards[0].setQuestion("1+1 = ?");
-//        cards[0].setCorrectAnswer("2");
-//        String[] answerArea = {"1","2","3","4"};
-//        cards[0].setPossibleAnswers(answerArea);
-//        cards[0].setCardType(Constants.SHORT_MULTIPLE_CHOICE);
-//        cards[0].setPoints(1);
-//        cards[0].setModeratorNeeded("False");
-//        cards[1] = new Card();
-//        cards[1].setQuestion("1*2 = 0");
-//        cards[1].setCorrectAnswer("False");
-//        cards[1].setCardType(Constants.SHORT_TRUE_FALSE);
-//        String[] answerAreaTF = {"True", "False"};
-//        cards[1].setPossibleAnswers(answerAreaTF);
-//        cards[1].setPoints(1);
-//        cards[1].setModeratorNeeded("False");
-//        cards[2] = new Card();
-//        cards[2].setQuestion("4*5 = 20");
-//        cards[2].setCorrectAnswer("True");
-//        cards[2].setCardType(Constants.SHORT_TRUE_FALSE);
-//        cards[2].setPossibleAnswers(answerAreaTF);
-//        cards[2].setPoints(1);
-//        cards[2].setModeratorNeeded("False");
-//        cards[3] = new Card();
-//        cards[3].setQuestion("20*10 = 100");
-//        cards[3].setCorrectAnswer("False");
-//        cards[3].setCardType(Constants.SHORT_TRUE_FALSE);
-//        cards[3].setPossibleAnswers(answerAreaTF);
-//        cards[3].setPoints(1);
-//        cards[3].setModeratorNeeded("False");
-//        cards[4] = new Card();
-//        cards[4].setQuestion("10*91 = 901");
-//        cards[4].setCorrectAnswer("False");
-//        cards[4].setCardType(Constants.SHORT_TRUE_FALSE);
-//        cards[4].setPossibleAnswers(answerAreaTF);
-//        cards[4].setPoints(1);
-//        cards[4].setModeratorNeeded("False");
-//        cards[5] = new Card();
-//        cards[5].setQuestion("100^2 = 10000");
-//        cards[5].setCorrectAnswer("True");
-//        cards[5].setCardType(Constants.SHORT_TRUE_FALSE);
-//        cards[5].setPossibleAnswers(answerAreaTF);
-//        cards[5].setPoints(1);
-//        cards[5].setModeratorNeeded("False");
-//        cards[6] = new Card();
-//        cards[6].setQuestion("10*102 = 1002");
-//        cards[6].setCorrectAnswer("False");
-//        cards[6].setCardType(Constants.SHORT_TRUE_FALSE);
-//        cards[6].setPossibleAnswers(answerAreaTF);
-//        cards[6].setPoints(1);
-//        cards[6].setModeratorNeeded("False");
-//        cards[7] = new Card();
-//        cards[7].setQuestion("8/2 = 4");
-//        cards[7].setCorrectAnswer("True");
-//        cards[7].setCardType(Constants.SHORT_TRUE_FALSE);
-//        cards[7].setPossibleAnswers(answerAreaTF);
-//        cards[7].setPoints(1);
-//        cards[7].setModeratorNeeded("False");
-//        cards[8] = new Card();
-//        cards[8].setQuestion("120/4 = 30");
-//        cards[8].setCorrectAnswer("True");
-//        cards[8].setCardType(Constants.SHORT_TRUE_FALSE);
-//        cards[8].setPossibleAnswers(answerAreaTF);
-//        cards[8].setPoints(1);
-//        cards[8].setModeratorNeeded("False");
-//        cards[9] = new Card();
-//        cards[9].setQuestion("6*7 = 41");
-//        cards[9].setCorrectAnswer("False");
-//        cards[9].setCardType(Constants.SHORT_TRUE_FALSE);
-//        cards[9].setPossibleAnswers(answerAreaTF);
-//        cards[9].setPoints(1);
-//        cards[9].setModeratorNeeded("False");
-//
-//        this.open();
-//        for (Card card : cards) {
-//            this.createCard(card);
-//        }
-//        this.close();
-//    }
 }
