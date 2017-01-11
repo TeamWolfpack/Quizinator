@@ -48,6 +48,8 @@
     <string name="wifi_direct_disabled">WiFi Direct Disabled, please re-enable.</string>
     <string name="host_game_game_settings">Game Settings</string>
 
+    <string name="btn_disconnect_all">Disconnect All</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="send_card">Send Card</string>

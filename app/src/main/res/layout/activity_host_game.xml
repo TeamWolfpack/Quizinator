@@ -19,9 +19,17 @@
         android:onClick="startGameSettingsActivity" >
     </Button>
 
+    <Button
+        android:id="@+id/btn_disconnect_all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_disconnect_all"
+        android:onClick="disconnectAllPeersForTheHostPlayer" >
+    </Button>
+
     <fragment
-        class="com.seniordesign.wolfpack.quizinator.Fragments.DeviceListFragment"
-        android:id="@+id/frag_list"
+        class="com.seniordesign.wolfpack.quizinator.Fragments.PeerListFragment"
+        android:id="@+id/frag_peer_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
     </fragment>

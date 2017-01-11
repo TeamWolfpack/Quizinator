@@ -1,7 +1,6 @@
 package com.seniordesign.wolfpack.quizinator.Fragments;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -29,7 +28,7 @@ import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
  * A ListFragment that displays available peerDevicesList on discovery
  * and requests the parent activity to handle user interaction events.
  */
-public class DeviceListFragment extends ListFragment {
+public class PeerListFragment extends ListFragment {
 
     private static final String TAG = "PTP_ListFrag";
 
@@ -80,43 +79,35 @@ public class DeviceListFragment extends ListFragment {
         WifiP2pConfig config = new WifiP2pConfig();
             config.deviceAddress = myDevice.deviceAddress;
             config.wps.setup = WpsInfo.PBC;
-            // 15 is highest group owner (host)
-            // 0 is lowest (player)
-            config.groupOwnerIntent = wifiDirectApp.isHost();  // least inclination to be group owner.
+            // least inclination to be group owner.
+                // 15 is highest group owner (host)
+                // 0 is lowest (player)
+            config.groupOwnerIntent = wifiDirectApp.isHost();
         dismissProgressDialog();
         // perform p2p connect upon user click the connect button,
         // connect available handle when connection done.
-        ((DeviceListFragment.DeviceActionListener) getActivity()).connect(config);
+        ((PeerListFragment.DeviceActionListener) getActivity()).connect(config);
     }
 
     public void onDisconnectButtonClicked(){
-        ((DeviceListFragment.DeviceActionListener) getActivity()).disconnect();
-    }
-
-    /**
-     * @return this myDevice
-     */
-    public WifiP2pDevice getMyDevice(){
-        return myDevice;
+        ((PeerListFragment.DeviceActionListener) getActivity()).disconnect();
     }
 
     /**
      * Update UI for this myDevice.
-     *
-     * @param myDevice WifiP2pDevice object
      */
     public void updateThisDevice(WifiP2pDevice myDevice) {
         Log.d(TAG, "updateThisDevice");
-
-        TextView deviceNameTextView = (TextView) mContentView.findViewById(R.id.my_name);
-        TextView deviceDetailsTextView = (TextView) mContentView.findViewById(R.id.my_status);
-
+        TextView deviceNameTextView =
+                (TextView) mContentView.findViewById(R.id.my_name);
+        TextView deviceDetailsTextView =
+                (TextView) mContentView.findViewById(R.id.my_status);
         if (myDevice != null) {
             this.myDevice = myDevice;
             deviceNameTextView.setText(myDevice.deviceName);
-            deviceDetailsTextView.setText(ConnectionService.getDeviceStatus(myDevice.status));
-        }
-        else if (this.myDevice != null) {
+            deviceDetailsTextView.setText(
+                    ConnectionService.getDeviceStatus(myDevice.status));
+        } else if (this.myDevice != null) {
             deviceNameTextView.setText(this.myDevice.deviceName);
             deviceDetailsTextView.setText(R.string.wifi_direct_disabled);
         }
@@ -131,6 +122,7 @@ public class DeviceListFragment extends ListFragment {
         dismissProgressDialog();
         peerDevicesList.clear();
         List<WifiP2pDevice> toRemove = new ArrayList<>();
+        //filter peers based on if the device is the host
         if (wifiDirectApp.mIsServer) {
             Log.d(TAG, "onPeersAvailable: wifiDirectApp.mServer is true (HOST)");
             for (WifiP2pDevice device : peerList) {
@@ -172,8 +164,8 @@ public class DeviceListFragment extends ListFragment {
         Log.d(TAG, "onInitiateDiscovery");
         dismissProgressDialog();
         progressDialog = ProgressDialog.show(getActivity(),
-                "Press back to cancel", "finding peerDevicesList", true, true,
-                new DialogInterface.OnCancelListener() {
+                "Press back to cancel", "finding peerDevicesList",
+                true, true, new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
             }
