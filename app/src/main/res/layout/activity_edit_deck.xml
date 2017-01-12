@@ -8,11 +8,10 @@
     tools:context="com.seniordesign.wolfpack.quizinator.Activities.EditDeckActivity">
 
     <LinearLayout
-        android:layout_weight="0.1"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:gravity="bottom"
-        android:layout_height="0dp">
+        android:layout_height="wrap_content">
         <EditText
             android:id="@+id/edit_deck_name"
             android:layout_weight="0.5"
@@ -53,27 +52,35 @@
             android:layout_height="match_parent"></ListView>
     </LinearLayout>
 
-    <LinearLayout
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        android:layout_weight="0.1"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp">
+        android:layout_height="60dp">
         <Button
-            android:text="@string/cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onCancelClick" />
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/save_button"
+            android:layout_margin="10dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:onClick="onSaveClick"/>
         <Button
-            android:text="@string/Delete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="10dp"
+            android:background="@drawable/cancel_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:onClick="onCancelClick"/>
+        <Button
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="10dp"
+            android:background="@drawable/remove_item_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:onClick="onDeleteClick"/>
-        <Button
-            android:text="@string/save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onSaveClick" />
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>
