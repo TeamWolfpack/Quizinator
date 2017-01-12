@@ -91,6 +91,11 @@ public class GameSettingTests {
     }
 
     @Test
+    public void validateDeckSpinner() {
+        onView(withId(R.id.deck_spinner)).check(matches(withSpinnerText(containsString("Default"))));
+    }
+
+    @Test
     public void validateGameMinuteInput_LowerBound() {
         onView(withId(R.id.game_minutes)).check(matches(withText("01")));
         onView(withId(R.id.game_minutes)).perform(clearText(), typeText("-1"));
