@@ -24,14 +24,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btn_disconnect_all"
-            android:onClick="disconnectAllPeersForTheHostPlayer" />
+            android:onClick="disconnectAllButtonClicked" />
 
         <Button
             android:id="@+id/start_game_settings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/host_game_game_settings"
-            android:onClick="startGameSettingsActivity" />
+            android:onClick="gameSettingsButtonClicked" />
 
     </LinearLayout>
 

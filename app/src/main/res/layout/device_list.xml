@@ -65,8 +65,7 @@
         </LinearLayout>
 
     </LinearLayout>
-    <!--TODO -> if the above code does not break then we can remove this code-->
-    <!--android:singleLine="true"-->
+
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -89,8 +88,6 @@
         android:layout_weight="1"
         android:drawSelectorOnTop="false"
         />
-    <!--TODO -> code snippet below was a part of the above ui element, remove if it does not break things-->
-    <!--android:layout_height="match_parent"-->
 
     <TextView
         android:id="@id/android:empty"

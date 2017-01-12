@@ -3,6 +3,7 @@ package com.seniordesign.wolfpack.quizinator.Activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
@@ -90,23 +91,6 @@ public class HostGameActivity
         wifiDirectApp.onDestroy(TAG);
     }
 
-    /**
-     * The onClick handlers use this method via the layout's.
-     */
-    public void onClick(View v){
-        PeerListFragment listFragment =
-                (PeerListFragment)getFragmentManager().
-                        findFragmentById(R.id.frag_peer_list);
-        switch (v.getId()){
-            case R.id.btn_connect:
-                listFragment.onConnectButtonClicked();
-                break;
-            case R.id.btn_disconnect:
-                listFragment.onDisconnectButtonClicked();
-                break;
-        }
-    }
-
     public void initiateDiscovery(){
         Log.d(TAG, "initiateDiscovery");
         if( !wifiDirectApp.isP2pEnabled() ){
@@ -114,11 +98,11 @@ public class HostGameActivity
                     Toast.LENGTH_LONG).show();
             return;
         }
-        final PeerListFragment fragment =
+        final PeerListFragment peerListFragment =
                 (PeerListFragment) getFragmentManager().
                         findFragmentById(R.id.frag_peer_list);
-        fragment.onInitiateDiscovery();
-        discoverPeers(fragment);
+        peerListFragment.onInitiateDiscovery();
+        discoverPeers(peerListFragment);
     }
 
     private void discoverPeers(final PeerListFragment fragment){
@@ -187,11 +171,11 @@ public class HostGameActivity
 
         runOnUiThread(new Runnable() {
             @Override public void run() {
-                PeerListFragment fragment =
+                PeerListFragment peerListFragment =
                         (PeerListFragment)getFragmentManager().
                                 findFragmentById(R.id.frag_peer_list);
-                if (fragment != null) {
-                    fragment.updateThisDevice(device);
+                if (peerListFragment != null) {
+                    peerListFragment.updateThisDevice(device);
                 }
             }
         });
@@ -205,12 +189,12 @@ public class HostGameActivity
         Log.d(TAG, "resetData: resetting the data");
         runOnUiThread(new Runnable() {
             @Override public void run() {
-                PeerListFragment fragmentList =
+                PeerListFragment peerListFragment =
                         (PeerListFragment) getFragmentManager().
                                 findFragmentById(R.id.frag_peer_list);
-                if (fragmentList != null) {
-                    fragmentList.clearPeers();
-                    fragmentList.resetViews();
+                if (peerListFragment != null) {
+                    peerListFragment.clearPeers();
+                    peerListFragment.resetViews();
                 }
             }
         });
@@ -226,9 +210,10 @@ public class HostGameActivity
                 "group owner - " + info.isGroupOwner);
         runOnUiThread(new Runnable() {
             @Override public void run() {
-                PeerListFragment fragmentDetails =
-                        (PeerListFragment) getFragmentManager().findFragmentById(R.id.frag_peer_list);
-                fragmentDetails.onConnectionInfoAvailable(info);
+                PeerListFragment peerListFragment =
+                        (PeerListFragment) getFragmentManager().
+                                findFragmentById(R.id.frag_peer_list);
+                peerListFragment.onConnectionInfoAvailable(info);
             }
         });
     }
@@ -240,13 +225,13 @@ public class HostGameActivity
         Log.d(TAG, "onPeersAvailable: peer list available");
         runOnUiThread(new Runnable() {
             @Override public void run() {
-                PeerListFragment fragmentList =
+                PeerListFragment peerListFragment =
                         (PeerListFragment) getFragmentManager().findFragmentById(R.id.frag_peer_list);
-                fragmentList.onPeersAvailable(wifiDirectApp.mPeers);  // use application cached list.
+                peerListFragment.onPeersAvailable(wifiDirectApp.mPeers);  // use application cached list.
 
                 for(WifiP2pDevice d : peerList.getDeviceList()){
                     if( d.status == WifiP2pDevice.FAILED ){
-                        fragmentList.resetViews();
+                        peerListFragment.resetViews();
                     }
                 }
             }
@@ -301,8 +286,9 @@ public class HostGameActivity
     @Override
     public void showDetails(WifiP2pDevice device) {
         Log.d(TAG, "showDetails: device - " + device.toString());
-        PeerListFragment fragment = (PeerListFragment) getFragmentManager().findFragmentById(R.id.frag_peer_list);
-        fragment.showDetails(device);
+        PeerListFragment peerListFragment = (PeerListFragment)
+                getFragmentManager().findFragmentById(R.id.frag_peer_list);
+        peerListFragment.showDetails(device);
     }
 
     /**
@@ -346,7 +332,7 @@ public class HostGameActivity
         final PeerListFragment peerListFragment = (PeerListFragment)
                 getFragmentManager().findFragmentById(R.id.frag_peer_list);
         if (peerListFragment != null) {
-            peerListFragment.clearPeers();
+            //peerListFragment.clearPeers();
             peerListFragment.resetViews();
         }
     }
@@ -354,7 +340,7 @@ public class HostGameActivity
     /**
      * Button handler for the layout.
      */
-    public boolean startGameSettingsActivity(View v){
+    public boolean gameSettingsButtonClicked(View v){
         Log.d(TAG, "startGameSettingsActivity: view(" + v.toString() + ")");
         if(!wifiDirectApp.mP2pConnected ){
             Toast.makeText(this, "You are not connected to anyone",
@@ -370,10 +356,28 @@ public class HostGameActivity
         return true;
     }
 
-    /**
-     * Button handler for the layout.
-     */
-    public boolean disconnectAllPeersForTheHostPlayer(View v){
+    public void onConnectButtonClicked(View v){
+        PeerListFragment peerListFragment =
+                (PeerListFragment)getFragmentManager().
+                        findFragmentById(R.id.frag_peer_list);
+        WifiP2pConfig config = new WifiP2pConfig();
+        config.deviceAddress = peerListFragment.getSelectedDevice().deviceAddress;
+        config.wps.setup = WpsInfo.PBC;
+        // least inclination to be group owner.
+            // 15 is highest group owner (host)
+            // 0 is lowest (player)
+        config.groupOwnerIntent = wifiDirectApp.isHost();
+        peerListFragment.dismissProgressDialog();
+        // perform p2p connect upon user click the connect button,
+        // connect available handle when connection done.
+        this.connect(config);
+    }
+
+    public void onDisconnectButtonClicked(View v){
+        this.disconnect();
+    }
+
+    public boolean disconnectAllButtonClicked(View v){
         ConnectionService.sendMessage(MSG_DISCONNECT_FROM_ALL_PEERS, "");
         this.disconnect();
         finish();

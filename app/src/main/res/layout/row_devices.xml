@@ -50,7 +50,7 @@
 
             <Button
                 android:id="@+id/btn_connect"
-                android:onClick="onClick"
+                android:onClick="onConnectButtonClicked"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/connect_peer_button"
@@ -58,7 +58,7 @@
 
             <Button
                 android:id="@+id/btn_disconnect"
-                android:onClick="onClick"
+                android:onClick="onDisconnectButtonClicked"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/disconnect_peer_button"

@@ -75,24 +75,6 @@ public class PeerListFragment extends ListFragment {
         peerListAdapter.setSelectedIndex(position, wifiDirectApp.mIsServer);
     }
 
-    public void onConnectButtonClicked(){
-        WifiP2pConfig config = new WifiP2pConfig();
-            config.deviceAddress = myDevice.deviceAddress;
-            config.wps.setup = WpsInfo.PBC;
-            // least inclination to be group owner.
-                // 15 is highest group owner (host)
-                // 0 is lowest (player)
-            config.groupOwnerIntent = wifiDirectApp.isHost();
-        dismissProgressDialog();
-        // perform p2p connect upon user click the connect button,
-        // connect available handle when connection done.
-        ((PeerListFragment.DeviceActionListener) getActivity()).connect(config);
-    }
-
-    public void onDisconnectButtonClicked(){
-        ((PeerListFragment.DeviceActionListener) getActivity()).disconnect();
-    }
-
     /**
      * Update UI for this myDevice.
      */
@@ -111,6 +93,10 @@ public class PeerListFragment extends ListFragment {
             deviceNameTextView.setText(this.myDevice.deviceName);
             deviceDetailsTextView.setText(R.string.wifi_direct_disabled);
         }
+    }
+
+    public WifiP2pDevice getSelectedDevice(){
+        return myDevice;
     }
 
     /**
@@ -202,7 +188,7 @@ public class PeerListFragment extends ListFragment {
      * Hides the progress dialog which is used to ask the user to
      * accept connections from another peer.
      */
-    private boolean dismissProgressDialog(){
+    public boolean dismissProgressDialog(){
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
             return true;
