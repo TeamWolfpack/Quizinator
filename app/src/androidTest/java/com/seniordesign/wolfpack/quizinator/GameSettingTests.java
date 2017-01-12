@@ -19,7 +19,6 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.pressBack;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -115,7 +114,6 @@ public class GameSettingTests {
 
     @Test
     public void validateGameSecondInput_LowerBound() throws InterruptedException {
-        onView(withText(R.string.card_time)).perform(scrollTo());
         onView(withId(R.id.game_seconds)).check(matches(withText("00")));
         onView(withId(R.id.game_seconds)).perform(clearText(), typeText("-1"));
         onView(withId(R.id.game_seconds)).check(matches(withText("1")));
@@ -123,7 +121,6 @@ public class GameSettingTests {
 
     @Test
     public void validateGameSecondInput_UpperBound() {
-        onView(withText(R.string.card_time)).perform(scrollTo());
         onView(withId(R.id.game_seconds)).check(matches(withText("00")));
         onView(withId(R.id.game_seconds)).perform(clearText(), typeText("60"));
         onView(withId(R.id.game_seconds)).check(matches(withText("60")));
@@ -134,7 +131,6 @@ public class GameSettingTests {
 
     @Test
     public void validateCardMinuteInput_LowerBound() {
-        onView(withText(R.string.card_time)).perform(scrollTo());
         onView(withId(R.id.card_minutes)).check(matches(withText("00")));
         onView(withId(R.id.card_minutes)).perform(clearText(), typeText("-1"));
         onView(withId(R.id.card_minutes)).check(matches(withText("1")));
@@ -142,7 +138,6 @@ public class GameSettingTests {
 
     @Test
     public void validateCardMinuteInput_UpperBound() {
-        onView(withText(R.string.card_time)).perform(scrollTo());
         onView(withId(R.id.card_minutes)).check(matches(withText("00")));
         onView(withId(R.id.card_minutes)).perform(clearText(), typeText("60"));
         onView(withId(R.id.card_minutes)).check(matches(withText("60")));
