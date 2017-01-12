@@ -212,7 +212,7 @@ public class CardDataSource {
     public Card cursorToCard(Cursor cursor) {
         Card card = new Card();
         card.setId(cursor.getLong(0));
-        card.setCardType(cursor.getString(1));
+        card.setCardType(cursor.getInt(1));
         card.setQuestion(cursor.getString(2));
         card.setCorrectAnswer(cursor.getString(3));
 

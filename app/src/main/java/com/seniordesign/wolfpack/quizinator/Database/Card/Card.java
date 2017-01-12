@@ -58,7 +58,6 @@ public class Card{
     /*
      * @author  chuna (10-13-2016)
      */
-
     public void setCardType(CARD_TYPES cardType) {
         this.cardType = cardType.ordinal();
         switch(cardType){
@@ -77,39 +76,26 @@ public class Card{
         }
     }
 
-    /*
-     * @author  chuna (10-5-2016)
-     */
+    void setCardType(int cardType) {
+        setCardType(CARD_TYPES.values()[cardType]);
+    }
 
     public String getQuestion() {
         return question;
     }
 
-    /*
-     * @author  chuna (10-5-2016)
-     */
-
     public void setQuestion(String question) {
         this.question = question;
     }
 
-    /*
-     * @author  chuna (10-7-2016)
-     */
     public String getCorrectAnswer() {
         return correctAnswer;
     }
 
-    /*
-     * @author  chuna (10-7-2016)
-     */
     public void setCorrectAnswer(String correctAnswer) {
         this.correctAnswer = correctAnswer;
     }
 
-    /*
-     * @author  chuna (10-11-2016)
-     */
     public String[] getPossibleAnswers() {
         return possibleAnswers;
     }
