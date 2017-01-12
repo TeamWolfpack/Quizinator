@@ -328,19 +328,19 @@ public class HostGameActivity
     public void disconnect() {
         Log.d(TAG, "disconnect: disconnects from all peers and reset " +
                 "the peer list fragment");
-        wifiDirectApp.mP2pMan.removeGroup(wifiDirectApp.mP2pChannel, p2pActionListener);
         final PeerListFragment peerListFragment = (PeerListFragment)
                 getFragmentManager().findFragmentById(R.id.frag_peer_list);
         if (peerListFragment != null) {
             peerListFragment.clearPeers();
             peerListFragment.dismissProgressDialog();
         }
+        wifiDirectApp.mP2pMan.removeGroup(wifiDirectApp.mP2pChannel, null);
     }
 
     /**
      * Button handler for the layout.
      */
-    public boolean gameSettingsButtonClicked(View v){
+    public boolean onGameSettingsButtonClicked(View v){
         Log.d(TAG, "startGameSettingsActivity: view(" + v.toString() + ")");
         if(!wifiDirectApp.mP2pConnected ){
             Toast.makeText(this, "You are not connected to anyone",
@@ -349,7 +349,8 @@ public class HostGameActivity
         }
         runOnUiThread(new Runnable() {
             @Override public void run() {
-                Intent i = wifiDirectApp.getLaunchActivityIntent(NewGameSettingsActivity.class, null);
+                Intent i = wifiDirectApp.getLaunchActivityIntent(
+                        NewGameSettingsActivity.class, null);
                 startActivity(i);
             }
         });
@@ -377,7 +378,7 @@ public class HostGameActivity
         this.disconnect();
     }
 
-    public boolean disconnectAllButtonClicked(View v){
+    public boolean onDisconnectAllButtonClicked(View v){
         ConnectionService.sendMessage(MSG_DISCONNECT_FROM_ALL_PEERS, "");
         this.disconnect();
         finish();
