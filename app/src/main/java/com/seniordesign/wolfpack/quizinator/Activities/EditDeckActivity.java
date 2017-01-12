@@ -1,6 +1,8 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -83,13 +85,28 @@ public class EditDeckActivity extends AppCompatActivity  implements AdapterView.
         String deckName = ((EditText)findViewById(R.id.edit_deck_name)).getText().toString();
         deck.setDeckName(deckName);
         deckDataSource.updateDeck(deck);
-        Intent intent = new Intent(this, DecksActivity.class);
-        startActivity(intent);
+        finish();
     }
 
     public void onCancelClick(View view){
-        Intent intent = new Intent(this, DecksActivity.class);
-        startActivity(intent);
+        finish();
+    }
+
+    public void onDeleteClick(View view){
+        new AlertDialog.Builder(this)
+                .setTitle("Deleting Deck")
+                .setMessage("Are you sure you want to delete this deck?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deckDataSource.deleteDeck(deck);
+                        finish();
+                    }
+
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 
     /*

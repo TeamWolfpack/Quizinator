@@ -57,4 +57,35 @@ public class DecksActivity extends AppCompatActivity implements AdapterView.OnIt
         startActivity(intent);
     }
 
+    public void newDeckClick(View view){
+        Intent intent = new Intent(this, EditDeckActivity.class);
+        Gson gson = new Gson();
+        Deck deck = deckDataSource.createDeck("New Deck",new ArrayList<Card>());
+        String jsonDeck = gson.toJson(deck);
+        intent.putExtra("Deck",jsonDeck);
+        startActivity(intent);
+    }
+
+    protected void onResume() {
+        super.onResume();
+        deckDataSource.open();
+        List<Deck> decks = deckDataSource.getAllDecks();
+        fillListOfDecks(decks);
+    }
+
+    /*
+     * @author kuczynskij (10/13/2016)
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        deckDataSource.close();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        deckDataSource.close();
+    }
+
 }
