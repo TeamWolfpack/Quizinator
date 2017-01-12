@@ -31,6 +31,9 @@ public final class MessageCodes {
     public static final int MSG_ANSWER_CONFIRMATION_ACTIVITY = 3004;
     public static final int MSG_END_OF_GAME_ACTIVITY = 3005;
 
+    //update peerlist
+    public static final int MSG_DISCONNECT_FROM_ALL_PEERS = 4000;
+
     //Testing messages
     public static final int MSG_TEST_HI_JIMMY = -1;
 }

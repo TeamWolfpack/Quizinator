@@ -26,6 +26,8 @@ import com.seniordesign.wolfpack.quizinator.Fragments.PeerListFragment;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WiFiDirectBroadcastReceiver;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
+import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_DISCONNECT_FROM_ALL_PEERS;
+
 public class HostGameActivity
         extends AppCompatActivity
         implements PeerListFragment.DeviceActionListener {
@@ -56,9 +58,6 @@ public class HostGameActivity
             setTitle(Constants.HOST_GAME);
         } else {
             setTitle(Constants.JOIN_GAME);
-//            buttonsPanel
-//            findViewById(R.id.start_game_settings).setVisibility(View.GONE);
-//            findViewById(R.id.btn_disconnect_all).setVisibility(View.GONE);
             findViewById(R.id.buttonsPanel).setVisibility(View.GONE);
         }
         // If service not started yet, start it.
@@ -108,7 +107,7 @@ public class HostGameActivity
         }
     }
 
-    private void initiateDiscovery(){
+    public void initiateDiscovery(){
         Log.d(TAG, "initiateDiscovery");
         if( !wifiDirectApp.isP2pEnabled() ){
             Toast.makeText(this, R.string.p2p_off_warning,
@@ -157,7 +156,7 @@ public class HostGameActivity
         }
     };
 
-    private void removeExistingGroup(){
+    public void removeExistingGroup(){
         Log.d(TAG, "removeExistingGroup: remove group and creates a new one");
         wifiDirectApp.mP2pMan.removeGroup(wifiDirectApp.mP2pChannel,
                 removeExistingGroupActionListener);
@@ -180,9 +179,11 @@ public class HostGameActivity
      * this device.
      */
     public void updateThisDevice(final WifiP2pDevice device){
-        Log.d(TAG, "updateThisDevice: \n" +
-                "     device name: " + device.deviceName + "\n" +
-                "     device address: " + device.deviceAddress);
+        if(device != null){
+            Log.d(TAG, "updateThisDevice: \n" +
+                    "     device name: " + device.deviceName + "\n" +
+                    "     device address: " + device.deviceAddress);
+        }
 
         runOnUiThread(new Runnable() {
             @Override public void run() {
@@ -241,7 +242,7 @@ public class HostGameActivity
             @Override public void run() {
                 PeerListFragment fragmentList =
                         (PeerListFragment) getFragmentManager().findFragmentById(R.id.frag_peer_list);
-                    fragmentList.onPeersAvailable(wifiDirectApp.mPeers);  // use application cached list.
+                fragmentList.onPeersAvailable(wifiDirectApp.mPeers);  // use application cached list.
 
                 for(WifiP2pDevice d : peerList.getDeviceList()){
                     if( d.status == WifiP2pDevice.FAILED ){
@@ -341,12 +342,13 @@ public class HostGameActivity
     public void disconnect() {
         Log.d(TAG, "disconnect: disconnects from all peers and reset " +
                 "the peer list fragment");
+        wifiDirectApp.mP2pMan.removeGroup(wifiDirectApp.mP2pChannel, p2pActionListener);
         final PeerListFragment peerListFragment = (PeerListFragment)
                 getFragmentManager().findFragmentById(R.id.frag_peer_list);
         if (peerListFragment != null) {
+            peerListFragment.clearPeers();
             peerListFragment.resetViews();
         }
-        wifiDirectApp.mP2pMan.removeGroup(wifiDirectApp.mP2pChannel, p2pActionListener);
     }
 
     /**
@@ -372,6 +374,7 @@ public class HostGameActivity
      * Button handler for the layout.
      */
     public boolean disconnectAllPeersForTheHostPlayer(View v){
+        ConnectionService.sendMessage(MSG_DISCONNECT_FROM_ALL_PEERS, "");
         this.disconnect();
         finish();
         return true;

@@ -4,14 +4,8 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 
-import android.net.wifi.p2p.WifiP2pDeviceList;
-import android.net.wifi.p2p.WifiP2pManager;
 import android.util.Log;
-import android.widget.Toast;
-
-import java.util.List;
 
 /**
  *  A BroadcastReceiver that notifies of important Wi-Fi p2p events.
@@ -36,10 +30,6 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
         this.mActivity = activity;
     }
 
-
-    /*
-     * @author kuczynskij (10/26/2016)
-     */
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "onReceive: intent reveived by broadcast receiver");
