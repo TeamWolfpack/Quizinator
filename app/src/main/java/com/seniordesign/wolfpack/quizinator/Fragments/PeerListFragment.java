@@ -170,18 +170,9 @@ public class PeerListFragment extends ListFragment {
     /**
      * Updates the UI with myDevice data
      */
-    public void showDetails(WifiP2pDevice device) {
+    public void updateSelectedDevice(WifiP2pDevice device) {
         Log.d(TAG, "showDetail");
         this.myDevice = device;
-    }
-
-    /**
-     * Clears the UI fields after a disconnect or direct mode disable
-     * operation.
-     */
-    public void resetViews() {
-        Log.d(TAG, "resetViews");
-        dismissProgressDialog();
     }
 
     /**

@@ -194,7 +194,7 @@ public class HostGameActivity
                                 findFragmentById(R.id.frag_peer_list);
                 if (peerListFragment != null) {
                     peerListFragment.clearPeers();
-                    peerListFragment.resetViews();
+                    peerListFragment.dismissProgressDialog();
                 }
             }
         });
@@ -231,7 +231,7 @@ public class HostGameActivity
 
                 for(WifiP2pDevice d : peerList.getDeviceList()){
                     if( d.status == WifiP2pDevice.FAILED ){
-                        peerListFragment.resetViews();
+                        peerListFragment.dismissProgressDialog();
                     }
                 }
             }
@@ -285,10 +285,10 @@ public class HostGameActivity
      */
     @Override
     public void showDetails(WifiP2pDevice device) {
-        Log.d(TAG, "showDetails: device - " + device.toString());
+        Log.d(TAG, "updateSelectedDevice: device - " + device.toString());
         PeerListFragment peerListFragment = (PeerListFragment)
                 getFragmentManager().findFragmentById(R.id.frag_peer_list);
-        peerListFragment.showDetails(device);
+        peerListFragment.updateSelectedDevice(device);
     }
 
     /**
@@ -332,8 +332,8 @@ public class HostGameActivity
         final PeerListFragment peerListFragment = (PeerListFragment)
                 getFragmentManager().findFragmentById(R.id.frag_peer_list);
         if (peerListFragment != null) {
-            //peerListFragment.clearPeers();
-            peerListFragment.resetViews();
+            peerListFragment.clearPeers();
+            peerListFragment.dismissProgressDialog();
         }
     }
 
