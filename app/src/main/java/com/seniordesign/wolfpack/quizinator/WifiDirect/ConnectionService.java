@@ -27,6 +27,7 @@ import android.os.Message;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.seniordesign.wolfpack.quizinator.Activities.HostGameActivity;
 import com.seniordesign.wolfpack.quizinator.Activities.MainMenuActivity;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
@@ -91,9 +92,6 @@ public class ConnectionService extends Service implements
         return START_STICKY;
     }
 
-    /*
-     * @author kuczynskij (10/26/2016)
-     */
     private void processIntent(Intent intent) {
         if (intent == null)
             return;
@@ -132,9 +130,6 @@ public class ConnectionService extends Service implements
         }
     }
 
-    /*
-     * @author kuczynskij (10/26/2016)
-     */
     private boolean deviceWifiStateChangedAction(int state) {
         if (state == WifiP2pManager.WIFI_P2P_STATE_ENABLED) {
             // Wifi Direct mode is enabled
@@ -157,9 +152,6 @@ public class ConnectionService extends Service implements
         }
     }
 
-    /*
-     * @author kuczynskij (10/26/2016)
-     */
     private boolean deviceWifiPeersChangedAction() {
         // a list of peers are available after discovery,
         // use PeerListListener to collect request available
@@ -167,7 +159,7 @@ public class ConnectionService extends Service implements
         // asynchronous call and the calling activity is
         // notified with callback on
         // PeerListListener.onPeersAvailable()
-        if(wifiDirectApp.mManageActivity!=null){
+        if(wifiDirectApp.mManageActivity != null){
             wifiDirectApp.mManageActivity.validateAnswer(null);
         }
         if (wifiDirectApp.mP2pMan != null) {
@@ -177,9 +169,6 @@ public class ConnectionService extends Service implements
         return false;
     }
 
-    /*
-     * @author kuczynskij (10/26/2016)
-     */
     private boolean deviceConnectionChangedAction(Intent intent) {
         NetworkInfo networkInfo = intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
         if (networkInfo.isConnected()) {
@@ -275,7 +264,8 @@ public class ConnectionService extends Service implements
      */
     @Override
     public void onConnectionInfoAvailable(final WifiP2pInfo info) {
-        Log.d(TAG, "onConnectionInfoAvailable: " + info.groupOwnerAddress.getHostAddress());
+        if(info.groupOwnerAddress != null)
+            Log.d(TAG, "onConnectionInfoAvailable: " + info.groupOwnerAddress.getHostAddress());
         if (info.groupFormed && info.isGroupOwner) {
             // XXX server path goes to peer connected.
             //new FileServerAsyncTask(getActivity(), mContentView.findViewById(R.id.status_text)).execute();
@@ -288,7 +278,7 @@ public class ConnectionService extends Service implements
         wifiDirectApp.mP2pInfo = info;   // connection info available
     }
 
-    private void enableStartChatActivity() {
+    private void sendMessageToUpDatePeerListFragment() {
         if (wifiDirectApp.mHomeActivity != null) {
             wifiDirectApp.mHomeActivity.onConnectionInfoAvailable(wifiDirectApp.mP2pInfo);
         }
@@ -331,12 +321,12 @@ public class ConnectionService extends Service implements
                 break;
             case MSG_STARTSERVER:
                 if (mConnMan.startServerSelector() >= 0) {
-                    enableStartChatActivity();
+                    sendMessageToUpDatePeerListFragment();
                 }
                 break;
             case MSG_STARTCLIENT:
                 if (mConnMan.startClientSelector((String) msg.obj) >= 0) {
-                    enableStartChatActivity();
+                    sendMessageToUpDatePeerListFragment();
                 }
                 break;
             case MSG_NEW_CLIENT:
@@ -374,6 +364,9 @@ public class ConnectionService extends Service implements
                 break;
             case MSG_BROKEN_CONN:
                 mConnMan.onBrokenConnection((SocketChannel) msg.obj);
+                break;
+            case MSG_DISCONNECT_FROM_ALL_PEERS:
+                pushDisconnectAllPeersOut((String) msg.obj);
                 break;
             default:
                 break;
@@ -491,6 +484,12 @@ public class ConnectionService extends Service implements
         mConnMan.pushOutData(message);
     }
 
+    private void pushDisconnectAllPeersOut(String data) {
+        Log.d(TAG, "pushDisconnectAllPeersOut: " + data);
+        String message = createQuizMessage(MSG_DISCONNECT_FROM_ALL_PEERS, data);
+        mConnMan.pushOutData(message);
+    }
+
     /**
      * service handle data in come from socket channel
      */
@@ -532,6 +531,12 @@ public class ConnectionService extends Service implements
                 case MSG_END_OF_GAME_ACTIVITY:
                     long totalGameTime = Long.parseLong(message);
                     wifiDirectApp.mGameplayActivity.endGamePlay(totalGameTime);
+                    break;
+                case MSG_DISCONNECT_FROM_ALL_PEERS:
+                    if(wifiDirectApp.mHomeActivity != null){
+                        wifiDirectApp.mHomeActivity.disconnect();
+                        wifiDirectApp.mHomeActivity.finish();
+                    }
                     break;
             }
         }
