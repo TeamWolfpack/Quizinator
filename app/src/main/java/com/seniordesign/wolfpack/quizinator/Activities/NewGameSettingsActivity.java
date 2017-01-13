@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.text.InputFilter;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -28,12 +30,14 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.List;
 
 import io.apptik.widget.multiselectspinner.BaseMultiSelectSpinner;
 import io.apptik.widget.multiselectspinner.MultiSelectSpinner;
 
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_SEND_RULES_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.Constants.*;
+import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.*;
 
 
 /*
@@ -49,6 +53,8 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     private EditText gameSecondsInput;
     private EditText cardMinutesInput;
     private EditText cardSecondsInput;
+
+    private Spinner deckSpinner;
 
     private MultiSelectSpinner cardTypeSpinner;
     private List<String> selectedCardTypes;
@@ -76,47 +82,111 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         wifiDirectApp = (WifiDirectApp)getApplication();
         initializeDB();
 
-        if(deckDataSource.getAllDecks().size()>0){
+        if (rulesSource.getAllRules().size() > 0) {
+            deck = deckDataSource.getDeckWithId(rulesSource.getAllRules()
+                    .get(rulesSource.getAllRules().size() - 1)
+                    .getDeckId());
+        } else if (deckDataSource.getAllDecks().size()>0){
             deck = deckDataSource.getAllDecks().get(0);
-        }else{
+        } else {
             deck = initializeDeck();
         }
 
-        cardTypeSpinner = (MultiSelectSpinner) findViewById(R.id.card_type_spinner);
-            selectedCardTypes = new ArrayList<>();
-            cardTypeOptions = formatCardTypes(deck);
-            ArrayAdapter<String> cardTypeAdapter = new ArrayAdapter<>(this,
-                    android.R.layout.simple_list_item_multiple_choice, cardTypeOptions);
-            cardTypeSpinner
-                    .setListAdapter(cardTypeAdapter)
-                    .setAllCheckedText("All Types")
-                    .setAllUncheckedText("None Selected")
-                    .setMinSelectedItems(1)
-                    .setListener(new BaseMultiSelectSpinner.MultiSpinnerListener() {
-                        @Override
-                        public void onItemsSelected(boolean[] selected) {
-                            selectedCardTypes.clear();
-                            for (int i = 0; i < selected.length; i++) {
-                                if (selected[i])
-                                    selectedCardTypes.add(shortFormCardType(cardTypeOptions.get(i)));
+        final BaseMultiSelectSpinner.MultiSpinnerListener multiSpinnerListener = new BaseMultiSelectSpinner.MultiSpinnerListener() {
+            @Override
+            public void onItemsSelected(boolean[] selected) {
+                selectedCardTypes.clear();
+                for (int i = 0; i < selected.length; i++) {
+                    if (selected[i])
+                        selectedCardTypes.add(shortFormCardType(cardTypeOptions.get(i)));
+                }
+                Rules tempRules = new Rules();
+                tempRules.setCardTypes(gson.toJson(selectedCardTypes));
+                Deck filteredDeck = deck.filter(tempRules);
+
+                if (!isInputEmpty(cardCountInput) &&
+                        Integer.valueOf(cardCountInput.getText().toString()) > filteredDeck.getCards().size())
+//                                cardCountInput.setText(filteredDeck.getCards().size()); //TODO
+                    cardCountInput.setText("" + filteredDeck.getCards().size());
+
+                filterCardCount(filteredDeck);
+            }
+        };
+
+        deckSpinner = (Spinner)findViewById(R.id.deck_spinner);
+            List<String> deckNames = new ArrayList<>();
+            if(deckDataSource.getAllDecks().size() == 0)
+                initializeDeck();
+            for (Deck deck: deckDataSource.getAllDecks()) {
+                deckNames.add(deck.getDeckName());
+            }
+            final ArrayAdapter<String> deckAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, deckNames);
+            deckAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            deckSpinner.setAdapter(deckAdapter);
+            deckSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    String name = deckAdapter.getItem(position);
+                    for (Deck deck: deckDataSource.getAllDecks()) {
+                        if (deck.getDeckName().equals(name)) {
+                            Log.d(TAG, "Deck ID is " + deck.getId());
+                            // update the card type spinner with any new card types
+                            cardTypeOptions = formatCardTypes(deck);
+                            ArrayAdapter<String> cardTypeAdapter = new ArrayAdapter<>(NewGameSettingsActivity.this,
+                                    android.R.layout.simple_list_item_multiple_choice, cardTypeOptions);
+                            cardTypeSpinner
+                                    .setListAdapter(cardTypeAdapter)
+                                    .setAllCheckedText(ALL_CARD_TYPES)
+                                    .setAllUncheckedText(NO_CARD_TYPES)
+                                    .setMinSelectedItems(1)
+                                    .setListener(multiSpinnerListener);
+                            for (String type: selectedCardTypes) {
+                                if (cardTypeOptions.indexOf(longFormCardType(type)) > -1)
+                                    cardTypeSpinner.selectItem(cardTypeOptions.indexOf(longFormCardType(type)), true);
                             }
+
+                            // update the card count with the new deck size
                             Rules tempRules = new Rules();
                             tempRules.setCardTypes(gson.toJson(selectedCardTypes));
                             Deck filteredDeck = deck.filter(tempRules);
-
+                            filterCardCount(filteredDeck);
                             if (!isInputEmpty(cardCountInput) &&
                                     Integer.valueOf(cardCountInput.getText().toString()) > filteredDeck.getCards().size())
 //                                cardCountInput.setText(filteredDeck.getCards().size()); //TODO
                                 cardCountInput.setText("" + filteredDeck.getCards().size());
 
-                            filterCardCount(filteredDeck);
+                            NewGameSettingsActivity.this.deck = deck;
+                            break;
                         }
-                    });
+                    }
+                }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) { /* Do nothing */ }
+            });
+            for (int i = 0; i < deckNames.size(); i++) {
+                if (deckNames.get(i).equals(deck.getDeckName())) {
+                    deckSpinner.setSelection(i);
+                    break;
+                }
+            }
+
+        cardTypeSpinner = (MultiSelectSpinner) findViewById(R.id.card_type_spinner);
+            selectedCardTypes = new ArrayList<>();
+            cardTypeOptions = formatCardTypes(deck);
+            ArrayAdapter<String> cardTypeAdapter = new ArrayAdapter<>(NewGameSettingsActivity.this,
+                    android.R.layout.simple_list_item_multiple_choice, cardTypeOptions);
+            cardTypeSpinner
+                    .setListAdapter(cardTypeAdapter)
+                    .setAllCheckedText(ALL_CARD_TYPES)
+                    .setAllUncheckedText(NO_CARD_TYPES)
+                    .setMinSelectedItems(1)
+                    .setListener(multiSpinnerListener);
 
         cardCountInput = (EditText)findViewById(R.id.card_count);
             filterCardCount(deck);
 //            cardCountInput.setText(deck.getCards().size()); //TODO
-             cardCountInput.setText("" + deck.getCards().size());
+            cardCountInput.setText("" + deck.getCards().size());
 //            cardCountInput.setText(deck.getCards().size()); // Should be deck count, change when deck is done
 
         gameMinutesInput = (EditText)findViewById(R.id.game_minutes);
@@ -173,6 +243,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                     GamePlayActivity.class);
             startGameIntent.putExtra(Constants.GAME_MODE,true);
             startActivity(startGameIntent);
+            finish();
             return true;
         }
     }
@@ -203,7 +274,6 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             }
         });
         return true;
-
     }
 
     /*
@@ -212,23 +282,26 @@ public class NewGameSettingsActivity extends AppCompatActivity {
      */
     public Rules updateRuleSet() {
         if (isInputEmpty(gameMinutesInput)) {
-            Toast.makeText(this, "Game Minutes can't be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, GAME_MINUTES_ERROR, Toast.LENGTH_SHORT).show();
             return null;
         }
         if (isInputEmpty(gameSecondsInput)) {
-            Toast.makeText(this, "Game Seconds can't be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, GAME_SECONDS_ERROR, Toast.LENGTH_SHORT).show();
             return null;
         }
         if (isInputEmpty(cardMinutesInput)) {
-            Toast.makeText(this, "Card Minutes can't be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, CARD_MINUTES_ERROR, Toast.LENGTH_SHORT).show();
             return null;
         }
         if (isInputEmpty(cardSecondsInput)) {
-            Toast.makeText(this, "Card Seconds can't be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, CARD_SECONDS_ERROR, Toast.LENGTH_SHORT).show();
             return null;
         }
         if (isInputEmpty(cardCountInput)) {
-            Toast.makeText(this, "Card Count can't be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, CARD_COUNT_ERROR, Toast.LENGTH_SHORT).show();
+            return null;
+        } else if (cardCountInput.getText().toString().equals("0")) {
+            Toast.makeText(this, CARD_COUNT_ZERO, Toast.LENGTH_SHORT).show();
             return null;
         }
 
@@ -246,10 +319,16 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         String cardTypes = gson.toJson(selectedCardTypes);
 
         if (rulesSource.getAllRules().size() < 1) {
-            return rulesSource.createRule(cardCount,
+            Log.d(TAG, "Deck id is saved as " + (int)deck.getId());
+            return rulesSource.createRule(
+                    cardCount,
                     gameMinutesInMilli + gameSecondsInMilli,
-                    cardMinutesInMilli + cardSecondsInMilli, cardTypes);
+                    cardMinutesInMilli + cardSecondsInMilli,
+                    cardTypes,
+                    (int)deck.getId());
         }
+
+        Log.d(TAG, "Deck id is updated as " + (int)deck.getId());
 
         Rules rule = rulesSource.getAllRules().get(rulesSource.getAllRules().size() - 1);
         rulesSource.deleteRule(rule);
@@ -269,7 +348,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
         return rulesSource.createRule(rule.getMaxCardCount(),
                 rule.getTimeLimit(), rule.getCardDisplayTime(),
-                rule.getCardTypes());
+                rule.getCardTypes(), (int)deck.getId());
     }
 
     /*
@@ -280,6 +359,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         if (rulesSource.getAllRules().size() < 1) return false;
 
         Rules rule = rulesSource.getAllRules().get(rulesSource.getAllRules().size() - 1);
+
         Calendar gameCal = Calendar.getInstance();
         gameCal.setTimeInMillis(rule.getTimeLimit());
 
@@ -304,7 +384,8 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         Type listType = new TypeToken<ArrayList<String>>(){}.getType();
         selectedCardTypes = gson.fromJson(rule.getCardTypes(), listType);
         for (String type: selectedCardTypes) {
-            cardTypeSpinner.selectItem(cardTypeOptions.indexOf(longFormCardType(type)), true);
+            if (cardTypeOptions.indexOf(longFormCardType(type)) > -1)
+                cardTypeSpinner.selectItem(cardTypeOptions.indexOf(longFormCardType(type)), true);
         }
         return true;
     }
@@ -340,7 +421,6 @@ public class NewGameSettingsActivity extends AppCompatActivity {
      * TEMP returns a sample deck for testing
      */
     private Deck initializeDeck() {
-        Deck newDeck = new Deck();
         Card[] cards = new Card[10];
         cards[0] = new Card();
         cards[0].setQuestion("1+1 = ?");
@@ -414,10 +494,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         cards[9].setPossibleAnswers(answerAreaTF);
         cards[9].setPoints(1);
         cards[9].setModeratorNeeded("False");
-        newDeck.setCards(Arrays.asList(cards));
-        deckDataSource.createDeck("Default", Arrays.asList(cards));
-
-        return newDeck;
+        return deckDataSource.createDeck("Default", Arrays.asList(cards));
     }
 
     /*
@@ -426,19 +503,13 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     public List<String> formatCardTypes(Deck deck) {
         ArrayList<String> types = new ArrayList<>();
 
-        if (deck == null) {
+        if (deck == null)
             return types;
-        }
 
         for (String type: deck.getCardTypes()) {
-            if (type.equals("TF"))
-                types.add("True/False");
-            else if (type.equals("MC"))
-                types.add("Multi-Choice");
-            else if (type.equals("FR"))
-                types.add("Free Response");
-            else if (type.equals("VR"))
-                types.add("Verbal Response");
+            String longType = longFormCardType(type);
+            if (longType != null)
+                types.add(longType);
         }
         return types;
     }
@@ -449,14 +520,14 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     public String shortFormCardType(String type) {
         String shortForm = null;
 
-        if (type.equals("True/False"))
-            shortForm = "TF";
-        else if (type.equals("Multi-Choice"))
-            shortForm = "MC";
-        else if (type.equals("Free Response"))
-            shortForm = "FR";
-        else if (type.equals("Verbal Response"))
-            shortForm = "VR";
+        if (type.equals(LONG_TRUE_FALSE))
+            shortForm = SHORT_TRUE_FALSE;
+        else if (type.equals(LONG_MULTIPLE_CHOICE))
+            shortForm = SHORT_MULTIPLE_CHOICE;
+        else if (type.equals(LONG_FREE_RESPONSE))
+            shortForm = SHORT_FREE_RESPONSE;
+        else if (type.equals(LONG_VERBAL_RESPONSE))
+            shortForm = SHORT_VERBAL_RESPONSE;
 
         return shortForm;
     }
@@ -467,14 +538,14 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     public String longFormCardType(String type) {
         String longForm = null;
 
-        if (type.equals("TF"))
-            longForm = "True/False";
-        else if (type.equals("MC"))
-            longForm = "Multi-Choice";
-        else if (type.equals("FR"))
-            longForm = "Free Response";
-        else if (type.equals("VR"))
-            longForm = "Verbal Response";
+        if (type.equals(SHORT_TRUE_FALSE))
+            longForm = LONG_TRUE_FALSE;
+        else if (type.equals(SHORT_MULTIPLE_CHOICE))
+            longForm = LONG_MULTIPLE_CHOICE;
+        else if (type.equals(SHORT_FREE_RESPONSE))
+            longForm = LONG_FREE_RESPONSE;
+        else if (type.equals(SHORT_VERBAL_RESPONSE))
+            longForm = LONG_VERBAL_RESPONSE;
 
         return longForm;
     }

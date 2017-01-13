@@ -225,5 +225,6 @@ public class WifiDirectApp extends Application {
         mHomeActivity = null;
         mGameplayActivity = null;
         mManageActivity = null;
+        mIsServer = false;
     }
 }

@@ -18,6 +18,7 @@ public final class Constants {
     public static final String LONG_FREE_RESPONSE = "Free Response";
     public static final String LONG_VERBAL_RESPONSE = "Verbal Response";
     public static final String ALL_CARD_TYPES = "All Types";
+    public static final String NO_CARD_TYPES = "None Selected";
 
     public static final String MAIN_MENU = "Main Menu";
     public static final String HOST_GAME = "Host Game";
@@ -28,4 +29,10 @@ public final class Constants {
     public static final String RULES = "Rules";
     public static final String GAME_MODE = "GameMode";
 
+    public static final String GAME_MINUTES_ERROR = "Game Minutes can't be empty";
+    public static final String GAME_SECONDS_ERROR = "Game Seconds can't be empty";
+    public static final String CARD_MINUTES_ERROR = "Card Minutes can't be empty";
+    public static final String CARD_SECONDS_ERROR = "Card Seconds can't be empty";
+    public static final String CARD_COUNT_ERROR = "Card Count can't be empty";
+    public static final String CARD_COUNT_ZERO = "Card Count can't be 0";
 }
