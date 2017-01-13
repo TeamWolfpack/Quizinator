@@ -15,7 +15,12 @@ public class DeckSQLiteHelper extends SQLiteOpenHelper {
     public static final String TABLE_DECKS = "deck";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_DECKNAME = "_deckName";
-    public static final String COLUMN_CARDS = "_cards";
+//    public static final String COLUMN_CARDS = "_cards";
+    public static final String COLUMN_CATEGORY = "_category";
+    public static final String COLUMN_SUBJECT = "_subject";
+    public static final String COLUMN_DUPLICATECARDS = "_duplicateCards";
+    public static final String COLUMN_OWNER = "_owner";
+
 
 
     //database filename
@@ -27,7 +32,10 @@ public class DeckSQLiteHelper extends SQLiteOpenHelper {
             + TABLE_DECKS + "("
             + COLUMN_ID + " integer primary key autoincrement, "
             + COLUMN_DECKNAME + " TEXT, "
-            + COLUMN_CARDS + " TEXT"
+            + COLUMN_CATEGORY + " TEXT, "
+            + COLUMN_SUBJECT + " TEXT, "
+            + COLUMN_DUPLICATECARDS + " TEXT, "
+            + COLUMN_OWNER + " TEXT "
             + ");";
 
     /*

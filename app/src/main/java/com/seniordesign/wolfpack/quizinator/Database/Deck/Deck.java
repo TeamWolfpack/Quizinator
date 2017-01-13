@@ -18,7 +18,9 @@ public class Deck {
 
     private long id;
     private String deckName;
-    private List<Card> cards;
+//    private List<Card> cards;
+    private String category;
+    private String subject;
 
 //    private boolean moderatorNeeded;
 
