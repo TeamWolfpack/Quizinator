@@ -126,6 +126,10 @@ public class MainMenuActivity extends AppCompatActivity
                 Toast.makeText(this, "Device is not compatible with P2P", Toast.LENGTH_SHORT).show();
             }
         }
+        else if(id == R.id.nav_show_decks) {
+            Intent intent = new Intent(this,DecksActivity.class);
+            startActivity(intent);
+        }
         /*
         else if (id == R.id.nav_application_settings) {
             // For later sprints

@@ -23,7 +23,8 @@ public class RulesDataSource {
         RulesSQLiteHelper.COLUMN_TIMELIMIT,
         RulesSQLiteHelper.COLUMN_CARDDISPLAYTIME,
         RulesSQLiteHelper.COLUMN_MAXCARDCOUNT,
-        RulesSQLiteHelper.COLUMN_CARDTYPES
+        RulesSQLiteHelper.COLUMN_CARDTYPES,
+        RulesSQLiteHelper.COLUMN_DECK_ID
     };
 
     /*
@@ -68,12 +69,13 @@ public class RulesDataSource {
      * @author kuczynskij (10/10/2016)
      */
     public Rules createRule(int maxCardCount, long timeLimit,
-                           long cardDisplayTime, String cardTypes) {
+                           long cardDisplayTime, String cardTypes, int deckId) {
         ContentValues values = new ContentValues();
             values.put(RulesSQLiteHelper.COLUMN_TIMELIMIT, timeLimit);
             values.put(RulesSQLiteHelper.COLUMN_CARDDISPLAYTIME, cardDisplayTime);
             values.put(RulesSQLiteHelper.COLUMN_MAXCARDCOUNT, maxCardCount);
             values.put(RulesSQLiteHelper.COLUMN_CARDTYPES, cardTypes);
+            values.put(RulesSQLiteHelper.COLUMN_DECK_ID, deckId);
         long insertId = database.insert(RulesSQLiteHelper.TABLE_RULES,
                 null, values);
         Cursor cursor = database.query(RulesSQLiteHelper.TABLE_RULES,
@@ -95,6 +97,7 @@ public class RulesDataSource {
             cv.put(RulesSQLiteHelper.COLUMN_CARDDISPLAYTIME, r.getCardDisplayTime());
             cv.put(RulesSQLiteHelper.COLUMN_MAXCARDCOUNT, r.getMaxCardCount());
             cv.put(RulesSQLiteHelper.COLUMN_CARDTYPES, r.getCardTypes());
+            cv.put(RulesSQLiteHelper.COLUMN_DECK_ID, r.getDeckId());
         String where = RulesSQLiteHelper.COLUMN_ID + " = " + r.getId();
         return database.update(RulesSQLiteHelper.TABLE_RULES, cv, where, null);
     }
@@ -138,6 +141,7 @@ public class RulesDataSource {
             rule.setCardDisplayTime(cursor.getLong(2));//card display time
             rule.setMaxCardCount(cursor.getInt(3));//max card count
             rule.setCardTypes(cursor.getString(4));//card types
+            rule.setDeckId(cursor.getInt(5));
         return rule;
     }
 

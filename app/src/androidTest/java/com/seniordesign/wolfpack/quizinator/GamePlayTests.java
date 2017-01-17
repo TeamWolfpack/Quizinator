@@ -71,7 +71,7 @@ public class GamePlayTests {
         types.add("TF");
         types.add("MC");
         String cardTypes = gson.toJson(types);
-        rulesource.createRule(1, 60000, 3000, cardTypes);
+        rulesource.createRule(1, 60000, 3000, cardTypes, 1);
         mActivityRule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {

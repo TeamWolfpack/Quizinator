@@ -69,7 +69,9 @@
 
         <activity android:name=".Activities.ManageGameplayActivity" />
         <activity android:name=".Activities.CardsActivity" />
-        <activity android:name=".Activities.EditCardActivity"></activity>
+        <activity android:name=".Activities.EditCardActivity" />
+        <activity android:name=".Activities.DecksActivity" />
+        <activity android:name=".Activities.EditDeckActivity"></activity>
     </application>
 
 </manifest>

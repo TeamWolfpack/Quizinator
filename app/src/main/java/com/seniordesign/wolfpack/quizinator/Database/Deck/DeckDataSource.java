@@ -122,6 +122,15 @@ public class DeckDataSource {
         return decks;
     }
 
+    public Deck getDeckWithId(int id) {
+        Cursor cursor = database.query(DeckSQLiteHelper.TABLE_DECKS,
+                allColumns, DeckSQLiteHelper.COLUMN_ID + " = " + id, null, null, null, null);
+        cursor.moveToFirst();
+        Deck deck = cursorToDeck(cursor);
+        cursor.close();
+        return deck;
+    }
+
     /*
      * @author  chuna (10/4/2016)
      */
