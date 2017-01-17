@@ -64,13 +64,6 @@ public class CardsActivity extends AppCompatActivity {
                                 }
                             }
                         }
-//                        Deck filteredDeck = deck.filter(tempRules);
-
-//                        if (!isInputEmpty(cardCountInput) &&
-//                                Integer.valueOf(cardCountInput.getText().toString()) > filteredDeck.getCards().size())
-//                            cardCountInput.setText("" + filteredDeck.getCards().size());
-//
-//                        filterCardCount(filteredDeck);
                         ArrayList<String> chosenTypes = new ArrayList<>();
                         for(int i = 0; i < selectedCardTypes.size(); i++){
                             chosenTypes.add(selectedCardTypes.get(i));
@@ -78,6 +71,7 @@ public class CardsActivity extends AppCompatActivity {
                         fillListOfCards(cardDataSource.filterCards(chosenTypes));
                     }
                 });
+        fillListOfCards(cardDataSource.filterCards(cardTypes));
     }
 
     private boolean initializeDB(){
@@ -85,12 +79,16 @@ public class CardsActivity extends AppCompatActivity {
         return cardDataSource.open();
     }
 
+    private void initializeList(){
+        fillListOfCards(cardDataSource.filterCards(cardTypes));
+    }
+
     private void fillListOfCards(List<Card> values){
         final ListView listView = (ListView)findViewById(R.id.list_of_cards);
-//        final CardAdapter adapter = new CardAdapter(this,
-//                R.layout.array_adapter_list_of_cards, values);
         final CardAdapter adapter = new CardAdapter(this,
-                android.R.layout.simple_list_item_1, values);
+                R.layout.array_adapter_list_of_cards, values);
+//        final CardAdapter adapter = new CardAdapter(this,
+//                android.R.layout.simple_list_item_1, values);
         listView.setAdapter(adapter);
 
 //        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -103,34 +101,6 @@ public class CardsActivity extends AppCompatActivity {
 //            }
 //        });
     }
-
-    /*
-     * @author leonardj (12/23/16)
-     */
-//    private boolean isInputEmpty(EditText input) {
-//        return input.getText().toString().equals("");
-//    }
-
-    /*
-     * @author leonardj (12/16/16)
-     */
-//    public List<String> formatCardTypes(Deck deck) {
-//        ArrayList<String> types = new ArrayList<>();
-//        if (deck == null) {
-//            return types;
-//        }
-//        for (String type : deck.getCardTypes()) {
-//            if (type.equals(Constants.SHORT_TRUE_FALSE))
-//                types.add(Constants.LONG_TRUE_FALSE);
-//            else if (type.equals(Constants.SHORT_MULTIPLE_CHOICE))
-//                types.add(Constants.LONG_MULTIPLE_CHOICE);
-//            else if (type.equals(Constants.SHORT_FREE_RESPONSE))
-//                types.add(Constants.LONG_FREE_RESPONSE);
-//            else if (type.equals(Constants.SHORT_VERBAL_RESPONSE))
-//                types.add(Constants.LONG_VERBAL_RESPONSE);
-//        }
-//        return types;
-//    }
 
     /*
      * @author leonardj (12/16/16)

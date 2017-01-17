@@ -1,6 +1,8 @@
 package com.seniordesign.wolfpack.quizinator.Database.Card;
 
 import com.google.gson.annotations.SerializedName;
+import com.seniordesign.wolfpack.quizinator.Constants;
+import com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES;
 
 import java.io.Serializable;
 
@@ -11,7 +13,7 @@ import java.io.Serializable;
 public class Card{
 
     private long id;
-    private String cardType;
+    private int cardType;
     private String question;
     private String correctAnswer;
     private String [] possibleAnswers;
@@ -25,7 +27,7 @@ public class Card{
         */
 
     public String toString(){
-        return cardType + " | " + question + " | " +
+        return CARD_TYPES.values()[cardType].toString() + " | " + question +
                 " | " + points;
     }
 
@@ -49,59 +51,51 @@ public class Card{
      * @author  chuna (10-13-2016)
      */
 
-    public String getCardType() {
+    public int getCardType() {
         return cardType;
     }
 
     /*
      * @author  chuna (10-13-2016)
      */
-
-    public void setCardType(String cardType) {
-        this.cardType = cardType;
+    public void setCardType(CARD_TYPES cardType) {
+        this.cardType = cardType.ordinal();
         switch(cardType){
-            case("TF"):
+            case TRUE_FALSE:
                 this.maxPossibleAnswers = 2;
                 break;
-            case("MC"):
+            case MULTIPLE_CHOICE:
                 this.maxPossibleAnswers = 4;
+                break;
+            case FREE_RESPONSE:
+                // TODO implement later
+                break;
+            case VERBAL_RESPONSE:
+                // TODO implement later
                 break;
         }
     }
 
-    /*
-     * @author  chuna (10-5-2016)
-     */
+    void setCardType(int cardType) {
+        setCardType(CARD_TYPES.values()[cardType]);
+    }
 
     public String getQuestion() {
         return question;
     }
 
-    /*
-     * @author  chuna (10-5-2016)
-     */
-
     public void setQuestion(String question) {
         this.question = question;
     }
 
-    /*
-     * @author  chuna (10-7-2016)
-     */
     public String getCorrectAnswer() {
         return correctAnswer;
     }
 
-    /*
-     * @author  chuna (10-7-2016)
-     */
     public void setCorrectAnswer(String correctAnswer) {
         this.correctAnswer = correctAnswer;
     }
 
-    /*
-     * @author  chuna (10-11-2016)
-     */
     public String[] getPossibleAnswers() {
         return possibleAnswers;
     }

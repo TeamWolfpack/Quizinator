@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Constants;
 
 /**
@@ -12,6 +13,8 @@ import com.seniordesign.wolfpack.quizinator.Constants;
  * @creation 10/4/2016
  */
 public class CardSQLiteHelper extends SQLiteOpenHelper {
+
+//    private static Gson gson = new Gson(); //TODO initialize inside setDefaultCardSet() method later
 
     //table contents
     public static final String TABLE_CARDS = "cards";
@@ -23,8 +26,6 @@ public class CardSQLiteHelper extends SQLiteOpenHelper {
     public static final String COLUMN_POINTS = "_points";
     public static final String COLUMN_MODERATORNEEDED = "_moderatorNeeded";
 
-    private CardDataSource cardDataSource;
-
     //database filename
     private static final String DATABASE_NAME = "card.db";
     private static final int DATABASE_VERSION = 1;
@@ -33,13 +34,14 @@ public class CardSQLiteHelper extends SQLiteOpenHelper {
     private static final String DATABASE_CREATE = "create table "
             + TABLE_CARDS + "("
             + COLUMN_ID + " integer primary key autoincrement, "
-            + COLUMN_CARDTYPE + " TEXT, "
+            + COLUMN_CARDTYPE + " INTEGER, "
             + COLUMN_QUESTION + " TEXT, "
             + COLUMN_CORRECTANSWER + " TEXT, "
             + COLUMN_POSSIBLEANSWERS + " TEXT, "
             + COLUMN_POINTS + " INTEGER, "
             + COLUMN_MODERATORNEEDED + " TEXT"
             + ");";
+
 
     /*
      * @author  chuna (10/4/2016)
@@ -54,7 +56,7 @@ public class CardSQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(DATABASE_CREATE);
-        //setDefaultCardSet();
+        setDefaultCardSet(db);
     }
 
     /*
@@ -70,85 +72,124 @@ public class CardSQLiteHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    private void setDefaultCardSet() {
-        Card[] cards = new Card[10];
-        cards[0] = new Card();
-        cards[0].setQuestion("1+1 = ?");
-        cards[0].setCorrectAnswer("2");
-        String[] answerArea = {"1","2","3","4"};
-        cards[0].setPossibleAnswers(answerArea);
-        cards[0].setCardType(Constants.SHORT_MULTIPLE_CHOICE);
-        cards[0].setPoints(1);
-        cards[0].setModeratorNeeded("False");
-        cards[1] = new Card();
-        cards[1].setQuestion("1*2 = 0");
-        cards[1].setCorrectAnswer("False");
-        cards[1].setCardType(Constants.SHORT_TRUE_FALSE);
-        String[] answerAreaTF = {"True", "False"};
-        cards[1].setPossibleAnswers(answerAreaTF);
-        cards[1].setPoints(1);
-        cards[1].setModeratorNeeded("False");
-        cards[2] = new Card();
-        cards[2].setQuestion("4*5 = 20");
-        cards[2].setCorrectAnswer("True");
-        cards[2].setCardType(Constants.SHORT_TRUE_FALSE);
-        cards[2].setPossibleAnswers(answerAreaTF);
-        cards[2].setPoints(1);
-        cards[2].setModeratorNeeded("False");
-        cards[3] = new Card();
-        cards[3].setQuestion("20*10 = 100");
-        cards[3].setCorrectAnswer("False");
-        cards[3].setCardType(Constants.SHORT_TRUE_FALSE);
-        cards[3].setPossibleAnswers(answerAreaTF);
-        cards[3].setPoints(1);
-        cards[3].setModeratorNeeded("False");
-        cards[4] = new Card();
-        cards[4].setQuestion("10*91 = 901");
-        cards[4].setCorrectAnswer("False");
-        cards[4].setCardType(Constants.SHORT_TRUE_FALSE);
-        cards[4].setPossibleAnswers(answerAreaTF);
-        cards[4].setPoints(1);
-        cards[4].setModeratorNeeded("False");
-        cards[5] = new Card();
-        cards[5].setQuestion("100^2 = 10000");
-        cards[5].setCorrectAnswer("True");
-        cards[5].setCardType(Constants.SHORT_TRUE_FALSE);
-        cards[5].setPossibleAnswers(answerAreaTF);
-        cards[5].setPoints(1);
-        cards[5].setModeratorNeeded("False");
-        cards[6] = new Card();
-        cards[6].setQuestion("10*102 = 1002");
-        cards[6].setCorrectAnswer("False");
-        cards[6].setCardType(Constants.SHORT_TRUE_FALSE);
-        cards[6].setPossibleAnswers(answerAreaTF);
-        cards[6].setPoints(1);
-        cards[6].setModeratorNeeded("False");
-        cards[7] = new Card();
-        cards[7].setQuestion("8/2 = 4");
-        cards[7].setCorrectAnswer("True");
-        cards[7].setCardType(Constants.SHORT_TRUE_FALSE);
-        cards[7].setPossibleAnswers(answerAreaTF);
-        cards[7].setPoints(1);
-        cards[7].setModeratorNeeded("False");
-        cards[8] = new Card();
-        cards[8].setQuestion("120/4 = 30");
-        cards[8].setCorrectAnswer("True");
-        cards[8].setCardType(Constants.SHORT_TRUE_FALSE);
-        cards[8].setPossibleAnswers(answerAreaTF);
-        cards[8].setPoints(1);
-        cards[8].setModeratorNeeded("False");
-        cards[9] = new Card();
-        cards[9].setQuestion("6*7 = 41");
-        cards[9].setCorrectAnswer("False");
-        cards[9].setCardType(Constants.SHORT_TRUE_FALSE);
-        cards[9].setPossibleAnswers(answerAreaTF);
-        cards[9].setPoints(1);
-        cards[9].setModeratorNeeded("False");
+    private void setDefaultCardSet(SQLiteDatabase db) {
+        Gson gson = new Gson();
 
-        cardDataSource.open();
-        for (Card card : cards) {
-            cardDataSource.createCard(card);
-        }
-        cardDataSource.close();
+        final String TRUE = "True";
+        final String FALSE = "False";
+        final String[] TRUE_FALSE_ANSWERS = new String[]{"True", "False"};
+
+        StringBuilder queryBuilder = new StringBuilder()
+                .append("insert into " + TABLE_CARDS)
+                .append(" SELECT \'" + "1" + "\' AS \'" + COLUMN_ID + "\',")
+                    .append("\'").append(Constants.CARD_TYPES.MULTIPLE_CHOICE.ordinal()).append("\' AS \'").append(COLUMN_CARDTYPE).append("\',")
+                    .append("\'").append("1+1 = ?").append("\' AS \'").append(COLUMN_QUESTION).append("\',")
+                    .append("\'").append("2").append("\' AS \'").append(COLUMN_CORRECTANSWER).append("\',")
+                    .append("\'").append(gson.toJson(new String[]{"1", "2", "3", "4"})).append("\' AS \'").append(COLUMN_POSSIBLEANSWERS).append("\',")
+                    .append("\'").append("1").append("\' AS \'").append(COLUMN_POINTS).append("\',")
+                    .append("\'").append(FALSE).append("\' AS \'").append(COLUMN_MODERATORNEEDED).append("\' ")
+                .append("UNION ALL SELECT \'" + "2" + "\', " + "\'")
+                    .append(Constants.CARD_TYPES.TRUE_FALSE.ordinal())
+                    .append("\', ").append("\'1*2 = 0\', ")
+                    .append("\'").append(FALSE).append("\', ")
+                    .append("\'").append(gson.toJson(TRUE_FALSE_ANSWERS)).append("\', ")
+                    .append("\'1\', ").append("\'").append(FALSE).append("\' ")
+                .append("UNION ALL SELECT \'" + "3" + "\', " + "\'")
+                    .append(Constants.CARD_TYPES.TRUE_FALSE.ordinal()).append("\', ")
+                    .append("\'4*5 = 20\', ").append("\'").append(TRUE).append("\', ")
+                    .append("\'").append(gson.toJson(TRUE_FALSE_ANSWERS)).append("\', ").append("\'1\', ")
+                    .append("\'").append(FALSE).append("\' ")
+                .append("UNION ALL SELECT \'" + "4" + "\', " + "\'")
+                    .append(Constants.CARD_TYPES.TRUE_FALSE.ordinal()).append("\', ")
+                    .append("\'20*10 = 100\', ").append("\'").append(FALSE).append("\', ")
+                    .append("\'").append(gson.toJson(TRUE_FALSE_ANSWERS)).append("\', ")
+                    .append("\'1\', ").append("\'").append(FALSE).append("\' ")
+                .append("UNION ALL SELECT \'" + "5" + "\', " + "\'")
+                    .append(Constants.CARD_TYPES.TRUE_FALSE.ordinal()).append("\', ")
+                    .append("\'10*91 = 901\', ").append("\'").append(FALSE).append("\', ")
+                    .append("\'").append(gson.toJson(TRUE_FALSE_ANSWERS)).append("\', ")
+                    .append("\'1\', ").append("\'").append(FALSE).append("\' ")
+                .append("UNION ALL SELECT \'" + "6" + "\', " + "\'")
+                    .append(Constants.CARD_TYPES.TRUE_FALSE.ordinal()).append("\', ")
+                    .append("\'100^2 = 10000\', ").append("\'").append(TRUE).append("\', ")
+                    .append("\'").append(gson.toJson(TRUE_FALSE_ANSWERS)).append("\', ")
+                    .append("\'1\', ").append("\'").append(FALSE).append("\' ")
+                .append("UNION ALL SELECT \'" + "7" + "\', " + "\'")
+                    .append(Constants.CARD_TYPES.TRUE_FALSE.ordinal()).append("\', ")
+                    .append("\'10*102 = 1002\', ").append("\'").append(FALSE).append("\', ")
+                    .append("\'").append(gson.toJson(TRUE_FALSE_ANSWERS)).append("\', ")
+                    .append("\'1\', ").append("\'").append(FALSE).append("\' ")
+                .append("UNION ALL SELECT \'" + "8" + "\', " + "\'")
+                    .append(Constants.CARD_TYPES.TRUE_FALSE.ordinal()).append("\', ")
+                    .append("\'8/2 = 4\', ").append("\'").append(TRUE).append("\', ")
+                    .append("\'").append(gson.toJson(TRUE_FALSE_ANSWERS)).append("\', ")
+                    .append("\'1\', ").append("\'").append(FALSE).append("\' ")
+                .append("UNION ALL SELECT \'" + "9" + "\', " + "\'")
+                    .append(Constants.CARD_TYPES.TRUE_FALSE.ordinal()).append("\', ")
+                    .append("\'120/4 = 30\', ").append("\'").append(TRUE).append("\', ")
+                    .append("\'").append(gson.toJson(TRUE_FALSE_ANSWERS)).append("\', ")
+                    .append("\'1\', ").append("\'").append(FALSE).append("\' ")
+                .append("UNION ALL SELECT \'" + "10" + "\', " + "\'")
+                    .append(Constants.CARD_TYPES.TRUE_FALSE.ordinal()).append("\', ")
+                    .append("\'6*7 = 41\', ").append("\'").append(FALSE).append("\', ")
+                    .append("\'").append(gson.toJson(TRUE_FALSE_ANSWERS)).append("\', ")
+                    .append("\'1\', ").append("\'").append(FALSE).append("\';");
+
+//        String queryBuilder = ("insert into " + TABLE_CARDS) +
+//                " SELECT \'" + "1" + "\' AS \'" + COLUMN_ID + "\'," +
+//                "\'" + Constants.CARD_TYPES.MULTIPLE_CHOICE.ordinal() + "\' AS \'" + COLUMN_CARDTYPE + "\'," +
+//                "\'" + "1+1 = ?" + "\' AS \'" + COLUMN_QUESTION + "\'," +
+//                "\'" + "2" + "\' AS \'" + COLUMN_CORRECTANSWER + "\'," +
+//                "\'" + gson.toJson(new String[]{"1", "2", "3", "4"}) + "\' AS \'" + COLUMN_POSSIBLEANSWERS + "\'," +
+//                "\'" + "1" + "\' AS \'" + COLUMN_POINTS + "\'," +
+//                "\'" + FALSE + "\' AS \'" + COLUMN_MODERATORNEEDED + "\' " +
+//                "UNION ALL SELECT \'" + "2" + "\', " + "\'" +
+//                Constants.CARD_TYPES.TRUE_FALSE.ordinal() +
+//                "\', " + "\'1*2 = 0\', " +
+//                "\'" + FALSE + "\', " +
+//                "\'" + gson.toJson(TRUE_FALSE_ANSWERS) + "\', " +
+//                "\'1\', " + "\'" + FALSE + "\' " +
+//                "UNION ALL SELECT \'" + "3" + "\', " + "\'" +
+//                Constants.CARD_TYPES.TRUE_FALSE.ordinal() + "\', " +
+//                "\'4*5 = 20\', " + "\'" + TRUE + "\', " +
+//                "\'" + gson.toJson(TRUE_FALSE_ANSWERS) + "\', " + "\'1\', " +
+//                "\'" + FALSE + "\' " +
+//                "UNION ALL SELECT \'" + "4" + "\', " + "\'" +
+//                Constants.CARD_TYPES.TRUE_FALSE.ordinal() + "\', " +
+//                "\'20*10 = 100\', " + "\'" + FALSE + "\', " +
+//                "\'" + gson.toJson(TRUE_FALSE_ANSWERS) + "\', " +
+//                "\'1\', " + "\'" + FALSE + "\' " +
+//                "UNION ALL SELECT \'" + "5" + "\', " + "\'" +
+//                Constants.CARD_TYPES.TRUE_FALSE.ordinal() + "\', " +
+//                "\'10*91 = 901\', " + "\'" + FALSE + "\', " +
+//                "\'" + gson.toJson(TRUE_FALSE_ANSWERS) + "\', " +
+//                "\'1\', " + "\'" + FALSE + "\' " +
+//                "UNION ALL SELECT \'" + "6" + "\', " + "\'" +
+//                Constants.CARD_TYPES.TRUE_FALSE.ordinal() + "\', " +
+//                "\'100^2 = 10000\', " + "\'" + TRUE + "\', " +
+//                "\'" + gson.toJson(TRUE_FALSE_ANSWERS) + "\', " +
+//                "\'1\', " + "\'" + FALSE + "\' " +
+//                "UNION ALL SELECT \'" + "7" + "\', " + "\'" +
+//                Constants.CARD_TYPES.TRUE_FALSE.ordinal() + "\', " +
+//                "\'10*102 = 1002\', " + "\'" + FALSE + "\', " +
+//                "\'" + gson.toJson(TRUE_FALSE_ANSWERS) + "\', " +
+//                "\'1\', " + "\'" + FALSE + "\' " +
+//                "UNION ALL SELECT \'" + "8" + "\', " + "\'" +
+//                Constants.CARD_TYPES.TRUE_FALSE.ordinal() + "\', " +
+//                "\'8/2 = 4\', " + "\'" + TRUE + "\', " +
+//                "\'" + gson.toJson(TRUE_FALSE_ANSWERS) + "\', " +
+//                "\'1\', " + "\'" + FALSE + "\' " +
+//                "UNION ALL SELECT \'" + "9" + "\', " + "\'" +
+//                Constants.CARD_TYPES.TRUE_FALSE.ordinal() + "\', " +
+//                "\'120/4 = 30\', " + "\'" + TRUE + "\', " +
+//                "\'" + gson.toJson(TRUE_FALSE_ANSWERS) + "\', " +
+//                "\'1\', " + "\'" + FALSE + "\' " +
+//                "UNION ALL SELECT \'" + "10" + "\', " + "\'" +
+//                Constants.CARD_TYPES.TRUE_FALSE.ordinal() + "\', " +
+//                "\'6*7 = 41\', " + "\'" + FALSE + "\', " +
+//                "\'" + gson.toJson(TRUE_FALSE_ANSWERS) + "\', " +
+//                "\'1\', " + "\'" + FALSE + "\';";
+
+        db.execSQL(queryBuilder.toString());
     }
 }

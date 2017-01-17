@@ -27,7 +27,10 @@ public class DeckDataSource {
     private String[] allColumns = {
             DeckSQLiteHelper.COLUMN_ID,
             DeckSQLiteHelper.COLUMN_DECKNAME,
-            DeckSQLiteHelper.COLUMN_CARDS
+            DeckSQLiteHelper.COLUMN_CATEGORY,
+            DeckSQLiteHelper.COLUMN_SUBJECT,
+            DeckSQLiteHelper.COLUMN_DUPLICATECARDS,
+            DeckSQLiteHelper.COLUMN_OWNER
     };
 
     /*
