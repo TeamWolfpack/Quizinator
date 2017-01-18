@@ -5,6 +5,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.seniordesign.wolfpack.quizinator.Constants;
+
 /**
  * SQLite data access object for Deck
  * @creation 10/4/2016
@@ -50,6 +53,7 @@ public class DeckSQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(DATABASE_CREATE);
+        setDefaultDeckSet(db);
     }
 
     /*
@@ -63,5 +67,18 @@ public class DeckSQLiteHelper extends SQLiteOpenHelper {
                         "destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_DECKS);
         onCreate(db);
+    }
+
+    private void setDefaultDeckSet(SQLiteDatabase db) {
+        StringBuilder queryBuilder = new StringBuilder()
+                .append("insert into " + TABLE_DECKS)
+                .append(" SELECT \'" + "1" + "\' AS \'" + COLUMN_ID + "\',")
+                .append("\'").append("Default").append("\' AS \'").append(COLUMN_DECKNAME).append("\',")
+                .append("\'").append("General").append("\' AS \'").append(COLUMN_CATEGORY).append("\',")
+                .append("\'").append("General").append("\' AS \'").append(COLUMN_SUBJECT).append("\',")
+                .append("\'").append(String.valueOf(true)).append("\' AS \'").append(COLUMN_DUPLICATECARDS).append("\',")
+                .append("\'").append("Team Wolfpack").append("\' AS \'").append(COLUMN_OWNER).append("\';");
+
+        db.execSQL(queryBuilder.toString());
     }
 }
