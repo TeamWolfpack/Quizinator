@@ -62,5 +62,7 @@ public class CustomDeckTests {
         onView(withId(R.id.new_item_button)).perform(click());
         int dif = deckDataSource.getAllDecks().size() - numOfDecks;
         assertTrue(dif>0);
+        onView(withId(R.id.deck_delete_button)).perform(click());
+        onView(withId(android.R.id.button1)).perform(click());
     }
 }
