@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -128,6 +129,11 @@ public class DeckDataSource {
                 allColumns, DeckSQLiteHelper.COLUMN_ID + " = " + id, null, null, null, null);
         cursor.moveToFirst();
         return deck;
+    }
+
+    private String getCardsQuery() {
+        SQLiteQueryBuilder sqlBuilder = new SQLiteQueryBuilder();
+        sqlBuilder.setTables();
     }
 
     private Deck cursorToDeck(Cursor cursor) {
