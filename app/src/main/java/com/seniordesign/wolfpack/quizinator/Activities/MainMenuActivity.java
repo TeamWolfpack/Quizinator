@@ -127,8 +127,10 @@ public class MainMenuActivity extends AppCompatActivity
             }
         }
         else if(id == R.id.nav_show_decks) {
-            Intent intent = new Intent(this,DecksActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(this, DecksActivity.class));
+        }
+        else if(id == R.id.nav_show_cards){
+            startActivity(new Intent(this, CardsActivity.class));
         }
         /*
         else if (id == R.id.nav_application_settings) {
@@ -177,9 +179,9 @@ public class MainMenuActivity extends AppCompatActivity
         }
     }
 
-    public void goToCardsList(View v) {
-        startActivity(new Intent(this, CardsActivity.class));
-    }
+//    public void goToCardsList(View v) {
+//        startActivity(new Intent(this, CardsActivity.class));
+//    }
 
     private boolean isWifiDirectSupported(Context ctx) {
         PackageManager pm = ctx.getPackageManager();
