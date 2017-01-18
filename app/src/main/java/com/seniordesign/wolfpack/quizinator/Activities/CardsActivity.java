@@ -31,7 +31,7 @@ public class CardsActivity extends AppCompatActivity {
     private List<String> selectedCardTypes;
     private List<String> cardTypes = new ArrayList<>(
             Arrays.asList(
-                    CARD_TYPES.FREE_RESPONSE.toString(),
+                    CARD_TYPES.TRUE_FALSE.toString(),
                     CARD_TYPES.MULTIPLE_CHOICE.toString(),
                     CARD_TYPES.FREE_RESPONSE.toString(),
                     CARD_TYPES.VERBAL_RESPONSE.toString()
