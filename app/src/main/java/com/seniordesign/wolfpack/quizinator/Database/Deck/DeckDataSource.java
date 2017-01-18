@@ -124,7 +124,7 @@ public class DeckDataSource {
         Deck deck = cursorToDeck(cursor);
         cursor.close();
         cdrDatabase.rawQuery()
-        cursor = cdrDatabase.query(SQLiteHelper.TABLE_DECKS,
+        cursor = cdrDatabase.query(DeckSQLiteHelper.TABLE_DECKS,
                 allColumns, DeckSQLiteHelper.COLUMN_ID + " = " + id, null, null, null, null);
         cursor.moveToFirst();
         return deck;

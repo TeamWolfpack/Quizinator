@@ -14,9 +14,6 @@ import com.seniordesign.wolfpack.quizinator.R;
 
 import java.util.List;
 
-/**
- * Created by chris on 1/4/2016.
- */
 
 public class DeckAdapter extends ArrayAdapter<Deck> {
 
