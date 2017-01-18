@@ -73,4 +73,8 @@
     <string name="_true">True</string>
     <string name="_false">False</string>
 
+    <string name="nav_bar_check_p2p_compliance">Check P2P Compatibility</string>
+    <string name="nav_bar_edit_decks">Edit Decks</string>
+    <string name="nav_bar_edit_cards">Edit Cards</string>
+
 </resources>
