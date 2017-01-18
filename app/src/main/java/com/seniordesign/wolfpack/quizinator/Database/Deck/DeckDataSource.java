@@ -123,8 +123,8 @@ public class DeckDataSource {
         cursor.moveToFirst();
         Deck deck = cursorToDeck(cursor);
         cursor.close();
-        cdrDatabase.rawQuery()
-        cursor = cdrDatabase.query(SQLiteHelper.TABLE_DECKS,
+        //cdrDatabase.rawQuery()
+        cursor = cdrDatabase.query(DeckSQLiteHelper.TABLE_DECKS,
                 allColumns, DeckSQLiteHelper.COLUMN_ID + " = " + id, null, null, null, null);
         cursor.moveToFirst();
         return deck;
@@ -157,7 +157,7 @@ public class DeckDataSource {
 
         Gson gson = new Gson();
         String cardsStr = gson.toJson(deck.getCards());
-        values.put(DeckSQLiteHelper.COLUMN_CARDS, cardsStr);
+        //values.put(DeckSQLiteHelper.COLUMN_CARDS, cardsStr);
 
         String where = DeckSQLiteHelper.COLUMN_ID + " = " + deck.getId();
         return deckDatabase.update(DeckSQLiteHelper.TABLE_DECKS, values, where, null);

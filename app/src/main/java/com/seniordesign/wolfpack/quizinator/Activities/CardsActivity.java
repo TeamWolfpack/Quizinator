@@ -12,6 +12,7 @@ import android.widget.ListView;
 
 import com.seniordesign.wolfpack.quizinator.Adapters.CardAdapter;
 import com.seniordesign.wolfpack.quizinator.Constants;
+import com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Card.CardDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
@@ -28,7 +29,13 @@ public class CardsActivity extends AppCompatActivity {
 
     private MultiSelectSpinner cardTypeSpinner;
     private List<String> selectedCardTypes;
-    private List<String> cardTypes = new ArrayList<>(Arrays.asList(Constants.LONG_TRUE_FALSE, Constants.LONG_MULTIPLE_CHOICE));
+    private List<String> cardTypes = new ArrayList<>(
+            Arrays.asList(
+                    CARD_TYPES.FREE_RESPONSE.toString(),
+                    CARD_TYPES.MULTIPLE_CHOICE.toString(),
+                    CARD_TYPES.FREE_RESPONSE.toString(),
+                    CARD_TYPES.VERBAL_RESPONSE.toString()
+            ));
 //    private List<String> cardTypes = new ArrayList<>(Arrays.asList(Constants.LONG_TRUE_FALSE, Constants.LONG_MULTIPLE_CHOICE, Constants.LONG_FREE_RESPONSE, Constants.LONG_VERBAL_RESPONSE));
 
     private CardDataSource cardDataSource;
@@ -58,7 +65,7 @@ public class CardsActivity extends AppCompatActivity {
                         for (int i = 0; i < selected.length; i++) {
                             if (selected[i]) {
                                 try{
-                                    selectedCardTypes.add(shortFormCardType(cardTypes.get(i)));
+                                    selectedCardTypes.add(cardTypes.get(i));
                                 }catch (Exception e){
                                     System.out.println(e.getMessage());
                                 }
@@ -100,38 +107,5 @@ public class CardsActivity extends AppCompatActivity {
 //                startActivity(intent);
 //            }
 //        });
-    }
-
-    /*
-     * @author leonardj (12/16/16)
-     */
-    private String shortFormCardType(String type) throws Exception {
-        if (type.equals(Constants.LONG_TRUE_FALSE))
-            return Constants.SHORT_TRUE_FALSE;
-        else if (type.equals(Constants.LONG_MULTIPLE_CHOICE))
-            return Constants.SHORT_MULTIPLE_CHOICE;
-        else if (type.equals(Constants.LONG_FREE_RESPONSE))
-            return Constants.SHORT_FREE_RESPONSE;
-        else if (type.equals(Constants.LONG_VERBAL_RESPONSE))
-            return Constants.SHORT_VERBAL_RESPONSE;
-        else
-            throw new Exception("Invalid Card Type");
-    }
-
-    /*
-  * @author leonardj (12/16/16)
-  */
-
-    private String longFormCardType(String type) throws Exception {
-        if (type.equals(Constants.SHORT_TRUE_FALSE))
-            return Constants.LONG_TRUE_FALSE;
-        else if (type.equals(Constants.SHORT_MULTIPLE_CHOICE))
-            return Constants.LONG_MULTIPLE_CHOICE;
-        else if (type.equals(Constants.SHORT_FREE_RESPONSE))
-            return Constants.LONG_FREE_RESPONSE;
-        else if (type.equals(Constants.SHORT_VERBAL_RESPONSE))
-            return Constants.LONG_VERBAL_RESPONSE;
-        else
-            throw new Exception("Invalid Card Type");
     }
 }

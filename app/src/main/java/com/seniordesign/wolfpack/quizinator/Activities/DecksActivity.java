@@ -60,7 +60,7 @@ public class DecksActivity extends AppCompatActivity implements AdapterView.OnIt
     public void newDeckClick(View view){
         Intent intent = new Intent(this, EditDeckActivity.class);
         Gson gson = new Gson();
-        Deck deck = deckDataSource.createDeck("New Deck",new ArrayList<Card>());
+        Deck deck = deckDataSource.createDeck("New Deck", null, null, true, null, new ArrayList<Card>());
         String jsonDeck = gson.toJson(deck);
         intent.putExtra("Deck",jsonDeck);
         startActivity(intent);
