@@ -1,5 +1,6 @@
 package com.seniordesign.wolfpack.quizinator;
 
+import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -22,6 +23,8 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerActions.open;
 import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 
 /**
  * Created by farrowc on 1/17/2017.
@@ -53,8 +56,11 @@ public class CustomDeckTests {
 
     @Test
     public void validateCreateDeck() {
+        deckDataSource = new DeckDataSource(InstrumentationRegistry.getTargetContext());
+        deckDataSource.open();
+        int numOfDecks = deckDataSource.getAllDecks().size();
         onView(withId(R.id.new_item_button)).perform(click());
+        int dif = deckDataSource.getAllDecks().size() - numOfDecks;
+        assertTrue(dif>0);
     }
-
-
 }
