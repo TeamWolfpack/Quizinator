@@ -8,10 +8,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 import com.seniordesign.wolfpack.quizinator.R;
 
 import java.util.List;
+
+import static com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES.TRUE_FALSE;
 
 /**
  * Created by aaron on 12/27/2016.
@@ -41,18 +44,19 @@ public class CardAdapter extends ArrayAdapter<Card> {
         Card card = getItem(position);
 
         if (card != null) {
-            ImageView icon = (ImageView) v.findViewById(R.id.card_type_icon);;
-            switch(card.getCardType()) {
-                case "TF":
+            ImageView icon = (ImageView) v.findViewById(R.id.card_type_icon);
+            Constants.CARD_TYPES cardType = Constants.CARD_TYPES.values()[card.getCardType()];
+            switch(cardType) {
+                case TRUE_FALSE:
                     icon.setImageResource(R.drawable.tf_icon);
                     break;
-                case "MC":
+                case MULTIPLE_CHOICE:
                     icon.setImageResource(R.drawable.mc_icon);
                     break;
-                case "FR":
+                case FREE_RESPONSE:
                     icon.setImageResource(R.drawable.fr_icon);
                     break;
-                case "VR":
+                case VERBAL_RESPONSE:
                     icon.setImageResource(R.drawable.vr_icon);
                     break;
             }

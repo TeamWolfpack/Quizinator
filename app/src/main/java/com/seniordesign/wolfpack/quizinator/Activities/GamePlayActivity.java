@@ -23,6 +23,8 @@ import com.seniordesign.wolfpack.quizinator.Fragments.TrueFalseChoiceAnswerFragm
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
+import static com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES.TRUE_FALSE;
+
 /*
  * The game play activity is...
  * @creation 09/28/2016
@@ -106,8 +108,9 @@ public class GamePlayActivity
      * @author farrowc (10/11/2016)
      */
     public void showCard(final Card card) {
-        switch(card.getCardType()){
-            case(Constants.SHORT_TRUE_FALSE):
+        Constants.CARD_TYPES cardType = Constants.CARD_TYPES.values()[card.getCardType()];
+        switch(cardType){
+            case TRUE_FALSE:
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -121,7 +124,7 @@ public class GamePlayActivity
                     }
                 });
                 break;
-            case(Constants.SHORT_MULTIPLE_CHOICE):
+            case MULTIPLE_CHOICE:
                 final MultipleChoiceAnswerFragment mcFragment = new MultipleChoiceAnswerFragment();
                 mcFragment.setChoiceA(card.getPossibleAnswers()[0]);
                 mcFragment.setChoiceB(card.getPossibleAnswers()[1]);

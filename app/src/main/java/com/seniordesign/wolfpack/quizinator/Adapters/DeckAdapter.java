@@ -8,6 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.seniordesign.wolfpack.quizinator.Constants;
+import com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
 import com.seniordesign.wolfpack.quizinator.R;
@@ -45,17 +47,18 @@ public class DeckAdapter extends ArrayAdapter<Deck> {
             int vrCount = 0;
 
             for(Card card : deck.getCards()){
-                switch(card.getCardType()) {
-                    case "TF":
+                CARD_TYPES cardType = CARD_TYPES.values()[card.getCardType()];
+                switch(cardType) {
+                    case TRUE_FALSE:
                         tfCount++;
                         break;
-                    case "MC":
+                    case MULTIPLE_CHOICE:
                         mcCount++;
                         break;
-                    case "FR":
+                    case FREE_RESPONSE:
                         frCount++;
                         break;
-                    case "VR":
+                    case VERBAL_RESPONSE:
                         vrCount++;
                         break;
                 }
