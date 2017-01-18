@@ -58,8 +58,8 @@ public class DeckUITests {
     @Test
     public void normalFlow_DeckDataSource() throws Exception{
         assertEquals(true, datasource.open());
-        assertEquals(true, datasource.getDatabase().isOpen());
-        dbHelper.onUpgrade(datasource.getDatabase(), 0, 1);
+        assertEquals(true, datasource.getDeckDatabase().isOpen());
+        dbHelper.onUpgrade(datasource.getDeckDatabase(), 0, 1);
         List<Card> cards = new ArrayList<>();
         cards.add(new Card());
         cards.add(new Card());

@@ -40,6 +40,7 @@ public final class Constants {
 //    public static final String LONG_MULTIPLE_CHOICE = "Multiple Choice";
 //    public static final String LONG_FREE_RESPONSE = "Free Response";
 //    public static final String LONG_VERBAL_RESPONSE = "Verbal Response";
+
     public static final String ALL_CARD_TYPES = "All Types";
     public static final String NO_CARD_TYPES = "None Selected";
 

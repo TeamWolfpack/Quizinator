@@ -9,12 +9,11 @@ import android.database.sqlite.SQLiteDatabase;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
+import com.seniordesign.wolfpack.quizinator.Database.CardDeckRelation.CdrSQLiteHelper;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @creation 10/4/2016.
@@ -22,8 +21,10 @@ import java.util.Map;
 public class DeckDataSource {
 
     // Database fields
-    private SQLiteDatabase database;
-    private DeckSQLiteHelper dbHelper;
+    private SQLiteDatabase deckDatabase;
+    private DeckSQLiteHelper deckHelper;
+    private SQLiteDatabase cdrDatabase;
+    private CdrSQLiteHelper cdrHelper;
     private String[] allColumns = {
             DeckSQLiteHelper.COLUMN_ID,
             DeckSQLiteHelper.COLUMN_DECKNAME,
@@ -33,83 +34,78 @@ public class DeckDataSource {
             DeckSQLiteHelper.COLUMN_OWNER
     };
 
-    /*
-     * @author  chuna (10/4/2016)
-     */
     public DeckDataSource(Context context) {
-        dbHelper = new DeckSQLiteHelper(context);
+        deckHelper = new DeckSQLiteHelper(context);
+        cdrHelper = new CdrSQLiteHelper(context);
     }
 
-    /*
-     * @author  chuna (10/4/2016)
-     */
     public boolean open() throws SQLException {
-        database = dbHelper.getWritableDatabase();
+        deckDatabase = deckHelper.getWritableDatabase();
+        cdrDatabase = cdrHelper.getWritableDatabase(); //TODO may need to just be cdrHelper.open()
         return true;
     }
 
-    /*
-     * @author  chuna (10/4/2016)
-     */
     public boolean close() {
-        dbHelper.close();
+        deckHelper.close();
+        cdrHelper.close();
         return true;
     }
 
-    /*
-     * @author  chuna (10/4/2016)
-     */
-    public SQLiteDatabase getDatabase(){
-        return database;
+    public SQLiteDatabase getDeckDatabase(){
+        return deckDatabase;
     }
 
-    /*
-     * @author  chuna (10/4/2016)
-     */
     public DeckSQLiteHelper getSQLiteHelper() {
-        return dbHelper;
+        return deckHelper;
     }
 
-    /*
-     * @author  chuna (10/4/2016)
-     */
-    public Deck createDeck(String deckName, List<Card> cards) {
+    public Deck createDeck(String deckName, String category, String subject,
+                           boolean duplicateCards, String owner, List<Card> cards) {
         ContentValues values = new ContentValues();
         values.put(DeckSQLiteHelper.COLUMN_DECKNAME, deckName);
-
-        // TODO make sure this works like in CardDataSource
-        Gson gson = new Gson();
-        String cardsStr = gson.toJson(cards);
-        values.put(DeckSQLiteHelper.COLUMN_CARDS, cardsStr);
-
-        long insertId = database.insert(DeckSQLiteHelper.TABLE_DECKS,
+        values.put(DeckSQLiteHelper.COLUMN_CATEGORY, category);
+        values.put(DeckSQLiteHelper.COLUMN_SUBJECT, subject);
+        values.put(DeckSQLiteHelper.COLUMN_DUPLICATECARDS, String.valueOf(duplicateCards));
+        values.put(DeckSQLiteHelper.COLUMN_OWNER, owner);
+        long insertId = deckDatabase.insert(DeckSQLiteHelper.TABLE_DECKS,
                 null, values);
-        Cursor cursor = database.query(DeckSQLiteHelper.TABLE_DECKS,
+
+        Cursor cursor = deckDatabase.query(DeckSQLiteHelper.TABLE_DECKS,
                 allColumns, DeckSQLiteHelper.COLUMN_ID
                         + " = " + insertId, null,
                 null, null, null);
         cursor.moveToFirst();
         Deck newDeck = cursorToDeck(cursor);
         cursor.close();
+        setCardDeckRelation(insertId, cards);
+        newDeck.setCards(cards);
         return newDeck;
     }
 
-    /*
-     * @author  chuna (10/4/2016)
-     */
+    private void setCardDeckRelation(long deckId, List<Card> cards) {
+        ContentValues values;
+        for (Card card : cards) {
+            values = new ContentValues();
+            values.put(CdrSQLiteHelper.COLUMN_FKCARD, card.getId());
+            values.put(CdrSQLiteHelper.COLUMN_FKDECK, deckId);
+
+            cdrDatabase.insert(CdrSQLiteHelper.TABLE_CDRELATIONS,
+                    null, values);
+        }
+    }
+
     public int deleteDeck(Deck deck) {
         long id = deck.getId();
         System.out.println("Deleted item: " + deck.toString());
-        return database.delete(DeckSQLiteHelper.TABLE_DECKS,
+        cdrDatabase.delete(CdrSQLiteHelper.TABLE_CDRELATIONS,
+                CdrSQLiteHelper.COLUMN_FKDECK + " = " + id, null);
+        return deckDatabase.delete(DeckSQLiteHelper.TABLE_DECKS,
                 DeckSQLiteHelper.COLUMN_ID + " = " + id, null);
     }
 
-    /*
-     * @author  chuna (10/4/2016)
-     */
     public List<Deck> getAllDecks() {
-        List<Deck> decks = new ArrayList<Deck>();
-        Cursor cursor = database.query(DeckSQLiteHelper.TABLE_DECKS,
+        List<Deck> decks = new ArrayList<>();
+        Cursor cursor = deckDatabase.query(DeckSQLiteHelper.TABLE_DECKS,
                 allColumns, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -117,24 +113,24 @@ public class DeckDataSource {
             decks.add(deck);
             cursor.moveToNext();
         }
-        // make sure to close the cursor
         cursor.close();
         return decks;
     }
 
-    public Deck getDeckWithId(int id) {
-        Cursor cursor = database.query(DeckSQLiteHelper.TABLE_DECKS,
+    public Deck getDeckWithId(long id) {
+        Cursor cursor = deckDatabase.query(DeckSQLiteHelper.TABLE_DECKS,
                 allColumns, DeckSQLiteHelper.COLUMN_ID + " = " + id, null, null, null, null);
         cursor.moveToFirst();
         Deck deck = cursorToDeck(cursor);
         cursor.close();
+        cdrDatabase.rawQuery()
+        cursor = cdrDatabase.query(SQLiteHelper.TABLE_DECKS,
+                allColumns, DeckSQLiteHelper.COLUMN_ID + " = " + id, null, null, null, null);
+        cursor.moveToFirst();
         return deck;
     }
 
-    /*
-     * @author  chuna (10/4/2016)
-     */
-    public Deck cursorToDeck(Cursor cursor) {
+    private Deck cursorToDeck(Cursor cursor) {
         Deck deck = new Deck();
         deck.setId(cursor.getLong(0));
         deck.setDeckName(cursor.getString(1));
@@ -151,16 +147,10 @@ public class DeckDataSource {
         return deck;
     }
 
-    /*
-     * @author  chuna (10/4/2016)
-     */
     public String[] getAllColumns(){
         return allColumns;
     }
 
-    /*
-     * @author  chuna (10//2016)
-     */
     public int updateDeck(Deck deck){
         ContentValues values = new ContentValues();
         values.put(DeckSQLiteHelper.COLUMN_DECKNAME, deck.getDeckName());
@@ -170,6 +160,6 @@ public class DeckDataSource {
         values.put(DeckSQLiteHelper.COLUMN_CARDS, cardsStr);
 
         String where = DeckSQLiteHelper.COLUMN_ID + " = " + deck.getId();
-        return database.update(DeckSQLiteHelper.TABLE_DECKS, values, where, null);
+        return deckDatabase.update(DeckSQLiteHelper.TABLE_DECKS, values, where, null);
     }
 }

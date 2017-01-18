@@ -69,7 +69,7 @@ public class RulesDataSource {
      * @author kuczynskij (10/10/2016)
      */
     public Rules createRule(int maxCardCount, long timeLimit,
-                           long cardDisplayTime, String cardTypes, int deckId) {
+                           long cardDisplayTime, String cardTypes, long deckId) {
         ContentValues values = new ContentValues();
             values.put(RulesSQLiteHelper.COLUMN_TIMELIMIT, timeLimit);
             values.put(RulesSQLiteHelper.COLUMN_CARDDISPLAYTIME, cardDisplayTime);

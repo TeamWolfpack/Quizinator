@@ -30,7 +30,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.List;
 
 import io.apptik.widget.multiselectspinner.BaseMultiSelectSpinner;
@@ -85,7 +84,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         if (rulesSource.getAllRules().size() > 0) {
             deck = deckDataSource.getDeckWithId(rulesSource.getAllRules()
                     .get(rulesSource.getAllRules().size() - 1)
-                    .getDeckId());
+                    .getId());
         } else if (deckDataSource.getAllDecks().size()>0){
             deck = deckDataSource.getAllDecks().get(0);
         } else {
@@ -325,7 +324,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                     gameMinutesInMilli + gameSecondsInMilli,
                     cardMinutesInMilli + cardSecondsInMilli,
                     cardTypes,
-                    (int)deck.getId());
+                    deck.getId());
         }
 
         Log.d(TAG, "Deck id is updated as " + (int)deck.getId());
@@ -417,83 +416,82 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     }
 
     /*
-     * @author farrowc (10/31/2016)
-     * TEMP returns a sample deck for testing
+     * TODO This needs to change so it pulls from the database!!!
      */
     private Deck initializeDeck() {
         Card[] cards = new Card[10];
-        cards[0] = new Card();
-        cards[0].setQuestion("1+1 = ?");
-        cards[0].setCorrectAnswer("2");
-        String[] answerArea = {"1","2","3","4"};
-        cards[0].setPossibleAnswers(answerArea);
-        cards[0].setCardType(Constants.SHORT_MULTIPLE_CHOICE);
-        cards[0].setPoints(1);
-        cards[0].setModeratorNeeded("False");
-        cards[1] = new Card();
-        cards[1].setQuestion("1*2 = 0");
-        cards[1].setCorrectAnswer("False");
-        cards[1].setCardType(Constants.SHORT_TRUE_FALSE);
-        String[] answerAreaTF = {"True", "False"};
-        cards[1].setPossibleAnswers(answerAreaTF);
-        cards[1].setPoints(1);
-        cards[1].setModeratorNeeded("False");
-        cards[2] = new Card();
-        cards[2].setQuestion("4*5 = 20");
-        cards[2].setCorrectAnswer("True");
-        cards[2].setCardType(Constants.SHORT_TRUE_FALSE);
-        cards[2].setPossibleAnswers(answerAreaTF);
-        cards[2].setPoints(1);
-        cards[2].setModeratorNeeded("False");
-        cards[3] = new Card();
-        cards[3].setQuestion("20*10 = 100");
-        cards[3].setCorrectAnswer("False");
-        cards[3].setCardType(Constants.SHORT_TRUE_FALSE);
-        cards[3].setPossibleAnswers(answerAreaTF);
-        cards[3].setPoints(1);
-        cards[3].setModeratorNeeded("False");
-        cards[4] = new Card();
-        cards[4].setQuestion("10*91 = 901");
-        cards[4].setCorrectAnswer("False");
-        cards[4].setCardType(Constants.SHORT_TRUE_FALSE);
-        cards[4].setPossibleAnswers(answerAreaTF);
-        cards[4].setPoints(1);
-        cards[4].setModeratorNeeded("False");
-        cards[5] = new Card();
-        cards[5].setQuestion("100^2 = 10000");
-        cards[5].setCorrectAnswer("True");
-        cards[5].setCardType(Constants.SHORT_TRUE_FALSE);
-        cards[5].setPossibleAnswers(answerAreaTF);
-        cards[5].setPoints(1);
-        cards[5].setModeratorNeeded("False");
-        cards[6] = new Card();
-        cards[6].setQuestion("10*102 = 1002");
-        cards[6].setCorrectAnswer("False");
-        cards[6].setCardType(Constants.SHORT_TRUE_FALSE);
-        cards[6].setPossibleAnswers(answerAreaTF);
-        cards[6].setPoints(1);
-        cards[6].setModeratorNeeded("False");
-        cards[7] = new Card();
-        cards[7].setQuestion("8/2 = 4");
-        cards[7].setCorrectAnswer("True");
-        cards[7].setCardType(Constants.SHORT_TRUE_FALSE);
-        cards[7].setPossibleAnswers(answerAreaTF);
-        cards[7].setPoints(1);
-        cards[7].setModeratorNeeded("False");
-        cards[8] = new Card();
-        cards[8].setQuestion("120/4 = 30");
-        cards[8].setCorrectAnswer("True");
-        cards[8].setCardType(Constants.SHORT_TRUE_FALSE);
-        cards[8].setPossibleAnswers(answerAreaTF);
-        cards[8].setPoints(1);
-        cards[8].setModeratorNeeded("False");
-        cards[9] = new Card();
-        cards[9].setQuestion("6*7 = 41");
-        cards[9].setCorrectAnswer("False");
-        cards[9].setCardType(Constants.SHORT_TRUE_FALSE);
-        cards[9].setPossibleAnswers(answerAreaTF);
-        cards[9].setPoints(1);
-        cards[9].setModeratorNeeded("False");
+//        cards[0] = new Card();
+//        cards[0].setQuestion("1+1 = ?");
+//        cards[0].setCorrectAnswer("2");
+//        String[] answerArea = {"1","2","3","4"};
+//        cards[0].setPossibleAnswers(answerArea);
+//        cards[0].setCardType(Constants.SHORT_MULTIPLE_CHOICE);
+//        cards[0].setPoints(1);
+//        cards[0].setModeratorNeeded("False");
+//        cards[1] = new Card();
+//        cards[1].setQuestion("1*2 = 0");
+//        cards[1].setCorrectAnswer("False");
+//        cards[1].setCardType(Constants.SHORT_TRUE_FALSE);
+//        String[] answerAreaTF = {"True", "False"};
+//        cards[1].setPossibleAnswers(answerAreaTF);
+//        cards[1].setPoints(1);
+//        cards[1].setModeratorNeeded("False");
+//        cards[2] = new Card();
+//        cards[2].setQuestion("4*5 = 20");
+//        cards[2].setCorrectAnswer("True");
+//        cards[2].setCardType(Constants.SHORT_TRUE_FALSE);
+//        cards[2].setPossibleAnswers(answerAreaTF);
+//        cards[2].setPoints(1);
+//        cards[2].setModeratorNeeded("False");
+//        cards[3] = new Card();
+//        cards[3].setQuestion("20*10 = 100");
+//        cards[3].setCorrectAnswer("False");
+//        cards[3].setCardType(Constants.SHORT_TRUE_FALSE);
+//        cards[3].setPossibleAnswers(answerAreaTF);
+//        cards[3].setPoints(1);
+//        cards[3].setModeratorNeeded("False");
+//        cards[4] = new Card();
+//        cards[4].setQuestion("10*91 = 901");
+//        cards[4].setCorrectAnswer("False");
+//        cards[4].setCardType(Constants.SHORT_TRUE_FALSE);
+//        cards[4].setPossibleAnswers(answerAreaTF);
+//        cards[4].setPoints(1);
+//        cards[4].setModeratorNeeded("False");
+//        cards[5] = new Card();
+//        cards[5].setQuestion("100^2 = 10000");
+//        cards[5].setCorrectAnswer("True");
+//        cards[5].setCardType(Constants.SHORT_TRUE_FALSE);
+//        cards[5].setPossibleAnswers(answerAreaTF);
+//        cards[5].setPoints(1);
+//        cards[5].setModeratorNeeded("False");
+//        cards[6] = new Card();
+//        cards[6].setQuestion("10*102 = 1002");
+//        cards[6].setCorrectAnswer("False");
+//        cards[6].setCardType(Constants.SHORT_TRUE_FALSE);
+//        cards[6].setPossibleAnswers(answerAreaTF);
+//        cards[6].setPoints(1);
+//        cards[6].setModeratorNeeded("False");
+//        cards[7] = new Card();
+//        cards[7].setQuestion("8/2 = 4");
+//        cards[7].setCorrectAnswer("True");
+//        cards[7].setCardType(Constants.SHORT_TRUE_FALSE);
+//        cards[7].setPossibleAnswers(answerAreaTF);
+//        cards[7].setPoints(1);
+//        cards[7].setModeratorNeeded("False");
+//        cards[8] = new Card();
+//        cards[8].setQuestion("120/4 = 30");
+//        cards[8].setCorrectAnswer("True");
+//        cards[8].setCardType(Constants.SHORT_TRUE_FALSE);
+//        cards[8].setPossibleAnswers(answerAreaTF);
+//        cards[8].setPoints(1);
+//        cards[8].setModeratorNeeded("False");
+//        cards[9] = new Card();
+//        cards[9].setQuestion("6*7 = 41");
+//        cards[9].setCorrectAnswer("False");
+//        cards[9].setCardType(Constants.SHORT_TRUE_FALSE);
+//        cards[9].setPossibleAnswers(answerAreaTF);
+//        cards[9].setPoints(1);
+//        cards[9].setModeratorNeeded("False");
         return deckDataSource.createDeck("Default", Arrays.asList(cards));
     }
 
@@ -517,38 +515,38 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     /*
      * @author leonardj (12/16/16)
      */
-    public String shortFormCardType(String type) {
-        String shortForm = null;
-
-        if (type.equals(LONG_TRUE_FALSE))
-            shortForm = SHORT_TRUE_FALSE;
-        else if (type.equals(LONG_MULTIPLE_CHOICE))
-            shortForm = SHORT_MULTIPLE_CHOICE;
-        else if (type.equals(LONG_FREE_RESPONSE))
-            shortForm = SHORT_FREE_RESPONSE;
-        else if (type.equals(LONG_VERBAL_RESPONSE))
-            shortForm = SHORT_VERBAL_RESPONSE;
-
-        return shortForm;
-    }
+//    public String shortFormCardType(String type) {
+//        String shortForm = null;
+//
+//        if (type.equals(LONG_TRUE_FALSE))
+//            shortForm = SHORT_TRUE_FALSE;
+//        else if (type.equals(LONG_MULTIPLE_CHOICE))
+//            shortForm = SHORT_MULTIPLE_CHOICE;
+//        else if (type.equals(LONG_FREE_RESPONSE))
+//            shortForm = SHORT_FREE_RESPONSE;
+//        else if (type.equals(LONG_VERBAL_RESPONSE))
+//            shortForm = SHORT_VERBAL_RESPONSE;
+//
+//        return shortForm;
+//    }
 
     /*
      * @author leonardj (12/16/16)
      */
-    public String longFormCardType(String type) {
-        String longForm = null;
-
-        if (type.equals(SHORT_TRUE_FALSE))
-            longForm = LONG_TRUE_FALSE;
-        else if (type.equals(SHORT_MULTIPLE_CHOICE))
-            longForm = LONG_MULTIPLE_CHOICE;
-        else if (type.equals(SHORT_FREE_RESPONSE))
-            longForm = LONG_FREE_RESPONSE;
-        else if (type.equals(SHORT_VERBAL_RESPONSE))
-            longForm = LONG_VERBAL_RESPONSE;
-
-        return longForm;
-    }
+//    public String longFormCardType(String type) {
+//        String longForm = null;
+//
+//        if (type.equals(SHORT_TRUE_FALSE))
+//            longForm = LONG_TRUE_FALSE;
+//        else if (type.equals(SHORT_MULTIPLE_CHOICE))
+//            longForm = LONG_MULTIPLE_CHOICE;
+//        else if (type.equals(SHORT_FREE_RESPONSE))
+//            longForm = LONG_FREE_RESPONSE;
+//        else if (type.equals(SHORT_VERBAL_RESPONSE))
+//            longForm = LONG_VERBAL_RESPONSE;
+//
+//        return longForm;
+//    }
 
     /*
      * @author kuczynskij (09/28/2016)

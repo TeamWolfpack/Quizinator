@@ -15,7 +15,6 @@ public class DeckSQLiteHelper extends SQLiteOpenHelper {
     public static final String TABLE_DECKS = "deck";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_DECKNAME = "_deckName";
-//    public static final String COLUMN_CARDS = "_cards";
     public static final String COLUMN_CATEGORY = "_category";
     public static final String COLUMN_SUBJECT = "_subject";
     public static final String COLUMN_DUPLICATECARDS = "_duplicateCards";

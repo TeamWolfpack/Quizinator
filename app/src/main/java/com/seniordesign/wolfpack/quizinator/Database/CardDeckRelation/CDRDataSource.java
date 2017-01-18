@@ -9,9 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by aaron on 1/10/2017.
- */
 
 public class CdrDataSource {
 
