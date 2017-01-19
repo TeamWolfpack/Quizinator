@@ -277,6 +277,7 @@ public class QuizDataSource {
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Deck deck = cursorToDeck(cursor);
+            deck.setCards(getAllCardsInDeck(deck.getId()));
             decks.add(deck);
             cursor.moveToNext();
         }
