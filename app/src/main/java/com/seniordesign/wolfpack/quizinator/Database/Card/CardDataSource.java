@@ -35,39 +35,39 @@ public class CardDataSource {
     /*
      * @author  chuna (10/4/2016)
      */
-//    public CardDataSource(Context context) {
-//        dbHelper = new CardSQLiteHelper(context);
-//    }
-//
-//    /*
-//     * @author  chuna (10/4/2016)
-//     */
-//    public boolean open() throws SQLException {
-//        database = dbHelper.getWritableDatabase();
-//        return database.isOpen();
-//    }
-//
-//    /*
-//     * @author  chuna (10/4/2016)
-//     */
-//    public boolean close() {
-//        dbHelper.close();
-//        return true;
-//    }
-//
-//    /*
-//     * @author  chuna (10/4/2016)
-//     */
-//    public SQLiteDatabase getDatabase(){
-//        return database;
-//    }
-//
-//    /*
-//     * @author  chuna (10/4/2016)
-//     */
-//    public CardSQLiteHelper getSQLiteHelper() {
-//        return dbHelper;
-//    }
+    public CardDataSource(Context context) {
+        dbHelper = new CardSQLiteHelper(context);
+    }
+
+    /*
+     * @author  chuna (10/4/2016)
+     */
+    public boolean open() throws SQLException {
+        database = dbHelper.getWritableDatabase();
+        return database.isOpen();
+    }
+
+    /*
+     * @author  chuna (10/4/2016)
+     */
+    public boolean close() {
+        dbHelper.close();
+        return true;
+    }
+
+    /*
+     * @author  chuna (10/4/2016)
+     */
+    public SQLiteDatabase getDatabase(){
+        return database;
+    }
+
+    /*
+     * @author  chuna (10/4/2016)
+     */
+    public CardSQLiteHelper getSQLiteHelper() {
+        return dbHelper;
+    }
 //
 //    /*
 //     * @author  chuna (10/4/2016)
@@ -178,11 +178,12 @@ public class CardDataSource {
     /*
      * Need to check to make sure that the cardType string is shortFormatted
      * before building whereClause.
+     * TODO didn't move this over to QuizDataSource
      */
-    private List<String> checkCardTypeForm(List<String> cardTypes){
-
-        return cardTypes;
-    }
+//    private List<String> checkCardTypeForm(List<String> cardTypes){
+//
+//        return cardTypes;
+//    }
 
 //    private String buildWhereClause(List<String> cardTypes) {
 //        if (cardTypes == null || cardTypes.size() == 0) {
@@ -205,11 +206,10 @@ public class CardDataSource {
 //        return whereClause.toString();
 //    }
 //
-//
 //    /*
 //     * @author  chuna (10/4/2016)
 //     */
-//    public Card cursorToCard(Cursor cursor) {
+//    private Card cursorToCard(Cursor cursor) {
 //        Card card = new Card();
 //        card.setId(cursor.getLong(0));
 //        card.setCardType(cursor.getInt(1));

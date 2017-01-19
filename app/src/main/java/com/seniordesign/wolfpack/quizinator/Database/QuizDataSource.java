@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Card.CardSQLiteHelper;
 import com.seniordesign.wolfpack.quizinator.Database.CardDeckRelation.CardDeckRelation;
@@ -195,7 +196,7 @@ public class QuizDataSource {
     public Card cursorToCard(Cursor cursor) {
         Card card = new Card();
         card.setId(cursor.getLong(0));
-        card.setCardType(cursor.getInt(1));
+        card.setCardType(Constants.CARD_TYPES.values()[cursor.getInt(1)]);
         card.setQuestion(cursor.getString(2));
         card.setCorrectAnswer(cursor.getString(3));
 
@@ -253,7 +254,7 @@ public class QuizDataSource {
         cursor.moveToFirst();
         Deck newDeck = cursorToDeck(cursor);
         cursor.close();
-        setCardDeckRelation(insertId, cards);
+//        setCardDeckRelation(insertId, cards); //TODO
         newDeck.setCards(cards);
         return newDeck;
     }

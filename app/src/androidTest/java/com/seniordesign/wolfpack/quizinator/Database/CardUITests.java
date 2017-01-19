@@ -28,8 +28,8 @@ import static junit.framework.Assert.assertEquals;
 @LargeTest
 public class CardUITests {
 
-    private CardDataSource datasource;
-    private CardSQLiteHelper dbHelper;
+    private QuizDataSource datasource;
+    private QuizSQLiteHelper dbHelper;
 
     @Rule
     public ActivityTestRule<MainMenuActivity> mActivityRule =
@@ -47,8 +47,8 @@ public class CardUITests {
             }
         };
         activity.runOnUiThread(wakeUpDevice);
-        datasource = new CardDataSource(activity);
-        dbHelper = new CardSQLiteHelper(activity);
+        datasource = new QuizDataSource(activity);
+        dbHelper = new QuizSQLiteHelper(activity);
     }
 
     /*
@@ -64,7 +64,7 @@ public class CardUITests {
                 new String[]{"True", "False"}, 1, "False");
         assertEquals("card.db", datasource.getSQLiteHelper().getDatabaseName());
         assertEquals(1, datasource.getAllCards().size());
-        assertEquals(7, datasource.getAllColumns().length);
+        assertEquals(7, datasource.getCardAllColumns().length);
         card.setPoints(3);
         assertEquals(1, datasource.updateCard(card));
         assertEquals(1, datasource.deleteCard(card));

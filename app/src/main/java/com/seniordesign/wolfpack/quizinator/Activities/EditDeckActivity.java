@@ -1,7 +1,6 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,15 +8,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Adapters.CardAdapter;
-import com.seniordesign.wolfpack.quizinator.Adapters.DeckAdapter;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Card.CardDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckDataSource;
+import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
 
 import java.util.List;
@@ -28,8 +26,8 @@ public class EditDeckActivity extends AppCompatActivity  implements AdapterView.
     List<Card> cardsAvailable;
     CardAdapter deckCardAdapter;
     CardAdapter totalCardAdapter;
-    CardDataSource cardDataSource;
-    DeckDataSource deckDataSource;
+
+    QuizDataSource dataSource;
 
 
     @Override
@@ -41,15 +39,14 @@ public class EditDeckActivity extends AppCompatActivity  implements AdapterView.
         deck = gson.fromJson(jsonDeck,Deck.class);
 
         initializeDB();
-        cardsAvailable = cardDataSource.getAllCards();
+        cardsAvailable = dataSource.getAllCards();
 
         populateMenus(deck, cardsAvailable);
     }
 
     private boolean initializeDB(){
-        cardDataSource = new CardDataSource(this);
-        deckDataSource = new DeckDataSource(this);
-        return deckDataSource.open() && cardDataSource.open();
+        dataSource = new QuizDataSource(this);
+        return dataSource.open() && dataSource.open();
     }
 
     private void populateMenus(Deck deck, List<Card> cardsAvailable){
@@ -84,7 +81,7 @@ public class EditDeckActivity extends AppCompatActivity  implements AdapterView.
     public void onSaveClick(View view){
         String deckName = ((EditText)findViewById(R.id.edit_deck_name)).getText().toString();
         deck.setDeckName(deckName);
-        deckDataSource.updateDeck(deck);
+        dataSource.updateDeck(deck);
         finish();
     }
 
@@ -100,7 +97,7 @@ public class EditDeckActivity extends AppCompatActivity  implements AdapterView.
                 {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        deckDataSource.deleteDeck(deck);
+                        dataSource.deleteDeck(deck);
                         finish();
                     }
 
@@ -115,8 +112,8 @@ public class EditDeckActivity extends AppCompatActivity  implements AdapterView.
     @Override
     protected void onResume() {
         super.onResume();
-        deckDataSource.open();
-        cardDataSource.open();
+        dataSource.open();
+        dataSource.open();
     }
 
     /*
@@ -125,14 +122,14 @@ public class EditDeckActivity extends AppCompatActivity  implements AdapterView.
     @Override
     protected void onPause() {
         super.onPause();
-        deckDataSource.close();
-        cardDataSource.close();
+        dataSource.close();
+        dataSource.close();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        deckDataSource.close();
-        cardDataSource.close();
+        dataSource.close();
+        dataSource.close();
     }
 }
