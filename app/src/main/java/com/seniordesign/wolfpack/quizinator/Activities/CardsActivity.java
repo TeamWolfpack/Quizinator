@@ -3,10 +3,10 @@ package com.seniordesign.wolfpack.quizinator.Activities;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.RadioGroup;
-import android.widget.Spinner;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -54,10 +54,23 @@ public class CardsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cards);
         setTitle(Constants.CARDS);
-        initializeDB();
+        //initializeDB();
 
         cardTypeSpinner = (MultiSelectSpinner) findViewById(R.id.card_type_spinner);
         selectedCardTypes = new ArrayList<>();
+
+        initializeCardTypeSpinner();
+
+        fillListOfCards(new ArrayList<Card>(){{add(new Card() {{setId(1);setCardType(CARD_TYPES.MULTIPLE_CHOICE);setQuestion("test question");setCorrectAnswer("correct");setPossibleAnswers(new String[]{"correct","wrong1","wrong2","wrong3",});setModeratorNeeded(String.valueOf(false));setPoints(10);}});}});
+
+        //fillListOfCards(dataSource.filterCards(cardTypes));TODO -> make me work with the DB
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    private Boolean initializeCardTypeSpinner(){
         ArrayAdapter<String> cardTypeAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_multiple_choice, cardTypes);
         cardTypeSpinner
@@ -85,10 +98,7 @@ public class CardsActivity extends AppCompatActivity {
                         fillListOfCards(dataSource.filterCards(chosenTypes));
                     }
                 });
-        fillListOfCards(dataSource.filterCards(cardTypes));
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        return true;
     }
 
     private boolean initializeDB() {
