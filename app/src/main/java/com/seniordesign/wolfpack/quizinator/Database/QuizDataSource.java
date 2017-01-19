@@ -43,7 +43,7 @@ public class QuizDataSource {
             QuizSQLiteHelper.DECK_COLUMN_OWNER
     };
 
-    private String[] cdrelationsAllColumns = {
+    private String[] cdRelationsAllColumns = {
             QuizSQLiteHelper.CDRELATIONS_COLUMN_ID,
             QuizSQLiteHelper.CDRELATIONS_COLUMN_FKCARD,
             QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK
@@ -176,13 +176,13 @@ public class QuizDataSource {
         StringBuilder whereClause = new StringBuilder();
         int i = 0;
         while (cardTypes.size() != i + 1) {
-            whereClause.append(CardSQLiteHelper.CARD_COLUMN_CARDTYPE)
+            whereClause.append(QuizSQLiteHelper.CARD_COLUMN_CARDTYPE)
                     .append("=\'")
                     .append(cardTypes.get(i))
                     .append("\' OR ");
             i++;
         }
-        whereClause.append(CardSQLiteHelper.CARD_COLUMN_CARDTYPE)
+        whereClause.append(QuizSQLiteHelper.CARD_COLUMN_CARDTYPE)
                 .append("=\'")
                 .append(cardTypes.get(i))
                 .append("\'");
@@ -236,16 +236,16 @@ public class QuizDataSource {
     public Deck createDeck(String deckName, String category, String subject,
                            boolean duplicateCards, String owner, List<Card> cards) {
         ContentValues values = new ContentValues();
-        values.put(DeckSQLiteHelper.DECK_COLUMN_DECKNAME, deckName);
-        values.put(DeckSQLiteHelper.DECK_COLUMN_CATEGORY, category);
-        values.put(DeckSQLiteHelper.DECK_COLUMN_SUBJECT, subject);
-        values.put(DeckSQLiteHelper.DECK_COLUMN_DUPLICATECARDS, String.valueOf(duplicateCards));
-        values.put(DeckSQLiteHelper.DECK_COLUMN_OWNER, owner);
-        long insertId = database.insert(DeckSQLiteHelper.TABLE_DECKS,
+        values.put(QuizSQLiteHelper.DECK_COLUMN_DECKNAME, deckName);
+        values.put(QuizSQLiteHelper.DECK_COLUMN_CATEGORY, category);
+        values.put(QuizSQLiteHelper.DECK_COLUMN_SUBJECT, subject);
+        values.put(QuizSQLiteHelper.DECK_COLUMN_DUPLICATECARDS, String.valueOf(duplicateCards));
+        values.put(QuizSQLiteHelper.DECK_COLUMN_OWNER, owner);
+        long insertId = database.insert(QuizSQLiteHelper.TABLE_DECKS,
                 null, values);
 
-        Cursor cursor = database.query(DeckSQLiteHelper.TABLE_DECKS,
-                deckAllColumns, DeckSQLiteHelper.DECK_COLUMN_ID
+        Cursor cursor = database.query(QuizSQLiteHelper.TABLE_DECKS,
+                deckAllColumns, QuizSQLiteHelper.DECK_COLUMN_ID
                         + " = " + insertId, null,
                 null, null, null);
         cursor.moveToFirst();
@@ -259,15 +259,15 @@ public class QuizDataSource {
     public int deleteDeck(Deck deck) {
         long id = deck.getId();
         System.out.println("Deleted item: " + deck.toString());
-        database.delete(CdrSQLiteHelper.TABLE_CDRELATIONS,
-                CdrSQLiteHelper.COLUMN_FKDECK + " = " + id, null);
-        return database.delete(DeckSQLiteHelper.TABLE_DECKS,
-                DeckSQLiteHelper.DECK_COLUMN_ID + " = " + id, null);
+        database.delete(QuizSQLiteHelper.TABLE_CDRELATIONS,
+                QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK + " = " + id, null);
+        return database.delete(QuizSQLiteHelper.TABLE_DECKS,
+                QuizSQLiteHelper.DECK_COLUMN_ID + " = " + id, null);
     }
 
     public List<Deck> getAllDecks() {
         List<Deck> decks = new ArrayList<>();
-        Cursor cursor = database.query(DeckSQLiteHelper.TABLE_DECKS,
+        Cursor cursor = database.query(QuizSQLiteHelper.TABLE_DECKS,
                 deckAllColumns, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -280,14 +280,14 @@ public class QuizDataSource {
     }
 
     public Deck getDeckWithId(long id) {
-        Cursor cursor = database.query(DeckSQLiteHelper.TABLE_DECKS,
-                deckAllColumns, DeckSQLiteHelper.DECK_COLUMN_ID + " = " + id, null, null, null, null);
+        Cursor cursor = database.query(QuizSQLiteHelper.TABLE_DECKS,
+                deckAllColumns, QuizSQLiteHelper.DECK_COLUMN_ID + " = " + id, null, null, null, null);
         cursor.moveToFirst();
         Deck deck = cursorToDeck(cursor);
         cursor.close();
         //cdrDatabase.rawQuery()
-        cursor = database.query(DeckSQLiteHelper.TABLE_DECKS,
-                deckAllColumns, DeckSQLiteHelper.DECK_COLUMN_ID + " = " + id, null, null, null, null);
+        cursor = database.query(QuizSQLiteHelper.TABLE_DECKS,
+                deckAllColumns, QuizSQLiteHelper.DECK_COLUMN_ID + " = " + id, null, null, null, null);
         cursor.moveToFirst();
         return deck;
     }
@@ -315,14 +315,14 @@ public class QuizDataSource {
 
     public int updateDeck(Deck deck){
         ContentValues values = new ContentValues();
-        values.put(DeckSQLiteHelper.DECK_COLUMN_DECKNAME, deck.getDeckName());
+        values.put(QuizSQLiteHelper.DECK_COLUMN_DECKNAME, deck.getDeckName());
 
         Gson gson = new Gson();
         String cardsStr = gson.toJson(deck.getCards());
         //values.put(DeckSQLiteHelper.COLUMN_CARDS, cardsStr);
 
-        String where = DeckSQLiteHelper.DECK_COLUMN_ID + " = " + deck.getId();
-        return database.update(DeckSQLiteHelper.TABLE_DECKS, values, where, null);
+        String where = QuizSQLiteHelper.DECK_COLUMN_ID + " = " + deck.getId();
+        return database.update(QuizSQLiteHelper.TABLE_DECKS, values, where, null);
     }
     /************************ DECK METHODS END *******************************/
 
@@ -335,7 +335,7 @@ public class QuizDataSource {
         long insertId = database.insert(QuizSQLiteHelper.TABLE_CDRELATIONS,
                 null, values);
         Cursor cursor = database.query(QuizSQLiteHelper.TABLE_CDRELATIONS,
-                cdrelationsAllColumns, QuizSQLiteHelper.CDRELATIONS_COLUMN_ID
+                cdRelationsAllColumns, QuizSQLiteHelper.CDRELATIONS_COLUMN_ID
                         + " = " + insertId, null,
                 null, null, null);
         cursor.moveToFirst();
@@ -352,7 +352,7 @@ public class QuizDataSource {
         long insertId = database.insert(QuizSQLiteHelper.TABLE_CDRELATIONS,
                 null, values);
         Cursor cursor = database.query(QuizSQLiteHelper.TABLE_CDRELATIONS,
-                cdrelationsAllColumns, QuizSQLiteHelper.CDRELATIONS_COLUMN_ID
+                cdRelationsAllColumns, QuizSQLiteHelper.CDRELATIONS_COLUMN_ID
                         + " = " + insertId, null,
                 null, null, null);
         cursor.moveToFirst();
@@ -371,7 +371,7 @@ public class QuizDataSource {
     public List<CardDeckRelation> getAllCardDeckRelations() {
         List<CardDeckRelation> cdRelations = new ArrayList<>();
         Cursor cursor = database.query(QuizSQLiteHelper.TABLE_CDRELATIONS,
-                cdrelationsAllColumns, null, null, null, null, null);
+                cdRelationsAllColumns, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             CardDeckRelation cdRelation = cursorToCardDeckRelation(cursor);
@@ -392,7 +392,7 @@ public class QuizDataSource {
     }
 
     public String[] getCdrelationAllColumns(){
-        return cdrelationsAllColumns;
+        return cdRelationsAllColumns;
     }
     /************************ CARDDECKRELATION METHODS END *******************************/
 }
