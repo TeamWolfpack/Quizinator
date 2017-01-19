@@ -8,10 +8,6 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Constants;
 
-/**
- * Created by aaron on 1/19/2017.
- */
-
 public class QuizSQLiteHelper extends SQLiteOpenHelper {
 
     // database filename
@@ -86,7 +82,7 @@ public class QuizSQLiteHelper extends SQLiteOpenHelper {
         db.execSQL(CDRELATIONS_TABLE_CREATE);
         setDefaultCardSet(db);
         setDefaultDeckSet(db);
-        setDefaultCdrelationSet(db);
+        setDefaultCdRelationSet(db);
     }
 
     @Override
@@ -178,7 +174,39 @@ public class QuizSQLiteHelper extends SQLiteOpenHelper {
         db.execSQL(queryBuilder.toString());
     }
 
-    private void setDefaultCdrelationSet(SQLiteDatabase db) { //TODO try using Jing maybe
-
+    private void setDefaultCdRelationSet(SQLiteDatabase db) {
+        StringBuilder queryBuilder = new StringBuilder()
+                .append("insert into " + TABLE_CDRELATIONS)
+                .append(" SELECT \'1\' AS \'" + CDRELATIONS_COLUMN_ID + "\', ")
+                    .append("\'1\' AS \'" + CDRELATIONS_COLUMN_FKCARD + "\', ")
+                    .append("\'1\' AS \'" + CDRELATIONS_COLUMN_FKDECK + "\' ")
+                .append(" UNION ALL SELECT \'2\', ")
+                    .append("\'2\', ")
+                    .append("\'1\' ")
+                .append(" UNION ALL SELECT \'3\', ")
+                    .append("\'3\', ")
+                    .append("\'1\' ")
+                .append(" UNION ALL SELECT \'4\', ")
+                    .append("\'4\', ")
+                    .append("\'1\' ")
+                .append(" UNION ALL SELECT \'5\', ")
+                    .append("\'5\', ")
+                    .append("\'1\' ")
+                .append(" UNION ALL SELECT \'6\', ")
+                    .append("\'6\', ")
+                    .append("\'1\' ")
+                .append(" UNION ALL SELECT \'7\', ")
+                    .append("\'7\', ")
+                    .append("\'1\' ")
+                .append(" UNION ALL SELECT \'8\', ")
+                    .append("\'8\', ")
+                    .append("\'1\' ")
+                .append(" UNION ALL SELECT \'9\', ")
+                    .append("\'9\', ")
+                    .append("\'1\' ")
+                .append(" UNION ALL SELECT \'10\', ")
+                    .append("\'10\', ")
+                    .append("\'1\';");
+        db.execSQL(queryBuilder.toString());
     }
 }

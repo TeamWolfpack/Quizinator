@@ -297,7 +297,7 @@ public class QuizDataSource {
         deck.setId(cursor.getLong(0));
         deck.setDeckName(cursor.getString(1));
 
-        //TODO make sure this works like in CardDatasource
+        //TODO make sure this works like in CardDataSource
         List<Card> cards;
         Gson gson = new Gson();
         String json = cursor.getString(2);
