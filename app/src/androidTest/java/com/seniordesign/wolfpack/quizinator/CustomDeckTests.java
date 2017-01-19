@@ -16,13 +16,16 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerActions.open;
 import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
+import static android.support.test.espresso.matcher.ViewMatchers.withChild;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 
@@ -62,6 +65,21 @@ public class CustomDeckTests {
         onView(withId(R.id.new_item_button)).perform(click());
         int dif = deckDataSource.getAllDecks().size() - numOfDecks;
         assertTrue(dif>0);
+        onView(withId(R.id.deck_delete_button)).perform(click());
+        onView(withId(android.R.id.button1)).perform(click());
+        dif = deckDataSource.getAllDecks().size() - numOfDecks;
+        assertTrue(dif == 0);
+    }
+
+    public void validateEditSaveDeck() {
+        deckDataSource = new DeckDataSource(InstrumentationRegistry.getTargetContext());
+        deckDataSource.open();
+        int numOfDecks = deckDataSource.getAllDecks().size();
+        onView(withId(R.id.new_item_button)).perform(click());
+        int dif = deckDataSource.getAllDecks().size() - numOfDecks;
+        assertTrue(dif>0);
+        onView(withId(R.id.deck_cancel_button)).perform(click());
+        onData(withChild(withText("New Deck"))).perform(click());
         onView(withId(R.id.deck_delete_button)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
         dif = deckDataSource.getAllDecks().size() - numOfDecks;
