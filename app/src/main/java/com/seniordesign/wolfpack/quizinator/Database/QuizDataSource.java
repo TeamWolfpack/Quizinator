@@ -252,9 +252,14 @@ public class QuizDataSource {
         cursor.moveToFirst();
         Deck newDeck = cursorToDeck(cursor);
         cursor.close();
-//        setCardDeckRelation(insertId, cards); //TODO
+        addCardDeckRelation(insertId, cards);
         newDeck.setCards(cards);
         return newDeck;
+    }
+
+    public Deck createDeck(Deck deck) {
+        return createDeck(deck.getDeckName(), deck.getCategory(), deck.getSubject(),
+                deck.isDuplicateCards(), deck.getOwner(), deck.getCards());
     }
 
     public int deleteDeck(Deck deck) {
@@ -288,7 +293,7 @@ public class QuizDataSource {
         cursor = database.query(QuizSQLiteHelper.TABLE_DECKS,
                 deckAllColumns, QuizSQLiteHelper.DECK_COLUMN_ID + " = " + id, null, null, null, null);
         cursor.moveToFirst();
-        //TODO get all the cards and put it into the deck
+        deck.setCards(getAllCardsInDeck(id));
         return deck;
     }
 
@@ -296,16 +301,10 @@ public class QuizDataSource {
         Deck deck = new Deck();
         deck.setId(cursor.getLong(0));
         deck.setDeckName(cursor.getString(1));
-
-        //TODO make sure this works like in CardDataSource
-        List<Card> cards;
-        Gson gson = new Gson();
-        String json = cursor.getString(2);
-
-        Type listType = new TypeToken<List<Card>>(){}.getType();
-        cards = new Gson().fromJson(json, listType);
-        deck.setCards(cards);
-
+        deck.setCategory(cursor.getString(2));
+        deck.setSubject(cursor.getString(3));
+        deck.setDuplicateCards(cursor.getString(4));
+        deck.setOwner(cursor.getString(5));
         return deck;
     }
 
@@ -314,12 +313,15 @@ public class QuizDataSource {
     }
 
     public int updateDeck(Deck deck){
+        updateCardDeckRelation(deck);
         ContentValues values = new ContentValues();
         values.put(QuizSQLiteHelper.DECK_COLUMN_DECKNAME, deck.getDeckName());
+        values.put(QuizSQLiteHelper.DECK_COLUMN_CATEGORY, deck.getCategory());
+        values.put(QuizSQLiteHelper.DECK_COLUMN_SUBJECT, deck.getSubject());
+        values.put(QuizSQLiteHelper.DECK_COLUMN_DUPLICATECARDS, String.valueOf(deck.isDuplicateCards()));
+        values.put(QuizSQLiteHelper.DECK_COLUMN_OWNER, deck.getOwner());
 
-        Gson gson = new Gson();
-        String cardsStr = gson.toJson(deck.getCards());
-        //values.put(DeckSQLiteHelper.COLUMN_CARDS, cardsStr);
+
 
         String where = QuizSQLiteHelper.DECK_COLUMN_ID + " = " + deck.getId();
         return database.update(QuizSQLiteHelper.TABLE_DECKS, values, where, null);
@@ -378,6 +380,37 @@ public class QuizDataSource {
                 QuizSQLiteHelper.CDRELATIONS_COLUMN_FKCARD + " = " + fkDeck, null);
     }
 
+    private List<Card> getAllCardsInDeck(long deckId) {
+        ArrayList<Card> cards = new ArrayList<>();
+        StringBuilder cardColumns = new StringBuilder();
+        for (String cardColumn : cardAllColumns) {
+            cardColumns.append("c.").append(cardColumn).append(",");
+        }
+        cardColumns.deleteCharAt(cardColumns.length()-1);
+        StringBuilder query = new StringBuilder()
+                .append("SELECT ").append(cardColumns.toString())
+                .append(" FROM " + QuizSQLiteHelper.TABLE_CDRELATIONS + " cdr")
+                .append(" INNER JOIN " + QuizSQLiteHelper.TABLE_CARDS + " c")
+                .append(" ON cdr." + QuizSQLiteHelper.CDRELATIONS_COLUMN_FKCARD + "=c." + QuizSQLiteHelper.CARD_COLUMN_ID)
+                .append(" INNER JOIN " + QuizSQLiteHelper.TABLE_DECKS + " d")
+                .append(" ON cdr." + QuizSQLiteHelper.CDRELATIONS_COLUMN_FKCARD + "=d." + QuizSQLiteHelper.DECK_COLUMN_ID)
+                .append(" WHERE cdr." + QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK + "=\'").append(deckId).append("\'");
+        Cursor cursor = database.rawQuery(query.toString(), null);
+        cursor.moveToFirst();
+        while(!cursor.isAfterLast()){
+            Card card = cursorToCard(cursor);
+            cards.add(card);
+            cursor.moveToNext();
+        }
+        return cards;
+    }
+
+    private void addCardDeckRelation(long deckId, List<Card> cards) {
+        for (Card card : cards) {
+            createCardDeckRelation(card.getId(), deckId);
+        }
+    }
+
     public List<CardDeckRelation> getAllCardDeckRelations() {
         List<CardDeckRelation> cdRelations = new ArrayList<>();
         Cursor cursor = database.query(QuizSQLiteHelper.TABLE_CDRELATIONS,
@@ -403,6 +436,11 @@ public class QuizDataSource {
 
     public String[] getCdrelationAllColumns(){
         return cdRelationsAllColumns;
+    }
+
+    public void updateCardDeckRelation(Deck deck) {
+        deleteCardDeckRelationByDeckId(deck.getId());
+        addCardDeckRelation(deck.getId(), deck.getCards());
     }
     /************************ CARDDECKRELATION METHODS END *******************************/
 }
