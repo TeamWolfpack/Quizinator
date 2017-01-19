@@ -127,6 +127,7 @@ public class QuizDataSource {
     public int deleteCard(Card card) {
         long id = card.getId();
         System.out.println("Deleted card: " + card.toString());
+        deleteCardDeckRelationByCardId(id);
         return database.delete(QuizSQLiteHelper.TABLE_CARDS,
                 QuizSQLiteHelper.CARD_COLUMN_ID + " = " + id, null);
     }
@@ -259,8 +260,7 @@ public class QuizDataSource {
     public int deleteDeck(Deck deck) {
         long id = deck.getId();
         System.out.println("Deleted item: " + deck.toString());
-        database.delete(QuizSQLiteHelper.TABLE_CDRELATIONS,
-                QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK + " = " + id, null);
+        deleteCardDeckRelationByDeckId(id);
         return database.delete(QuizSQLiteHelper.TABLE_DECKS,
                 QuizSQLiteHelper.DECK_COLUMN_ID + " = " + id, null);
     }
@@ -285,10 +285,10 @@ public class QuizDataSource {
         cursor.moveToFirst();
         Deck deck = cursorToDeck(cursor);
         cursor.close();
-        //cdrDatabase.rawQuery()
         cursor = database.query(QuizSQLiteHelper.TABLE_DECKS,
                 deckAllColumns, QuizSQLiteHelper.DECK_COLUMN_ID + " = " + id, null, null, null, null);
         cursor.moveToFirst();
+        //TODO get all the cards and put it into the deck
         return deck;
     }
 
@@ -366,6 +366,16 @@ public class QuizDataSource {
         System.out.println("Deleted card: " + cdRelation.toString());
         return database.delete(QuizSQLiteHelper.TABLE_CDRELATIONS,
                 QuizSQLiteHelper.CDRELATIONS_COLUMN_ID + " = " + id, null);
+    }
+
+    public int deleteCardDeckRelationByCardId(long fkCard) {
+        return database.delete(QuizSQLiteHelper.TABLE_CDRELATIONS,
+                QuizSQLiteHelper.CDRELATIONS_COLUMN_FKCARD + " = " + fkCard, null);
+    }
+
+    public int deleteCardDeckRelationByDeckId(long fkDeck) {
+        return database.delete(QuizSQLiteHelper.TABLE_CDRELATIONS,
+                QuizSQLiteHelper.CDRELATIONS_COLUMN_FKCARD + " = " + fkDeck, null);
     }
 
     public List<CardDeckRelation> getAllCardDeckRelations() {
