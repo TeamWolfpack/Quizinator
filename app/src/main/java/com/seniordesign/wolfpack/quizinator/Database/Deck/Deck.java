@@ -19,9 +19,11 @@ public class Deck {
 
     private long id;
     private String deckName;
-    private List<Card> cards;
     private String category;
     private String subject;
+    private boolean duplicateCards;
+    private String owner;
+    private List<Card> cards;
 
 //    private boolean moderatorNeeded;
 
@@ -67,6 +69,42 @@ public class Deck {
 
     public void setDeckName(String deckName) {
         this.deckName = deckName;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public boolean isDuplicateCards() {
+        return duplicateCards;
+    }
+
+    public void setDuplicateCards(boolean duplicateCards) {
+        this.duplicateCards = duplicateCards;
+    }
+
+    public void setDuplicateCards(String duplicateCards) {
+        this.duplicateCards = Boolean.parseBoolean(duplicateCards);
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public List<Card> getCards() {
