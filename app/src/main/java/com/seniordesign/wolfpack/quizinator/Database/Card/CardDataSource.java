@@ -18,56 +18,56 @@ import java.util.List;
  * @creation    10/4/2016.
  */
 public class CardDataSource {
-
-    // Database fields
-    private SQLiteDatabase database;
-    private CardSQLiteHelper dbHelper;
-    private String[] allColumns = {
-            CardSQLiteHelper.COLUMN_ID,
-            CardSQLiteHelper.COLUMN_CARDTYPE,
-            CardSQLiteHelper.COLUMN_QUESTION,
-            CardSQLiteHelper.COLUMN_CORRECTANSWER,
-            CardSQLiteHelper.COLUMN_POSSIBLEANSWERS,
-            CardSQLiteHelper.COLUMN_POINTS,
-            CardSQLiteHelper.COLUMN_MODERATORNEEDED
-    };
-
-    /*
-     * @author  chuna (10/4/2016)
-     */
-    public CardDataSource(Context context) {
-        dbHelper = new CardSQLiteHelper(context);
-    }
-
-    /*
-     * @author  chuna (10/4/2016)
-     */
-    public boolean open() throws SQLException {
-        database = dbHelper.getWritableDatabase();
-        return database.isOpen();
-    }
-
-    /*
-     * @author  chuna (10/4/2016)
-     */
-    public boolean close() {
-        dbHelper.close();
-        return true;
-    }
-
-    /*
-     * @author  chuna (10/4/2016)
-     */
-    public SQLiteDatabase getDatabase(){
-        return database;
-    }
-
-    /*
-     * @author  chuna (10/4/2016)
-     */
-    public CardSQLiteHelper getSQLiteHelper() {
-        return dbHelper;
-    }
+//
+//    // Database fields
+//    private SQLiteDatabase database;
+//    private CardSQLiteHelper dbHelper;
+//    private String[] allColumns = {
+//            CardSQLiteHelper.CARD_COLUMN_ID,
+//            CardSQLiteHelper.CARD_COLUMN_CARDTYPE,
+//            CardSQLiteHelper.CARD_COLUMN_QUESTION,
+//            CardSQLiteHelper.CARD_COLUMN_CORRECTANSWER,
+//            CardSQLiteHelper.CARD_COLUMN_POSSIBLEANSWERS,
+//            CardSQLiteHelper.CARD_COLUMN_POINTS,
+//            CardSQLiteHelper.CARD_COLUMN_MODERATORNEEDED
+//    };
+//
+//    /*
+//     * @author  chuna (10/4/2016)
+//     */
+//    public CardDataSource(Context context) {
+//        dbHelper = new CardSQLiteHelper(context);
+//    }
+//
+//    /*
+//     * @author  chuna (10/4/2016)
+//     */
+//    public boolean open() throws SQLException {
+//        database = dbHelper.getWritableDatabase();
+//        return database.isOpen();
+//    }
+//
+//    /*
+//     * @author  chuna (10/4/2016)
+//     */
+//    public boolean close() {
+//        dbHelper.close();
+//        return true;
+//    }
+//
+//    /*
+//     * @author  chuna (10/4/2016)
+//     */
+//    public SQLiteDatabase getDatabase(){
+//        return database;
+//    }
+//
+//    /*
+//     * @author  chuna (10/4/2016)
+//     */
+//    public CardSQLiteHelper getSQLiteHelper() {
+//        return dbHelper;
+//    }
 //
 //    /*
 //     * @author  chuna (10/4/2016)
@@ -76,21 +76,21 @@ public class CardDataSource {
 //                           String[] possibleCorrectAnswers, int points,
 //                           String moderatorNeeded) {
 //        ContentValues values = new ContentValues();
-//        values.put(CardSQLiteHelper.COLUMN_CARDTYPE, cardType);
-//        values.put(CardSQLiteHelper.COLUMN_QUESTION, question);
-//        values.put(CardSQLiteHelper.COLUMN_CORRECTANSWER, correctAnswer);
+//        values.put(CardSQLiteHelper.CARD_COLUMN_CARDTYPE, cardType);
+//        values.put(CardSQLiteHelper.CARD_COLUMN_QUESTION, question);
+//        values.put(CardSQLiteHelper.CARD_COLUMN_CORRECTANSWER, correctAnswer);
 //
 //        //TODO need to make sure that depending on card type, the correct number of possible answers is inputted... can be done here or in code calling this method
 //        Gson gson = new Gson();
 //        String stringPossibleAnswers = gson.toJson(possibleCorrectAnswers);
-//        values.put(CardSQLiteHelper.COLUMN_POSSIBLEANSWERS, stringPossibleAnswers);
+//        values.put(CardSQLiteHelper.CARD_COLUMN_POSSIBLEANSWERS, stringPossibleAnswers);
 //
-//        values.put(CardSQLiteHelper.COLUMN_POINTS, points);
-//        values.put(CardSQLiteHelper.COLUMN_MODERATORNEEDED, moderatorNeeded);
+//        values.put(CardSQLiteHelper.CARD_COLUMN_POINTS, points);
+//        values.put(CardSQLiteHelper.CARD_COLUMN_MODERATORNEEDED, moderatorNeeded);
 //        long insertId = database.insert(CardSQLiteHelper.TABLE_CARDS,
 //                null, values);
 //        Cursor cursor = database.query(CardSQLiteHelper.TABLE_CARDS,
-//                allColumns, CardSQLiteHelper.COLUMN_ID
+//                allColumns, CardSQLiteHelper.CARD_COLUMN_ID
 //                        + " = " + insertId, null,
 //                null, null, null);
 //        cursor.moveToFirst();
@@ -101,21 +101,21 @@ public class CardDataSource {
 //
 //    public Card createCard(Card card) {
 //        ContentValues values = new ContentValues();
-//        values.put(CardSQLiteHelper.COLUMN_CARDTYPE, card.getCardType());
-//        values.put(CardSQLiteHelper.COLUMN_QUESTION, card.getQuestion());
-//        values.put(CardSQLiteHelper.COLUMN_CORRECTANSWER, card.getCorrectAnswer());
+//        values.put(CardSQLiteHelper.CARD_COLUMN_CARDTYPE, card.getCardType());
+//        values.put(CardSQLiteHelper.CARD_COLUMN_QUESTION, card.getQuestion());
+//        values.put(CardSQLiteHelper.CARD_COLUMN_CORRECTANSWER, card.getCorrectAnswer());
 //
 //        //TODO need to make sure that depending on card type, the correct number of possible answers is inputted... can be done here or in code calling this method
 //        Gson gson = new Gson();
 //        String stringPossibleAnswers = gson.toJson(card.getPossibleAnswers());
-//        values.put(CardSQLiteHelper.COLUMN_POSSIBLEANSWERS, stringPossibleAnswers);
+//        values.put(CardSQLiteHelper.CARD_COLUMN_POSSIBLEANSWERS, stringPossibleAnswers);
 //
-//        values.put(CardSQLiteHelper.COLUMN_POINTS, card.getPoints());
-//        values.put(CardSQLiteHelper.COLUMN_MODERATORNEEDED, card.getModeratorNeeded());
+//        values.put(CardSQLiteHelper.CARD_COLUMN_POINTS, card.getPoints());
+//        values.put(CardSQLiteHelper.CARD_COLUMN_MODERATORNEEDED, card.getModeratorNeeded());
 //        long insertId = database.insert(CardSQLiteHelper.TABLE_CARDS,
 //                null, values);
 //        Cursor cursor = database.query(CardSQLiteHelper.TABLE_CARDS,
-//                allColumns, CardSQLiteHelper.COLUMN_ID
+//                allColumns, CardSQLiteHelper.CARD_COLUMN_ID
 //                        + " = " + insertId, null,
 //                null, null, null);
 //        cursor.moveToFirst();
@@ -131,7 +131,7 @@ public class CardDataSource {
 //        long id = card.getId();
 //        System.out.println("Deleted card: " + card.toString());
 //        return database.delete(CardSQLiteHelper.TABLE_CARDS,
-//                CardSQLiteHelper.COLUMN_ID + " = " + id, null);
+//                CardSQLiteHelper.CARD_COLUMN_ID + " = " + id, null);
 //    }
 //
 //    /*
@@ -192,13 +192,13 @@ public class CardDataSource {
 //        StringBuilder whereClause = new StringBuilder();
 //        int i = 0;
 //        while (cardTypes.size() != i + 1) {
-//            whereClause.append(CardSQLiteHelper.COLUMN_CARDTYPE)
+//            whereClause.append(CardSQLiteHelper.CARD_COLUMN_CARDTYPE)
 //                    .append("=\'")
 //                    .append(cardTypes.get(i))
 //                    .append("\' OR ");
 //            i++;
 //        }
-//        whereClause.append(CardSQLiteHelper.COLUMN_CARDTYPE)
+//        whereClause.append(CardSQLiteHelper.CARD_COLUMN_CARDTYPE)
 //                .append("=\'")
 //                .append(cardTypes.get(i))
 //                .append("\'");
@@ -240,18 +240,18 @@ public class CardDataSource {
 //     */
 //    public int updateCard(Card card){
 //        ContentValues values = new ContentValues();
-//        values.put(CardSQLiteHelper.COLUMN_CARDTYPE, card.getCardType());
-//        values.put(CardSQLiteHelper.COLUMN_QUESTION, card.getQuestion());
-//        values.put(CardSQLiteHelper.COLUMN_CORRECTANSWER, card.getCorrectAnswer());
+//        values.put(CardSQLiteHelper.CARD_COLUMN_CARDTYPE, card.getCardType());
+//        values.put(CardSQLiteHelper.CARD_COLUMN_QUESTION, card.getQuestion());
+//        values.put(CardSQLiteHelper.CARD_COLUMN_CORRECTANSWER, card.getCorrectAnswer());
 //
 //        Gson gson = new Gson();
 //        String possibleAnswerStr = gson.toJson(card.getPossibleAnswers());
-//        values.put(CardSQLiteHelper.COLUMN_POSSIBLEANSWERS, possibleAnswerStr);
+//        values.put(CardSQLiteHelper.CARD_COLUMN_POSSIBLEANSWERS, possibleAnswerStr);
 //
-//        values.put(CardSQLiteHelper.COLUMN_MODERATORNEEDED, card.getModeratorNeeded());
-//        values.put(CardSQLiteHelper.COLUMN_POINTS, card.getPoints());
+//        values.put(CardSQLiteHelper.CARD_COLUMN_MODERATORNEEDED, card.getModeratorNeeded());
+//        values.put(CardSQLiteHelper.CARD_COLUMN_POINTS, card.getPoints());
 //
-//        String where = CardSQLiteHelper.COLUMN_ID + " = " + card.getId();
+//        String where = CardSQLiteHelper.CARD_COLUMN_ID + " = " + card.getId();
 //        return database.update(CardSQLiteHelper.TABLE_CARDS, values, where, null);
 //    }
 }

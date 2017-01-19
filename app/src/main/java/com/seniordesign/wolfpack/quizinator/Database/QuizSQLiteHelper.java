@@ -7,7 +7,6 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Constants;
-import com.seniordesign.wolfpack.quizinator.Database.CardDeckRelation.CdrSQLiteHelper;
 
 /**
  * Created by aaron on 1/19/2017.
@@ -92,7 +91,7 @@ public class QuizSQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.w(CdrSQLiteHelper.class.getName(),
+        Log.w(QuizSQLiteHelper.class.getName(),
                 "Upgrading database from version " + oldVersion
                         + " to " + newVersion + ", which will " +
                         "destroy all old data");
@@ -180,14 +179,6 @@ public class QuizSQLiteHelper extends SQLiteOpenHelper {
     }
 
     private void setDefaultCdrelationSet(SQLiteDatabase db) { //TODO try using Jing maybe
-//        StringBuilder queryBuilder = new StringBuilder()
-//                .append("insert into " + TABLE_CDRELATIONS)
-//                .append(" SELECT \'" + "1" + "\' AS \'" + DECK_COLUMN_ID + "\',")
-//                .append("\'").append("Default").append("\' AS \'").append(DECK_COLUMN_DECKNAME).append("\',")
-//                .append("\'").append("General").append("\' AS \'").append(DECK_COLUMN_CATEGORY).append("\',")
-//                .append("\'").append("General").append("\' AS \'").append(DECK_COLUMN_SUBJECT).append("\',")
-//                .append("\'").append(String.valueOf(true)).append("\' AS \'").append(DECK_COLUMN_DUPLICATECARDS).append("\',")
-//                .append("\'").append("Team Wolfpack").append("\' AS \'").append(DECK_COLUMN_OWNER).append("\';");
-//        db.execSQL(queryBuilder.toString());
+
     }
 }
