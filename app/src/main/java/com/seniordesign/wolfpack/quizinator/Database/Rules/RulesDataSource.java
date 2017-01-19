@@ -141,7 +141,7 @@ public class RulesDataSource {
             rule.setCardDisplayTime(cursor.getLong(2));//card display time
             rule.setMaxCardCount(cursor.getInt(3));//max card count
             rule.setCardTypes(cursor.getString(4));//card types
-            rule.setDeckId(cursor.getInt(5));
+            rule.setDeckId(cursor.getLong(5));
         return rule;
     }
 

@@ -69,5 +69,5 @@ public class Rules {
 
     public long getDeckId() { return deckId; }
 
-    public void setDeckId(int deckId) { this.deckId = deckId; }
+    public void setDeckId(long deckId) { this.deckId = deckId; }
 }
