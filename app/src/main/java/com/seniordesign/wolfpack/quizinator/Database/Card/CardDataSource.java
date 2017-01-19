@@ -18,56 +18,56 @@ import java.util.List;
  * @creation    10/4/2016.
  */
 public class CardDataSource {
-
-    // Database fields
-    private SQLiteDatabase database;
-    private CardSQLiteHelper dbHelper;
-    private String[] allColumns = {
-            CardSQLiteHelper.COLUMN_ID,
-            CardSQLiteHelper.COLUMN_CARDTYPE,
-            CardSQLiteHelper.COLUMN_QUESTION,
-            CardSQLiteHelper.COLUMN_CORRECTANSWER,
-            CardSQLiteHelper.COLUMN_POSSIBLEANSWERS,
-            CardSQLiteHelper.COLUMN_POINTS,
-            CardSQLiteHelper.COLUMN_MODERATORNEEDED
-    };
-
-    /*
-     * @author  chuna (10/4/2016)
-     */
-    public CardDataSource(Context context) {
-        dbHelper = new CardSQLiteHelper(context);
-    }
-
-    /*
-     * @author  chuna (10/4/2016)
-     */
-    public boolean open() throws SQLException {
-        database = dbHelper.getWritableDatabase();
-        return database.isOpen();
-    }
-
-    /*
-     * @author  chuna (10/4/2016)
-     */
-    public boolean close() {
-        dbHelper.close();
-        return true;
-    }
-
-    /*
-     * @author  chuna (10/4/2016)
-     */
-    public SQLiteDatabase getDatabase(){
-        return database;
-    }
-
-    /*
-     * @author  chuna (10/4/2016)
-     */
-    public CardSQLiteHelper getSQLiteHelper() {
-        return dbHelper;
-    }
+//
+//    // Database fields
+//    private SQLiteDatabase database;
+//    private CardSQLiteHelper dbHelper;
+//    private String[] allColumns = {
+//            CardSQLiteHelper.COLUMN_ID,
+//            CardSQLiteHelper.COLUMN_CARDTYPE,
+//            CardSQLiteHelper.COLUMN_QUESTION,
+//            CardSQLiteHelper.COLUMN_CORRECTANSWER,
+//            CardSQLiteHelper.COLUMN_POSSIBLEANSWERS,
+//            CardSQLiteHelper.COLUMN_POINTS,
+//            CardSQLiteHelper.COLUMN_MODERATORNEEDED
+//    };
+//
+//    /*
+//     * @author  chuna (10/4/2016)
+//     */
+//    public CardDataSource(Context context) {
+//        dbHelper = new CardSQLiteHelper(context);
+//    }
+//
+//    /*
+//     * @author  chuna (10/4/2016)
+//     */
+//    public boolean open() throws SQLException {
+//        database = dbHelper.getWritableDatabase();
+//        return database.isOpen();
+//    }
+//
+//    /*
+//     * @author  chuna (10/4/2016)
+//     */
+//    public boolean close() {
+//        dbHelper.close();
+//        return true;
+//    }
+//
+//    /*
+//     * @author  chuna (10/4/2016)
+//     */
+//    public SQLiteDatabase getDatabase(){
+//        return database;
+//    }
+//
+//    /*
+//     * @author  chuna (10/4/2016)
+//     */
+//    public CardSQLiteHelper getSQLiteHelper() {
+//        return dbHelper;
+//    }
 //
 //    /*
 //     * @author  chuna (10/4/2016)

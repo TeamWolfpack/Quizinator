@@ -4,25 +4,21 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.view.Gravity;
 import android.view.WindowManager;
 
 import com.seniordesign.wolfpack.quizinator.Activities.DecksActivity;
-import com.seniordesign.wolfpack.quizinator.Activities.NewGameSettingsActivity;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckDataSource;
+import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerActions.open;
 import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
 import static android.support.test.espresso.matcher.ViewMatchers.withChild;
@@ -39,7 +35,7 @@ import static junit.framework.Assert.assertTrue;
 @LargeTest
 public class CustomDeckTests {
 
-    DeckDataSource deckDataSource;
+    QuizDataSource dataSource;
 
     @Rule
     public ActivityTestRule<DecksActivity> mActivityRule =
@@ -61,42 +57,42 @@ public class CustomDeckTests {
 
     @Test
     public void validateCreateAndDeleteDeck() {
-        deckDataSource = new DeckDataSource(InstrumentationRegistry.getTargetContext());
-        deckDataSource.open();
-        int numOfDecks = deckDataSource.getAllDecks().size();
+        dataSource = new QuizDataSource(InstrumentationRegistry.getTargetContext());
+        dataSource.open();
+        int numOfDecks = dataSource.getAllDecks().size();
         onView(withId(R.id.new_item_button)).perform(click());
-        int dif = deckDataSource.getAllDecks().size() - numOfDecks;
+        int dif = dataSource.getAllDecks().size() - numOfDecks;
         assertTrue(dif>0);
         onView(withId(R.id.deck_delete_button)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
-        dif = deckDataSource.getAllDecks().size() - numOfDecks;
+        dif = dataSource.getAllDecks().size() - numOfDecks;
         assertTrue(dif == 0);
     }
 
     @Test
     public void validateEditCancelDeck() {
-        deckDataSource = new DeckDataSource(InstrumentationRegistry.getTargetContext());
-        deckDataSource.open();
-        int numOfDecks = deckDataSource.getAllDecks().size();
+        dataSource = new QuizDataSource(InstrumentationRegistry.getTargetContext());
+        dataSource.open();
+        int numOfDecks = dataSource.getAllDecks().size();
         onView(withId(R.id.new_item_button)).perform(click());
-        int dif = deckDataSource.getAllDecks().size() - numOfDecks;
+        int dif = dataSource.getAllDecks().size() - numOfDecks;
         assertTrue(dif>0);
         onView(withId(R.id.deck_cancel_button)).perform(click());
         onView(withChild(withText("New Deck"))).perform(click());
         onView(withId(R.id.deck_delete_button)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
-        dif = deckDataSource.getAllDecks().size() - numOfDecks;
+        dif = dataSource.getAllDecks().size() - numOfDecks;
         assertTrue(dif == 0);
     }
 
 
     @Test
     public void validateEditSaveDeck() {
-        deckDataSource = new DeckDataSource(InstrumentationRegistry.getTargetContext());
-        deckDataSource.open();
-        int numOfDecks = deckDataSource.getAllDecks().size();
+        dataSource = new QuizDataSource(InstrumentationRegistry.getTargetContext());
+        dataSource.open();
+        int numOfDecks = dataSource.getAllDecks().size();
         onView(withId(R.id.new_item_button)).perform(click());
-        int dif = deckDataSource.getAllDecks().size() - numOfDecks;
+        int dif = dataSource.getAllDecks().size() - numOfDecks;
         assertTrue(dif>0);
         onView(withId(R.id.edit_deck_name)).perform(clearText());
         onView(withId(R.id.edit_deck_name)).perform(typeText("FFF111"));
@@ -104,7 +100,7 @@ public class CustomDeckTests {
         onView(withChild(withText("FFF111"))).perform(click());
         onView(withId(R.id.deck_delete_button)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
-        dif = deckDataSource.getAllDecks().size() - numOfDecks;
+        dif = dataSource.getAllDecks().size() - numOfDecks;
         assertTrue(dif == 0);
     }
 }

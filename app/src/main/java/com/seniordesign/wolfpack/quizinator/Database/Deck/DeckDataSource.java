@@ -21,20 +21,20 @@ import java.util.List;
  */
 public class DeckDataSource {
 
-    // Database fields
-    private SQLiteDatabase deckDatabase;
-    private DeckSQLiteHelper deckHelper;
-    private SQLiteDatabase cdrDatabase;
-    private CdrSQLiteHelper cdrHelper;
-    private String[] allColumns = {
-            DeckSQLiteHelper.COLUMN_ID,
-            DeckSQLiteHelper.COLUMN_DECKNAME,
-            DeckSQLiteHelper.COLUMN_CATEGORY,
-            DeckSQLiteHelper.COLUMN_SUBJECT,
-            DeckSQLiteHelper.COLUMN_DUPLICATECARDS,
-            DeckSQLiteHelper.COLUMN_OWNER
-    };
-
+//    // Database fields
+//    private SQLiteDatabase deckDatabase;
+//    private DeckSQLiteHelper deckHelper;
+//    private SQLiteDatabase cdrDatabase;
+//    private CdrSQLiteHelper cdrHelper;
+//    private String[] allColumns = {
+//            DeckSQLiteHelper.COLUMN_ID,
+//            DeckSQLiteHelper.COLUMN_DECKNAME,
+//            DeckSQLiteHelper.COLUMN_CATEGORY,
+//            DeckSQLiteHelper.COLUMN_SUBJECT,
+//            DeckSQLiteHelper.COLUMN_DUPLICATECARDS,
+//            DeckSQLiteHelper.COLUMN_OWNER
+//    };
+//
 //    public DeckDataSource(Context context) {
 //        deckHelper = new DeckSQLiteHelper(context);
 //        cdrHelper = new CdrSQLiteHelper(context);
@@ -59,7 +59,7 @@ public class DeckDataSource {
 //    public DeckSQLiteHelper getSQLiteHelper() {
 //        return deckHelper;
 //    }
-
+//
 //    public Deck createDeck(String deckName, String category, String subject,
 //                           boolean duplicateCards, String owner, List<Card> cards) {
 //        ContentValues values = new ContentValues();
@@ -82,19 +82,19 @@ public class DeckDataSource {
 //        newDeck.setCards(cards);
 //        return newDeck;
 //    }
-
-    private void setCardDeckRelation(long deckId, List<Card> cards) {
-        ContentValues values;
-        for (Card card : cards) {
-            values = new ContentValues();
-            values.put(CdrSQLiteHelper.COLUMN_FKCARD, card.getId());
-            values.put(CdrSQLiteHelper.COLUMN_FKDECK, deckId);
-
-            cdrDatabase.insert(CdrSQLiteHelper.TABLE_CDRELATIONS,
-                    null, values);
-        }
-    }
-
+//
+//    private void setCardDeckRelation(long deckId, List<Card> cards) {
+//        ContentValues values;
+//        for (Card card : cards) {
+//            values = new ContentValues();
+//            values.put(CdrSQLiteHelper.COLUMN_FKCARD, card.getId());
+//            values.put(CdrSQLiteHelper.COLUMN_FKDECK, deckId);
+//
+//            cdrDatabase.insert(CdrSQLiteHelper.TABLE_CDRELATIONS,
+//                    null, values);
+//        }
+//    }
+//
 //    public int deleteDeck(Deck deck) {
 //        long id = deck.getId();
 //        System.out.println("Deleted item: " + deck.toString());
@@ -131,10 +131,11 @@ public class DeckDataSource {
 //        return deck;
 //    }
 
-    private String getCardsQuery() {
-        SQLiteQueryBuilder sqlBuilder = new SQLiteQueryBuilder();
-        sqlBuilder.setTables();
-    }
+    // TODO didn't move this over to quiz but don't think i need to
+//    private String getCardsQuery() {
+//        SQLiteQueryBuilder sqlBuilder = new SQLiteQueryBuilder();
+//        sqlBuilder.setTables();
+//    }
 
 //    private Deck cursorToDeck(Cursor cursor) {
 //        Deck deck = new Deck();

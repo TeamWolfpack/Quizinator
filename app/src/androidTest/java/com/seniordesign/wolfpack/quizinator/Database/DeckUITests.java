@@ -8,8 +8,6 @@ import android.view.WindowManager;
 import com.seniordesign.wolfpack.quizinator.Activities.MainMenuActivity;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
-import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckDataSource;
-import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckSQLiteHelper;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -21,16 +19,12 @@ import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
 
-/**
- * Tests the Deck database files that need a Context object
- * @creation 10/16/2016.
- */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class DeckUITests {
 
-    private DeckDataSource datasource;
-    private DeckSQLiteHelper dbHelper;
+    private QuizDataSource dataSource;
+    private QuizSQLiteHelper dbHelper;
 
     @Rule
     public ActivityTestRule<MainMenuActivity> mActivityRule =
@@ -48,28 +42,26 @@ public class DeckUITests {
             }
         };
         activity.runOnUiThread(wakeUpDevice);
-        datasource = new DeckDataSource(activity);
-        dbHelper = new DeckSQLiteHelper(activity);
+        dataSource = new QuizDataSource(activity);
+        dbHelper = new QuizSQLiteHelper(activity);
     }
 
-    /*
-     * @author  chuna (10/16/2016)
-     */
+    // TODO may need to add the category and other inputs and check them in this test
     @Test
     public void normalFlow_DeckDataSource() throws Exception{
-        assertEquals(true, datasource.open());
-        assertEquals(true, datasource.getDeckDatabase().isOpen());
-        dbHelper.onUpgrade(datasource.getDeckDatabase(), 0, 1);
+        assertEquals(true, dataSource.open());
+        assertEquals(true, dataSource.getDatabase().isOpen());
+        dbHelper.onUpgrade(dataSource.getDatabase(), 0, 1);
         List<Card> cards = new ArrayList<>();
         cards.add(new Card());
         cards.add(new Card());
-        Deck deck = datasource.createDeck("TestDeck", cards);
-        assertEquals("deck.db", datasource.getSQLiteHelper().getDatabaseName());
-        assertEquals(1, datasource.getAllDecks().size());
-        assertEquals(3, datasource.getAllColumns().length);
+        Deck deck = dataSource.createDeck("TestDeck", null, null, true, null, cards); // TODO may need to add the category and other inputs and check them in this test
+        assertEquals("deck.db", dataSource.getSQLiteHelper().getDatabaseName());
+        assertEquals(1, dataSource.getAllDecks().size());
+        assertEquals(3, dataSource.getDeckAllColumns().length);
         deck.setDeckName("TestDeck2");
-        assertEquals(1, datasource.updateDeck(deck));
-        assertEquals(1, datasource.deleteDeck(deck));
-        assertEquals(true, datasource.close());
+        assertEquals(1, dataSource.updateDeck(deck));
+        assertEquals(1, dataSource.deleteDeck(deck));
+        assertEquals(true, dataSource.close());
     }
 }

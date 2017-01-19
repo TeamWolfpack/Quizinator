@@ -6,25 +6,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.seniordesign.wolfpack.quizinator.Adapters.CardAdapter;
 import com.seniordesign.wolfpack.quizinator.Adapters.DeckAdapter;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
-import com.seniordesign.wolfpack.quizinator.Database.Card.CardDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
-import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckDataSource;
+import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DecksActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
-    DeckDataSource deckDataSource;
+    QuizDataSource dataSource;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,13 +27,13 @@ public class DecksActivity extends AppCompatActivity implements AdapterView.OnIt
 
         initializeDB();
 
-        List<Deck> decks = deckDataSource.getAllDecks();
+        List<Deck> decks = dataSource.getAllDecks();
         fillListOfDecks(decks);
     }
 
     private boolean initializeDB(){
-        deckDataSource = new DeckDataSource(this);
-        return deckDataSource.open();
+        dataSource = new QuizDataSource(this);
+        return dataSource.open();
     }
 
     private void fillListOfDecks(List<Deck> values){
@@ -52,7 +47,7 @@ public class DecksActivity extends AppCompatActivity implements AdapterView.OnIt
     public void onItemClick(AdapterView<?> parent, View view, int position, long id){
         Intent intent = new Intent(this, EditDeckActivity.class);
         Gson gson = new Gson();
-        String jsonDeck = gson.toJson(deckDataSource.getAllDecks().get(position));
+        String jsonDeck = gson.toJson(dataSource.getAllDecks().get(position));
         intent.putExtra("Deck",jsonDeck);
         startActivity(intent);
     }
@@ -60,7 +55,7 @@ public class DecksActivity extends AppCompatActivity implements AdapterView.OnIt
     public void newDeckClick(View view){
         Intent intent = new Intent(this, EditDeckActivity.class);
         Gson gson = new Gson();
-        Deck deck = deckDataSource.createDeck("New Deck", null, null, true, null, new ArrayList<Card>());
+        Deck deck = dataSource.createDeck("New Deck", null, null, true, null, new ArrayList<Card>());
         String jsonDeck = gson.toJson(deck);
         intent.putExtra("Deck",jsonDeck);
         startActivity(intent);
@@ -68,8 +63,8 @@ public class DecksActivity extends AppCompatActivity implements AdapterView.OnIt
 
     protected void onResume() {
         super.onResume();
-        deckDataSource.open();
-        List<Deck> decks = deckDataSource.getAllDecks();
+        dataSource.open();
+        List<Deck> decks = dataSource.getAllDecks();
         fillListOfDecks(decks);
     }
 
@@ -79,13 +74,13 @@ public class DecksActivity extends AppCompatActivity implements AdapterView.OnIt
     @Override
     protected void onPause() {
         super.onPause();
-        deckDataSource.close();
+        dataSource.close();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        deckDataSource.close();
+        dataSource.close();
     }
 
 }

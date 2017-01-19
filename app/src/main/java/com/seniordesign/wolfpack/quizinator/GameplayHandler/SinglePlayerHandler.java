@@ -3,15 +3,12 @@ package com.seniordesign.wolfpack.quizinator.GameplayHandler;
 import android.widget.TextView;
 
 import com.seniordesign.wolfpack.quizinator.Activities.GamePlayActivity;
-import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
-import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
-import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresDataSource;
+import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -64,10 +61,10 @@ public class SinglePlayerHandler implements GamePlayHandler {
         if (properties.getHighScoresDataSource().open()) {
             positiveDBConnections++;
         }
-        properties.setDeckDataSource(new DeckDataSource(gamePlayActivity));
-        if (properties.getDeckDataSource().open()) {
+        properties.setQuizDataSource(new QuizDataSource(gamePlayActivity)); //TODO
+        if (properties.getDataSource().open()) {
             positiveDBConnections++;
-            properties.setDeck(properties.getDeckDataSource().getDeckWithId(properties.getRules().getDeckId()).filter(properties.getRules()));
+            properties.setDeck(properties.getDataSource().getDeckWithId(properties.getRules().getDeckId()).filter(properties.getRules()));
         }
         return (positiveDBConnections == 3);
     }
@@ -102,7 +99,7 @@ public class SinglePlayerHandler implements GamePlayHandler {
     public boolean handleCleanup(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         properties.getRulesDataSource().close();
         properties.getHighScoresDataSource().close();
-        properties.getDeckDataSource().close();
+        properties.getDataSource().close();
 
         properties.getGamePlayTimerStatic().cancel();
         properties.getGamePlayTimerRunning().cancel();
