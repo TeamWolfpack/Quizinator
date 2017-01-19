@@ -1,7 +1,10 @@
 package com.seniordesign.wolfpack.quizinator.Fragments;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +24,34 @@ public class EditCardFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_edit_card,
                 container, false);
         return view; // Inflate the layout for this fragment
+    }
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return new AlertDialog.Builder(getActivity())
+            .setTitle("Edit Card")
+            .setPositiveButton("Save",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,
+                                        int whichButton) {
+                        // do something...
+                        handleSavedButtonClick(getView());
+                    }
+                }
+            )
+            .setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,
+                                        int whichButton) {
+                        dialog.dismiss();
+                    }
+                }
+            )
+            .create();
+    }
+
+    public static void createPopUp(){
+
     }
 
     public static void handleSavedButtonClick(View v){

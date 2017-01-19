@@ -73,9 +73,6 @@ public class DecksActivity extends AppCompatActivity implements AdapterView.OnIt
         fillListOfDecks(decks);
     }
 
-    /*
-     * @author kuczynskij (10/13/2016)
-     */
     @Override
     protected void onPause() {
         super.onPause();
