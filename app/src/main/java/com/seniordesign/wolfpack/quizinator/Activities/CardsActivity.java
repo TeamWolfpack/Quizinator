@@ -1,14 +1,9 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
-import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -22,7 +17,7 @@ import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Card.CardDataSource;
-import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
+import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.Fragments.EditCardFragment;
 import com.seniordesign.wolfpack.quizinator.R;
 
@@ -46,7 +41,7 @@ public class CardsActivity extends AppCompatActivity {
             ));
 //    private List<String> cardTypes = new ArrayList<>(Arrays.asList(Constants.LONG_TRUE_FALSE, Constants.LONG_MULTIPLE_CHOICE, Constants.LONG_FREE_RESPONSE, Constants.LONG_VERBAL_RESPONSE));
 
-    private CardDataSource cardDataSource;
+    private QuizDataSource dataSource;
 
     private static final String TAG = "ACT_CA";
     /**
@@ -88,22 +83,22 @@ public class CardsActivity extends AppCompatActivity {
                         for (int i = 0; i < selectedCardTypes.size(); i++) {
                             chosenTypes.add(selectedCardTypes.get(i));
                         }
-                        fillListOfCards(cardDataSource.filterCards(chosenTypes));
+                        fillListOfCards(dataSource.filterCards(chosenTypes));
                     }
                 });
-        fillListOfCards(cardDataSource.filterCards(cardTypes));
+        fillListOfCards(dataSource.filterCards(cardTypes));
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     private boolean initializeDB() {
-        cardDataSource = new CardDataSource(this);
-        return cardDataSource.open();
+        dataSource = new QuizDataSource(this);
+        return dataSource.open();
     }
 
     private void initializeList() {
-        fillListOfCards(cardDataSource.filterCards(cardTypes));
+        fillListOfCards(dataSource.filterCards(cardTypes));
     }
 
     private void fillListOfCards(List<Card> values) {

@@ -15,10 +15,10 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.seniordesign.wolfpack.quizinator.Constants;
-import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Card.CardDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
 import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckDataSource;
+import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.Filters.NumberFilter;
@@ -28,7 +28,6 @@ import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -60,8 +59,8 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     private List<String> cardTypeOptions;
 
     private RulesDataSource rulesSource;
-    private DeckDataSource deckDataSource;
-    private CardDataSource cardDataSource;
+
+    private QuizDataSource dataSource;
 
     private Deck deck;
 
@@ -69,10 +68,6 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
     Gson gson = new Gson();
 
-    /*
-     * @author kuczynskij (09/28/2016)
-     * @author leonardj (10/4/2016)
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,11 +77,11 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         initializeDB();
 
         if (rulesSource.getAllRules().size() > 0) {
-            deck = deckDataSource.getDeckWithId(rulesSource.getAllRules()
+            deck = dataSource.getDeckWithId(rulesSource.getAllRules()
                     .get(rulesSource.getAllRules().size() - 1)
                     .getId());
-        } else if (deckDataSource.getAllDecks().size()>0){
-            deck = deckDataSource.getAllDecks().get(0);
+        } else if (dataSource.getAllDecks().size()>0){
+            deck = dataSource.getAllDecks().get(0);
         }
 
         final BaseMultiSelectSpinner.MultiSpinnerListener multiSpinnerListener = new BaseMultiSelectSpinner.MultiSpinnerListener() {
@@ -112,7 +107,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
         deckSpinner = (Spinner)findViewById(R.id.deck_spinner);
             List<String> deckNames = new ArrayList<>();
-            for (Deck deck: deckDataSource.getAllDecks()) {
+            for (Deck deck: dataSource.getAllDecks()) {
                 deckNames.add(deck.getDeckName());
             }
             final ArrayAdapter<String> deckAdapter = new ArrayAdapter<>(this,
@@ -123,7 +118,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     String name = deckAdapter.getItem(position);
-                    for (Deck deck: deckDataSource.getAllDecks()) {
+                    for (Deck deck: dataSource.getAllDecks()) {
                         if (deck.getDeckName().equals(name)) {
                             Log.d(TAG, "Deck ID is " + deck.getId());
                             // update the card type spinner with any new card types
@@ -206,19 +201,12 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         loadPreviousRules();
     }
 
-    /*
-     * @author leoanrdj 12/19/16
-     */
     private void filterCardCount(Deck deck) {
         NumberFilter cardCountFilter = new NumberFilter(1, deck.getCards().size(), false);
         cardCountInput.setFilters(new InputFilter[]{ cardCountFilter });
         cardCountInput.setOnFocusChangeListener(cardCountFilter);
     }
 
-    /*
-     * @author kuczynskij (09/28/2016)
-     * @author leonardj (10/4/2016)
-     */
     public boolean startGame(View v){
         if (selectedCardTypes.size() < 1) {
             Toast.makeText(this, "Must select card type", Toast.LENGTH_SHORT).show();
@@ -242,10 +230,6 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         }
     }
 
-    /*
-     * @author kuczynskij (10/31/2016)
-     * @author leonardj (10/31/2016)
-     */
     private boolean startMultiplayerGamePlay(Rules r){
         //multi-player
         if(!wifiDirectApp.mP2pConnected ){
@@ -270,10 +254,6 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         return true;
     }
 
-    /*
-     * @author leonardj (10/31/2016)
-     * @author kuczynskij (10/31/2016)
-     */
     public Rules updateRuleSet() {
         if (isInputEmpty(gameMinutesInput)) {
             Toast.makeText(this, GAME_MINUTES_ERROR, Toast.LENGTH_SHORT).show();
@@ -345,10 +325,6 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                 rule.getCardTypes(), (int)deck.getId());
     }
 
-    /*
-     * @author kuczynskij (09/28/2016)
-     * @author leonardj (10/14/2016)
-     */
     public boolean loadPreviousRules(){
         if (rulesSource.getAllRules().size() < 1) return false;
 
@@ -384,58 +360,37 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         return true;
     }
 
-    /*
-     * @author kuczynskij (09/28/2016)
-     */
     public boolean loadDeck(){
         return false;
     }
 
-    /*
-     * @author leonardj 12/23/16
-     */
     private boolean isInputEmpty(EditText input) {
         return input.getText().toString().equals("");
     }
 
-    /*
-     * @author kuczynskij (09/28/2016)
-     * @author leonardj (10/14/2016)
-     * @author farrowc (10/31/2016)
-     */
     private boolean initializeDB(){
         rulesSource = new RulesDataSource(this);
-        deckDataSource = new DeckDataSource(this);
-        cardDataSource = new CardDataSource(this);
-        return rulesSource.open() && deckDataSource.open() && cardDataSource.open();
+        dataSource = new QuizDataSource(this);
+        return rulesSource.open() && dataSource.open() && dataSource.open();
     }
 
-    /*
-     * @author leonardj (12/16/16)
-     */
     public List<String> formatCardTypes(Deck deck) {
         if (deck == null)
             return new ArrayList<>();
         return deck.getCardTypes();
     }
 
-    /*
-     * @author kuczynskij (09/28/2016)
-     */
     @Override
     protected void onResume(){
         super.onResume();
         rulesSource.open();
-        deckDataSource.open();
+        dataSource.open();
     }
 
-    /*
-     * @author kuczynskij (09/28/2016)
-     */
     @Override
     protected void onPause(){
         super.onPause();
         rulesSource.close();
-        deckDataSource.close();
+        dataSource.close();
     }
 }
