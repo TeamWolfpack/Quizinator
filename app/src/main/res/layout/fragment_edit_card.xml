@@ -33,16 +33,20 @@
             android:id="@+id/edit_card_points_value"
             android:layout_column="1"
             android:gravity="center"
-            android:padding="3dip" />
+                android:padding="3dip"
+                android:inputType="number"/>
     </TableRow>
 
     <TableRow>
+
         <TextView
             android:layout_column="0"
             android:text="@string/question"
             android:padding="3dip"
             android:gravity="right"
             android:layout_width="wrap_content" />
+                android:id="@+id/textView2" />
+
         <EditText
             android:id="@+id/edit_card_question_value"
             android:layout_column="1"
