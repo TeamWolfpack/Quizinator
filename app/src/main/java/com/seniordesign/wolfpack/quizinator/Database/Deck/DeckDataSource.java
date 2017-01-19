@@ -10,7 +10,6 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
-import com.seniordesign.wolfpack.quizinator.Database.CardDeckRelation.CdrSQLiteHelper;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -27,12 +26,12 @@ public class DeckDataSource {
 //    private SQLiteDatabase cdrDatabase;
 //    private CdrSQLiteHelper cdrHelper;
 //    private String[] allColumns = {
-//            DeckSQLiteHelper.COLUMN_ID,
-//            DeckSQLiteHelper.COLUMN_DECKNAME,
-//            DeckSQLiteHelper.COLUMN_CATEGORY,
-//            DeckSQLiteHelper.COLUMN_SUBJECT,
-//            DeckSQLiteHelper.COLUMN_DUPLICATECARDS,
-//            DeckSQLiteHelper.COLUMN_OWNER
+//            DeckSQLiteHelper.CARD_COLUMN_ID,
+//            DeckSQLiteHelper.DECK_COLUMN_DECKNAME,
+//            DeckSQLiteHelper.DECK_COLUMN_CATEGORY,
+//            DeckSQLiteHelper.DECK_COLUMN_SUBJECT,
+//            DeckSQLiteHelper.DECK_COLUMN_DUPLICATECARDS,
+//            DeckSQLiteHelper.DECK_COLUMN_OWNER
 //    };
 //
 //    public DeckDataSource(Context context) {
@@ -63,16 +62,16 @@ public class DeckDataSource {
 //    public Deck createDeck(String deckName, String category, String subject,
 //                           boolean duplicateCards, String owner, List<Card> cards) {
 //        ContentValues values = new ContentValues();
-//        values.put(DeckSQLiteHelper.COLUMN_DECKNAME, deckName);
-//        values.put(DeckSQLiteHelper.COLUMN_CATEGORY, category);
-//        values.put(DeckSQLiteHelper.COLUMN_SUBJECT, subject);
-//        values.put(DeckSQLiteHelper.COLUMN_DUPLICATECARDS, String.valueOf(duplicateCards));
-//        values.put(DeckSQLiteHelper.COLUMN_OWNER, owner);
+//        values.put(DeckSQLiteHelper.DECK_COLUMN_DECKNAME, deckName);
+//        values.put(DeckSQLiteHelper.DECK_COLUMN_CATEGORY, category);
+//        values.put(DeckSQLiteHelper.DECK_COLUMN_SUBJECT, subject);
+//        values.put(DeckSQLiteHelper.DECK_COLUMN_DUPLICATECARDS, String.valueOf(duplicateCards));
+//        values.put(DeckSQLiteHelper.DECK_COLUMN_OWNER, owner);
 //        long insertId = deckDatabase.insert(DeckSQLiteHelper.TABLE_DECKS,
 //                null, values);
 //
 //        Cursor cursor = deckDatabase.query(DeckSQLiteHelper.TABLE_DECKS,
-//                allColumns, DeckSQLiteHelper.COLUMN_ID
+//                allColumns, DeckSQLiteHelper.CARD_COLUMN_ID
 //                        + " = " + insertId, null,
 //                null, null, null);
 //        cursor.moveToFirst();
@@ -87,8 +86,8 @@ public class DeckDataSource {
 //        ContentValues values;
 //        for (Card card : cards) {
 //            values = new ContentValues();
-//            values.put(CdrSQLiteHelper.COLUMN_FKCARD, card.getId());
-//            values.put(CdrSQLiteHelper.COLUMN_FKDECK, deckId);
+//            values.put(CdrSQLiteHelper.CDRELATION_COLUMN_FKCARD, card.getId());
+//            values.put(CdrSQLiteHelper.CDRELATION_COLUMN_FKDECK, deckId);
 //
 //            cdrDatabase.insert(CdrSQLiteHelper.TABLE_CDRELATIONS,
 //                    null, values);
@@ -99,9 +98,9 @@ public class DeckDataSource {
 //        long id = deck.getId();
 //        System.out.println("Deleted item: " + deck.toString());
 //        cdrDatabase.delete(CdrSQLiteHelper.TABLE_CDRELATIONS,
-//                CdrSQLiteHelper.COLUMN_FKDECK + " = " + id, null);
+//                CdrSQLiteHelper.CDRELATION_COLUMN_FKDECK + " = " + id, null);
 //        return deckDatabase.delete(DeckSQLiteHelper.TABLE_DECKS,
-//                DeckSQLiteHelper.COLUMN_ID + " = " + id, null);
+//                DeckSQLiteHelper.CARD_COLUMN_ID + " = " + id, null);
 //    }
 //
 //    public List<Deck> getAllDecks() {
@@ -120,13 +119,13 @@ public class DeckDataSource {
 //
 //    public Deck getDeckWithId(long id) {
 //        Cursor cursor = deckDatabase.query(DeckSQLiteHelper.TABLE_DECKS,
-//                allColumns, DeckSQLiteHelper.COLUMN_ID + " = " + id, null, null, null, null);
+//                allColumns, DeckSQLiteHelper.CARD_COLUMN_ID + " = " + id, null, null, null, null);
 //        cursor.moveToFirst();
 //        Deck deck = cursorToDeck(cursor);
 //        cursor.close();
 //        //cdrDatabase.rawQuery()
 //        cursor = cdrDatabase.query(DeckSQLiteHelper.TABLE_DECKS,
-//                allColumns, DeckSQLiteHelper.COLUMN_ID + " = " + id, null, null, null, null);
+//                allColumns, DeckSQLiteHelper.CARD_COLUMN_ID + " = " + id, null, null, null, null);
 //        cursor.moveToFirst();
 //        return deck;
 //    }
@@ -160,13 +159,13 @@ public class DeckDataSource {
 //
 //    public int updateDeck(Deck deck){
 //        ContentValues values = new ContentValues();
-//        values.put(DeckSQLiteHelper.COLUMN_DECKNAME, deck.getDeckName());
+//        values.put(DeckSQLiteHelper.DECK_COLUMN_DECKNAME, deck.getDeckName());
 //
 //        Gson gson = new Gson();
 //        String cardsStr = gson.toJson(deck.getCards());
 //        //values.put(DeckSQLiteHelper.COLUMN_CARDS, cardsStr);
 //
-//        String where = DeckSQLiteHelper.COLUMN_ID + " = " + deck.getId();
+//        String where = DeckSQLiteHelper.CARD_COLUMN_ID + " = " + deck.getId();
 //        return deckDatabase.update(DeckSQLiteHelper.TABLE_DECKS, values, where, null);
 //    }
 }

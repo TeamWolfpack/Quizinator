@@ -15,9 +15,9 @@ public class CdrDataSource {
 //    private SQLiteDatabase database;
 //    private CdrSQLiteHelper dbHelper;
 //    private String[] allColumns = {
-//            CdrSQLiteHelper.COLUMN_ID,
-//            CdrSQLiteHelper.COLUMN_FKCARD,
-//            CdrSQLiteHelper.COLUMN_FKDECK
+//            CdrSQLiteHelper.CARD_COLUMN_ID,
+//            CdrSQLiteHelper.CDRELATION_COLUMN_FKCARD,
+//            CdrSQLiteHelper.CDRELATION_COLUMN_FKDECK
 //    };
 //
 //    public CdrDataSource(Context context) {
@@ -44,13 +44,13 @@ public class CdrDataSource {
 //
 //    public CardDeckRelation createCardDeckRelation(long fkCard, long fkDeck) {
 //        ContentValues values = new ContentValues();
-//        values.put(CdrSQLiteHelper.COLUMN_FKCARD, fkCard);
-//        values.put(CdrSQLiteHelper.COLUMN_FKDECK, fkDeck);
+//        values.put(CdrSQLiteHelper.CDRELATION_COLUMN_FKCARD, fkCard);
+//        values.put(CdrSQLiteHelper.CDRELATION_COLUMN_FKDECK, fkDeck);
 //
 //        long insertId = database.insert(CdrSQLiteHelper.TABLE_CDRELATIONS,
 //                null, values);
 //        Cursor cursor = database.query(CdrSQLiteHelper.TABLE_CDRELATIONS,
-//                allColumns, CdrSQLiteHelper.COLUMN_ID
+//                allColumns, CdrSQLiteHelper.CARD_COLUMN_ID
 //                        + " = " + insertId, null,
 //                null, null, null);
 //        cursor.moveToFirst();
@@ -61,13 +61,13 @@ public class CdrDataSource {
 //
 //    public CardDeckRelation createCardDeckRelation(CardDeckRelation cdRelation) {
 //        ContentValues values = new ContentValues();
-//        values.put(CdrSQLiteHelper.COLUMN_FKCARD, cdRelation.getFkCard());
-//        values.put(CdrSQLiteHelper.COLUMN_FKDECK, cdRelation.getFkDeck());
+//        values.put(CdrSQLiteHelper.CDRELATION_COLUMN_FKCARD, cdRelation.getFkCard());
+//        values.put(CdrSQLiteHelper.CDRELATION_COLUMN_FKDECK, cdRelation.getFkDeck());
 //
 //        long insertId = database.insert(CdrSQLiteHelper.TABLE_CDRELATIONS,
 //                null, values);
 //        Cursor cursor = database.query(CdrSQLiteHelper.TABLE_CDRELATIONS,
-//                allColumns, CdrSQLiteHelper.COLUMN_ID
+//                allColumns, CdrSQLiteHelper.CARD_COLUMN_ID
 //                        + " = " + insertId, null,
 //                null, null, null);
 //        cursor.moveToFirst();
@@ -83,7 +83,7 @@ public class CdrDataSource {
 //        long id = cdRelation.getId();
 //        System.out.println("Deleted card: " + cdRelation.toString());
 //        return database.delete(CdrSQLiteHelper.TABLE_CDRELATIONS,
-//                CdrSQLiteHelper.COLUMN_ID + " = " + id, null);
+//                CdrSQLiteHelper.CARD_COLUMN_ID + " = " + id, null);
 //    }
 //
 //    /*
