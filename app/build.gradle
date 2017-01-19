@@ -50,4 +50,5 @@ dependencies {
     compile 'io.apptik.widget:multiselectspinner:1.0.12'
     testCompile 'junit:junit:4.12'
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
+    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
 }
