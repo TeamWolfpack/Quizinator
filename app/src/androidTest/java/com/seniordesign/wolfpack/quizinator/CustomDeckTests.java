@@ -19,7 +19,9 @@ import org.junit.runner.RunWith;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
+import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerActions.open;
 import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
@@ -58,7 +60,7 @@ public class CustomDeckTests {
     // **********************************************
 
     @Test
-    public void validateCreateDeck() {
+    public void validateCreateAndDeleteDeck() {
         deckDataSource = new DeckDataSource(InstrumentationRegistry.getTargetContext());
         deckDataSource.open();
         int numOfDecks = deckDataSource.getAllDecks().size();
@@ -71,7 +73,8 @@ public class CustomDeckTests {
         assertTrue(dif == 0);
     }
 
-    public void validateEditSaveDeck() {
+    @Test
+    public void validateEditCancelDeck() {
         deckDataSource = new DeckDataSource(InstrumentationRegistry.getTargetContext());
         deckDataSource.open();
         int numOfDecks = deckDataSource.getAllDecks().size();
@@ -79,7 +82,26 @@ public class CustomDeckTests {
         int dif = deckDataSource.getAllDecks().size() - numOfDecks;
         assertTrue(dif>0);
         onView(withId(R.id.deck_cancel_button)).perform(click());
-        onData(withChild(withText("New Deck"))).perform(click());
+        onView(withChild(withText("New Deck"))).perform(click());
+        onView(withId(R.id.deck_delete_button)).perform(click());
+        onView(withId(android.R.id.button1)).perform(click());
+        dif = deckDataSource.getAllDecks().size() - numOfDecks;
+        assertTrue(dif == 0);
+    }
+
+
+    @Test
+    public void validateEditSaveDeck() {
+        deckDataSource = new DeckDataSource(InstrumentationRegistry.getTargetContext());
+        deckDataSource.open();
+        int numOfDecks = deckDataSource.getAllDecks().size();
+        onView(withId(R.id.new_item_button)).perform(click());
+        int dif = deckDataSource.getAllDecks().size() - numOfDecks;
+        assertTrue(dif>0);
+        onView(withId(R.id.edit_deck_name)).perform(clearText());
+        onView(withId(R.id.edit_deck_name)).perform(typeText("FFF111"));
+        onView(withId(R.id.deck_save_button)).perform(click());
+        onView(withChild(withText("FFF111"))).perform(click());
         onView(withId(R.id.deck_delete_button)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
         dif = deckDataSource.getAllDecks().size() - numOfDecks;
