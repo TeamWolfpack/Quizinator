@@ -149,8 +149,8 @@ public class QuizDataSource {
 
     // TODO will update later as more filtering options are created
     // TODO can also replace getAllCards just by passing in nulls but can be looked into later
-    public List<Card> filterCards(List<String> cardTypes) {
-        List<Card> cards = new ArrayList<Card>();
+    public List<Card> filterCards(List<Constants.CARD_TYPES> cardTypes) {
+        List<Card> cards = new ArrayList<>();
         Cursor cursor = database.query(QuizSQLiteHelper.TABLE_CARDS,
                 cardAllColumns, buildCardTypeWhereClause(cardTypes), null, null, null, null);
         cursor.moveToFirst();
@@ -164,13 +164,13 @@ public class QuizDataSource {
 
         Log.d("DATABASE", "Starting log of cards: size = " + cards.size());
         for(int i = 0; i < cards.size(); i++){
-            Log.d("DATABASE", i + " : " + cards.get(i).toString());
+            Log.d("DATABASE", i + " : " + cards.get(i));
         }
 
         return cards;
     }
 
-    private String buildCardTypeWhereClause(List<String> cardTypes) {
+    private String buildCardTypeWhereClause(List<Constants.CARD_TYPES> cardTypes) {
         if (cardTypes == null || cardTypes.size() == 0) {
             return null;
         }
@@ -179,13 +179,13 @@ public class QuizDataSource {
         while (cardTypes.size() != i + 1) {
             whereClause.append(QuizSQLiteHelper.CARD_COLUMN_CARDTYPE)
                     .append("=\'")
-                    .append(cardTypes.get(i))
+                    .append(cardTypes.get(i).ordinal())
                     .append("\' OR ");
             i++;
         }
         whereClause.append(QuizSQLiteHelper.CARD_COLUMN_CARDTYPE)
                 .append("=\'")
-                .append(cardTypes.get(i))
+                .append(cardTypes.get(i).ordinal())
                 .append("\'");
         Log.d("DATABASE", "whereClause: " + whereClause.toString());
         return whereClause.toString();
