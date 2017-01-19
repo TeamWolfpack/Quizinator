@@ -1,54 +1,14 @@
 package com.seniordesign.wolfpack.quizinator.Fragments;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.content.DialogInterface;
-import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.app.Activity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import com.seniordesign.wolfpack.quizinator.R;
 
-public class EditCardFragment extends DialogFragment {
-
-    @Override
-    public View onCreateView(LayoutInflater inflater,
-                             ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_edit_card,
-                container, false);
-        return view; // Inflate the layout for this fragment
-    }
-
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new AlertDialog.Builder(getActivity())
-            .setTitle("Edit Card")
-            .setPositiveButton("Save",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,
-                                        int whichButton) {
-                        // do something...
-                        handleSavedButtonClick(getView());
-                    }
-                }
-            )
-            .setNegativeButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,
-                                        int whichButton) {
-                        dialog.dismiss();
-                    }
-                }
-            )
-            .create();
-    }
+public class EditCardDialog {
 
     public static void createPopUp(){
 
@@ -79,7 +39,7 @@ public class EditCardFragment extends DialogFragment {
         //close fragment and return to card list
     }
 
-    private Boolean updateViewOnCardTypeChanged(){
+    private boolean updateViewOnCardTypeChanged(){
         //take card reference and populate given fields
 
         return true;
