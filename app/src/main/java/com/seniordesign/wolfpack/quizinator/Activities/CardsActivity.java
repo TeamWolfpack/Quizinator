@@ -57,16 +57,16 @@ public class CardsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cards);
         setTitle(Constants.CARDS);
-        //initializeDB();
+        initializeDB();
 
         cardTypeSpinner = (MultiSelectSpinner) findViewById(R.id.card_type_spinner);
         selectedCardTypes = new ArrayList<>();
 
         initializeCardTypeSpinner();
 
-        fillListOfCards(new ArrayList<Card>(){{add(new Card() {{setId(1);setCardType(CARD_TYPES.MULTIPLE_CHOICE);setQuestion("test question");setCorrectAnswer("correct");setPossibleAnswers(new String[]{"correct","wrong1","wrong2","wrong3",});setModeratorNeeded(String.valueOf(false));setPoints(10);}});}});
+        //fillListOfCards(new ArrayList<Card>(){{add(new Card() {{setId(1);setCardType(CARD_TYPES.MULTIPLE_CHOICE);setQuestion("test question");setCorrectAnswer("correct");setPossibleAnswers(new String[]{"correct","wrong1","wrong2","wrong3",});setModeratorNeeded(String.valueOf(false));setPoints(10);}});}});
 
-        //fillListOfCards(dataSource.filterCards(cardTypes));TODO -> make me work with the DB
+        fillListOfCards(dataSource.getAllCards());//TODO -> make me work with the DB
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
