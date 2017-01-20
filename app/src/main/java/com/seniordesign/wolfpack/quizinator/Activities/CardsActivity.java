@@ -175,12 +175,11 @@ public class CardsActivity extends AppCompatActivity {
                     }
                 });
         AlertDialog alertDialog = alertDialogBuilder.create();
+        populateEditCardValues(card, promptsView, true);
         alertDialog.show();
-
-        populateEditCardValues(card, promptsView);
     }
 
-    private void populateEditCardValues(final Card card, View promptsView){
+    private void populateEditCardValues(final Card card, View promptsView, boolean initializeSpinner){
         ((EditText)promptsView.findViewById(R.id.edit_card_points_value)).setText(String.valueOf(card.getPoints()));
         ((EditText)promptsView.findViewById(R.id.edit_card_question_value)).setText(card.getQuestion());
 
@@ -220,6 +219,10 @@ public class CardsActivity extends AppCompatActivity {
                 EditText correctAnswer1 = (EditText) promptsView.findViewById(R.id.edit_card_answer_field_1);
                 correctAnswer1.setText(card.getCorrectAnswer());
                 correctAnswer1.setVisibility(View.VISIBLE);
+
+                if (card.getPossibleAnswers() == null) {
+                    card.setPossibleAnswers(new String[] {"", "", "", ""});
+                }
                 EditText wrongAnswer1 = (EditText) promptsView.findViewById(R.id.edit_card_answer_field_2);
                 wrongAnswer1.setText(card.getPossibleAnswers()[1]);
                 wrongAnswer1.setVisibility(View.VISIBLE);
@@ -238,7 +241,8 @@ public class CardsActivity extends AppCompatActivity {
                 correctAnswer2.setVisibility(View.VISIBLE);
                 break;
         }
-        initializeCardTypeSpinnerSingleSelection(card, promptsView);
+        if (initializeSpinner)
+            initializeCardTypeSpinnerSingleSelection(card, promptsView);
     }
 
     private void updateEditCardDialog(){
@@ -284,7 +288,8 @@ public class CardsActivity extends AppCompatActivity {
         cardSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                editCard(card,promptsView,false);
+                card.setCardType(CARD_TYPES.values()[position]);
+                populateEditCardValues(card,promptsView,false);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) { /* Do nothing */ }
@@ -377,7 +382,7 @@ public class CardsActivity extends AppCompatActivity {
             dataSource.updateCard(card);
         }
         else{
-            populateEditCardValues(card,promptsView);
+            populateEditCardValues(card,promptsView, false);
         }
     }
 
