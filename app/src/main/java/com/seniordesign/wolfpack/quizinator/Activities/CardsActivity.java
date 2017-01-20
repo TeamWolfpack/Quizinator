@@ -2,7 +2,9 @@ package com.seniordesign.wolfpack.quizinator.Activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -20,12 +23,14 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Adapters.CardAdapter;
 import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES;
 import com.seniordesign.wolfpack.quizinator.Database.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Deck;
 import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
+import com.seniordesign.wolfpack.quizinator.Fragments.EditCardDialog;
 import com.seniordesign.wolfpack.quizinator.R;
 
 import java.util.ArrayList;
@@ -146,12 +151,13 @@ public class CardsActivity extends AppCompatActivity {
                 .setTitle("Edit Card")
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
-                        saveCard(card,promptsView);
+                        editCard(card,promptsView,true);
                         dialog.cancel();
                     }
                 })
                 .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
+
                         dialog.cancel();
                     }
                 })
@@ -195,6 +201,16 @@ public class CardsActivity extends AppCompatActivity {
                 //grab group
                 RadioGroup radioGroupForTrueFalse = (RadioGroup) promptsView.findViewById(R.id.edit_card_true_or_false);
                 radioGroupForTrueFalse.setVisibility(View.VISIBLE);
+
+                if(card.getCorrectAnswer().equals("True")){
+                    RadioButton radioButton = (RadioButton) promptsView.findViewById(R.id.edit_card_true);
+                    radioButton.setChecked(true);
+                }
+                else{
+                    RadioButton radioButton = (RadioButton) promptsView.findViewById(R.id.edit_card_false);
+                    radioButton.setChecked(true);
+                }
+
                 break;
             case MULTIPLE_CHOICE:
                 answerArea1.setVisibility(View.VISIBLE);
@@ -266,7 +282,7 @@ public class CardsActivity extends AppCompatActivity {
         cardSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                populateEditCardValues(card, promptsView);
+                editCard(card,promptsView,false);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) { /* Do nothing */ }
@@ -310,22 +326,31 @@ public class CardsActivity extends AppCompatActivity {
         client.disconnect();
     }
 
-    private void saveCard(final Card card,View promptsView){
+    private void editCard(final Card card,View promptsView, boolean saveCard){
         Spinner cardSpinner = (Spinner)promptsView.findViewById(R.id.edit_card_card_type_spinner);
         card.setCardType(CARD_TYPES.values()[cardSpinner.getSelectedItemPosition()]);
 
         String pointsStr = ""+((TextView)promptsView.findViewById(R.id.edit_card_points_value)).getText();
-        card.setPoints(Integer.parseInt(pointsStr));
+        if(pointsStr.equals("")){
+            card.setPoints(0);
+        }
+        else {
+            card.setPoints(Integer.parseInt(pointsStr));
+        }
 
         card.setQuestion(""+((TextView)promptsView.findViewById(R.id.edit_card_question_value)).getText());
 
         switch (Constants.CARD_TYPES.values()[card.getCardType()]) {
             case TRUE_FALSE:
                 RadioGroup radioGroupForTrueFalse = (RadioGroup) promptsView.findViewById(R.id.edit_card_true_or_false);
-                radioGroupForTrueFalse.setVisibility(View.VISIBLE);
                 int checkedID = radioGroupForTrueFalse.getCheckedRadioButtonId();
 
-                card.setCorrectAnswer("" + (checkedID == R.id.edit_card_true));
+                if((checkedID == R.id.edit_card_true)){
+                    card.setCorrectAnswer("True");
+                }
+                else{
+                    card.setCorrectAnswer("False");
+                }
                 break;
             case MULTIPLE_CHOICE:
                 String[] possibleAnswers = new String[4];
@@ -346,6 +371,16 @@ public class CardsActivity extends AppCompatActivity {
                 card.setCorrectAnswer("" + correctAnswer2.getText());
                 break;
         }
-        dataSource.updateCard(card);
+        if(saveCard) {
+            dataSource.updateCard(card);
+        }
+        else{
+            populateEditCardValues(card,promptsView);
+        }
+    }
+
+    public void newCardClick(View view){
+        Card card = new Card();
+        createEditCardDialog(card);
     }
 }
