@@ -167,8 +167,11 @@ public class CardsActivity extends AppCompatActivity {
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
 
-        ((EditText)promptsView.findViewById(R.id.edit_card_points_value)).setText(String.valueOf(card.getPoints()));
+        populateEditCardValues(card, promptsView);
+    }
 
+    private void populateEditCardValues(final Card card, View promptsView){
+        ((EditText)promptsView.findViewById(R.id.edit_card_points_value)).setText(String.valueOf(card.getPoints()));
         ((EditText)promptsView.findViewById(R.id.edit_card_question_value)).setText(card.getQuestion());
 
         LinearLayout answerArea1 = ((LinearLayout)promptsView.findViewById(R.id.edit_card_answer_layout_1));
@@ -176,7 +179,6 @@ public class CardsActivity extends AppCompatActivity {
         for(int i = 0; i < answerArea1CC; i++){
             answerArea1.getChildAt(i).setVisibility(View.INVISIBLE);
         }
-
 
         LinearLayout answerArea2 = ((LinearLayout)promptsView.findViewById(R.id.edit_card_answer_layout_2));
         int answerArea2CC = answerArea2.getChildCount();
