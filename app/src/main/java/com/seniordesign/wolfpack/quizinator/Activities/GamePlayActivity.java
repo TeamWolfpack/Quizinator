@@ -15,15 +15,13 @@ import com.seniordesign.wolfpack.quizinator.GameplayHandler.GamePlayHandler;
 import com.seniordesign.wolfpack.quizinator.GameplayHandler.GamePlayProperties;
 import com.seniordesign.wolfpack.quizinator.GameplayHandler.MultiplayerHandler;
 import com.seniordesign.wolfpack.quizinator.GameplayHandler.SinglePlayerHandler;
-import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
+import com.seniordesign.wolfpack.quizinator.Database.Card;
 import com.seniordesign.wolfpack.quizinator.Database.GamePlayStats;
 import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScores;
 import com.seniordesign.wolfpack.quizinator.Fragments.MultipleChoiceAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.Fragments.TrueFalseChoiceAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
-
-import static com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES.TRUE_FALSE;
 
 /*
  * The game play activity is...

@@ -9,8 +9,8 @@ import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Adapters.DeckAdapter;
-import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
-import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
+import com.seniordesign.wolfpack.quizinator.Database.Card;
+import com.seniordesign.wolfpack.quizinator.Database.Deck;
 import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
 

@@ -6,7 +6,6 @@ import android.support.test.runner.AndroidJUnit4;
 import android.view.WindowManager;
 
 import com.seniordesign.wolfpack.quizinator.Activities.MainMenuActivity;
-import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 
 import org.junit.Before;
 import org.junit.Rule;

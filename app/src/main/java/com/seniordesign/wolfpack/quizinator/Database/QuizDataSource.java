@@ -8,13 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.seniordesign.wolfpack.quizinator.Constants;
-import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
-import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
-import com.seniordesign.wolfpack.quizinator.Database.CardDeckRelation.CardDeckRelation;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 

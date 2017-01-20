@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.seniordesign.wolfpack.quizinator.Constants;
-import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
+import com.seniordesign.wolfpack.quizinator.Database.Deck;
 import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;

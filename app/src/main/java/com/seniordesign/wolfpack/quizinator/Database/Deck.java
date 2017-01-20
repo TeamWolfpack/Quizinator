@@ -1,9 +1,8 @@
-package com.seniordesign.wolfpack.quizinator.Database.Deck;
+package com.seniordesign.wolfpack.quizinator.Database;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.seniordesign.wolfpack.quizinator.Constants;
-import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 
 import java.lang.reflect.Type;

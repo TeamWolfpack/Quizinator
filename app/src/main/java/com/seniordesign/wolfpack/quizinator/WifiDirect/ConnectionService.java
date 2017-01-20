@@ -28,7 +28,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Activities.MainMenuActivity;
-import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
+import com.seniordesign.wolfpack.quizinator.Database.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.Messages.Answer;
 import com.seniordesign.wolfpack.quizinator.Messages.Confirmation;
