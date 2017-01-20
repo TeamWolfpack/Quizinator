@@ -202,7 +202,7 @@ public class CardsActivity extends AppCompatActivity {
                 RadioGroup radioGroupForTrueFalse = (RadioGroup) promptsView.findViewById(R.id.edit_card_true_or_false);
                 radioGroupForTrueFalse.setVisibility(View.VISIBLE);
 
-                if(card.getCorrectAnswer().equals("True")){
+                if(card.getCorrectAnswer() != null && card.getCorrectAnswer().equals("True")){
                     RadioButton radioButton = (RadioButton) promptsView.findViewById(R.id.edit_card_true);
                     radioButton.setChecked(true);
                 }
