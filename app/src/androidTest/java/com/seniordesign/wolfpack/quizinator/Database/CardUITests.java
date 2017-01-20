@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.view.WindowManager;
 
 import com.seniordesign.wolfpack.quizinator.Activities.MainMenuActivity;
+import com.seniordesign.wolfpack.quizinator.Constants;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -54,7 +55,7 @@ public class CardUITests {
         assertEquals(true, dataSource.getDatabase().isOpen());
         dbHelper.onUpgrade(dataSource.getDatabase(), 0, 1);
 
-        Card card = dataSource.createCard("TF", "Test TF Question", "True",
+        Card card = dataSource.createCard(Constants.CARD_TYPES.TRUE_FALSE.ordinal(), "Test TF Question", "True",
                 new String[]{"True", "False"}, 1, "False");
         assertEquals(11, dataSource.getAllCards().size());
         assertEquals(7, dataSource.getCardAllColumns().length);

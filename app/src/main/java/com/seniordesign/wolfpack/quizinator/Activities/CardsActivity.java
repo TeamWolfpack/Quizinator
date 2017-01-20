@@ -2,7 +2,9 @@ package com.seniordesign.wolfpack.quizinator.Activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,12 +23,14 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Adapters.CardAdapter;
 import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES;
 import com.seniordesign.wolfpack.quizinator.Database.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Deck;
 import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
+import com.seniordesign.wolfpack.quizinator.Fragments.EditCardDialog;
 import com.seniordesign.wolfpack.quizinator.R;
 
 import java.util.ArrayList;
@@ -153,6 +157,7 @@ public class CardsActivity extends AppCompatActivity {
                 })
                 .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
+
                         dialog.cancel();
                     }
                 })
@@ -370,5 +375,10 @@ public class CardsActivity extends AppCompatActivity {
             populateEditCardValues(card,promptsView);
         }
 
+    }
+
+    public void newCardClick(View view){
+        Card card = new Card();
+        createEditCardDialog(card);
     }
 }
