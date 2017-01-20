@@ -107,11 +107,13 @@
                 android:layout_height="match_parent"
                 >
                 <RadioButton
+                    android:id="@+id/edit_card_true"
                     android:layout_width="fill_parent"
                     android:layout_height="match_parent"
                     android:text="@string/_true"
                     />
                 <RadioButton
+                    android:id="@+id/edit_card_false"
                     android:layout_width="fill_parent"
                     android:layout_height="match_parent"
                     android:text="@string/_false"

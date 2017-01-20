@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -137,7 +138,7 @@ public class CardsActivity extends AppCompatActivity {
 
     private void createEditCardDialog(final Card card){
         LayoutInflater li = LayoutInflater.from(this);
-        View promptsView = li.inflate(R.layout.fragment_edit_card, null);
+        final View promptsView = li.inflate(R.layout.fragment_edit_card, null);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setView(promptsView);
         alertDialogBuilder
@@ -145,7 +146,8 @@ public class CardsActivity extends AppCompatActivity {
                 .setTitle("Edit Card")
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
-                        //TODO -> save card
+                        saveCard(card,promptsView);
+                        dialog.cancel();
                     }
                 })
                 .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
@@ -304,7 +306,44 @@ public class CardsActivity extends AppCompatActivity {
         client.disconnect();
     }
 
-    private void deleteCard(){
+    private void saveCard(final Card card,View promptsView){
+        Spinner cardSpinner = (Spinner)promptsView.findViewById(R.id.edit_card_card_type_spinner);
+        card.setCardType(CARD_TYPES.values()[cardSpinner.getSelectedItemPosition()]);
+
+        String pointsStr = ""+((TextView)promptsView.findViewById(R.id.edit_card_points_value)).getText();
+        card.setPoints(Integer.parseInt(pointsStr));
+
+        card.setQuestion(""+((TextView)promptsView.findViewById(R.id.edit_card_question_value)).getText());
+
+        switch (Constants.CARD_TYPES.values()[card.getCardType()]) {
+            case TRUE_FALSE:
+                RadioGroup radioGroupForTrueFalse = (RadioGroup) promptsView.findViewById(R.id.edit_card_true_or_false);
+                radioGroupForTrueFalse.setVisibility(View.VISIBLE);
+                int checkedID = radioGroupForTrueFalse.getCheckedRadioButtonId();
+
+                card.setCorrectAnswer("" + (checkedID == R.id.edit_card_true));
+                break;
+            case MULTIPLE_CHOICE:
+                String[] possibleAnswers = new String[4];
+                EditText correctAnswer1 = (EditText) promptsView.findViewById(R.id.edit_card_answer_field_1);
+                card.setCorrectAnswer("" + correctAnswer1.getText());
+                possibleAnswers[0] = "" + correctAnswer1.getText();
+                EditText wrongAnswer1 = (EditText) promptsView.findViewById(R.id.edit_card_answer_field_2);
+                possibleAnswers[1] = "" + wrongAnswer1.getText();
+                EditText wrongAnswer2 = (EditText) promptsView.findViewById(R.id.edit_card_answer_field_3);
+                possibleAnswers[2] = "" + wrongAnswer2.getText();
+                EditText wrongAnswer3 = (EditText) promptsView.findViewById(R.id.edit_card_answer_field_4);
+                possibleAnswers[3] = "" + wrongAnswer3.getText();
+                card.setPossibleAnswers(possibleAnswers);
+
+                break;
+            default:
+                EditText correctAnswer2 = (EditText) promptsView.findViewById(R.id.edit_card_answer_field_1);
+                card.setCorrectAnswer("" + correctAnswer2.getText());
+                break;
+        }
+
+        dataSource.updateCard(card);
 
     }
 }
