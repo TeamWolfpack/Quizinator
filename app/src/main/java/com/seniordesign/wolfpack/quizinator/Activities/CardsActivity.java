@@ -32,13 +32,13 @@ import io.apptik.widget.multiselectspinner.MultiSelectSpinner;
 public class CardsActivity extends AppCompatActivity {
 
     private MultiSelectSpinner cardTypeSpinner;
-    private List<String> selectedCardTypes;
-    private List<String> cardTypes = new ArrayList<>(
+    private List<CARD_TYPES> selectedCardTypes;
+    private List<CARD_TYPES> cardTypes = new ArrayList<>(
             Arrays.asList(
-                    CARD_TYPES.TRUE_FALSE.toString(),
-                    CARD_TYPES.MULTIPLE_CHOICE.toString(),
-                    CARD_TYPES.FREE_RESPONSE.toString(),
-                    CARD_TYPES.VERBAL_RESPONSE.toString()
+                    CARD_TYPES.TRUE_FALSE,
+                    CARD_TYPES.MULTIPLE_CHOICE,
+                    CARD_TYPES.FREE_RESPONSE,
+                    CARD_TYPES.VERBAL_RESPONSE
             ));
 //    private List<String> cardTypes = new ArrayList<>(Arrays.asList(Constants.LONG_TRUE_FALSE, Constants.LONG_MULTIPLE_CHOICE, Constants.LONG_FREE_RESPONSE, Constants.LONG_VERBAL_RESPONSE));
 
@@ -56,16 +56,17 @@ public class CardsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cards);
         setTitle(Constants.CARDS);
-        //initializeDB();
+        initializeDB();
 
         cardTypeSpinner = (MultiSelectSpinner) findViewById(R.id.card_type_spinner);
         selectedCardTypes = new ArrayList<>();
 
         initializeCardTypeSpinner();
 
-        initializeListOfCards(new ArrayList<Card>(){{add(new Card() {{setId(1);setCardType(CARD_TYPES.MULTIPLE_CHOICE);setQuestion("test question");setCorrectAnswer("correct");setPossibleAnswers(new String[]{"correct","wrong1","wrong2","wrong3",});setModeratorNeeded(String.valueOf(false));setPoints(10);}});}});
+        //fillListOfCards(new ArrayList<Card>(){{add(new Card() {{setId(1);setCardType(CARD_TYPES.MULTIPLE_CHOICE);setQuestion("test question");setCorrectAnswer("correct");setPossibleAnswers(new String[]{"correct","wrong1","wrong2","wrong3",});setModeratorNeeded(String.valueOf(false));setPoints(10);}});}});
 
-        //initializeListOfCards(dataSource.filterCards(cardTypes));TODO -> make me work with the DB
+//        fillListOfCards(dataSource.getAllCards());//TODO -> make me work with the DB
+        fillListOfCards(dataSource.filterCards(cardTypes));
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -73,7 +74,7 @@ public class CardsActivity extends AppCompatActivity {
     }
 
     private Boolean initializeCardTypeSpinner(){
-        ArrayAdapter<String> cardTypeAdapter = new ArrayAdapter<>(this,
+        ArrayAdapter<CARD_TYPES> cardTypeAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_multiple_choice, cardTypes);
         cardTypeSpinner
                 .setListAdapter(cardTypeAdapter)
@@ -93,7 +94,7 @@ public class CardsActivity extends AppCompatActivity {
                                 }
                             }
                         }
-                        ArrayList<String> chosenTypes = new ArrayList<>();
+                        ArrayList<CARD_TYPES> chosenTypes = new ArrayList<>();
                         for (int i = 0; i < selectedCardTypes.size(); i++) {
                             chosenTypes.add(selectedCardTypes.get(i));
                         }
