@@ -5,7 +5,7 @@ import android.view.WindowManager;
 
 import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Activities.NewGameSettingsActivity;
-import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
+import com.seniordesign.wolfpack.quizinator.Database.Card;
 import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;

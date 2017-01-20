@@ -223,6 +223,10 @@ public class CardsActivity extends AppCompatActivity {
         initializeCardTypeSpinnerSingleSelection(card, promptsView);
     }
 
+    private void updateEditCardDialog(){
+
+    }
+
     private void createDeleteCardConfirmation(final Card card){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder
@@ -249,7 +253,7 @@ public class CardsActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private void initializeCardTypeSpinnerSingleSelection(final Card card, View promptsView){
+    private void initializeCardTypeSpinnerSingleSelection(final Card card, final View promptsView){
         Spinner cardSpinner = (Spinner)promptsView.findViewById(R.id.edit_card_card_type_spinner);
         List<String> cardTypesAdapter = new ArrayList<>();
         for(Constants.CARD_TYPES cardType : Constants.CARD_TYPES.values()){
@@ -262,7 +266,7 @@ public class CardsActivity extends AppCompatActivity {
         cardSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //TODO -> update view when card type changes
+                populateEditCardValues(card, promptsView);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) { /* Do nothing */ }
@@ -342,8 +346,6 @@ public class CardsActivity extends AppCompatActivity {
                 card.setCorrectAnswer("" + correctAnswer2.getText());
                 break;
         }
-
         dataSource.updateCard(card);
-
     }
 }
