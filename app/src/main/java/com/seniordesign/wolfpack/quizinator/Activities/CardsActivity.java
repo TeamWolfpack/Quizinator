@@ -20,7 +20,6 @@ import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
 import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
-import com.seniordesign.wolfpack.quizinator.Fragments.EditCardDialog;
 import com.seniordesign.wolfpack.quizinator.R;
 
 import java.util.ArrayList;
@@ -64,9 +63,9 @@ public class CardsActivity extends AppCompatActivity {
 
         initializeCardTypeSpinner();
 
-        fillListOfCards(new ArrayList<Card>(){{add(new Card() {{setId(1);setCardType(CARD_TYPES.MULTIPLE_CHOICE);setQuestion("test question");setCorrectAnswer("correct");setPossibleAnswers(new String[]{"correct","wrong1","wrong2","wrong3",});setModeratorNeeded(String.valueOf(false));setPoints(10);}});}});
+        initializeListOfCards(new ArrayList<Card>(){{add(new Card() {{setId(1);setCardType(CARD_TYPES.MULTIPLE_CHOICE);setQuestion("test question");setCorrectAnswer("correct");setPossibleAnswers(new String[]{"correct","wrong1","wrong2","wrong3",});setModeratorNeeded(String.valueOf(false));setPoints(10);}});}});
 
-        //fillListOfCards(dataSource.filterCards(cardTypes));TODO -> make me work with the DB
+        //initializeListOfCards(dataSource.filterCards(cardTypes));TODO -> make me work with the DB
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -98,7 +97,7 @@ public class CardsActivity extends AppCompatActivity {
                         for (int i = 0; i < selectedCardTypes.size(); i++) {
                             chosenTypes.add(selectedCardTypes.get(i));
                         }
-                        fillListOfCards(dataSource.filterCards(chosenTypes));
+                        //initializeListOfCards(dataSource.filterCards(chosenTypes));
                     }
                 });
         return true;
@@ -110,27 +109,26 @@ public class CardsActivity extends AppCompatActivity {
     }
 
     private void initializeList() {
-        fillListOfCards(dataSource.filterCards(cardTypes));
+        initializeListOfCards(dataSource.filterCards(cardTypes));
     }
 
-    private void fillListOfCards(List<Card> values) {
+    private void initializeListOfCards(List<Card> values) {
         final ListView listView = (ListView) findViewById(R.id.list_of_cards);
         final CardAdapter adapter = new CardAdapter(this,
                 R.layout.array_adapter_list_of_cards, values);
 //        final CardAdapter adapter = new CardAdapter(this,
 //                android.R.layout.simple_list_item_1, values);
         listView.setAdapter(adapter);
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                createDialog();
+                createEditCardDialog();
             }
         });
     }
 
-    public void createDialog(){
+    private void createEditCardDialog(){
         LayoutInflater li = LayoutInflater.from(this);
         View promptsView = li.inflate(R.layout.fragment_edit_card, null);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -140,7 +138,7 @@ public class CardsActivity extends AppCompatActivity {
                 .setTitle("Edit Card")
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
-                        //save card
+                        //TODO -> save card
                     }
                 })
                 .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
@@ -150,15 +148,31 @@ public class CardsActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
-                        dialog.cancel();
+                        createDeleteCardConfirmation();
                     }
                 });
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
 
-    public void onSaveButtonClicked(View v) {
-        EditCardDialog.handleSavedButtonClick(v);
+    private void createDeleteCardConfirmation(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder
+                .setCancelable(false)
+                .setTitle("Delete Card?")
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        //TODO -> delete the card
+                        dialog.cancel();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     /**

@@ -10,10 +10,6 @@ import com.seniordesign.wolfpack.quizinator.R;
 
 public class EditCardDialog {
 
-    public static void createPopUp(){
-
-    }
-
     public static void handleSavedButtonClick(View v){
         EditText pointsValue = (EditText) v.findViewById(R.id.edit_card_points_value);
         EditText cardQuestionValue = (EditText) v.findViewById(R.id.edit_card_question_value);
