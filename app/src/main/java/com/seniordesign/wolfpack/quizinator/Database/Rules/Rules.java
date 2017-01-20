@@ -10,6 +10,7 @@ public class Rules {
     private int maxCardCount;
     private long timeLimit;
     private long cardDisplayTime;
+    private long deckId;
     /*
      * Using String because going to use an Array of Strings to limit what choice
      * of Card Type in that class instead of using an enum. We thought this
@@ -18,26 +19,18 @@ public class Rules {
      */
     private String cardTypes;
 
-    /*
-     * @author kuczynskij (10/5/2016)
-     */
     @Override
     public String toString(){
         return "Rules id(" + id + "), maxCardCount(" + maxCardCount +
                 "), timeLimit(" + timeLimit + "), cardDisplayTime(" +
-                cardDisplayTime + "), cardTypes(" + cardTypes + ").";
+                cardDisplayTime + "), cardTypes(" + cardTypes + "), deckId(" +
+                deckId + ").";
     }
 
-    /*
-     * @author kuczynskij (10/5/2016)
-     */
     public long getId() {
         return id;
     }
 
-    /*
-     * @author kuczynskij (10/5/2016)
-     */
     public void setId(long id) {
         this.id = id;
     }
@@ -73,4 +66,8 @@ public class Rules {
     public void setCardTypes(String cardTypes) {
         this.cardTypes = cardTypes;
     }
+
+    public long getDeckId() { return deckId; }
+
+    public void setDeckId(long deckId) { this.deckId = deckId; }
 }

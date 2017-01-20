@@ -5,6 +5,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.KeyEvent;
 import android.view.WindowManager;
 import com.seniordesign.wolfpack.quizinator.Activities.NewGameSettingsActivity;
 
@@ -16,15 +17,20 @@ import org.junit.runner.RunWith;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.seniordesign.wolfpack.quizinator.Constants.*;
 import static junit.framework.Assert.assertEquals;
-import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 
 /*
  * @author leonardj (10/2/2016)
@@ -60,14 +66,33 @@ public class GameSettingTests {
     }
 
     @Test
-    public void validateSpinnerOptions() {
-        String[] cardTypes = new String[] {"True/False", "Multiple Choice", "Both"};
-        for (int index = 0; index < cardTypes.length; index++) {
-            String type = cardTypes[index];
-            onView(withId(R.id.card_type_spinner)).perform();
-            onData(anything()).inAdapterView(withId(R.id.card_type_spinner)).atPosition(index).perform();
-            onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(type))));
-        }
+    public void validateSpinnerTrueFalse() {
+        onData(allOf(is(instanceOf(String.class)), is(NO_CARD_TYPES))).inAdapterView(withId(R.id.card_type_spinner)).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is(CARD_TYPES.TRUE_FALSE.toString()))).perform(click());
+        onView(withText(CARD_TYPES.TRUE_FALSE.toString())).perform(pressBack());
+        onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(CARD_TYPES.TRUE_FALSE.toString()))));
+    }
+
+    @Test
+    public void validateSpinnerMultiChoice() {
+        onData(allOf(is(instanceOf(String.class)), is(NO_CARD_TYPES))).inAdapterView(withId(R.id.card_type_spinner)).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is(CARD_TYPES.MULTIPLE_CHOICE.toString()))).perform(click());
+        onView(withText(CARD_TYPES.MULTIPLE_CHOICE.toString())).perform(pressBack());
+        onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(CARD_TYPES.MULTIPLE_CHOICE.toString()))));
+    }
+
+    @Test
+    public void validateSpinnerAllTypes() {
+        onData(allOf(is(instanceOf(String.class)), is(NO_CARD_TYPES))).inAdapterView(withId(R.id.card_type_spinner)).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is(CARD_TYPES.TRUE_FALSE.toString()))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is(CARD_TYPES.MULTIPLE_CHOICE.toString()))).perform(click());
+        onView(withText(CARD_TYPES.MULTIPLE_CHOICE.toString())).perform(pressBack());
+        onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(ALL_CARD_TYPES))));
+    }
+
+    @Test
+    public void validateDeckSpinner() {
+        onView(withId(R.id.deck_spinner)).check(matches(withSpinnerText(containsString("Default"))));
     }
 
     @Test
@@ -123,7 +148,7 @@ public class GameSettingTests {
 
     @Test
     public void validateCardSecondInput_LowerBound() throws InterruptedException {
-        onView(withId(R.id.card_seconds)).check(matches(withText("03")));
+        onView(withId(R.id.card_seconds)).check(matches(withText("10")));
         onView(withId(R.id.card_seconds)).perform(clearText(), typeText("1"));
         onView(withId(R.id.card_seconds)).check(matches(withText("1")));
 
@@ -136,7 +161,7 @@ public class GameSettingTests {
 
     @Test
     public void validateCardSecondInput_UpperBound() {
-        onView(withId(R.id.card_seconds)).check(matches(withText("03")));
+        onView(withId(R.id.card_seconds)).check(matches(withText("10")));
         onView(withId(R.id.card_seconds)).perform(clearText(), typeText("60"));
         onView(withId(R.id.card_seconds)).check(matches(withText("60")));
 
@@ -146,11 +171,16 @@ public class GameSettingTests {
 
     @Test
     public void validateCardCountInput() {
-        onView(withId(R.id.card_count)).check(matches(withText("10")));
+        onData(allOf(is(instanceOf(String.class)), is(NO_CARD_TYPES))).inAdapterView(withId(R.id.card_type_spinner)).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is(CARD_TYPES.TRUE_FALSE.toString()))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is(CARD_TYPES.MULTIPLE_CHOICE.toString()))).perform(click());
+        onView(withText(CARD_TYPES.MULTIPLE_CHOICE.toString())).perform(pressBack());
+
+        onView(withId(R.id.card_count)).check(matches(withText("0")));
         onView(withId(R.id.card_count)).perform(clearText(), typeText("1"));
         onView(withId(R.id.card_count)).check(matches(withText("1")));
 
-        onView(withId(R.id.card_count)).perform(clearText(), typeText("00"));
+        onView(withId(R.id.card_count)).perform(clearText(), typeText("0"));
         onView(withId(R.id.card_count)).check(matches(withText("")));
 
         onView(withId(R.id.card_count)).perform(clearText(), typeText("-1"));
@@ -189,7 +219,7 @@ public class GameSettingTests {
         onView(withId(R.id.game_minutes)).check(matches(withText(containsString("01"))));
         onView(withId(R.id.game_seconds)).check(matches(withText(containsString("00"))));
         onView(withId(R.id.card_minutes)).check(matches(withText(containsString("00"))));
-        onView(withId(R.id.card_seconds)).check(matches(withText(containsString("03"))));
-        onView(withId(R.id.card_count)).check(matches(withText(containsString("10"))));
+        onView(withId(R.id.card_seconds)).check(matches(withText(containsString("10"))));
+        onView(withId(R.id.card_count)).check(matches(withText(containsString("0"))));
     }
 }

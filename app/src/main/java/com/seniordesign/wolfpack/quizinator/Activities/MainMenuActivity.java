@@ -126,6 +126,12 @@ public class MainMenuActivity extends AppCompatActivity
                 Toast.makeText(this, "Device is not compatible with P2P", Toast.LENGTH_SHORT).show();
             }
         }
+        else if(id == R.id.nav_show_decks) {
+            startActivity(new Intent(this, DecksActivity.class));
+        }
+        else if(id == R.id.nav_show_cards){
+            startActivity(new Intent(this, CardsActivity.class));
+        }
         /*
         else if (id == R.id.nav_application_settings) {
             // For later sprints
@@ -172,6 +178,10 @@ public class MainMenuActivity extends AppCompatActivity
             Toast.makeText(this, "Device is not compatible with P2P hardware and unable to join", Toast.LENGTH_SHORT).show();
         }
     }
+
+//    public void goToCardsList(View v) {
+//        startActivity(new Intent(this, CardsActivity.class));
+//    }
 
     private boolean isWifiDirectSupported(Context ctx) {
         PackageManager pm = ctx.getPackageManager();

@@ -19,6 +19,7 @@ public class RulesSQLiteHelper extends SQLiteOpenHelper {
     public static final String COLUMN_CARDDISPLAYTIME = "_cardDisplayTime";
     public static final String COLUMN_MAXCARDCOUNT = "_maxCardCount";
     public static final String COLUMN_CARDTYPES = "_cardTypes";
+    public static final String COLUMN_DECK_ID = "_deckId";
 
     //database filename
     private static final String DATABASE_NAME = "rules.db";
@@ -31,7 +32,8 @@ public class RulesSQLiteHelper extends SQLiteOpenHelper {
             + COLUMN_TIMELIMIT + " REAL, "
             + COLUMN_CARDDISPLAYTIME + " REAL, "
             + COLUMN_MAXCARDCOUNT + " INTEGER, "
-            + COLUMN_CARDTYPES + " TEXT"
+            + COLUMN_CARDTYPES + " TEXT, "
+            + COLUMN_DECK_ID + " INTEGER"
             + ");";
 
     /*

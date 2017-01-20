@@ -15,7 +15,7 @@ import com.seniordesign.wolfpack.quizinator.GameplayHandler.GamePlayHandler;
 import com.seniordesign.wolfpack.quizinator.GameplayHandler.GamePlayProperties;
 import com.seniordesign.wolfpack.quizinator.GameplayHandler.MultiplayerHandler;
 import com.seniordesign.wolfpack.quizinator.GameplayHandler.SinglePlayerHandler;
-import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
+import com.seniordesign.wolfpack.quizinator.Database.Card;
 import com.seniordesign.wolfpack.quizinator.Database.GamePlayStats;
 import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScores;
 import com.seniordesign.wolfpack.quizinator.Fragments.MultipleChoiceAnswerFragment;
@@ -106,8 +106,9 @@ public class GamePlayActivity
      * @author farrowc (10/11/2016)
      */
     public void showCard(final Card card) {
-        switch(card.getCardType()){
-            case(Constants.SHORT_TRUE_FALSE):
+        Constants.CARD_TYPES cardType = Constants.CARD_TYPES.values()[card.getCardType()];
+        switch(cardType){
+            case TRUE_FALSE:
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -121,7 +122,7 @@ public class GamePlayActivity
                     }
                 });
                 break;
-            case(Constants.SHORT_MULTIPLE_CHOICE):
+            case MULTIPLE_CHOICE:
                 final MultipleChoiceAnswerFragment mcFragment = new MultipleChoiceAnswerFragment();
                 mcFragment.setChoiceA(card.getPossibleAnswers()[0]);
                 mcFragment.setChoiceB(card.getPossibleAnswers()[1]);

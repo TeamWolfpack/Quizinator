@@ -10,9 +10,9 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Constants;
-import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
-import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
-import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckDataSource;
+import com.seniordesign.wolfpack.quizinator.Database.Card;
+import com.seniordesign.wolfpack.quizinator.Database.Deck;
+import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
@@ -31,7 +31,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
 
     private WifiDirectApp wifiDirectApp;
 
-    private DeckDataSource deckDataSource;
+    private QuizDataSource dataSource;
     private RulesDataSource rulesDataSource;
 
     private Deck deck;
@@ -65,13 +65,13 @@ public class ManageGameplayActivity extends AppCompatActivity {
         wifiDirectApp = (WifiDirectApp)getApplication();
         wifiDirectApp.mManageActivity = this;
 
-        deckDataSource = new DeckDataSource(this);
-        deckDataSource.open();
-        deck = deckDataSource.getAllDecks().get(0);
-
         rulesDataSource = new RulesDataSource(this);
         rulesDataSource.open();
         rules = rulesDataSource.getAllRules().get(rulesDataSource.getAllRules().size()-1);
+
+        dataSource = new QuizDataSource(this);
+        dataSource.open();
+        deck = dataSource.getDeckWithId(rules.getDeckId());
 
         cardLimit = Math.min(deck.getCards().size(),rules.getMaxCardCount());
 
@@ -151,7 +151,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        deckDataSource.open();
+        dataSource.open();
         rulesDataSource.open();
     }
 
@@ -163,7 +163,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
         super.onPause();
         //gameplayTimerRunning.cancel();
         //gameplayTimerStatic.cancel();
-        deckDataSource.close();
+        dataSource.close();
         rulesDataSource.close();
     }
 

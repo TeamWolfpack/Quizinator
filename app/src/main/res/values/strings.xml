@@ -15,12 +15,13 @@
     <string name="quiz_bowl_rules">Quiz Bowl Rules</string>
     <string name="card_count">Card Count:</string>
     <string name="card_time">Card Time:</string>
-    <string name="three_secs">03</string>
+    <string name="three_secs">10</string>
 
     <string name="new_game">New Game</string>
     <string name="solo_game">Solo Game</string>
     <string name="join_game">Join Game</string>
     <string name="host_game">Host Game</string>
+    <string name="cards">Cards</string>
 
     <string name="game_over">Game Over</string>
     <string name="main_menu">Main Menu</string>
@@ -38,6 +39,7 @@
     <string name="empty_message">No devices found. Make sure P2P is enabled.</string>
     <string name="label_me">Me</string>
     <string name="label_peers">Players</string>
+    <string name="moderator_needed_filter">Moderator Needed</string>
 
     <string-array name="card_type_array">
         <item>True/False</item>
@@ -54,4 +56,30 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="send_card">Send Card</string>
     <string name="end_game">End Game</string>
+    <string name="question">Question</string>
+
+    <string name="deck_name">Deck Name</string>
+    <string name="deck_size">Deck Size</string>
+    <string name="MC_count">MC: 0</string>
+    <string name="TF_count">TF: 0</string>
+    <string name="FR_count">FR: 0</string>
+    <string name="VR_count">VR: 0</string>
+    <string name="new_deck">New Deck</string>
+    <string name="available_cards">Available Cards</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="Delete">Delete</string>
+    <string name="select_deck">Select Deck:</string>
+
+    <string name="type">Type</string>
+    <string name="points">Points</string>
+    <string name="answer">Answer</string>
+
+    <string name="_true">True</string>
+    <string name="_false">False</string>
+
+    <string name="nav_bar_check_p2p_compliance">Check P2P Compatibility</string>
+    <string name="nav_bar_edit_decks">Edit Decks</string>
+    <string name="nav_bar_edit_cards">Edit Cards</string>
+
 </resources>

@@ -6,17 +6,12 @@ import android.support.test.runner.AndroidJUnit4;
 import android.view.WindowManager;
 
 import com.seniordesign.wolfpack.quizinator.Activities.MainMenuActivity;
-import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
-import com.seniordesign.wolfpack.quizinator.Database.Card.CardDataSource;
-import com.seniordesign.wolfpack.quizinator.Database.Card.CardSQLiteHelper;
+import com.seniordesign.wolfpack.quizinator.Constants;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -28,8 +23,8 @@ import static junit.framework.Assert.assertEquals;
 @LargeTest
 public class CardUITests {
 
-    private CardDataSource datasource;
-    private CardSQLiteHelper dbHelper;
+    private QuizDataSource dataSource;
+    private QuizSQLiteHelper dbHelper;
 
     @Rule
     public ActivityTestRule<MainMenuActivity> mActivityRule =
@@ -47,8 +42,8 @@ public class CardUITests {
             }
         };
         activity.runOnUiThread(wakeUpDevice);
-        datasource = new CardDataSource(activity);
-        dbHelper = new CardSQLiteHelper(activity);
+        dataSource = new QuizDataSource(activity);
+        dbHelper = new QuizSQLiteHelper(activity);
     }
 
     /*
@@ -56,18 +51,17 @@ public class CardUITests {
      */
     @Test
     public void normalFlow_CardDataSource() throws Exception{
-        assertEquals(true, datasource.open());
-        assertEquals(true, datasource.getDatabase().isOpen());
-        dbHelper.onUpgrade(datasource.getDatabase(), 0, 1);
+        assertEquals(true, dataSource.open());
+        assertEquals(true, dataSource.getDatabase().isOpen());
+        dbHelper.onUpgrade(dataSource.getDatabase(), 0, 1);
 
-        Card card = datasource.createCard("TF", "Test TF Question", "True",
+        Card card = dataSource.createCard(Constants.CARD_TYPES.TRUE_FALSE.ordinal(), "Test TF Question", "True",
                 new String[]{"True", "False"}, 1, "False");
-        assertEquals("card.db", datasource.getSQLiteHelper().getDatabaseName());
-        assertEquals(1, datasource.getAllCards().size());
-        assertEquals(7, datasource.getAllColumns().length);
+        assertEquals(11, dataSource.getAllCards().size());
+        assertEquals(7, dataSource.getCardAllColumns().length);
         card.setPoints(3);
-        assertEquals(1, datasource.updateCard(card));
-        assertEquals(1, datasource.deleteCard(card));
-        assertEquals(true, datasource.close());
+        assertEquals(1, dataSource.updateCard(card));
+        assertEquals(1, dataSource.deleteCard(card));
+        assertEquals(true, dataSource.close());
     }
 }
