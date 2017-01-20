@@ -154,6 +154,7 @@ public class CardsActivity extends AppCompatActivity {
                 })
                 .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
+
                         dialog.cancel();
                     }
                 })
@@ -312,8 +313,8 @@ public class CardsActivity extends AppCompatActivity {
 
     }
 
-    public void newDeckClick(View view){
-        Card card = dataSource.createCard(new Card());
+    public void newCardClick(View view){
+        Card card = new Card();
         createEditCardDialog(card);
     }
 }

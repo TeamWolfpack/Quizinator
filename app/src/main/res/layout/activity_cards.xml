@@ -39,7 +39,7 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
     <Button
-        android:id="@+id/new_item_button"
+        android:id="@+id/new_card_button"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
