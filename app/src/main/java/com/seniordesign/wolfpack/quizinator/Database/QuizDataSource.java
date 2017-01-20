@@ -322,8 +322,6 @@ public class QuizDataSource {
         values.put(QuizSQLiteHelper.DECK_COLUMN_DUPLICATECARDS, String.valueOf(deck.isDuplicateCards()));
         values.put(QuizSQLiteHelper.DECK_COLUMN_OWNER, deck.getOwner());
 
-
-
         String where = QuizSQLiteHelper.DECK_COLUMN_ID + " = " + deck.getId();
         return database.update(QuizSQLiteHelper.TABLE_DECKS, values, where, null);
     }
@@ -378,7 +376,7 @@ public class QuizDataSource {
 
     public int deleteCardDeckRelationByDeckId(long fkDeck) {
         return database.delete(QuizSQLiteHelper.TABLE_CDRELATIONS,
-                QuizSQLiteHelper.CDRELATIONS_COLUMN_FKCARD + " = " + fkDeck, null);
+                QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK + " = " + fkDeck, null);
     }
 
     private List<Card> getAllCardsInDeck(long deckId) {
@@ -394,8 +392,9 @@ public class QuizDataSource {
                 .append(" INNER JOIN " + QuizSQLiteHelper.TABLE_CARDS + " c")
                 .append(" ON cdr." + QuizSQLiteHelper.CDRELATIONS_COLUMN_FKCARD + "=c." + QuizSQLiteHelper.CARD_COLUMN_ID)
                 .append(" INNER JOIN " + QuizSQLiteHelper.TABLE_DECKS + " d")
-                .append(" ON cdr." + QuizSQLiteHelper.CDRELATIONS_COLUMN_FKCARD + "=d." + QuizSQLiteHelper.DECK_COLUMN_ID)
+                .append(" ON cdr." + QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK + "=d." + QuizSQLiteHelper.DECK_COLUMN_ID)
                 .append(" WHERE cdr." + QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK + "=\'").append(deckId).append("\'");
+        Log.d("FUCKINGQUERY", query.toString());
         Cursor cursor = database.rawQuery(query.toString(), null);
         cursor.moveToFirst();
         while(!cursor.isAfterLast()){

@@ -109,7 +109,7 @@ public class CardsActivity extends AppCompatActivity {
                         for (int i = 0; i < selectedCardTypes.size(); i++) {
                             chosenTypes.add(selectedCardTypes.get(i));
                         }
-                         initializeListOfCards(dataSource.filterCards(chosenTypes));
+                        initializeListOfCards(dataSource.filterCards(chosenTypes));
                     }
                 });
         return true;
@@ -172,7 +172,6 @@ public class CardsActivity extends AppCompatActivity {
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
 
-
         ((EditText)alertDialog.findViewById(R.id.edit_card_points_value)).setText(card.getPoints());
 
         ((EditText)alertDialog.findViewById(R.id.edit_card_question_value)).setText(card.getQuestion());
@@ -222,6 +221,7 @@ public class CardsActivity extends AppCompatActivity {
                 correctAnswer2.setVisibility(View.VISIBLE);
                 break;
         }
+        initializeCardTypeSpinnerSingleSelection(promptsView);
     }
 
     private void createDeleteCardConfirmation(final Card card){
@@ -250,6 +250,26 @@ public class CardsActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    private void initializeCardTypeSpinnerSingleSelection(View promptsView){
+        Spinner cardSpinner = (Spinner)promptsView.findViewById(R.id.edit_card_card_type_spinner);
+        List<String> cardTypesAdapter = new ArrayList<>();
+        for(Constants.CARD_TYPES cardType : Constants.CARD_TYPES.values()){
+            cardTypesAdapter.add(cardType.toString());
+        }
+        final ArrayAdapter<String> cardAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, cardTypesAdapter);
+        cardAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        cardSpinner.setAdapter(cardAdapter);
+        cardSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //TODO -> update view when card type changes
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) { /* Do nothing */ }
+        });
+    }
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -274,29 +294,6 @@ public class CardsActivity extends AppCompatActivity {
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
         AppIndex.AppIndexApi.start(client, getIndexApiAction());
-    }
-
-    private void initializeCardTypeSpinnerSingleSelection(){
-        Spinner cardSpinner = (Spinner)findViewById(R.id.edit_card_card_type_spinner);
-
-        List<String> deckNames = new ArrayList<>();
-
-        for (Deck deck: dataSource.getAllDecks()) {
-            deckNames.add(deck.getDeckName());
-        }
-        final ArrayAdapter<String> deckAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, deckNames);
-
-        deckAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        cardSpinner.setAdapter(deckAdapter);
-        cardSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //TODO -> update view when card type changes
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) { /* Do nothing */ }
-        });
     }
 
     @Override
