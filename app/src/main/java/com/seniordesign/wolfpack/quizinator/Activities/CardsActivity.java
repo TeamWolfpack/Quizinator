@@ -311,7 +311,12 @@ public class CardsActivity extends AppCompatActivity {
         card.setCardType(CARD_TYPES.values()[cardSpinner.getSelectedItemPosition()]);
 
         String pointsStr = ""+((TextView)promptsView.findViewById(R.id.edit_card_points_value)).getText();
-        card.setPoints(Integer.parseInt(pointsStr));
+        if(pointsStr.equals("")){
+            card.setPoints(0);
+        }
+        else {
+            card.setPoints(Integer.parseInt(pointsStr));
+        }
 
         card.setQuestion(""+((TextView)promptsView.findViewById(R.id.edit_card_question_value)).getText());
 
