@@ -1,36 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_card_creation"
+    android:id="@+id/activity_decks"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.seniordesign.wolfpack.quizinator.Activities.CardsActivity">
-
     <LinearLayout
+        android:id="@+id/activity_card_creation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <io.apptik.widget.multiselectspinner.MultiSelectSpinner
-            android:id="@+id/card_type_spinner"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:orientation="horizontal">
 
-        <!-- TODO For when we add the Moderator class later -->
-        <!--<CheckBox-->
-            <!--android:id="@+id/moderator_needed_filter_checkbox"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="3"-->
-            <!--android:button="@null"-->
-            <!--android:drawableRight="?android:attr/listChoiceIndicatorMultiple"-->
-            <!--android:text="@string/moderator_needed_filter" />-->
+            <io.apptik.widget.multiselectspinner.MultiSelectSpinner
+                android:id="@+id/card_type_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+            <!-- TODO For when we add the Moderator class later -->
+            <!--<CheckBox-->
+                <!--android:id="@+id/moderator_needed_filter_checkbox"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="3"-->
+                <!--android:button="@null"-->
+                <!--android:drawableRight="?android:attr/listChoiceIndicatorMultiple"-->
+                <!--android:text="@string/moderator_needed_filter" />-->
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/list_of_cards"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
-
-    <ListView
-        android:id="@+id/list_of_cards"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+    <Button
+        android:id="@+id/new_item_button"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/new_item_button"
+        android:layout_margin="10dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:onClick="newCardClick"/>
+</RelativeLayout>
