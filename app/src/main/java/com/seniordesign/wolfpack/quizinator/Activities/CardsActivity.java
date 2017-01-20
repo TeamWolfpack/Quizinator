@@ -5,11 +5,13 @@ import android.content.DialogInterface;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -19,8 +21,9 @@ import com.seniordesign.wolfpack.quizinator.Adapters.CardAdapter;
 import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES;
 import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
+import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
 import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
-import com.seniordesign.wolfpack.quizinator.Fragments.EditCardDialog;
+import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.R;
 
 import java.util.ArrayList;
@@ -29,6 +32,9 @@ import java.util.List;
 
 import io.apptik.widget.multiselectspinner.BaseMultiSelectSpinner;
 import io.apptik.widget.multiselectspinner.MultiSelectSpinner;
+
+import static com.seniordesign.wolfpack.quizinator.Constants.ALL_CARD_TYPES;
+import static com.seniordesign.wolfpack.quizinator.Constants.NO_CARD_TYPES;
 
 public class CardsActivity extends AppCompatActivity {
 
@@ -66,8 +72,7 @@ public class CardsActivity extends AppCompatActivity {
 
         //fillListOfCards(new ArrayList<Card>(){{add(new Card() {{setId(1);setCardType(CARD_TYPES.MULTIPLE_CHOICE);setQuestion("test question");setCorrectAnswer("correct");setPossibleAnswers(new String[]{"correct","wrong1","wrong2","wrong3",});setModeratorNeeded(String.valueOf(false));setPoints(10);}});}});
 
-//        fillListOfCards(dataSource.getAllCards());//TODO -> make me work with the DB
-        fillListOfCards(dataSource.filterCards(cardTypes));
+        initializeListOfCards(dataSource.filterCards(cardTypes));
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -99,7 +104,7 @@ public class CardsActivity extends AppCompatActivity {
                         for (int i = 0; i < selectedCardTypes.size(); i++) {
                             chosenTypes.add(selectedCardTypes.get(i));
                         }
-                        fillListOfCards(dataSource.filterCards(chosenTypes));
+                         initializeListOfCards(dataSource.filterCards(chosenTypes));
                     }
                 });
         return true;
@@ -111,27 +116,26 @@ public class CardsActivity extends AppCompatActivity {
     }
 
     private void initializeList() {
-        fillListOfCards(dataSource.filterCards(cardTypes));
+        initializeListOfCards(dataSource.filterCards(cardTypes));
     }
 
-    private void fillListOfCards(List<Card> values) {
+    private void initializeListOfCards(List<Card> values) {
         final ListView listView = (ListView) findViewById(R.id.list_of_cards);
         final CardAdapter adapter = new CardAdapter(this,
                 R.layout.array_adapter_list_of_cards, values);
 //        final CardAdapter adapter = new CardAdapter(this,
 //                android.R.layout.simple_list_item_1, values);
         listView.setAdapter(adapter);
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                createDialog();
+                createEditCardDialog();
             }
         });
     }
 
-    public void createDialog(){
+    private void createEditCardDialog(){
         LayoutInflater li = LayoutInflater.from(this);
         View promptsView = li.inflate(R.layout.fragment_edit_card, null);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -141,7 +145,7 @@ public class CardsActivity extends AppCompatActivity {
                 .setTitle("Edit Card")
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
-                        //save card
+                        //TODO -> save card
                     }
                 })
                 .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
@@ -151,15 +155,31 @@ public class CardsActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
-                        dialog.cancel();
+                        createDeleteCardConfirmation();
                     }
                 });
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
 
-    public void onSaveButtonClicked(View v) {
-        EditCardDialog.handleSavedButtonClick(v);
+    private void createDeleteCardConfirmation(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder
+                .setCancelable(false)
+                .setTitle("Delete Card?")
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        //TODO -> delete the card
+                        dialog.cancel();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     /**
@@ -186,6 +206,29 @@ public class CardsActivity extends AppCompatActivity {
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
         AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    private void initializeCardTypeSpinnerSingleSelection(){
+        Spinner cardSpinner = (Spinner)findViewById(R.id.edit_card_card_type_spinner);
+
+        List<String> deckNames = new ArrayList<>();
+
+        for (Deck deck: dataSource.getAllDecks()) {
+            deckNames.add(deck.getDeckName());
+        }
+        final ArrayAdapter<String> deckAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, deckNames);
+
+        deckAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        cardSpinner.setAdapter(deckAdapter);
+        cardSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //TODO -> update view when card type changes
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) { /* Do nothing */ }
+        });
     }
 
     @Override
