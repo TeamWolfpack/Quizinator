@@ -172,18 +172,18 @@ public class CardsActivity extends AppCompatActivity {
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
 
-        ((EditText)alertDialog.findViewById(R.id.edit_card_points_value)).setText(card.getPoints());
+        ((EditText)promptsView.findViewById(R.id.edit_card_points_value)).setText(String.valueOf(card.getPoints()));
 
-        ((EditText)alertDialog.findViewById(R.id.edit_card_question_value)).setText(card.getQuestion());
+        ((EditText)promptsView.findViewById(R.id.edit_card_question_value)).setText(card.getQuestion());
 
-        LinearLayout answerArea1 = ((LinearLayout)alertDialog.findViewById(R.id.edit_card_answer_layout_1));
+        LinearLayout answerArea1 = ((LinearLayout)promptsView.findViewById(R.id.edit_card_answer_layout_1));
         int answerArea1CC = answerArea1.getChildCount();
         for(int i = 0; i < answerArea1CC; i++){
             answerArea1.getChildAt(i).setVisibility(View.INVISIBLE);
         }
 
 
-        LinearLayout answerArea2 = ((LinearLayout)alertDialog.findViewById(R.id.edit_card_answer_layout_2));
+        LinearLayout answerArea2 = ((LinearLayout)promptsView.findViewById(R.id.edit_card_answer_layout_2));
         int answerArea2CC = answerArea2.getChildCount();
         for(int i = 0; i < answerArea2CC; i++){
             answerArea2.getChildAt(i).setVisibility(View.INVISIBLE);
@@ -194,29 +194,29 @@ public class CardsActivity extends AppCompatActivity {
                 answerArea1.setVisibility(View.INVISIBLE);
                 answerArea2.setVisibility(View.VISIBLE);
                 //grab group
-                RadioGroup radioGroupForTrueFalse = (RadioGroup) alertDialog.findViewById(R.id.edit_card_true_or_false);
+                RadioGroup radioGroupForTrueFalse = (RadioGroup) promptsView.findViewById(R.id.edit_card_true_or_false);
                 radioGroupForTrueFalse.setVisibility(View.VISIBLE);
                 break;
             case MULTIPLE_CHOICE:
                 answerArea1.setVisibility(View.VISIBLE);
                 answerArea2.setVisibility(View.INVISIBLE);
-                EditText correctAnswer1 = (EditText) alertDialog.findViewById(R.id.edit_card_answer_field_1);
+                EditText correctAnswer1 = (EditText) promptsView.findViewById(R.id.edit_card_answer_field_1);
                 correctAnswer1.setText(card.getCorrectAnswer());
                 correctAnswer1.setVisibility(View.VISIBLE);
-                EditText wrongAnswer1 = (EditText) alertDialog.findViewById(R.id.edit_card_answer_field_2);
+                EditText wrongAnswer1 = (EditText) promptsView.findViewById(R.id.edit_card_answer_field_2);
                 wrongAnswer1.setText(card.getPossibleAnswers()[1]);
                 wrongAnswer1.setVisibility(View.VISIBLE);
-                EditText wrongAnswer2 = (EditText) alertDialog.findViewById(R.id.edit_card_answer_field_3);
+                EditText wrongAnswer2 = (EditText) promptsView.findViewById(R.id.edit_card_answer_field_3);
                 wrongAnswer2.setText(card.getPossibleAnswers()[2]);
                 wrongAnswer2.setVisibility(View.VISIBLE);
-                EditText wrongAnswer3 = (EditText) alertDialog.findViewById(R.id.edit_card_answer_field_4);
+                EditText wrongAnswer3 = (EditText) promptsView.findViewById(R.id.edit_card_answer_field_4);
                 wrongAnswer3.setText(card.getPossibleAnswers()[3]);
                 wrongAnswer3.setVisibility(View.VISIBLE);
                 break;
             default:
                 answerArea1.setVisibility(View.VISIBLE);
                 answerArea2.setVisibility(View.INVISIBLE);
-                EditText correctAnswer2 = (EditText) alertDialog.findViewById(R.id.edit_card_answer_field_1);
+                EditText correctAnswer2 = (EditText) promptsView.findViewById(R.id.edit_card_answer_field_1);
                 correctAnswer2.setText(card.getCorrectAnswer());
                 correctAnswer2.setVisibility(View.VISIBLE);
                 break;
