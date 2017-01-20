@@ -5,6 +5,8 @@ import android.view.WindowManager;
 
 import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Activities.NewGameSettingsActivity;
+import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
+import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 
@@ -21,6 +23,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -97,6 +100,11 @@ public class RuleIntegration {
     public void validateLoadingFromDatabase() {
         RulesDataSource rulesource = new RulesDataSource(mActivityRule.getActivity());
         rulesource.open();
+
+        QuizDataSource dataSource = new QuizDataSource(mActivityRule.getActivity());
+        dataSource.open();
+
+        dataSource.createDeck("Test", "", "", true, "", new ArrayList<Card>());
         rulesource.createRule(5, 603000, 9000, getCardTypeString(), 1);
         mActivityRule.getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -138,6 +146,7 @@ public class RuleIntegration {
         }
 
         rulesource.close();
+        dataSource.close();
     }
 
     @Test
@@ -155,13 +164,13 @@ public class RuleIntegration {
 
         onView(withId(R.id.new_game)).perform(scrollTo(), click());
 
-        onView(withId(R.id.endOfGameScoreText)).check(matches(withText(containsString("0"))));
+        onView(withId(R.id.endOfGameScoreText)).check(matches(isDisplayed()));
     }
 
     private String getCardTypeString() {
         List<String> types = new ArrayList<>();
-        types.add("TF");
-        types.add("MC");
+        types.add(Constants.CARD_TYPES.TRUE_FALSE.toString());
+        types.add(Constants.CARD_TYPES.MULTIPLE_CHOICE.toString());
         return gson.toJson(types);
     }
 }

@@ -77,7 +77,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         if (rulesSource.getAllRules().size() > 0) {
             deck = dataSource.getDeckWithId(rulesSource.getAllRules()
                     .get(rulesSource.getAllRules().size() - 1)
-                    .getId());
+                    .getDeckId());
         } else if (dataSource.getAllDecks().size()>0){
             deck = dataSource.getAllDecks().get(0);
         }

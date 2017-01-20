@@ -14,6 +14,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.espresso.Espresso.closeSoftKeyboard;
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -22,7 +24,14 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.withChild;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.seniordesign.wolfpack.quizinator.Constants.NO_CARD_TYPES;
 import static junit.framework.Assert.assertTrue;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.Matchers.hasToString;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.startsWith;
 
 /**
  * Created by farrowc on 1/17/2017.
@@ -75,7 +84,20 @@ public class CustomDeckTests {
         int dif = dataSource.getAllDecks().size() - numOfDecks;
         assertTrue(dif>0);
         onView(withId(R.id.deck_cancel_button)).perform(click());
-        onView(withChild(withText("New Deck"))).perform(click());
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        onData(anything())
+                .inAdapterView(withId(R.id.list_of_decks))
+                .atPosition(1)
+                .onChildView(withId(R.id.array_adapter_deck_name))
+                .perform(click());
+
+        closeSoftKeyboard();
         onView(withId(R.id.deck_delete_button)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
         dif = dataSource.getAllDecks().size() - numOfDecks;
@@ -95,6 +117,7 @@ public class CustomDeckTests {
         onView(withId(R.id.edit_deck_name)).perform(typeText("FFF111"));
         onView(withId(R.id.deck_save_button)).perform(click());
         onView(withChild(withText("FFF111"))).perform(click());
+        closeSoftKeyboard();
         onView(withId(R.id.deck_delete_button)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
         dif = dataSource.getAllDecks().size() - numOfDecks;

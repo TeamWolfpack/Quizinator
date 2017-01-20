@@ -68,7 +68,7 @@ public class GameSettingTests {
     @Test
     public void validateSpinnerTrueFalse() {
         onData(allOf(is(instanceOf(String.class)), is(NO_CARD_TYPES))).inAdapterView(withId(R.id.card_type_spinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is(CARD_TYPES.TRUE_FALSE))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is(CARD_TYPES.TRUE_FALSE.toString()))).perform(click());
         onView(withText(CARD_TYPES.TRUE_FALSE.toString())).perform(pressBack());
         onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(CARD_TYPES.TRUE_FALSE.toString()))));
     }
@@ -76,7 +76,7 @@ public class GameSettingTests {
     @Test
     public void validateSpinnerMultiChoice() {
         onData(allOf(is(instanceOf(String.class)), is(NO_CARD_TYPES))).inAdapterView(withId(R.id.card_type_spinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is(CARD_TYPES.MULTIPLE_CHOICE))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is(CARD_TYPES.MULTIPLE_CHOICE.toString()))).perform(click());
         onView(withText(CARD_TYPES.MULTIPLE_CHOICE.toString())).perform(pressBack());
         onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(CARD_TYPES.MULTIPLE_CHOICE.toString()))));
     }
@@ -84,8 +84,8 @@ public class GameSettingTests {
     @Test
     public void validateSpinnerAllTypes() {
         onData(allOf(is(instanceOf(String.class)), is(NO_CARD_TYPES))).inAdapterView(withId(R.id.card_type_spinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is(CARD_TYPES.TRUE_FALSE))).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is(CARD_TYPES.MULTIPLE_CHOICE))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is(CARD_TYPES.TRUE_FALSE.toString()))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is(CARD_TYPES.MULTIPLE_CHOICE.toString()))).perform(click());
         onView(withText(CARD_TYPES.MULTIPLE_CHOICE.toString())).perform(pressBack());
         onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(ALL_CARD_TYPES))));
     }
@@ -172,8 +172,8 @@ public class GameSettingTests {
     @Test
     public void validateCardCountInput() {
         onData(allOf(is(instanceOf(String.class)), is(NO_CARD_TYPES))).inAdapterView(withId(R.id.card_type_spinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is(CARD_TYPES.TRUE_FALSE))).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is(CARD_TYPES.MULTIPLE_CHOICE))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is(CARD_TYPES.TRUE_FALSE.toString()))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is(CARD_TYPES.MULTIPLE_CHOICE.toString()))).perform(click());
         onView(withText(CARD_TYPES.MULTIPLE_CHOICE.toString())).perform(pressBack());
 
         onView(withId(R.id.card_count)).check(matches(withText("0")));
