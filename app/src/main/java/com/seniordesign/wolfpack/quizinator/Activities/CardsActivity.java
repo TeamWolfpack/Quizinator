@@ -239,6 +239,10 @@ public class CardsActivity extends AppCompatActivity {
         initializeCardTypeSpinnerSingleSelection(card, promptsView);
     }
 
+    private void updateEditCardDialog(){
+
+    }
+
     private void createDeleteCardConfirmation(final Card card){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder
@@ -367,14 +371,12 @@ public class CardsActivity extends AppCompatActivity {
                 card.setCorrectAnswer("" + correctAnswer2.getText());
                 break;
         }
-
         if(saveCard) {
             dataSource.updateCard(card);
         }
         else{
             populateEditCardValues(card,promptsView);
         }
-
     }
 
     public void newCardClick(View view){
