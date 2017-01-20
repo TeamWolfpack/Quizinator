@@ -147,7 +147,7 @@ public class CardsActivity extends AppCompatActivity {
                 .setTitle("Edit Card")
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
-                        saveCard(card,promptsView);
+                        editCard(card,promptsView,true);
                         dialog.cancel();
                     }
                 })
@@ -260,7 +260,7 @@ public class CardsActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private void initializeCardTypeSpinnerSingleSelection(final Card card, View promptsView){
+    private void initializeCardTypeSpinnerSingleSelection(final Card card, final View promptsView){
         Spinner cardSpinner = (Spinner)promptsView.findViewById(R.id.edit_card_card_type_spinner);
         List<String> cardTypesAdapter = new ArrayList<>();
         for(Constants.CARD_TYPES cardType : Constants.CARD_TYPES.values()){
@@ -273,7 +273,7 @@ public class CardsActivity extends AppCompatActivity {
         cardSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //TODO -> update view when card type changes
+                editCard(card,promptsView,false);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) { /* Do nothing */ }
@@ -317,7 +317,7 @@ public class CardsActivity extends AppCompatActivity {
         client.disconnect();
     }
 
-    private void saveCard(final Card card,View promptsView){
+    private void editCard(final Card card,View promptsView, boolean saveCard){
         Spinner cardSpinner = (Spinner)promptsView.findViewById(R.id.edit_card_card_type_spinner);
         card.setCardType(CARD_TYPES.values()[cardSpinner.getSelectedItemPosition()]);
 
@@ -363,7 +363,12 @@ public class CardsActivity extends AppCompatActivity {
                 break;
         }
 
-        dataSource.updateCard(card);
+        if(saveCard) {
+            dataSource.updateCard(card);
+        }
+        else{
+            populateEditCardValues(card,promptsView);
+        }
 
     }
 }
