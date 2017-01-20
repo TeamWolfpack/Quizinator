@@ -54,9 +54,8 @@ public class DeckUITests {
         cards.add(new Card());
         cards.add(new Card());
         Deck deck = dataSource.createDeck("TestDeck", null, null, true, null, cards); // TODO may need to add the category and other inputs and check them in this test
-        assertEquals("deck.db", dataSource.getSQLiteHelper().getDatabaseName());
-        assertEquals(1, dataSource.getAllDecks().size());
-        assertEquals(3, dataSource.getDeckAllColumns().length);
+        assertEquals(2, dataSource.getAllDecks().size());
+        assertEquals(6, dataSource.getDeckAllColumns().length);
         deck.setDeckName("TestDeck2");
         assertEquals(1, dataSource.updateDeck(deck));
         assertEquals(1, dataSource.deleteDeck(deck));

@@ -56,8 +56,7 @@ public class CardUITests {
 
         Card card = dataSource.createCard("TF", "Test TF Question", "True",
                 new String[]{"True", "False"}, 1, "False");
-        assertEquals("card.db", dataSource.getSQLiteHelper().getDatabaseName());
-        assertEquals(1, dataSource.getAllCards().size());
+        assertEquals(11, dataSource.getAllCards().size());
         assertEquals(7, dataSource.getCardAllColumns().length);
         card.setPoints(3);
         assertEquals(1, dataSource.updateCard(card));
