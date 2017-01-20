@@ -136,12 +136,12 @@ public class CardsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                createEditCardDialog(values.get(position));
+                createEditCardDialog(values.get(position), false);
             }
         });
     }
 
-    private void createEditCardDialog(final Card card){
+    private void createEditCardDialog(final Card card, final boolean isNew){
         LayoutInflater li = LayoutInflater.from(this);
         final View promptsView = li.inflate(R.layout.fragment_edit_card, null);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -157,7 +157,9 @@ public class CardsActivity extends AppCompatActivity {
                 })
                 .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
-
+                        if(isNew){
+                            dataSource.deleteCard(card);
+                        }
                         dialog.cancel();
                     }
                 })
@@ -380,7 +382,7 @@ public class CardsActivity extends AppCompatActivity {
     }
 
     public void newCardClick(View view){
-        Card card = new Card();
-        createEditCardDialog(card);
+        Card card = dataSource.createCard(new Card());
+        createEditCardDialog(card, true);
     }
 }
