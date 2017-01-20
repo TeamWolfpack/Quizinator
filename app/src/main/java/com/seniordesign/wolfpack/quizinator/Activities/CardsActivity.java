@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -195,6 +196,16 @@ public class CardsActivity extends AppCompatActivity {
                 //grab group
                 RadioGroup radioGroupForTrueFalse = (RadioGroup) promptsView.findViewById(R.id.edit_card_true_or_false);
                 radioGroupForTrueFalse.setVisibility(View.VISIBLE);
+
+                if(card.getCorrectAnswer().equals("True")){
+                    RadioButton radioButton = (RadioButton) promptsView.findViewById(R.id.edit_card_true);
+                    radioButton.setChecked(true);
+                }
+                else{
+                    RadioButton radioButton = (RadioButton) promptsView.findViewById(R.id.edit_card_false);
+                    radioButton.setChecked(true);
+                }
+
                 break;
             case MULTIPLE_CHOICE:
                 answerArea1.setVisibility(View.VISIBLE);
@@ -323,10 +334,14 @@ public class CardsActivity extends AppCompatActivity {
         switch (Constants.CARD_TYPES.values()[card.getCardType()]) {
             case TRUE_FALSE:
                 RadioGroup radioGroupForTrueFalse = (RadioGroup) promptsView.findViewById(R.id.edit_card_true_or_false);
-                radioGroupForTrueFalse.setVisibility(View.VISIBLE);
                 int checkedID = radioGroupForTrueFalse.getCheckedRadioButtonId();
 
-                card.setCorrectAnswer("" + (checkedID == R.id.edit_card_true));
+                if((checkedID == R.id.edit_card_true)){
+                    card.setCorrectAnswer("True");
+                }
+                else{
+                    card.setCorrectAnswer("False");
+                }
                 break;
             case MULTIPLE_CHOICE:
                 String[] possibleAnswers = new String[4];
