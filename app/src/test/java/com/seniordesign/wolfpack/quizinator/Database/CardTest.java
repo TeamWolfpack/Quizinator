@@ -1,7 +1,6 @@
 package com.seniordesign.wolfpack.quizinator.Database;
 
 import com.seniordesign.wolfpack.quizinator.Constants;
-import com.seniordesign.wolfpack.quizinator.Database.Card.*;
 
 import org.junit.Before;
 import org.junit.Test;

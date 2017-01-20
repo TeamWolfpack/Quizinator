@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,10 +19,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.seniordesign.wolfpack.quizinator.Adapters.CardAdapter;
 import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES;
-import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
-import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
+import com.seniordesign.wolfpack.quizinator.Database.Card;
+import com.seniordesign.wolfpack.quizinator.Database.Deck;
 import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
-import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.R;
 
 import java.util.ArrayList;
@@ -32,9 +30,6 @@ import java.util.List;
 
 import io.apptik.widget.multiselectspinner.BaseMultiSelectSpinner;
 import io.apptik.widget.multiselectspinner.MultiSelectSpinner;
-
-import static com.seniordesign.wolfpack.quizinator.Constants.ALL_CARD_TYPES;
-import static com.seniordesign.wolfpack.quizinator.Constants.NO_CARD_TYPES;
 
 public class CardsActivity extends AppCompatActivity {
 

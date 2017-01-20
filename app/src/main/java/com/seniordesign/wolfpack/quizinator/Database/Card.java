@@ -1,4 +1,4 @@
-package com.seniordesign.wolfpack.quizinator.Database.Card;
+package com.seniordesign.wolfpack.quizinator.Database;
 
 import com.google.gson.annotations.SerializedName;
 import com.seniordesign.wolfpack.quizinator.Constants;

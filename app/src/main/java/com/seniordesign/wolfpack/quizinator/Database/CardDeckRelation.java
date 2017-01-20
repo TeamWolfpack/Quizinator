@@ -1,4 +1,4 @@
-package com.seniordesign.wolfpack.quizinator.Database.CardDeckRelation;
+package com.seniordesign.wolfpack.quizinator.Database;
 
 /**
  * Created by aaron on 1/10/2017.
