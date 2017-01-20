@@ -222,7 +222,7 @@ public class CardsActivity extends AppCompatActivity {
                 correctAnswer2.setVisibility(View.VISIBLE);
                 break;
         }
-        initializeCardTypeSpinnerSingleSelection(promptsView);
+        initializeCardTypeSpinnerSingleSelection(card, promptsView);
     }
 
     private void createDeleteCardConfirmation(final Card card){
@@ -251,7 +251,7 @@ public class CardsActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private void initializeCardTypeSpinnerSingleSelection(View promptsView){
+    private void initializeCardTypeSpinnerSingleSelection(final Card card, View promptsView){
         Spinner cardSpinner = (Spinner)promptsView.findViewById(R.id.edit_card_card_type_spinner);
         List<String> cardTypesAdapter = new ArrayList<>();
         for(Constants.CARD_TYPES cardType : Constants.CARD_TYPES.values()){
@@ -269,6 +269,7 @@ public class CardsActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) { /* Do nothing */ }
         });
+        cardSpinner.setSelection(card.getCardType());
     }
 
     /**
