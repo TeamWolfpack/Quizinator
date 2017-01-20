@@ -104,7 +104,7 @@ public class CardsActivity extends AppCompatActivity {
                         for (int i = 0; i < selectedCardTypes.size(); i++) {
                             chosenTypes.add(selectedCardTypes.get(i));
                         }
-                        //initializeListOfCards(dataSource.filterCards(chosenTypes));
+                         initializeListOfCards(dataSource.filterCards(chosenTypes));
                     }
                 });
         return true;
