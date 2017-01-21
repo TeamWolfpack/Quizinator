@@ -67,7 +67,8 @@
             android:name=".WifiDirect.ConnectionService"
             android:enabled="true" />
 
-        <activity android:name=".Activities.ManageGameplayActivity" />
+        <activity android:name=".Activities.ManageGameplayActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activities.CardsActivity" />
         <activity android:name=".Activities.DecksActivity" />
         <activity android:name=".Activities.EditDeckActivity"></activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for

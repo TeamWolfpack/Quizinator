@@ -81,5 +81,7 @@
     <string name="nav_bar_check_p2p_compliance">Check P2P Compatibility</string>
     <string name="nav_bar_edit_decks">Edit Decks</string>
     <string name="nav_bar_edit_cards">Edit Cards</string>
+    <string name="next_card">Next Card:</string>
+    <string name="shuffle">Shuffle</string>
 
 </resources>

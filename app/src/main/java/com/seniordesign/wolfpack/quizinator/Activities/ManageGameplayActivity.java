@@ -1,14 +1,25 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.seniordesign.wolfpack.quizinator.Adapters.CardAdapter;
+import com.seniordesign.wolfpack.quizinator.Adapters.NextCardAdapter;
 import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Database.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Deck;
@@ -22,6 +33,7 @@ import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_ANSWER_CONFIRMATION_ACTIVITY;
 import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_END_OF_GAME_ACTIVITY;
@@ -34,15 +46,15 @@ public class ManageGameplayActivity extends AppCompatActivity {
     private QuizDataSource dataSource;
     private RulesDataSource rulesDataSource;
 
+    private Rules rules;
     private Deck deck;
     private Card currentCard;
-    private int currentCardPosition;
     private int cardLimit;
 
+    private int cardsPlayed;
     private int clientsResponded;
 
-    private Rules rules;
-
+    private Spinner nextCardSpinner;
     private Gson gson = new Gson();
 
     private CountDownTimer gameplayTimerStatic;
@@ -71,27 +83,49 @@ public class ManageGameplayActivity extends AppCompatActivity {
 
         dataSource = new QuizDataSource(this);
         dataSource.open();
-        deck = dataSource.getDeckWithId(rules.getDeckId());
+        deck = dataSource.getDeckWithId(rules.getDeckId()).filter(rules);
 
         cardLimit = Math.min(deck.getCards().size(),rules.getMaxCardCount());
+
+        nextCardSpinner = (Spinner) findViewById(R.id.next_card_spinner);
+        NextCardAdapter nextCardAdapter = new NextCardAdapter(this, deck.getCards());
+        nextCardSpinner.setAdapter(nextCardAdapter);
 
         initializeGameTimer(rules.getTimeLimit());
         gameplayTimerRunning = gameplayTimerStatic.start();
     }
 
-    /*
-     * @author leonard (11/5/2016)
-     */
+    private void shuffle(View v) {
+        //TODO
+    }
+
     public void sendCard(View v) {
         clientsResponded=0;
-        if(currentCardPosition<cardLimit) {
-            currentCard = deck.getCards().get(currentCardPosition);
-            currentCardPosition++;
+        if(cardsPlayed < cardLimit) {
+            currentCard = (Card)nextCardSpinner.getSelectedItem();
             String json = gson.toJson(currentCard);
             ConnectionService.sendMessage(MSG_SEND_CARD_ACTIVITY, json);
-        }
-        else {
+            cardsPlayed++;
+            ((NextCardAdapter)nextCardSpinner.getAdapter())
+                    .removeItem(nextCardSpinner.getSelectedItemPosition());
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    nextCardSpinner.setSelection(0);
+                }
+            });
+        } else {
             endGame(null);
+        }
+        if (cardsPlayed == cardLimit) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    nextCardSpinner.setEnabled(false);
+                    findViewById(R.id.shuffle).setEnabled(false);
+                    findViewById(R.id.send_card).setEnabled(false);
+                }
+            });
         }
     }
 
