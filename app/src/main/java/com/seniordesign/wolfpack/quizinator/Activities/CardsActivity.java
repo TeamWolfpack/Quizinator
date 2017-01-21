@@ -220,17 +220,18 @@ public class CardsActivity extends AppCompatActivity {
                 correctAnswer1.setText(card.getCorrectAnswer());
                 correctAnswer1.setVisibility(View.VISIBLE);
 
-                if (card.getPossibleAnswers() == null) {
-                    card.setPossibleAnswers(new String[] {"", "", "", ""});
+                String[] answers = card.getPossibleAnswers();
+                if (answers == null) {
+                    answers = new String[] {"", "", "", ""};
                 }
                 EditText wrongAnswer1 = (EditText) promptsView.findViewById(R.id.edit_card_answer_field_2);
-                wrongAnswer1.setText(card.getPossibleAnswers()[1]);
+                wrongAnswer1.setText(answers.length > 1 ? answers[1] : "");
                 wrongAnswer1.setVisibility(View.VISIBLE);
                 EditText wrongAnswer2 = (EditText) promptsView.findViewById(R.id.edit_card_answer_field_3);
-                wrongAnswer2.setText(card.getPossibleAnswers()[2]);
+                wrongAnswer2.setText(answers.length > 2 ? answers[2] : "");
                 wrongAnswer2.setVisibility(View.VISIBLE);
                 EditText wrongAnswer3 = (EditText) promptsView.findViewById(R.id.edit_card_answer_field_4);
-                wrongAnswer3.setText(card.getPossibleAnswers()[3]);
+                wrongAnswer3.setText(answers.length > 3 ? answers[3] : "");
                 wrongAnswer3.setVisibility(View.VISIBLE);
                 break;
             default:
