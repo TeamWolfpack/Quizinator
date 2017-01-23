@@ -95,8 +95,9 @@ public class ManageGameplayActivity extends AppCompatActivity {
         gameplayTimerRunning = gameplayTimerStatic.start();
     }
 
-    private void shuffle(View v) {
-        //TODO
+    public void shuffle(View v) {
+        ((NextCardAdapter)nextCardSpinner.getAdapter()).shuffle();
+        nextCardSpinner.setSelection(0);
     }
 
     public void sendCard(View v) {
@@ -106,11 +107,11 @@ public class ManageGameplayActivity extends AppCompatActivity {
             String json = gson.toJson(currentCard);
             ConnectionService.sendMessage(MSG_SEND_CARD_ACTIVITY, json);
             cardsPlayed++;
-            ((NextCardAdapter)nextCardSpinner.getAdapter())
-                    .removeItem(nextCardSpinner.getSelectedItemPosition());
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    ((NextCardAdapter)nextCardSpinner.getAdapter())
+                            .removeItem(nextCardSpinner.getSelectedItemPosition());
                     nextCardSpinner.setSelection(0);
                 }
             });

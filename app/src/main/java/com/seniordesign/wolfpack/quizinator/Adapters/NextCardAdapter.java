@@ -12,6 +12,7 @@ import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Database.Card;
 import com.seniordesign.wolfpack.quizinator.R;
 
+import java.util.Collections;
 import java.util.List;
 
 public class NextCardAdapter extends BaseAdapter {
@@ -26,6 +27,11 @@ public class NextCardAdapter extends BaseAdapter {
 
     public void removeItem(int position) {
         cards.remove(position);
+        notifyDataSetChanged();
+    }
+
+    public void shuffle() {
+        Collections.shuffle(cards);
         notifyDataSetChanged();
     }
 
