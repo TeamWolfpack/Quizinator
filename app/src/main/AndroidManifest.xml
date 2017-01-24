@@ -36,12 +36,23 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <activity android:name=".Activities.DecksActivity" />
         <activity android:name=".Activities.EndOfGameplayActivity" />
         <activity android:name=".Activities.NewGameSettingsActivity" />
-        <activity android:name=".Activities.HostGameActivity" />
+        <activity android:name=".Activities.HostGameActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity android:name=".Activities.CardsActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity android:name=".Activities.EditDeckActivity"
+            android:configChanges="orientation|screenSize"/>
+        <activity android:name=".Activities.ManageGameplayActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.GamePlayActivity"
             android:label="@string/app_name"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.MainMenuActivity"
@@ -49,7 +60,6 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -63,19 +73,8 @@
             </intent-filter>
         </receiver>
 
-        <service
-            android:name=".WifiDirect.ConnectionService"
+        <service android:name=".WifiDirect.ConnectionService"
             android:enabled="true" />
 
-        <activity android:name=".Activities.ManageGameplayActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activities.CardsActivity" />
-        <activity android:name=".Activities.DecksActivity" />
-        <activity android:name=".Activities.EditDeckActivity"></activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
     </application>
-
 </manifest>
