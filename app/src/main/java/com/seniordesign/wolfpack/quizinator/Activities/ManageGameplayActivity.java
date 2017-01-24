@@ -90,6 +90,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
         nextCardSpinner = (Spinner) findViewById(R.id.next_card_spinner);
         NextCardAdapter nextCardAdapter = new NextCardAdapter(this, deck.getCards());
         nextCardSpinner.setAdapter(nextCardAdapter);
+        shuffle(null);
 
         initializeGameTimer(rules.getTimeLimit());
         gameplayTimerRunning = gameplayTimerStatic.start();
