@@ -3,12 +3,15 @@ package com.seniordesign.wolfpack.quizinator.GameplayHandler;
 import android.widget.TextView;
 
 import com.seniordesign.wolfpack.quizinator.Activities.GamePlayActivity;
+import com.seniordesign.wolfpack.quizinator.Database.Card;
+import com.seniordesign.wolfpack.quizinator.Database.Deck;
 import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -64,7 +67,15 @@ public class SinglePlayerHandler implements GamePlayHandler {
         properties.setQuizDataSource(new QuizDataSource(gamePlayActivity)); //TODO
         if (properties.getDataSource().open()) {
             positiveDBConnections++;
-            properties.setDeck(properties.getDataSource().getDeckWithId(properties.getRules().getDeckId()).filter(properties.getRules()));
+
+            //Filter and Shuffle deck
+            Deck deck = properties.getDataSource()
+                    .getDeckWithId(properties.getRules().getDeckId())
+                    .filter(properties.getRules());
+            List<Card> cards = deck.getCards();
+            Collections.shuffle(cards);
+            deck.setCards(cards);
+            properties.setDeck(deck);
         }
         return (positiveDBConnections == 3);
     }

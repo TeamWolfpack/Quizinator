@@ -27,6 +27,7 @@ import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import io.apptik.widget.multiselectspinner.BaseMultiSelectSpinner;
@@ -159,8 +160,8 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             }
 
         cardTypeSpinner = (MultiSelectSpinner) findViewById(R.id.card_type_spinner);
-            selectedCardTypes = new ArrayList<>();
             cardTypeOptions = formatCardTypes(deck);
+            selectedCardTypes = new ArrayList<>(cardTypeOptions);
             ArrayAdapter<String> cardTypeAdapter = new ArrayAdapter<>(NewGameSettingsActivity.this,
                     android.R.layout.simple_list_item_multiple_choice, cardTypeOptions);
             cardTypeSpinner
