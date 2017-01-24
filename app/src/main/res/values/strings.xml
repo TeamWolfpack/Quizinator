@@ -81,6 +81,13 @@
     <string name="nav_bar_check_p2p_compliance">Check P2P Compatibility</string>
     <string name="nav_bar_edit_decks">Edit Decks</string>
     <string name="nav_bar_edit_cards">Edit Cards</string>
+    <string name="next_card">Next Card:</string>
+    <string name="shuffle">Shuffle</string>
+    <string name="score_label">Score:</string>
+    <string name="total_cards_label">Total Cards:</string>
+    <string name="high_score_label">High Score:</string>
+    <string name="high_score_time_label">High Score Time:</string>
+    <string name="time_elapsed_label">Time Elapsed:</string>
 
     <string name="correct_answer">Correct Answer</string>
     <string name="wrong_answer">Wrong Answer</string>

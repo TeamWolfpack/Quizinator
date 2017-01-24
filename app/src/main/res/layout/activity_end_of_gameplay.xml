@@ -17,10 +17,9 @@
         android:layout_height="wrap_content"
         android:text="@string/game_over"
         android:textStyle="bold"
-        android:textSize="32dp"
+        android:textSize="32sp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="78dp" />
+        android:layout_centerHorizontal="true" />
     <LinearLayout
         android:layout_marginTop="20dp"
         android:layout_below="@id/endOfGameText"
@@ -34,34 +33,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:text="Score: " />
+            android:text="@string/score_label" />
         <TextView
             android:id="@+id/endOfGameTimeText"
             android:textAlignment="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:text="Time Elapsed: " />
+            android:text="@string/time_elapsed_label" />
         <TextView
             android:id="@+id/endOfGameTotalCardsText"
             android:textAlignment="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:text="Total Cards: "/>
+            android:text="@string/total_cards_label"/>
         <TextView
             android:id="@+id/endOfGameHighScoreText"
             android:textAlignment="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="High Score: " />
+            android:text="@string/high_score_label" />
         <TextView
             android:id="@+id/endOfGameHighScoreTimeText"
             android:textAlignment="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="High Score Time: "
-            android:layout_below="@id/endOfGameText" />
+            android:text="@string/high_score_time_label" />
         <Button
             android:id="@+id/goToMainMenu"
             android:layout_marginTop="20dp"
