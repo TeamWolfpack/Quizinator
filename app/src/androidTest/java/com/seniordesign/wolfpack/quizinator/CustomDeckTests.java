@@ -66,7 +66,7 @@ public class CustomDeckTests {
         dataSource = new QuizDataSource(InstrumentationRegistry.getTargetContext());
         dataSource.open();
         int numOfDecks = dataSource.getAllDecks().size();
-        onView(withId(R.id.new_item_button)).perform(click());
+        onView(withId(R.id.new_deck_button)).perform(click());
         int dif = dataSource.getAllDecks().size() - numOfDecks;
         assertTrue(dif>0);
         onView(withId(R.id.deck_delete_button)).perform(click());
@@ -80,7 +80,7 @@ public class CustomDeckTests {
         dataSource = new QuizDataSource(InstrumentationRegistry.getTargetContext());
         dataSource.open();
         int numOfDecks = dataSource.getAllDecks().size();
-        onView(withId(R.id.new_item_button)).perform(click());
+        onView(withId(R.id.new_deck_button)).perform(click());
         int dif = dataSource.getAllDecks().size() - numOfDecks;
         assertTrue(dif>0);
         onView(withId(R.id.deck_cancel_button)).perform(click());
@@ -110,7 +110,7 @@ public class CustomDeckTests {
         dataSource = new QuizDataSource(InstrumentationRegistry.getTargetContext());
         dataSource.open();
         int numOfDecks = dataSource.getAllDecks().size();
-        onView(withId(R.id.new_item_button)).perform(click());
+        onView(withId(R.id.new_deck_button)).perform(click());
         int dif = dataSource.getAllDecks().size() - numOfDecks;
         assertTrue(dif>0);
         onView(withId(R.id.edit_deck_name)).perform(clearText());

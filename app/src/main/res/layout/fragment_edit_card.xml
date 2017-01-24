@@ -72,28 +72,32 @@
                 android:gravity="start"
                 android:padding="3dip"
                 android:layout_width="fill_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:hint="@string/correct_answer" />
             <EditText
                 android:id="@+id/edit_card_answer_field_2"
                 android:gravity="start"
                 android:padding="3dip"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:hint="@string/wrong_answer" />
             <EditText
                 android:id="@+id/edit_card_answer_field_3"
                 android:gravity="start"
                 android:padding="3dip"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:hint="@string/wrong_answer" />
             <EditText
                 android:id="@+id/edit_card_answer_field_4"
                 android:gravity="start"
                 android:padding="3dip"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:hint="@string/wrong_answer" />
         </LinearLayout>
         <LinearLayout
             android:id="@+id/edit_card_answer_layout_2"

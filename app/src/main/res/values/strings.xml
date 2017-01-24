@@ -82,4 +82,7 @@
     <string name="nav_bar_edit_decks">Edit Decks</string>
     <string name="nav_bar_edit_cards">Edit Cards</string>
 
+    <string name="correct_answer">Correct Answer</string>
+    <string name="wrong_answer">Wrong Answer</string>
+
 </resources>
