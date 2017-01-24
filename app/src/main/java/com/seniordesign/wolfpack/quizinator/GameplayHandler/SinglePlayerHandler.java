@@ -14,15 +14,8 @@ import com.seniordesign.wolfpack.quizinator.R;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by farrowc on 11/29/2016.
- */
-
 public class SinglePlayerHandler implements GamePlayHandler {
 
-    /*
-     * @author farrowc (11/30/2016)
-     */
     @Override
     public boolean handleInitialization(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         initializeDB(gamePlayActivity,properties);
@@ -30,9 +23,6 @@ public class SinglePlayerHandler implements GamePlayHandler {
         return false;
     }
 
-    /*
-     * @author farrowc (11/30/2016)
-     */
     @Override
     public long handleAnswerClicked(GamePlayActivity gamePlayActivity, GamePlayProperties properties, String answer) {
         properties.getCardTimerAreaBackgroundRunning().cancel();
@@ -48,9 +38,6 @@ public class SinglePlayerHandler implements GamePlayHandler {
         return handleNextCard(gamePlayActivity, properties);
     }
 
-    /*
-     * @author farrowc (11/30/2016)
-     */
     @Override
     public boolean initializeDB(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         int positiveDBConnections = 0;
@@ -80,9 +67,6 @@ public class SinglePlayerHandler implements GamePlayHandler {
         return (positiveDBConnections == 3);
     }
 
-    /*
-     * @author farrowc (11/30/2016)
-     */
     @Override
     public long handleNextCard(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         properties.getCardTimerRunning().cancel();
@@ -103,9 +87,6 @@ public class SinglePlayerHandler implements GamePlayHandler {
         return properties.getCurrentCard().getId();
     }
 
-    /*
-     * @author farrowc (11/30/2016)
-     */
     @Override
     public boolean handleCleanup(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         properties.getRulesDataSource().close();
@@ -123,9 +104,6 @@ public class SinglePlayerHandler implements GamePlayHandler {
         return true;
     }
 
-    /*
-     * @author farrowc (11/30/2016)
-     */
     @Override
     public boolean handleResume(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         properties.getRulesDataSource().open();
@@ -133,25 +111,16 @@ public class SinglePlayerHandler implements GamePlayHandler {
         return true;
     }
 
-    /*
-     * @author farrowc (11/30/2016)
-     */
     @Override
     public boolean handlePause(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         return true;
     }
 
-    /*
-     * @author leonardj (12/6/16)
-     */
     @Override
     public boolean handleDestroy(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         return true;
     }
 
-    /*
-     * @author farrowc (11/30/2016)
-     */
     @Override
     public boolean handleInitializeGameplay(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         Rules rules = properties.getRules();
@@ -164,9 +133,6 @@ public class SinglePlayerHandler implements GamePlayHandler {
         return false;
     }
 
-    /*
-     * @author farrowc (11/30/2016)
-     */
     @Override
     public void onFragmentInteraction(GamePlayActivity gamePlayActivity, GamePlayProperties properties, String choice) {
         //Do nothing

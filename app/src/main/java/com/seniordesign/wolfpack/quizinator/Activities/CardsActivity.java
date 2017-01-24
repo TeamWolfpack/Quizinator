@@ -116,8 +116,6 @@ public class CardsActivity extends AppCompatActivity {
         final ListView listView = (ListView) findViewById(R.id.list_of_cards);
         final CardAdapter adapter = new CardAdapter(this,
                 R.layout.array_adapter_list_of_cards, values);
-//        final CardAdapter adapter = new CardAdapter(this,
-//                android.R.layout.simple_list_item_1, values);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

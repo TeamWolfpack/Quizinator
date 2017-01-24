@@ -13,17 +13,10 @@ import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_PLAYER_READY_ACTIVITY;
 import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_SEND_ANSWER_ACTIVITY;
 
-/**
- * Created by farrowc on 11/29/2016.
- */
-
 public class MultiplayerHandler implements GamePlayHandler {
 
-    long timeTaken;
+    private long timeTaken;
 
-    /*
-     * @author farrowc (11/30/2016)
-     */
     @Override
     public boolean handleInitialization(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         //TODO This is temporary, the game timer will be fixed later
@@ -49,9 +42,6 @@ public class MultiplayerHandler implements GamePlayHandler {
         return true;
     }
 
-    /*
-     * @author farrowc (11/30/2016)
-     */
     @Override
     public long handleAnswerClicked(GamePlayActivity gamePlayActivity, GamePlayProperties properties, String answer) {
         if(properties.getHasAnswered())
@@ -62,18 +52,12 @@ public class MultiplayerHandler implements GamePlayHandler {
         return 0;
     }
 
-    /*
-     * @author farrowc (11/30/2016)
-     */
     @Override
     public boolean initializeDB(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         properties.setHighScoresDataSource(new HighScoresDataSource(gamePlayActivity));
         return properties.getHighScoresDataSource().open();
     }
 
-    /*
-     * @author farrowc (11/30/2016)
-     */
     @Override
     public long handleNextCard(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         properties.setHasAnswered(false);
@@ -84,9 +68,6 @@ public class MultiplayerHandler implements GamePlayHandler {
         return properties.getCurrentCard().getId();
     }
 
-    /*
-     * @author farrowc (11/30/2016)
-     */
     @Override
     public boolean handleCleanup(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         properties.getHighScoresDataSource().close();
@@ -99,36 +80,24 @@ public class MultiplayerHandler implements GamePlayHandler {
         return true;
     }
 
-    /*
-     * @author farrowc (11/30/2016)
-     */
     @Override
     public boolean handleResume(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         properties.getHighScoresDataSource().open();
         return true;
     }
 
-    /*
-     * @author farrowc (11/30/2016)
-     */
     @Override
     public boolean handlePause(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         handleCleanup(gamePlayActivity,properties);
         return true;
     }
 
-    /*
-     * @author leonardj (12/6/16)
-     */
     @Override
     public boolean handleDestroy(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         properties.getWifiDirectApp().onDestroy("ACT_MGP");
         return true;
     }
 
-    /*
-     * @author farrowc (11/30/2016)
-     */
     @Override
     public boolean handleInitializeGameplay(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         properties.setCardTimerRunning(properties.getCardTimerStatic().start());
@@ -138,9 +107,6 @@ public class MultiplayerHandler implements GamePlayHandler {
         return true;
     }
 
-    /*
-     * @author leonard (11/4/2016)
-     */
     public void onFragmentInteraction(GamePlayActivity gamePlayActivity, GamePlayProperties properties,String choice) {
         //Send message to host for validation
         choice = choice == null ? "" : choice;
@@ -150,7 +116,6 @@ public class MultiplayerHandler implements GamePlayHandler {
                 properties.getWifiDirectApp().mMyAddress,
                 choice,
                 timeTaken
-
         );
         if(properties.getHasAnswered())
             return;

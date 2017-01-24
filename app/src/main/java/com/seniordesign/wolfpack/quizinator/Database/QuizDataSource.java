@@ -97,28 +97,6 @@ public class QuizDataSource {
     public Card createCard(Card card) {
         return createCard(card.getCardType(), card.getQuestion(), card.getCorrectAnswer(),
                 card.getPossibleAnswers(), card.getPoints(), card.getModeratorNeeded());
-//        ContentValues values = new ContentValues();
-//        values.put(QuizSQLiteHelper.CARD_COLUMN_CARDTYPE, card.getCardType());
-//        values.put(QuizSQLiteHelper.CARD_COLUMN_QUESTION, card.getQuestion());
-//        values.put(QuizSQLiteHelper.CARD_COLUMN_CORRECTANSWER, card.getCorrectAnswer());
-//
-//        //TODO need to make sure that depending on card type, the correct number of possible answers is inputted... can be done here or in code calling this method
-//        Gson gson = new Gson();
-//        String stringPossibleAnswers = gson.toJson(card.getPossibleAnswers());
-//        values.put(QuizSQLiteHelper.CARD_COLUMN_POSSIBLEANSWERS, stringPossibleAnswers);
-//
-//        values.put(QuizSQLiteHelper.CARD_COLUMN_POINTS, card.getPoints());
-//        values.put(QuizSQLiteHelper.CARD_COLUMN_MODERATORNEEDED, card.getModeratorNeeded());
-//        long insertId = database.insert(QuizSQLiteHelper.TABLE_CARDS,
-//                null, values);
-//        Cursor cursor = database.query(QuizSQLiteHelper.TABLE_CARDS,
-//                cardAllColumns, QuizSQLiteHelper.CARD_COLUMN_ID
-//                        + " = " + insertId, null,
-//                null, null, null);
-//        cursor.moveToFirst();
-//        Card newCard = cursorToCard(cursor);
-//        cursor.close();
-//        return newCard;
     }
 
     public int deleteCard(Card card) {
@@ -130,7 +108,7 @@ public class QuizDataSource {
     }
 
     public List<Card> getAllCards() {
-        List<Card> cards = new ArrayList<Card>();
+        List<Card> cards = new ArrayList<>();
         Cursor cursor = database.query(QuizSQLiteHelper.TABLE_CARDS,
                 cardAllColumns, null, null, null, null, null);
         cursor.moveToFirst();

@@ -11,10 +11,6 @@ import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
-/**
- * Created by farrowc on 11/30/2016.
- */
-
 public class GamePlayProperties {
 
     private WifiDirectApp wifiDirectApp;

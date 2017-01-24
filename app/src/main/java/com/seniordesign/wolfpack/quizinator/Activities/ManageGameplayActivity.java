@@ -18,7 +18,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.seniordesign.wolfpack.quizinator.Adapters.CardAdapter;
 import com.seniordesign.wolfpack.quizinator.Adapters.NextCardAdapter;
 import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Database.Card;
@@ -33,7 +32,6 @@ import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_ANSWER_CONFIRMATION_ACTIVITY;
 import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_END_OF_GAME_ACTIVITY;
@@ -131,9 +129,6 @@ public class ManageGameplayActivity extends AppCompatActivity {
         }
     }
 
-    /*
-     * @author leonard (11/5/2016)
-     */
     public void endGame(View v) {
         gameplayTimerRunning.cancel();
         selectAndRespondToFastestAnswer();
@@ -148,9 +143,6 @@ public class ManageGameplayActivity extends AppCompatActivity {
      * This is called in ConnectionSerive.onPullInData(...) when a ready message
      * is received.
      */
-    /*
-     * @author leonard (11/5/2016)
-     */
     public void deviceIsReady(String deviceName) {
         //TODO show that the device is ready
     }
@@ -159,17 +151,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
      * This is called in ConnectionSerive.onPullInData(...) when a answer message
      * is received.
      */
-    /*
-     * @author leonard (11/5/2016)
-     */
     public void validateAnswer(Answer answer) {
-        //boolean correct = currentCard.getCorrectAnswer().equals(answer.getAnswer());
-
-        //String playerName = answer.getDeviceName();
-        //String playerAddress = answer.getAddress();
-
-        //String confirmation = gson.toJson(new Confirmation(playerAddress, correct));
-        //ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
         if(answers!=null && answer!= null) {
             answers.add(answer);
         }
@@ -181,9 +163,6 @@ public class ManageGameplayActivity extends AppCompatActivity {
         checkClientCount();
     }
 
-    /*
-     * @author leonard (11/4/2016)
-     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -191,21 +170,13 @@ public class ManageGameplayActivity extends AppCompatActivity {
         rulesDataSource.open();
     }
 
-    /*
-     * @author leonard (11/4/2016)
-     */
     @Override
     protected void onPause() {
         super.onPause();
-        //gameplayTimerRunning.cancel();
-        //gameplayTimerStatic.cancel();
         dataSource.close();
         rulesDataSource.close();
     }
 
-    /*
-     * @author leonard (11/4/2016)
-     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -213,9 +184,6 @@ public class ManageGameplayActivity extends AppCompatActivity {
         wifiDirectApp.mManageActivity = null;
     }
 
-    /*
-     * @author farrowc 10/14/2016
-     */
     private boolean initializeGameTimer(long time) {
         System.out.println("Time: "+time);
         gameplayTimerStatic = new CountDownTimer(time, 10) {
