@@ -24,17 +24,9 @@ import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 
-/*
- * The main menu activity
- * @creation 10/4/2016
- */
 public class MainMenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
-    /*
-     * @author farrowc (10/4/2016)
-     * @author chuna (10/23/2016)
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,9 +56,6 @@ public class MainMenuActivity extends AppCompatActivity
         }
     }
 
-    /*
-     * @author farrowc 10/4/2016
-     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -77,37 +66,6 @@ public class MainMenuActivity extends AppCompatActivity
         }
     }
 
-    /*
-     * @author farrowc 10/4/2016
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.navigation_drawer, menu);
-        return true;
-    }
-
-    /*
-     * @author farrowc 10/4/2016
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    /*
-     * @author farrowc 10/4/2016
-     */
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -143,17 +101,11 @@ public class MainMenuActivity extends AppCompatActivity
         return true;
     }
 
-    /*
-     * @author farrowc 10/4/2016
-     */
     public void showGameSettings(View v){
         final Intent intent = new Intent(this, NewGameSettingsActivity.class);
         startActivity(intent);
     }
 
-    /*
-     * @author leonardj (10/26/16)
-     */
     public void initiateHostGame(View v) {
         if(isWifiDirectSupported(this)) {
             enableWifi();
@@ -165,9 +117,6 @@ public class MainMenuActivity extends AppCompatActivity
         }
     }
 
-    /*
-     * @author leonardj (10/26/16)
-     */
     public void initiateJoinGame(View v) {
         if(isWifiDirectSupported(this)) {
             enableWifi();
@@ -178,10 +127,6 @@ public class MainMenuActivity extends AppCompatActivity
             Toast.makeText(this, "Device is not compatible with P2P hardware and unable to join", Toast.LENGTH_SHORT).show();
         }
     }
-
-//    public void goToCardsList(View v) {
-//        startActivity(new Intent(this, CardsActivity.class));
-//    }
 
     private boolean isWifiDirectSupported(Context ctx) {
         PackageManager pm = ctx.getPackageManager();
@@ -201,5 +146,4 @@ public class MainMenuActivity extends AppCompatActivity
             Toast.makeText(this, R.string.enabling_wifi, Toast.LENGTH_LONG).show();
         }
     }
-
 }
