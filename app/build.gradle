@@ -2,15 +2,16 @@ apply plugin: 'com.android.application'
 apply plugin: 'jacoco-android'
 
 android {
-    compileSdkVersion 24
+    compileSdkVersion 25
     buildToolsVersion "24.0.2"
     defaultConfig {
         applicationId "com.seniordesign.wolfpack.quizinator"
         minSdkVersion 15
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         debug {
@@ -43,12 +44,12 @@ dependencies {
         exclude group: 'com.android.support', module: 'design'
         exclude module: 'recyclerview-v7'
     }
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:design:24.2.1'
+    compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'com.android.support:design:25.0.1'
     compile 'com.google.code.gson:gson:2.7'
-    compile 'com.android.support:support-v4:24.2.1'
+    compile 'com.android.support:support-v4:25.0.1'
     compile 'io.apptik.widget:multiselectspinner:1.0.12'
     testCompile 'junit:junit:4.12'
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
-    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
+    compile 'com.google.android.gms:play-services-appindexing:9.8.0'
 }

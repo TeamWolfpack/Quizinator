@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,6 +42,7 @@ import io.apptik.widget.multiselectspinner.BaseMultiSelectSpinner;
 import io.apptik.widget.multiselectspinner.MultiSelectSpinner;
 
 import static com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES.TRUE_FALSE;
+
 public class CardsActivity extends AppCompatActivity {
 
     private MultiSelectSpinner cardTypeSpinner;

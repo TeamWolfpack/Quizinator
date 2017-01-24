@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_decks"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.seniordesign.wolfpack.quizinator.Activities.CardsActivity">
+                xmlns:tools="http://schemas.android.com/tools"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/activity_decks"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.seniordesign.wolfpack.quizinator.Activities.CardsActivity">
     <LinearLayout
         android:id="@+id/activity_card_creation"
         android:layout_width="match_parent"
@@ -38,14 +39,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
-    <Button
+    <android.support.design.widget.FloatingActionButton
+        app:srcCompat="@drawable/ic_plus_btn_24dp"
         android:id="@+id/new_card_button"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:background="@drawable/new_item_button"
-        android:layout_margin="10dp"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:onClick="newCardClick"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="newCardClick" />
 </RelativeLayout>
