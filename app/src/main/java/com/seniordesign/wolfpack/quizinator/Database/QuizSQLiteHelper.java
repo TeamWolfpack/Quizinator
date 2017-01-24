@@ -110,7 +110,7 @@ public class QuizSQLiteHelper extends SQLiteOpenHelper {
                     .append("\'").append(Constants.CARD_TYPES.MULTIPLE_CHOICE.ordinal()).append("\' AS \'").append(CARD_COLUMN_CARDTYPE).append("\',")
                     .append("\'").append("1+1 = ?").append("\' AS \'").append(CARD_COLUMN_QUESTION).append("\',")
                     .append("\'").append("2").append("\' AS \'").append(CARD_COLUMN_CORRECTANSWER).append("\',")
-                    .append("\'").append(gson.toJson(new String[]{"1", "2", "3", "4"})).append("\' AS \'").append(CARD_COLUMN_POSSIBLEANSWERS).append("\',")
+                    .append("\'").append(gson.toJson(new String[]{"2", "1", "4", "3"})).append("\' AS \'").append(CARD_COLUMN_POSSIBLEANSWERS).append("\',")
                     .append("\'").append("1").append("\' AS \'").append(CARD_COLUMN_POINTS).append("\',")
                     .append("\'").append(FALSE).append("\' AS \'").append(CARD_COLUMN_MODERATORNEEDED).append("\' ")
                 .append("UNION ALL SELECT \'" + "2" + "\', " + "\'")

@@ -24,18 +24,9 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.withChild;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.seniordesign.wolfpack.quizinator.Constants.NO_CARD_TYPES;
 import static junit.framework.Assert.assertTrue;
-import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.hasToString;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.startsWith;
 
-/**
- * Created by farrowc on 1/17/2017.
- */
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
