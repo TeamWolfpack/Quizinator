@@ -43,10 +43,8 @@ public class GamePlayActivity
 
         properties.setWifiDirectApp((WifiDirectApp)getApplication());
         if(getIntent().getExtras().getBoolean("GameMode")){
-            System.out.println("SP"); //TODO might not be necessary
             gamePlayHandler = new SinglePlayerHandler();
         }else{
-            System.out.println("MP"); //TODO might not be necessary
             gamePlayHandler = new MultiplayerHandler();
         }
         gamePlayHandler.handleInitialization(this, properties);
@@ -77,11 +75,6 @@ public class GamePlayActivity
     @Override
     public void onFragmentInteraction(String answer) {
 
-    }
-
-    private boolean quickToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-        return true;
     }
 
     public void showCard(final Card card) {
@@ -164,16 +157,16 @@ public class GamePlayActivity
                     h.setBestTime(stats.getTimeElapsed());
                 }
                 h.setBestScore(properties.getScore());
-                h.setDeckName("Multiplayer game");
+                h.setDeckName("Multiplayer game"); //TODO we need to look into this and change this... old code that is pointless/wrong
                 properties.getHighScoresDataSource().deleteHighScore(h);
                 properties.getHighScoresDataSource().createHighScore(h.getDeckName(), h.getBestTime(), h.getBestScore());
-                return "Updated HighScores";
+                return Constants.UPDATED_HIGH_SCORE;
             }
-            return "No HighScore";
+            return Constants.NO_HIGH_SCORE;
         } else {
             properties.getHighScoresDataSource().createHighScore("Multiplayer game",
                     stats.getTimeElapsed(), properties.getScore());
-            return "New HighScore";
+            return Constants.NEW_HIGH_SCORE;
         }
     }
 

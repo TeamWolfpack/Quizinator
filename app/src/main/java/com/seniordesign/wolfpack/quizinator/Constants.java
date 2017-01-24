@@ -1,9 +1,5 @@
 package com.seniordesign.wolfpack.quizinator;
 
-/**
- * Created by aaron on 12/28/2016.
- */
-
 public final class Constants {
 
     public static final String NAQT_RULES_URL = "https://www.naqt.com/rules.html";
@@ -37,6 +33,10 @@ public final class Constants {
     public static final String GAME_SETTINGS = "Game Settings";
     public static final String RULES = "Rules";
     public static final String GAME_MODE = "GameMode";
+
+    public static final String UPDATED_HIGH_SCORE = "Updated High Scores";
+    public static final String NO_HIGH_SCORE = "No High Scores";
+    public static final String NEW_HIGH_SCORE = "New High Score";
 
     public static final String GAME_MINUTES_ERROR = "Game Minutes can't be empty";
     public static final String GAME_SECONDS_ERROR = "Game Seconds can't be empty";

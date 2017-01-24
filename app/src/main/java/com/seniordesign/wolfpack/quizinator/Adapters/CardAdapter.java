@@ -14,10 +14,6 @@ import com.seniordesign.wolfpack.quizinator.R;
 
 import java.util.List;
 
-/**
- * Created by aaron on 12/27/2016.
- */
-
 public class CardAdapter extends ArrayAdapter<Card> {
 
     public CardAdapter(Context context, int resource) {
