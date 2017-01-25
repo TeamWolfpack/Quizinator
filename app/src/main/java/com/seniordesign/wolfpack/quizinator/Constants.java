@@ -35,6 +35,10 @@ public final class Constants {
     public static final String RULES = "Rules";
     public static final String GAME_MODE = "GameMode";
 
+    public static final String SAVE = "Save";
+    public static final String CANCEL = "Cancel";
+    public static final String DELETE = "Delete";
+
     public static final String UPDATED_HIGH_SCORE = "Updated High Scores";
     public static final String NO_HIGH_SCORE = "No High Scores";
     public static final String NEW_HIGH_SCORE = "New High Score";

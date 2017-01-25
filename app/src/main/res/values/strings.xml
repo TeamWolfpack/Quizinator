@@ -91,5 +91,6 @@
 
     <string name="correct_answer">Answer</string>
     <string name="wrong_answer">Wrong</string>
+    <string name="default_card_points">1</string>
 
 </resources>

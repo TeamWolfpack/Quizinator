@@ -47,7 +47,7 @@ public class QuizSQLiteHelper extends SQLiteOpenHelper {
             + CARD_COLUMN_QUESTION + " TEXT, "
             + CARD_COLUMN_CORRECTANSWER + " TEXT, "
             + CARD_COLUMN_POSSIBLEANSWERS + " TEXT, "
-            + CARD_COLUMN_POINTS + " INTEGER, "
+            + CARD_COLUMN_POINTS + " INTEGER DEFAULT 1, "
             + CARD_COLUMN_MODERATORNEEDED + " TEXT"
             + ");";
 

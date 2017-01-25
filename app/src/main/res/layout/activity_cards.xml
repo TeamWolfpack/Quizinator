@@ -33,7 +33,6 @@
                 <!--android:drawableRight="?android:attr/listChoiceIndicatorMultiple"-->
                 <!--android:text="@string/moderator_needed_filter" />-->
         </LinearLayout>
-
         <ListView
             android:id="@+id/list_of_cards"
             android:layout_width="match_parent"

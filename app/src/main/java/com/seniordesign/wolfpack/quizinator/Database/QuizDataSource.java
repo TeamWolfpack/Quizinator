@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Constants;
@@ -136,12 +135,6 @@ public class QuizDataSource {
         }
         // make sure to close the cursor
         cursor.close();
-
-        Log.d("DATABASE", "Starting log of cards: size = " + cards.size());
-        for(int i = 0; i < cards.size(); i++){
-            Log.d("DATABASE", i + " : " + cards.get(i));
-        }
-
         return cards;
     }
 
@@ -162,7 +155,6 @@ public class QuizDataSource {
                 .append("=\'")
                 .append(cardTypes.get(i).ordinal())
                 .append("\'");
-        Log.d("DATABASE", "whereClause: " + whereClause.toString());
         return whereClause.toString();
     }
 
@@ -369,7 +361,6 @@ public class QuizDataSource {
                 .append(" INNER JOIN " + QuizSQLiteHelper.TABLE_DECKS + " d")
                 .append(" ON cdr." + QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK + "=d." + QuizSQLiteHelper.DECK_COLUMN_ID)
                 .append(" WHERE cdr." + QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK + "=\'").append(deckId).append("\'");
-        Log.d("FUCKINGQUERY", query.toString());
         Cursor cursor = database.rawQuery(query.toString(), null);
         cursor.moveToFirst();
         while(!cursor.isAfterLast()){

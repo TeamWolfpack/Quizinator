@@ -126,13 +126,13 @@ public class CardsActivity extends AppCompatActivity {
         alertDialogBuilder
                 .setCancelable(false)
                 .setTitle("Edit Card")
-                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                .setPositiveButton(Constants.SAVE, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
                         editCard(card,promptsView,true);
                         dialog.cancel();
                     }
                 })
-                .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNeutralButton(Constants.CANCEL, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
                         if(isNew){
                             dataSource.deleteCard(card);
@@ -140,7 +140,7 @@ public class CardsActivity extends AppCompatActivity {
                         dialog.cancel();
                     }
                 })
-                .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+                .setNegativeButton(Constants.DELETE, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
                         createDeleteCardConfirmation(card);
                     }
