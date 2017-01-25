@@ -114,6 +114,7 @@
             android:id="@+id/edit_card_true_or_false"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
+            android:orientation="horizontal"
             >
             <RadioButton
                 android:id="@+id/edit_card_true"

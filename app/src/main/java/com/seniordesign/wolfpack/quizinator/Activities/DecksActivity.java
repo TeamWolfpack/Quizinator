@@ -9,6 +9,7 @@ import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Adapters.DeckAdapter;
+import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Database.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Deck;
 import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
@@ -24,6 +25,7 @@ public class DecksActivity extends AppCompatActivity implements AdapterView.OnIt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_decks);
+        setTitle(Constants.DECKS);
 
         initializeDB();
 
