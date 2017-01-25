@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.seniordesign.wolfpack.quizinator.Adapters.CardAdapter;
@@ -64,12 +65,7 @@ public class CardsActivity extends AppCompatActivity {
         selectedCardTypes = new ArrayList<>();
 
         initializeCardTypeSpinner();
-
         initializeListOfCards(dataSource.filterCards(cardTypes));
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        //client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     private Boolean initializeCardTypeSpinner(){
@@ -106,10 +102,6 @@ public class CardsActivity extends AppCompatActivity {
     private boolean initializeDB() {
         dataSource = new QuizDataSource(this);
         return dataSource.open();
-    }
-
-    private void initializeList() {
-        initializeListOfCards(dataSource.filterCards(cardTypes));
     }
 
     private void initializeListOfCards(final List<Card> values) {
@@ -168,22 +160,15 @@ public class CardsActivity extends AppCompatActivity {
         ((EditText)promptsView.findViewById(R.id.edit_card_points_value)).setText(String.valueOf(card.getPoints()));
         ((EditText)promptsView.findViewById(R.id.edit_card_question_value)).setText(card.getQuestion());
 
-        LinearLayout answerArea1 = ((LinearLayout)promptsView.findViewById(R.id.edit_card_answer_layout_1));
-        int answerArea1CC = answerArea1.getChildCount();
-        for(int i = 0; i < answerArea1CC; i++){
-            answerArea1.getChildAt(i).setVisibility(View.INVISIBLE);
-        }
-
-        LinearLayout answerArea2 = ((LinearLayout)promptsView.findViewById(R.id.edit_card_answer_layout_2));
-        int answerArea2CC = answerArea2.getChildCount();
-        for(int i = 0; i < answerArea2CC; i++){
-            answerArea2.getChildAt(i).setVisibility(View.INVISIBLE);
-        }
+        TableRow tableRow1FR = (TableRow)promptsView.findViewById(R.id.answer_row_1);
+        TableRow tableRowMC = (TableRow)promptsView.findViewById(R.id.answer_row_2);
+        TableRow tableRowTF = (TableRow)promptsView.findViewById(R.id.answer_row_3);
 
         switch (Constants.CARD_TYPES.values()[card.getCardType()]){
             case TRUE_FALSE:
-                answerArea1.setVisibility(View.INVISIBLE);
-                answerArea2.setVisibility(View.VISIBLE);
+                tableRow1FR.setVisibility(View.GONE);
+                tableRowMC.setVisibility(View.GONE);
+                tableRowTF.setVisibility(View.VISIBLE);
                 //grab group
                 RadioGroup radioGroupForTrueFalse = (RadioGroup) promptsView.findViewById(R.id.edit_card_true_or_false);
                 radioGroupForTrueFalse.setVisibility(View.VISIBLE);
@@ -196,11 +181,11 @@ public class CardsActivity extends AppCompatActivity {
                     RadioButton radioButton = (RadioButton) promptsView.findViewById(R.id.edit_card_false);
                     radioButton.setChecked(true);
                 }
-
                 break;
             case MULTIPLE_CHOICE:
-                answerArea1.setVisibility(View.VISIBLE);
-                answerArea2.setVisibility(View.INVISIBLE);
+                tableRow1FR.setVisibility(View.VISIBLE);
+                tableRowMC.setVisibility(View.VISIBLE);
+                tableRowTF.setVisibility(View.GONE);
                 EditText correctAnswer1 = (EditText) promptsView.findViewById(R.id.edit_card_answer_field_1);
                 correctAnswer1.setText(card.getCorrectAnswer());
                 correctAnswer1.setVisibility(View.VISIBLE);
@@ -220,8 +205,9 @@ public class CardsActivity extends AppCompatActivity {
                 wrongAnswer3.setVisibility(View.VISIBLE);
                 break;
             default:
-                answerArea1.setVisibility(View.VISIBLE);
-                answerArea2.setVisibility(View.INVISIBLE);
+                tableRow1FR.setVisibility(View.VISIBLE);
+                tableRowMC.setVisibility(View.GONE);
+                tableRowTF.setVisibility(View.GONE);
                 EditText correctAnswer2 = (EditText) promptsView.findViewById(R.id.edit_card_answer_field_1);
                 correctAnswer2.setText(card.getCorrectAnswer());
                 correctAnswer2.setVisibility(View.VISIBLE);

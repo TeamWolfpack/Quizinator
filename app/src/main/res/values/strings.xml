@@ -89,7 +89,7 @@
     <string name="high_score_time_label">High Score Time:</string>
     <string name="time_elapsed_label">Time Elapsed:</string>
 
-    <string name="correct_answer">Correct Answer</string>
-    <string name="wrong_answer">Wrong Answer</string>
+    <string name="correct_answer">Answer</string>
+    <string name="wrong_answer">Wrong</string>
 
 </resources>
