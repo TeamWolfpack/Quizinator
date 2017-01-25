@@ -18,7 +18,7 @@
         android:maxLines="2"
         android:ellipsize="end"
         android:text="@string/question"
-        android:textSize="12sp"
+        android:textSize="@dimen/md_text_size_body"
         android:id="@+id/array_adapter_card_question" />
 
 </LinearLayout>
