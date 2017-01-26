@@ -49,7 +49,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.7'
     compile 'com.android.support:support-v4:25.1.0'
     compile 'io.apptik.widget:multiselectspinner:1.0.12'
-    compile 'com.google.android.gms:play-services-appindexing:9.8.0'
     testCompile 'junit:junit:4.12'
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
+    compile 'com.google.android.gms:play-services-appindexing:9.8.0'
 }
