@@ -2,6 +2,7 @@ package com.seniordesign.wolfpack.quizinator.Activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -124,14 +125,37 @@ public class CardsActivity extends AppCompatActivity {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setView(promptsView);
         alertDialogBuilder
-                .setCancelable(false)
-                .setTitle("Edit Card")
-                .setPositiveButton(Constants.SAVE, new DialogInterface.OnClickListener() {
+            .setCancelable(false)
+            .setTitle("Edit Card")
+            .setPositiveButton(Constants.SAVE, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog,int id) {
+                    editCard(card,promptsView,true);
+                    dialog.cancel();
+                }
+            })
+            .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    initializeListOfCards(dataSource.filterCards(cardTypes));
+                }
+            });
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            alertDialogBuilder
+                .setNegativeButton(Constants.CANCEL, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
-                        editCard(card,promptsView,true);
+                        if(isNew){
+                            dataSource.deleteCard(card);
+                        }
                         dialog.cancel();
                     }
                 })
+                .setNeutralButton(Constants.DELETE, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        createDeleteCardConfirmation(card);
+                    }
+                });
+        }else{
+            alertDialogBuilder
                 .setNeutralButton(Constants.CANCEL, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
                         if(isNew){
@@ -144,13 +168,8 @@ public class CardsActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog,int id) {
                         createDeleteCardConfirmation(card);
                     }
-                })
-                .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        initializeListOfCards(dataSource.filterCards(cardTypes));
-                    }
                 });
+        }
         AlertDialog alertDialog = alertDialogBuilder.create();
         populateEditCardValues(card, promptsView, true);
         alertDialog.show();
