@@ -79,7 +79,6 @@
             android:id="@+id/edit_card_multiple_choice"
             android:orientation="vertical"
             android:layout_column="1"
-            android:padding="3dip"
             >
             <EditText
                 android:id="@+id/edit_card_answer_field_2"
@@ -106,7 +105,6 @@
         android:id="@+id/answer_row_3">
         <TextView
             android:layout_column="0"
-            android:text="@string/wrong_answer"
             android:padding="3dip"
             android:gravity="right"
             android:layout_width="wrap_content" />
@@ -114,18 +112,22 @@
             android:id="@+id/edit_card_true_or_false"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
+            android:layout_column="1"
+            android:orientation="horizontal"
             >
             <RadioButton
                 android:id="@+id/edit_card_true"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
                 android:text="@string/_true"
+                android:layout_weight="1"
                 />
             <RadioButton
                 android:id="@+id/edit_card_false"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
                 android:text="@string/_false"
+                android:layout_weight="1"
                 />
         </RadioGroup>
     </TableRow>
