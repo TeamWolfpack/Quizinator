@@ -1,16 +1,20 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.seniordesign.wolfpack.quizinator.Constants;
+import com.seniordesign.wolfpack.quizinator.Fragments.FreeResponseAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.GameplayHandler.GamePlayHandler;
 import com.seniordesign.wolfpack.quizinator.GameplayHandler.GamePlayProperties;
 import com.seniordesign.wolfpack.quizinator.GameplayHandler.MultiplayerHandler;
@@ -29,7 +33,8 @@ import java.util.Collections;
 public class GamePlayActivity
         extends AppCompatActivity
         implements TrueFalseChoiceAnswerFragment.OnFragmentInteractionListener,
-        MultipleChoiceAnswerFragment.OnFragmentInteractionListener{
+        MultipleChoiceAnswerFragment.OnFragmentInteractionListener,
+        FreeResponseAnswerFragment.OnFragmentInteractionListener{
 
     GamePlayProperties properties;
     GamePlayHandler gamePlayHandler;
@@ -113,6 +118,20 @@ public class GamePlayActivity
                     }
                 });
                 break;
+            case FREE_RESPONSE:
+                final FreeResponseAnswerFragment frFragment = new FreeResponseAnswerFragment();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getSupportFragmentManager().
+                                beginTransaction()
+                                .replace(R.id.answerArea,frFragment)
+                                .commitNowAllowingStateLoss();
+                        ((TextView) findViewById(R.id.questionTextArea))
+                                .setText(card.getQuestion());
+                    }
+                });
+                break;
             default:
                 break;
         }
@@ -146,6 +165,16 @@ public class GamePlayActivity
         properties.getCardTimerAreaBackgroundRunning().cancel();
         Button clickedButton = (Button) v;
         String answer = clickedButton.getText().toString();
+        if(answer.equals("Submit")){
+            View view = this.getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+
+            EditText freeResponseAnswer = (EditText) findViewById(R.id.freeResponseAnswerArea);
+            answer = freeResponseAnswer.getText().toString();
+        }
         return gamePlayHandler.handleAnswerClicked(this, properties, answer);
     }
 
