@@ -30,6 +30,7 @@ public final class Constants {
     public static final String HOSTING_GAME = "Hosting Game";
     public static final String JOIN_GAME = "Join Game";
     public static final String CARDS = "Cards";
+    public static final String DECKS = "Decks";
     public static final String GAME_SETTINGS = "Game Settings";
     public static final String RULES = "Rules";
     public static final String GAME_MODE = "GameMode";
