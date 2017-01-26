@@ -335,6 +335,7 @@ public class CardsActivity extends AppCompatActivity {
                 break;
             default:
                 EditText correctAnswer2 = (EditText) promptsView.findViewById(R.id.edit_card_answer_field_1);
+                card.setModeratorNeeded(Boolean.TRUE.toString());
                 card.setCorrectAnswer("" + correctAnswer2.getText());
                 break;
         }
