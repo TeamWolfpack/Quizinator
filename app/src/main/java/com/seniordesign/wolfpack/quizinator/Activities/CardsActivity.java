@@ -179,13 +179,17 @@ public class CardsActivity extends AppCompatActivity {
         ((EditText)promptsView.findViewById(R.id.edit_card_question_value)).setText(card.getQuestion());
 
         TableRow tableRow1FR = (TableRow)promptsView.findViewById(R.id.answer_row_1);
-        TableRow tableRowMC = (TableRow)promptsView.findViewById(R.id.answer_row_2);
+        TableRow tableRowMC1 = (TableRow)promptsView.findViewById(R.id.answer_row_2_1);
+        TableRow tableRowMC2 = (TableRow)promptsView.findViewById(R.id.answer_row_2_2);
+        TableRow tableRowMC3 = (TableRow)promptsView.findViewById(R.id.answer_row_2_3);
         TableRow tableRowTF = (TableRow)promptsView.findViewById(R.id.answer_row_3);
 
         switch (Constants.CARD_TYPES.values()[card.getCardType()]){
             case TRUE_FALSE:
                 tableRow1FR.setVisibility(View.GONE);
-                tableRowMC.setVisibility(View.GONE);
+                tableRowMC1.setVisibility(View.GONE);
+                tableRowMC2.setVisibility(View.GONE);
+                tableRowMC3.setVisibility(View.GONE);
                 tableRowTF.setVisibility(View.VISIBLE);
                 //grab group
                 RadioGroup radioGroupForTrueFalse = (RadioGroup) promptsView.findViewById(R.id.edit_card_true_or_false);
@@ -202,7 +206,9 @@ public class CardsActivity extends AppCompatActivity {
                 break;
             case MULTIPLE_CHOICE:
                 tableRow1FR.setVisibility(View.VISIBLE);
-                tableRowMC.setVisibility(View.VISIBLE);
+                tableRowMC1.setVisibility(View.VISIBLE);
+                tableRowMC2.setVisibility(View.VISIBLE);
+                tableRowMC3.setVisibility(View.VISIBLE);
                 tableRowTF.setVisibility(View.GONE);
                 EditText correctAnswer1 = (EditText) promptsView.findViewById(R.id.edit_card_answer_field_1);
                 correctAnswer1.setText(card.getCorrectAnswer());
@@ -224,7 +230,9 @@ public class CardsActivity extends AppCompatActivity {
                 break;
             default:
                 tableRow1FR.setVisibility(View.VISIBLE);
-                tableRowMC.setVisibility(View.GONE);
+                tableRowMC1.setVisibility(View.GONE);
+                tableRowMC2.setVisibility(View.GONE);
+                tableRowMC3.setVisibility(View.GONE);
                 tableRowTF.setVisibility(View.GONE);
                 EditText correctAnswer2 = (EditText) promptsView.findViewById(R.id.edit_card_answer_field_1);
                 correctAnswer2.setText(card.getCorrectAnswer());
