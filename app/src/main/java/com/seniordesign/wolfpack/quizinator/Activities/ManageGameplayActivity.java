@@ -1,8 +1,10 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.CountDownTimer;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -109,9 +111,11 @@ public class ManageGameplayActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ((NextCardAdapter)nextCardSpinner.getAdapter())
-                            .removeItem(nextCardSpinner.getSelectedItemPosition());
-                    nextCardSpinner.setSelection(0);
+                    if (nextCardSpinner.getCount() > 1) {
+                        ((NextCardAdapter)nextCardSpinner.getAdapter())
+                                .removeItem(nextCardSpinner.getSelectedItemPosition());
+                        nextCardSpinner.setSelection(0);
+                    }
                 }
             });
         } else {
@@ -130,13 +134,30 @@ public class ManageGameplayActivity extends AppCompatActivity {
     }
 
     public void endGame(View v) {
-        gameplayTimerRunning.cancel();
-        selectAndRespondToFastestAnswer();
-        String json = gson.toJson(rules.getTimeLimit() - gameplayTimerRemaining);
-        ConnectionService.sendMessage(MSG_END_OF_GAME_ACTIVITY, json);
-        Intent i = new Intent(ManageGameplayActivity.this, MainMenuActivity.class);
-        startActivity(i);
-        finish();
+        if (v == null) {
+            gameplayTimerRunning.cancel();
+            selectAndRespondToFastestAnswer();
+            String json = gson.toJson(rules.getTimeLimit() - gameplayTimerRemaining);
+            ConnectionService.sendMessage(MSG_END_OF_GAME_ACTIVITY, json);
+            Intent i = new Intent(ManageGameplayActivity.this, MainMenuActivity.class);
+            startActivity(i);
+            finish();
+            return;
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle("End Game")
+                .setMessage("Are you sure you want to end the game?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        endGame(null);
+                    }
+
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 
     /**

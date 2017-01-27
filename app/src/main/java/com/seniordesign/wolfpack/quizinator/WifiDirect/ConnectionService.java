@@ -162,7 +162,7 @@ public class ConnectionService extends Service implements
         if(wifiDirectApp.mManageActivity != null){
             wifiDirectApp.mManageActivity.validateAnswer(null);
         }
-        if (wifiDirectApp.mP2pMan != null) {
+        if (wifiDirectApp.mP2pMan != null && wifiDirectApp.mP2pChannel != null) {
             wifiDirectApp.mP2pMan.requestPeers(wifiDirectApp.mP2pChannel, this);
             return true;
         }
