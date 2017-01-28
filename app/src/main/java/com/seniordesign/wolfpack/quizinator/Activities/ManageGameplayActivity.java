@@ -1,6 +1,5 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.CountDownTimer;
@@ -8,14 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -47,7 +39,6 @@ public class ManageGameplayActivity extends AppCompatActivity {
     private RulesDataSource rulesDataSource;
 
     private Rules rules;
-    private Deck deck;
     private Card currentCard;
     private int cardLimit;
 
@@ -83,7 +74,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
 
         dataSource = new QuizDataSource(this);
         dataSource.open();
-        deck = dataSource.getDeckWithId(rules.getDeckId()).filter(rules);
+        Deck deck = dataSource.getDeckWithId(rules.getDeckId()).filter(rules);
 
         cardLimit = Math.min(deck.getCards().size(),rules.getMaxCardCount());
 
@@ -165,6 +156,8 @@ public class ManageGameplayActivity extends AppCompatActivity {
      * is received.
      */
     public void deviceIsReady(String deviceName) {
+        //TODO start the game when all devices are ready
+        //or
         //TODO show that the device is ready
     }
 

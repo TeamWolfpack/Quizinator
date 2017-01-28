@@ -31,7 +31,7 @@ public class SinglePlayerHandler implements GamePlayHandler {
         }
         else if (answer.equals(properties.getCurrentCard().getCorrectAnswer())) {
             gamePlayActivity.quickCorrectAnswerConfirmation(true);
-            properties.setScore(properties.getScore()+1);
+            properties.setScore(properties.getScore() + properties.getCurrentCard().getPoints());
         } else {
             gamePlayActivity.quickCorrectAnswerConfirmation(false);
         }

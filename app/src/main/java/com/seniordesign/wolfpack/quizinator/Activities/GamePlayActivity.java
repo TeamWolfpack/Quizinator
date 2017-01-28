@@ -246,11 +246,11 @@ public class GamePlayActivity
 
     public void answerConfirmed(boolean correct) {
         if (correct)
-            properties.setScore(properties.getScore()+1);
+            properties.setScore(properties.getScore() + properties.getCurrentCard().getPoints());
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
                 ((TextView) findViewById(R.id.scoreText)).setText("Score: " + properties.getScore());
             }
         });
