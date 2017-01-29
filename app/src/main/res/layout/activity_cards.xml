@@ -39,12 +39,15 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
     <android.support.design.widget.FloatingActionButton
-        app:srcCompat="@drawable/ic_plus_btn_24dp"
+        app:srcCompat="@drawable/ic_plus_btn_white_24dp"
         android:id="@+id/new_card_button"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
         android:onClick="newCardClick" />
 </RelativeLayout>
