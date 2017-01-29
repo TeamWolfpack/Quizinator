@@ -32,8 +32,6 @@ import static org.hamcrest.Matchers.anything;
 @LargeTest
 public class CustomDeckTests {
 
-    QuizDataSource dataSource;
-
     @Rule
     public ActivityTestRule<DecksActivity> mActivityRule =
             new ActivityTestRule<>(DecksActivity.class);
@@ -54,64 +52,49 @@ public class CustomDeckTests {
 
     @Test
     public void validateCreateAndDeleteDeck() {
-        dataSource = new QuizDataSource(InstrumentationRegistry.getTargetContext());
+        QuizDataSource dataSource = new QuizDataSource(InstrumentationRegistry.getTargetContext());
         dataSource.open();
         int numOfDecks = dataSource.getAllDecks().size();
         onView(withId(R.id.new_deck_button)).perform(click());
-        int dif = dataSource.getAllDecks().size() - numOfDecks;
-        assertTrue(dif>0);
+        assertTrue(dataSource.getAllDecks().size() == numOfDecks);
+        closeSoftKeyboard();
         onView(withId(R.id.deck_delete_button)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
-        dif = dataSource.getAllDecks().size() - numOfDecks;
-        assertTrue(dif == 0);
+        assertTrue(dataSource.getAllDecks().size() == numOfDecks);
+        dataSource.close();
     }
 
     @Test
     public void validateEditCancelDeck() {
-        dataSource = new QuizDataSource(InstrumentationRegistry.getTargetContext());
+        QuizDataSource dataSource = new QuizDataSource(InstrumentationRegistry.getTargetContext());
         dataSource.open();
         int numOfDecks = dataSource.getAllDecks().size();
         onView(withId(R.id.new_deck_button)).perform(click());
-        int dif = dataSource.getAllDecks().size() - numOfDecks;
-        assertTrue(dif>0);
+        assertTrue(dataSource.getAllDecks().size() == numOfDecks);
+        closeSoftKeyboard();
         onView(withId(R.id.deck_cancel_button)).perform(click());
 
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        onData(anything())
-                .inAdapterView(withId(R.id.list_of_decks))
-                .atPosition(1)
-                .onChildView(withId(R.id.array_adapter_deck_name))
-                .perform(click());
-
+        onView(withId(R.id.new_deck_button)).perform(click());
         closeSoftKeyboard();
         onView(withId(R.id.deck_delete_button)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
-        dif = dataSource.getAllDecks().size() - numOfDecks;
-        assertTrue(dif == 0);
+        assertTrue(dataSource.getAllDecks().size() == numOfDecks);
+        dataSource.close();
     }
-
 
     @Test
     public void validateEditSaveDeck() {
-        dataSource = new QuizDataSource(InstrumentationRegistry.getTargetContext());
+        QuizDataSource dataSource = new QuizDataSource(InstrumentationRegistry.getTargetContext());
         dataSource.open();
         int numOfDecks = dataSource.getAllDecks().size();
         onView(withId(R.id.new_deck_button)).perform(click());
-        int dif = dataSource.getAllDecks().size() - numOfDecks;
-        assertTrue(dif>0);
-        onView(withId(R.id.edit_deck_name)).perform(clearText());
-        onView(withId(R.id.edit_deck_name)).perform(typeText("FFF111"));
+        onView(withId(R.id.edit_deck_name)).perform(clearText(), typeText("FFF111"));
         onView(withId(R.id.deck_save_button)).perform(click());
         onView(withChild(withText("FFF111"))).perform(click());
         closeSoftKeyboard();
         onView(withId(R.id.deck_delete_button)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
-        dif = dataSource.getAllDecks().size() - numOfDecks;
-        assertTrue(dif == 0);
+        assertTrue(dataSource.getAllDecks().size() == numOfDecks);
+        dataSource.close();
     }
 }
