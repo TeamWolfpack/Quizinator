@@ -79,7 +79,12 @@ public class EditDeckActivity extends AppCompatActivity  implements AdapterView.
     public void onSaveClick(View view){
         String deckName = ((EditText)findViewById(R.id.edit_deck_name)).getText().toString();
         deck.setDeckName(deckName);
-        dataSource.updateDeck(deck);
+
+        if (deck.getId() == 0) {
+            dataSource.createDeck(deck);
+        } else {
+            dataSource.updateDeck(deck);
+        }
         finish();
     }
 
