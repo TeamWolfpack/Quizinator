@@ -16,11 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
 
-/**
- * @creation 10/11/2016.
- */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class RulesUITests {

@@ -7,11 +7,8 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.seniordesign.wolfpack.quizinator.Activities.EndOfGameplayActivity;
-import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresDataSource;
 
-import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -26,14 +23,6 @@ import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 
-/*
- * @author leonardj (10/10/2016)
- */
-
-/*
- * Tests EndOfGame Tests
- * @creation 10/10/2016
- */
 public class EndOfGameTests {
 
     // Needed to run in Travis

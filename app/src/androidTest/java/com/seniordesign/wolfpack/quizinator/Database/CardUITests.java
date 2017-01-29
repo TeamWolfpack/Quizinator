@@ -15,10 +15,6 @@ import org.junit.runner.RunWith;
 
 import static junit.framework.Assert.assertEquals;
 
-/**
- * Tests the Card database files that need a Context object
- * @creation 10/16/2016.
- */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class CardUITests {

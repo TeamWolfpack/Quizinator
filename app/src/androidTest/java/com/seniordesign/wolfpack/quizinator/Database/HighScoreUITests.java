@@ -17,10 +17,6 @@ import org.junit.runner.RunWith;
 
 import static junit.framework.TestCase.assertEquals;
 
-/**
- * Tests the High Score database files that need a Context object
- * @creation 10/10/2016.
- */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class HighScoreUITests {
@@ -51,9 +47,6 @@ public class HighScoreUITests {
     }
     // **********************************************
 
-    /*
-     * @author kuczynskij (10/12/2016)
-     */
     @Test
     public void normalFlow_HighScoresDataSource() throws Exception{
         assertEquals(true, dao.open());
