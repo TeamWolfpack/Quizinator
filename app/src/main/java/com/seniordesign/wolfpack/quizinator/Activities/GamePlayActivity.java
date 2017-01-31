@@ -1,7 +1,6 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
 import android.annotation.SuppressLint;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;

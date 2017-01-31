@@ -25,7 +25,6 @@ public class FreeResponseAnswerFragment extends Fragment {
                 container, false);
     }
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
