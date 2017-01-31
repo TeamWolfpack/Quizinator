@@ -95,4 +95,11 @@
     <string name="current_card">Current Card</string>
     <string name="correct_answer_label">Correct Answer</string>
 
+    <!--ANSWER FRAGMENT BUTTONS-->
+    <string name="frag_answer_buzzer">Buzzer</string>
+    <string name="frag_answer_A">A</string>
+    <string name="frag_answer_B">B</string>
+    <string name="frag_answer_C">C</string>
+    <string name="frag_answer_D">D</string>
+
 </resources>

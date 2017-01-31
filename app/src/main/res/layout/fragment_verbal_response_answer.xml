@@ -1,7 +1,23 @@
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context="com.seniordesign.wolfpack.quizinator.Activities.GamePlayActivity">
 
-</LinearLayout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:tools="http://schemas.android.com/tools"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical">
+        <Button
+            android:id="@+id/choiceAButton"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:onClick="answerClicked"
+            android:text="@string/frag_answer_buzzer"
+            android:textSize="@dimen/md_text_size_button"
+            />
+    </LinearLayout>
+</FrameLayout>
