@@ -5,7 +5,6 @@ import android.text.InputFilter;
 import android.text.Spanned;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 /**
  * Filter will make sure the time inputs
