@@ -11,6 +11,6 @@
         android:layout_height="match_parent"
         android:onClick="answerClicked"
         android:text="@string/frag_answer_buzzer"
-        android:textSize="@dimen/md_text_size_button"
+        android:textSize="@dimen/md_text_size_game_play_button"
         />
 </FrameLayout>
