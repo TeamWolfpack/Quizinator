@@ -16,4 +16,6 @@
     <dimen name="md_text_size_caption">12sp</dimen>
 
     <dimen name="md_text_size_button">14sp</dimen>
+
+    <dimen name="md_icon_width_and_height">40dp</dimen>
 </resources>
