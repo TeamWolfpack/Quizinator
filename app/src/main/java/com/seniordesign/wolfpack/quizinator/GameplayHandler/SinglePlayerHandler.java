@@ -77,6 +77,7 @@ public class SinglePlayerHandler implements GamePlayHandler {
 
             properties.setCurrentCard(properties.getDeck().getCards().get(properties.getDeckIndex()));
 
+            // TODO NOT WHERE WE SHOULD DO THIS!!!! CLEAN ME UP LATER!!!!!!!!!!!!!!!!!!!!!
             if(Boolean.parseBoolean(properties.getCurrentCard().getModeratorNeeded())){
                 properties.setDeckIndex(properties.getDeckIndex()+1);
                 return handleNextCard(gamePlayActivity,properties);

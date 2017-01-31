@@ -3,8 +3,104 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.seniordesign.wolfpack.quizinator.Fragments.MultipleChoiceAnswerFragment">
+    tools:context="com.seniordesign.wolfpack.quizinator.Activities.GamePlayActivity">
+<!--
+    <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnCount="2"
+        android:rowCount="2"
+        android:orientation="horizontal"
+        tools:context="com.seniordesign.wolfpack.quizinator.Activities.GamePlayActivity" >
 
+        <Button
+            android:id="@+id/choiceAButton"
+            android:layout_column="0"
+            android:onClick="answerClicked"
+            android:text="@string/frag_answer_A"
+            android:textSize="@dimen/md_text_size_game_play_button" />
+
+        <Button
+            android:id="@+id/choiceBButton"
+            android:layout_column="1"
+            android:onClick="answerClicked"
+            android:text="@string/frag_answer_B"
+            android:textSize="@dimen/md_text_size_game_play_button" />
+
+        <Button
+            android:id="@+id/choiceCButton"
+            android:layout_column="0"
+            android:onClick="answerClicked"
+            android:text="@string/frag_answer_C"
+            android:textSize="@dimen/md_text_size_game_play_button" />
+
+        <Button
+            android:id="@+id/choiceDButton"
+            android:layout_column="1"
+            android:onClick="answerClicked"
+            android:text="@string/frag_answer_D"
+            android:textSize="@dimen/md_text_size_game_play_button" />
+    </GridLayout>
+-->
+    <!--
+    <TableLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:stretchColumns="1"
+        android:padding="10dp">
+
+        <TableRow
+            android:layout_height="match_parent"
+            android:layout_width="match_parent">
+
+            <Button
+                android:id="@+id/choiceAButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="0"
+                android:onClick="answerClicked"
+                android:text="@string/frag_answer_A"
+                android:textSize="@dimen/md_text_size_button" />
+
+            <Button
+                android:id="@+id/choiceBButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="1"
+                android:onClick="answerClicked"
+                android:text="@string/frag_answer_B"
+                android:textSize="@dimen/md_text_size_button" />
+        </TableRow>
+
+        <TableRow
+            android:layout_height="match_parent"
+            android:layout_width="match_parent">
+
+            <Button
+                android:id="@+id/choiceCButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="0"
+                android:onClick="answerClicked"
+                android:text="@string/frag_answer_C"
+                android:textSize="@dimen/md_text_size_button" />
+
+            <Button
+                android:id="@+id/choiceDButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="1"
+                android:onClick="answerClicked"
+                android:text="@string/frag_answer_D"
+                android:textSize="@dimen/md_text_size_button" />
+        </TableRow>
+
+    </TableLayout>
+    -->
+    <!--
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -22,7 +118,7 @@
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:onClick="answerClicked"
-                android:text="Choice A"
+                android:text="@string/frag_answer_A"
                 android:textSize="@dimen/md_text_size_button"
                 />
             <Button
@@ -31,7 +127,7 @@
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:onClick="answerClicked"
-                android:text="Choice B"
+                android:text="@string/frag_answer_B"
                 android:textSize="@dimen/md_text_size_button"
                 />
         </LinearLayout>
@@ -47,7 +143,7 @@
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:onClick="answerClicked"
-                android:text="Choice C"
+                android:text="@string/frag_answer_C"
                 android:textSize="@dimen/md_text_size_button"
                 />
             <Button
@@ -56,10 +152,12 @@
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:onClick="answerClicked"
-                android:text="Choice D"
+                android:text="@string/frag_answer_D"
                 android:textSize="@dimen/md_text_size_button"
                 />
         </LinearLayout>
     </LinearLayout>
+
+    -->
 
 </FrameLayout>
