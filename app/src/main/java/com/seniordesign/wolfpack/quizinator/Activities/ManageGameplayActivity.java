@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -27,6 +28,7 @@ import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
 import java.util.ArrayList;
 
+import static com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES.*;
 import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_ANSWER_CONFIRMATION_ACTIVITY;
 import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_END_OF_GAME_ACTIVITY;
 import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_SEND_CARD_ACTIVITY;
@@ -107,6 +109,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
                                 .removeItem(nextCardSpinner.getSelectedItemPosition());
                         nextCardSpinner.setSelection(0);
                     }
+                    updateCurrentCardView(currentCard);
                 }
             });
         } else {
@@ -196,6 +199,30 @@ public class ManageGameplayActivity extends AppCompatActivity {
         super.onDestroy();
         wifiDirectApp.disconnectFromGroup();
         wifiDirectApp.mManageActivity = null;
+    }
+
+    private void updateCurrentCardView(Card card) {
+        TextView question = (TextView) findViewById(R.id.current_card_question);
+            question.setText(card.getQuestion());
+
+        TextView points = (TextView) findViewById(R.id.current_card_points);
+            points.setText(getResources().getText(R.string.points) + ": " + card.getPoints());
+
+        ImageView type = (ImageView) findViewById(R.id.current_card_type_icon);
+            if (card.getCardType() == TRUE_FALSE.ordinal())
+                type.setImageResource(R.drawable.tf_icon);
+            else if (card.getCardType() == MULTIPLE_CHOICE.ordinal())
+                type.setImageResource(R.drawable.mc_icon);
+            else if (card.getCardType() == FREE_RESPONSE.ordinal())
+                type.setImageResource(R.drawable.fr_icon);
+            else if (card.getCardType() == VERBAL_RESPONSE.ordinal())
+                type.setImageResource(R.drawable.vr_icon);
+
+        TextView answerLabel = (TextView) findViewById(R.id.current_card_answer_label);
+            answerLabel.setText(R.string.correct_answer_label);
+
+        TextView answer = (TextView) findViewById(R.id.current_card_correct_answer);
+            answer.setText(card.getCorrectAnswer());
     }
 
     private boolean initializeGameTimer(long time) {
