@@ -1,6 +1,5 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,8 +9,6 @@ import com.seniordesign.wolfpack.quizinator.Database.GamePlayStats;
 import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScores;
 import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
-
-import java.sql.Time;
 
 public class EndOfGameplayActivity extends AppCompatActivity {
 
@@ -75,18 +72,12 @@ public class EndOfGameplayActivity extends AppCompatActivity {
         return (positiveDBConnections == 1);
     }
 
-    /*
-     * @author kuczynskij (09/28/2016)
-     */
     @Override
     protected void onResume(){
         super.onResume();
         highScoresDataSource.open();
     }
 
-    /*
-     * @author kuczynskij (09/28/2016)
-     */
     @Override
     protected void onPause(){
         super.onPause();
