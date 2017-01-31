@@ -97,6 +97,7 @@
 
     <!--ANSWER FRAGMENT BUTTONS-->
     <string name="frag_answer_buzzer">Buzzer</string>
+    <string name="frag_answer_submit">Submit</string>
     <string name="frag_answer_A">A</string>
     <string name="frag_answer_B">B</string>
     <string name="frag_answer_C">C</string>

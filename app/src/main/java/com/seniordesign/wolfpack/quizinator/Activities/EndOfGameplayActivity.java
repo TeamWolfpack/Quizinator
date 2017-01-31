@@ -13,18 +13,11 @@ import com.seniordesign.wolfpack.quizinator.R;
 
 import java.sql.Time;
 
-/*
- * The end of game play activity is...
- * @creation 09/28/2016
- */
 public class EndOfGameplayActivity extends AppCompatActivity {
 
     private HighScoresDataSource highScoresDataSource;
     private GamePlayStats gamePlayStats;
 
-    /*
-     * @author kuczynskij (09/28/2016)
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,57 +63,16 @@ public class EndOfGameplayActivity extends AppCompatActivity {
     }
 
     public void showMainMenu(View v){
-        final Intent intent = new Intent(this, MainMenuActivity.class);
-        startActivity(intent);
+        finish();
     }
 
-    /*
-     * @author kuczynskij (09/28/2016)
-     */
-    public String onButtonClick(View view){
-        return null;
-    }
-
-    /*
-     * @author kuczynskij (09/28/2016)
-     */
     private boolean initializeDB(){
         int positiveDBConnections = 0;
         highScoresDataSource = new HighScoresDataSource(this);
         if(highScoresDataSource.open()){
             positiveDBConnections++;
         }
-//        datasource = new ItemDataSource(this);
-//        datasource.open();
         return (positiveDBConnections == 1);
-    }
-
-    /*
-     * @author kuczynskij (09/28/2016)
-     */
-    private Time getGameDuration(){
-        return null;
-    }
-
-    /*
-     * @author kuczynskij (09/28/2016)
-     */
-    private int getPlayersScore(){
-        return 0;
-    }
-
-    /*
-     * @author kuczynskij (09/28/2016)
-     */
-    private int getCardsAnsweredRightTotal(){
-        return 0;
-    }
-
-    /*
-     * @author kuczynskij (09/28/2016)
-     */
-    private boolean updateHighscores(){
-        return false;
     }
 
     /*
