@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Fragments.FreeResponseAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.Fragments.TrueFalseAnswerFragment;
+import com.seniordesign.wolfpack.quizinator.Fragments.VerbalResponseAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.GameplayHandler.GamePlayHandler;
 import com.seniordesign.wolfpack.quizinator.GameplayHandler.GamePlayProperties;
 import com.seniordesign.wolfpack.quizinator.GameplayHandler.MultiplayerHandler;
@@ -31,9 +32,10 @@ import java.util.Collections;
 
 public class GamePlayActivity
         extends AppCompatActivity
-        implements TrueFalseAnswerFragment.OnFragmentInteractionListener,
-        MultipleChoiceAnswerFragment.OnFragmentInteractionListener,
-        FreeResponseAnswerFragment.OnFragmentInteractionListener{
+        implements
+            TrueFalseAnswerFragment.OnFragmentInteractionListener,
+            MultipleChoiceAnswerFragment.OnFragmentInteractionListener,
+            FreeResponseAnswerFragment.OnFragmentInteractionListener{
 
     GamePlayProperties properties;
     GamePlayHandler gamePlayHandler;
@@ -125,6 +127,21 @@ public class GamePlayActivity
                         getSupportFragmentManager().
                                 beginTransaction()
                                 .replace(R.id.answerArea,frFragment)
+                                .commitNowAllowingStateLoss();
+                        ((TextView) findViewById(R.id.questionTextArea))
+                                .setText(card.getQuestion());
+                    }
+                });
+                break;
+            case VERBAL_RESPONSE:
+                final VerbalResponseAnswerFragment vrFragment =
+                        new VerbalResponseAnswerFragment();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getSupportFragmentManager().
+                                beginTransaction()
+                                .replace(R.id.answerArea, vrFragment)
                                 .commitNowAllowingStateLoss();
                         ((TextView) findViewById(R.id.questionTextArea))
                                 .setText(card.getQuestion());

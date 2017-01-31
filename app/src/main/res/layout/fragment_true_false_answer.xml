@@ -12,8 +12,8 @@
         <Button
             android:id="@+id/trueButton"
             android:layout_width="match_parent"
-            android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:onClick="answerClicked"
             android:text="True"
             android:textSize="@dimen/md_text_size_button"
@@ -21,8 +21,8 @@
         <Button
             android:id="@+id/falseButton"
             android:layout_width="match_parent"
-            android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:onClick="answerClicked"
             android:text="False"
             android:textSize="@dimen/md_text_size_button"

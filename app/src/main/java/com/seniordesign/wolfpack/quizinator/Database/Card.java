@@ -44,7 +44,7 @@ public class Card{
                 // TODO implement later
                 break;
             case VERBAL_RESPONSE:
-                // TODO implement later
+                moderatorNeeded = String.valueOf(false);
                 break;
         }
     }
