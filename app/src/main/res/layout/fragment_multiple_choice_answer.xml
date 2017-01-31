@@ -23,7 +23,7 @@
                 android:layout_height="match_parent"
                 android:onClick="answerClicked"
                 android:text="Choice A"
-                android:textSize="20dp"
+                android:textSize="@dimen/md_text_size_button"
                 />
             <Button
                 android:id="@+id/choiceBButton"
@@ -32,7 +32,7 @@
                 android:layout_height="match_parent"
                 android:onClick="answerClicked"
                 android:text="Choice B"
-                android:textSize="20dp"
+                android:textSize="@dimen/md_text_size_button"
                 />
         </LinearLayout>
 
@@ -48,7 +48,7 @@
                 android:layout_height="match_parent"
                 android:onClick="answerClicked"
                 android:text="Choice C"
-                android:textSize="20dp"
+                android:textSize="@dimen/md_text_size_button"
                 />
             <Button
                 android:id="@+id/choiceDButton"
@@ -57,7 +57,7 @@
                 android:layout_height="match_parent"
                 android:onClick="answerClicked"
                 android:text="Choice D"
-                android:textSize="20dp"
+                android:textSize="@dimen/md_text_size_button"
                 />
         </LinearLayout>
     </LinearLayout>

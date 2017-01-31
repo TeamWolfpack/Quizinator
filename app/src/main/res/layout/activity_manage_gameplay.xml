@@ -133,6 +133,7 @@
                     android:id="@+id/current_card_question"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:gravity="center"
                     android:textSize="@dimen/md_text_size_headline"/>
 
