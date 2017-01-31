@@ -12,14 +12,14 @@ import com.seniordesign.wolfpack.quizinator.R;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link TrueFalseChoiceAnswerFragment.OnFragmentInteractionListener} interface
+ * {@link TrueFalseAnswerFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link TrueFalseChoiceAnswerFragment#newInstance} factory method to
+ * Use the {@link TrueFalseAnswerFragment#newInstance} factory method to
  * create an instance of this fragment.
  *
  * @creation 10/11/2016
  */
-public class TrueFalseChoiceAnswerFragment extends Fragment {
+public class TrueFalseAnswerFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -31,7 +31,7 @@ public class TrueFalseChoiceAnswerFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public TrueFalseChoiceAnswerFragment() {
+    public TrueFalseAnswerFragment() {
         // Required empty public constructor
     }
 
@@ -41,11 +41,11 @@ public class TrueFalseChoiceAnswerFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment TrueFalseChoiceAnswerFragment.
+     * @return A new instance of fragment TrueFalseAnswerFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TrueFalseChoiceAnswerFragment newInstance(String param1, String param2) {
-        TrueFalseChoiceAnswerFragment fragment = new TrueFalseChoiceAnswerFragment();
+    public static TrueFalseAnswerFragment newInstance(String param1, String param2) {
+        TrueFalseAnswerFragment fragment = new TrueFalseAnswerFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

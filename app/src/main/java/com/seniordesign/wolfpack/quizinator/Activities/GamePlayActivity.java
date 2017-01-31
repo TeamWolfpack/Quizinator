@@ -11,10 +11,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Fragments.FreeResponseAnswerFragment;
+import com.seniordesign.wolfpack.quizinator.Fragments.TrueFalseAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.GameplayHandler.GamePlayHandler;
 import com.seniordesign.wolfpack.quizinator.GameplayHandler.GamePlayProperties;
 import com.seniordesign.wolfpack.quizinator.GameplayHandler.MultiplayerHandler;
@@ -23,7 +23,6 @@ import com.seniordesign.wolfpack.quizinator.Database.Card;
 import com.seniordesign.wolfpack.quizinator.Database.GamePlayStats;
 import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScores;
 import com.seniordesign.wolfpack.quizinator.Fragments.MultipleChoiceAnswerFragment;
-import com.seniordesign.wolfpack.quizinator.Fragments.TrueFalseChoiceAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
@@ -32,7 +31,7 @@ import java.util.Collections;
 
 public class GamePlayActivity
         extends AppCompatActivity
-        implements TrueFalseChoiceAnswerFragment.OnFragmentInteractionListener,
+        implements TrueFalseAnswerFragment.OnFragmentInteractionListener,
         MultipleChoiceAnswerFragment.OnFragmentInteractionListener,
         FreeResponseAnswerFragment.OnFragmentInteractionListener{
 
@@ -91,7 +90,7 @@ public class GamePlayActivity
                     public void run() {
                         getSupportFragmentManager().
                                 beginTransaction()
-                                .replace(R.id.answerArea, new TrueFalseChoiceAnswerFragment())
+                                .replace(R.id.answerArea, new TrueFalseAnswerFragment())
                                 .commitNowAllowingStateLoss();
                         ((TextView) findViewById(R.id.questionTextArea))
                                 .setText(card.getQuestion());
