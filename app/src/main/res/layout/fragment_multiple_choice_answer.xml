@@ -43,7 +43,7 @@
             android:textSize="@dimen/md_text_size_game_play_button" />
     </GridLayout>
 -->
-    <!--
+
     <TableLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
@@ -99,7 +99,7 @@
         </TableRow>
 
     </TableLayout>
-    -->
+
     <!--
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
