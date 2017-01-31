@@ -161,7 +161,7 @@ public class GamePlayActivity
         finish();
     }
 
-    public long answerClicked(View v) {
+    public void answerClicked(View v) {
         properties.getCardTimerAreaBackgroundRunning().cancel();
         Button clickedButton = (Button) v;
         String answer = clickedButton.getText().toString();
@@ -175,7 +175,7 @@ public class GamePlayActivity
             EditText freeResponseAnswer = (EditText) findViewById(R.id.freeResponseAnswerArea);
             answer = freeResponseAnswer.getText().toString();
         }
-        return gamePlayHandler.handleAnswerClicked(this, properties, answer);
+        gamePlayHandler.handleAnswerClicked(this, properties, answer);
     }
 
     private String checkGameStatsAgainstHighScoresDB(GamePlayStats stats) {
