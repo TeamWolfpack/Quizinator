@@ -123,15 +123,20 @@
             android:layout_height="fill_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/current_card_question"
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:gravity="center"
-                android:textSize="@dimen/md_text_size_headline"
-                android:ellipsize="end"
-                android:background="@color/question_background"
-                android:layout_weight="0.5"/>
+                android:layout_weight="0.5"
+                android:background="@color/question_background">
+
+                <TextView
+                    android:id="@+id/current_card_question"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="@dimen/md_text_size_headline"/>
+
+            </ScrollView>
 
             <LinearLayout
                 android:layout_width="match_parent"
