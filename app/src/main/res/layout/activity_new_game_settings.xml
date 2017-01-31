@@ -102,10 +102,10 @@
                 android:id="@+id/card_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="@dimen/spinner_padding"
-                android:paddingLeft="@dimen/spinner_padding"
-                android:paddingEnd="@dimen/spinner_padding"
-                android:paddingRight="@dimen/spinner_padding"
+                android:layout_marginStart="@dimen/spinner_padding"
+                android:layout_marginLeft="@dimen/spinner_padding"
+                android:layout_marginEnd="@dimen/spinner_padding"
+                android:layout_marginRight="@dimen/spinner_padding"
                 android:inputType="number"/>
         </TableRow>
 
