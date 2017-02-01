@@ -230,6 +230,12 @@ public class GamePlayActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 gamePlayHandler.onFragmentInteraction(GamePlayActivity.this, properties, null);
+                properties.setHasAnswered(true);
+
+                // Wait for Moderator if time runs out
+                if (Boolean.parseBoolean(properties.getCurrentCard().getModeratorNeeded()))
+                    return;
+
                 gamePlayHandler.handleNextCard(GamePlayActivity.this,properties);
             }
         });
