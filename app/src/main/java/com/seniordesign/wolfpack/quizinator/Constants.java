@@ -38,6 +38,10 @@ public final class Constants {
     public static final String SAVE = "Save";
     public static final String CANCEL = "Cancel";
     public static final String DELETE = "Delete";
+    public static final String CLOSE = "Close";
+
+    public static final String ACTIVE_PLAYERS = "Active Players";
+    public static final String PLAYERS_RESPONSE = "Select a Winner";
 
     public static final String UPDATED_HIGH_SCORE = "Updated High Scores";
     public static final String NO_HIGH_SCORE = "No High Scores";

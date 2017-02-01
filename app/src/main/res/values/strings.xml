@@ -101,5 +101,7 @@
     <string name="frag_answer_B">B</string>
     <string name="frag_answer_C">C</string>
     <string name="frag_answer_D">D</string>
+    <string name="player_answer">Answer</string>
+    <string name="response_time">Response Time</string>
 
 </resources>
