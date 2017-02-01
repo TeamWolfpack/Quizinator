@@ -64,30 +64,28 @@ public class ActivePlayerAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
-        View v = view;
-
-        if (v == null) {
+        if (view == null) {
             LayoutInflater vi = LayoutInflater.from(context);
-            v = vi.inflate(R.layout.array_adapter_list_of_cards, null);
+            view = vi.inflate(R.layout.base_adapter_active_player_item, null);
         }
 
         Answer player = players.get(position);
 
-        TextView playerName = (TextView) v.findViewById(R.id.active_player_name);
+        TextView playerName = (TextView) view.findViewById(R.id.active_player_name);
         playerName.setText(player.getDeviceName());
 
         LinearLayout responseArea = (LinearLayout) view.findViewById(R.id.active_player_response_area);
         if (!mustSelectWinner) {
             responseArea.setVisibility(View.GONE);
-            return v;
+            return view;
         }
 
-        TextView playerAnswer = (TextView) v.findViewById(R.id.active_player_answer);
+        TextView playerAnswer = (TextView) view.findViewById(R.id.active_player_answer);
         playerAnswer.setText(player.getAnswer());
 
-        TextView playerTime = (TextView) v.findViewById(R.id.active_player_time);
+        TextView playerTime = (TextView) view.findViewById(R.id.active_player_time);
         playerTime.setText(player.getTimeTaken() + "");
 
-        return v;
+        return view;
     }
 }

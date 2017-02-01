@@ -3,7 +3,6 @@ package com.seniordesign.wolfpack.quizinator.Activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.wifi.p2p.WifiP2pDevice;
-import android.os.Build;
 import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -175,6 +174,9 @@ public class ManageGameplayActivity extends AppCompatActivity {
     }
 
     public void showPlayersDialog(View v) {
+        if (alertDialog != null)
+            alertDialog.dismiss();
+
         LayoutInflater li = LayoutInflater.from(this);
         final View promptsView = li.inflate(R.layout.fragment_active_players, null);
         android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
@@ -187,11 +189,22 @@ public class ManageGameplayActivity extends AppCompatActivity {
             viewingPlayers = true;
             alertDialogBuilder
                     .setTitle(Constants.ACTIVE_PLAYERS)
-                    .setNeutralButton(Constants.CLOSE, new DialogInterface.OnClickListener() {
+                    .setPositiveButton(Constants.CLOSE, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int i) {
                             dialog.cancel();
                             viewingPlayers = false;
+                        }
+                    });
+        } else {
+            alertDialogBuilder
+                    .setPositiveButton(Constants.NO_WINNER, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            dialog.cancel();
+                            noPlayerAnsweredFreeOrVerbalResponseCorrectly();
+                            sendCard(null);
+                            clientsResponded = 0;
                         }
                     });
         }
@@ -206,13 +219,18 @@ public class ManageGameplayActivity extends AppCompatActivity {
      * is received.
      */
     public void validateAnswer(Answer answer) {
-        if(answers!=null && answer!= null) {
+        if (answer == null)
+            return;
+
+        if (answers!=null) {
             answers.add(answer);
         }
         clientsResponded++;
 
         Log.d(TAG, "Clients responded: " + clientsResponded);
         Log.d(TAG, "Number of Players: " + wifiDirectApp.getConnectedPeers().size());
+
+        Log.d(TAG, "Current Card: " + currentCard.toString());
 
         if (Boolean.parseBoolean(currentCard.getModeratorNeeded())) {
             if (alertDialog == null || !alertDialog.isShowing()) {
@@ -221,7 +239,8 @@ public class ManageGameplayActivity extends AppCompatActivity {
                 alertDialog.cancel();
                 showPlayersDialog(null);
             }
-            ActivePlayerAdapter playerAdapter = (ActivePlayerAdapter)(alertDialog.getListView().getAdapter());
+            ListView playersList = (ListView) alertDialog.findViewById(R.id.active_player_dialog_list);
+            ActivePlayerAdapter playerAdapter = (ActivePlayerAdapter)(playersList.getAdapter());
             playerAdapter.addItem(answer);
         } else {
             checkClientCount();
@@ -245,6 +264,10 @@ public class ManageGameplayActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        if (alertDialog != null)
+            alertDialog.dismiss();
+
         wifiDirectApp.disconnectFromGroup();
         wifiDirectApp.mManageActivity = null;
     }
@@ -292,6 +315,16 @@ public class ManageGameplayActivity extends AppCompatActivity {
         return true;
     }
 
+    private void noPlayerAnsweredFreeOrVerbalResponseCorrectly() {
+        Log.d(TAG,"Moderator determined no one answered correctly");
+
+        for (WifiP2pDevice device : wifiDirectApp.getConnectedPeers()) {
+            String confirmation = gson.toJson(new Confirmation(device.deviceAddress, false));
+            ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+        }
+        answers = new ArrayList<>();
+    }
+
     private void selectAndRespondToSelectedAnswer(Answer selectedAnswer){
         Log.d(TAG,"selecting Selected Answer");
 
@@ -307,6 +340,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
             ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
         }
         answers = new ArrayList<>();
+        alertDialog.cancel();
     }
 
     private long selectAndRespondToFastestAnswer(){
@@ -344,7 +378,12 @@ public class ManageGameplayActivity extends AppCompatActivity {
     }
 
     private void handlePlayerDialog(View dialogView, boolean mustPickWinner) {
-        final ListView playersDialog = (ListView) dialogView;
+        final ListView playersDialogList = (ListView) dialogView.findViewById(R.id.active_player_dialog_list);
+
+        TextView correctAnswerLabel = (TextView) dialogView.findViewById(R.id.dialog_correct_answer_label);
+        TextView correctAnswer = (TextView) dialogView.findViewById(R.id.dialog_correct_answer);
+        if (currentCard != null)
+            correctAnswer.setText(currentCard.getCorrectAnswer());
 
         ActivePlayerAdapter playerAdapter = new ActivePlayerAdapter(dialogView.getContext(), new ArrayList<Answer>(), mustPickWinner);
         if (!mustPickWinner) {
@@ -353,22 +392,22 @@ public class ManageGameplayActivity extends AppCompatActivity {
                 players.add(new Answer(device.deviceName, device.deviceAddress, null, 0));
             }
             playerAdapter = new ActivePlayerAdapter(dialogView.getContext(), players, mustPickWinner);
+
+            correctAnswerLabel.setVisibility(View.GONE);
+            correctAnswer.setVisibility(View.GONE);
         }
 
-        playersDialog.setAdapter(playerAdapter);
+        playersDialogList.setAdapter(playerAdapter);
 
         if (mustPickWinner) {
-            playersDialog.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            playersDialogList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    Answer answer = (Answer) playersDialog.getAdapter().getItem(i);
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Answer answer = (Answer) playersDialogList.getAdapter().getItem(i);
                     selectAndRespondToSelectedAnswer(answer);
                     sendCard(null);
                     clientsResponded = 0;
                 }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) { /* Do nothing */ }
             });
         }
     }

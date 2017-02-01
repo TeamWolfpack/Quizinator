@@ -518,7 +518,8 @@ public class ConnectionService extends Service implements
                 case MSG_PLAYER_READY_ACTIVITY:
                     String deviceName = message;
                     Log.d(TAG, "deviceName - " + deviceName);
-                    wifiDirectApp.mManageActivity.deviceIsReady(deviceName);
+                    if (wifiDirectApp.mManageActivity != null)
+                        wifiDirectApp.mManageActivity.deviceIsReady(deviceName);
                     break;
                 case MSG_SEND_ANSWER_ACTIVITY:
                     Answer answer = gson.fromJson(message, Answer.class);

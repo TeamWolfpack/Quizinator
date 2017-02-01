@@ -39,6 +39,7 @@ public final class Constants {
     public static final String CANCEL = "Cancel";
     public static final String DELETE = "Delete";
     public static final String CLOSE = "Close";
+    public static final String NO_WINNER = "No Winner";
 
     public static final String ACTIVE_PLAYERS = "Active Players";
     public static final String PLAYERS_RESPONSE = "Select a Winner";
