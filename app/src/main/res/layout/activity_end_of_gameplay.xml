@@ -10,7 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.seniordesign.wolfpack.quizinator.Activities.EndOfGameplayActivity">
 
-
     <TextView
         android:id="@+id/endOfGameText"
         android:layout_width="wrap_content"
@@ -20,6 +19,7 @@
         android:textSize="32sp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
+
     <LinearLayout
         android:layout_marginTop="20dp"
         android:layout_below="@id/endOfGameText"
@@ -27,6 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/endOfGameScoreText"
             android:textAlignment="center"
@@ -34,6 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:text="@string/score_label" />
+
         <TextView
             android:id="@+id/endOfGameTimeText"
             android:textAlignment="center"
@@ -41,6 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:text="@string/time_elapsed_label" />
+
         <TextView
             android:id="@+id/endOfGameTotalCardsText"
             android:textAlignment="center"
@@ -48,27 +51,27 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:text="@string/total_cards_label"/>
+
         <TextView
             android:id="@+id/endOfGameHighScoreText"
             android:textAlignment="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/high_score_label" />
+
         <TextView
             android:id="@+id/endOfGameHighScoreTimeText"
             android:textAlignment="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/high_score_time_label" />
+
         <Button
             android:id="@+id/goToMainMenu"
             android:layout_marginTop="20dp"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="@string/main_menu"
-            android:onClick="showMainMenu"
-            />
-
+            android:onClick="showMainMenu"/>
     </LinearLayout>
-
 </RelativeLayout>

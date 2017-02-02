@@ -2,17 +2,22 @@ package com.seniordesign.wolfpack.quizinator.Activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.seniordesign.wolfpack.quizinator.Adapters.ActivePlayerAdapter;
 import com.seniordesign.wolfpack.quizinator.Adapters.NextCardAdapter;
 import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Database.Card;
@@ -27,6 +32,7 @@ import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES.*;
 import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_ANSWER_CONFIRMATION_ACTIVITY;
@@ -53,6 +59,9 @@ public class ManageGameplayActivity extends AppCompatActivity {
     private CountDownTimer gameplayTimerStatic;
     private CountDownTimer gameplayTimerRunning;
     private long gameplayTimerRemaining;
+
+    private android.app.AlertDialog alertDialog;
+    private boolean viewingPlayers;
 
     public static final String TAG = "ACT_MANAGE";
 
@@ -164,20 +173,78 @@ public class ManageGameplayActivity extends AppCompatActivity {
         //TODO show that the device is ready
     }
 
+    public void showPlayersDialog(View v) {
+        if (alertDialog != null)
+            alertDialog.dismiss();
+
+        LayoutInflater li = LayoutInflater.from(this);
+        final View promptsView = li.inflate(R.layout.fragment_active_players, null);
+        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
+        alertDialogBuilder.setView(promptsView);
+        alertDialogBuilder
+                .setCancelable(false)
+                .setTitle(Constants.PLAYERS_RESPONSE);
+
+        if (v != null) {
+            viewingPlayers = true;
+            alertDialogBuilder
+                    .setTitle(Constants.ACTIVE_PLAYERS)
+                    .setPositiveButton(Constants.CLOSE, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            dialog.cancel();
+                            viewingPlayers = false;
+                        }
+                    });
+        } else {
+            alertDialogBuilder
+                    .setPositiveButton(Constants.NO_WINNER, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            dialog.cancel();
+                            noPlayerAnsweredFreeOrVerbalResponseCorrectly();
+                            sendCard(null);
+                            clientsResponded = 0;
+                        }
+                    });
+        }
+
+        alertDialog = alertDialogBuilder.create();
+        handlePlayerDialog(promptsView, v == null);
+        alertDialog.show();
+    }
+
     /**
      * This is called in ConnectionSerive.onPullInData(...) when a answer message
      * is received.
      */
     public void validateAnswer(Answer answer) {
-        if(answers!=null && answer!= null) {
+        if (answer == null)
+            return;
+
+        if (answers!=null) {
             answers.add(answer);
         }
         clientsResponded++;
 
         Log.d(TAG, "Clients responded: " + clientsResponded);
-        Log.d(TAG, "Number of Peers: " + wifiDirectApp.mPeers.size());
+        Log.d(TAG, "Number of Players: " + wifiDirectApp.getConnectedPeers().size());
 
-        checkClientCount();
+        Log.d(TAG, "Current Card: " + currentCard.toString());
+
+        if (Boolean.parseBoolean(currentCard.getModeratorNeeded())) {
+            if (alertDialog == null || !alertDialog.isShowing()) {
+                showPlayersDialog(null);
+            } else if (viewingPlayers) {
+                alertDialog.cancel();
+                showPlayersDialog(null);
+            }
+            ListView playersList = (ListView) alertDialog.findViewById(R.id.active_player_dialog_list);
+            ActivePlayerAdapter playerAdapter = (ActivePlayerAdapter)(playersList.getAdapter());
+            playerAdapter.addItem(answer);
+        } else {
+            checkClientCount();
+        }
     }
 
     @Override
@@ -197,6 +264,10 @@ public class ManageGameplayActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        if (alertDialog != null)
+            alertDialog.dismiss();
+
         wifiDirectApp.disconnectFromGroup();
         wifiDirectApp.mManageActivity = null;
     }
@@ -244,6 +315,34 @@ public class ManageGameplayActivity extends AppCompatActivity {
         return true;
     }
 
+    private void noPlayerAnsweredFreeOrVerbalResponseCorrectly() {
+        Log.d(TAG,"Moderator determined no one answered correctly");
+
+        for (WifiP2pDevice device : wifiDirectApp.getConnectedPeers()) {
+            String confirmation = gson.toJson(new Confirmation(device.deviceAddress, false));
+            ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+        }
+        answers = new ArrayList<>();
+    }
+
+    private void selectAndRespondToSelectedAnswer(Answer selectedAnswer){
+        Log.d(TAG,"selecting Selected Answer");
+
+        // Selected Player gets the points
+        String confirmation = gson.toJson(new Confirmation(selectedAnswer.getAddress(), true));
+        ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+
+        for (WifiP2pDevice device : wifiDirectApp.getConnectedPeers()) {
+            if (device.deviceAddress.equals(selectedAnswer.getAddress()))
+                continue;
+
+            confirmation = gson.toJson(new Confirmation(device.deviceAddress, false));
+            ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+        }
+        answers = new ArrayList<>();
+        alertDialog.cancel();
+    }
+
     private long selectAndRespondToFastestAnswer(){
         Log.d(TAG,"selecting Fastest Answer");
         Answer fastestCorrectAnswer = null;
@@ -276,6 +375,41 @@ public class ManageGameplayActivity extends AppCompatActivity {
         }
         answers = new ArrayList<>();
         return fastestCorrectAnswer == null ? -1 : fastestCorrectAnswer.getTimeTaken();
+    }
+
+    private void handlePlayerDialog(View dialogView, boolean mustPickWinner) {
+        final ListView playersDialogList = (ListView) dialogView.findViewById(R.id.active_player_dialog_list);
+
+        TextView correctAnswerLabel = (TextView) dialogView.findViewById(R.id.dialog_correct_answer_label);
+        TextView correctAnswer = (TextView) dialogView.findViewById(R.id.dialog_correct_answer);
+        if (currentCard != null)
+            correctAnswer.setText(currentCard.getCorrectAnswer());
+
+        ActivePlayerAdapter playerAdapter = new ActivePlayerAdapter(dialogView.getContext(), new ArrayList<Answer>(), mustPickWinner);
+        if (!mustPickWinner) {
+            List<Answer> players = new ArrayList<>();
+            for (WifiP2pDevice device : wifiDirectApp.getConnectedPeers()) {
+                players.add(new Answer(device.deviceName, device.deviceAddress, null, 0));
+            }
+            playerAdapter = new ActivePlayerAdapter(dialogView.getContext(), players, mustPickWinner);
+
+            correctAnswerLabel.setVisibility(View.GONE);
+            correctAnswer.setVisibility(View.GONE);
+        }
+
+        playersDialogList.setAdapter(playerAdapter);
+
+        if (mustPickWinner) {
+            playersDialogList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Answer answer = (Answer) playersDialogList.getAdapter().getItem(i);
+                    selectAndRespondToSelectedAnswer(answer);
+                    sendCard(null);
+                    clientsResponded = 0;
+                }
+            });
+        }
     }
 
     public int checkClientCount() {

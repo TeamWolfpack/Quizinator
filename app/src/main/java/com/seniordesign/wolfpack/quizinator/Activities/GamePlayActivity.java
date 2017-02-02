@@ -1,5 +1,6 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Fragments.FreeResponseAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.Fragments.TrueFalseAnswerFragment;
+import com.seniordesign.wolfpack.quizinator.Fragments.VerbalResponseAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.GameplayHandler.GamePlayHandler;
 import com.seniordesign.wolfpack.quizinator.GameplayHandler.GamePlayProperties;
 import com.seniordesign.wolfpack.quizinator.GameplayHandler.MultiplayerHandler;
@@ -29,11 +31,7 @@ import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class GamePlayActivity
-        extends AppCompatActivity
-        implements TrueFalseAnswerFragment.OnFragmentInteractionListener,
-        MultipleChoiceAnswerFragment.OnFragmentInteractionListener,
-        FreeResponseAnswerFragment.OnFragmentInteractionListener{
+public class GamePlayActivity extends AppCompatActivity {
 
     GamePlayProperties properties;
     GamePlayHandler gamePlayHandler;
@@ -76,68 +74,53 @@ public class GamePlayActivity
         gamePlayHandler.handleDestroy(this, properties);
     }
 
-    @Override
-    public void onFragmentInteraction(String answer) {
-
-    }
-
     public void showCard(final Card card) {
-        Constants.CARD_TYPES cardType = Constants.CARD_TYPES.values()[card.getCardType()];
+        Constants.CARD_TYPES cardType =
+                Constants.CARD_TYPES.values()[card.getCardType()];
         switch(cardType){
             case TRUE_FALSE:
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        getSupportFragmentManager().
-                                beginTransaction()
-                                .replace(R.id.answerArea, new TrueFalseAnswerFragment())
-                                .commitNowAllowingStateLoss();
-                        ((TextView) findViewById(R.id.questionTextArea))
-                                .setText(card.getQuestion());
-                        getSupportFragmentManager().executePendingTransactions();
-                    }
-                });
+                showCardHelper(card, new TrueFalseAnswerFragment());
                 break;
             case MULTIPLE_CHOICE:
-                final MultipleChoiceAnswerFragment mcFragment = new MultipleChoiceAnswerFragment();
+                final MultipleChoiceAnswerFragment mcFragment =
+                        new MultipleChoiceAnswerFragment();
                 Collections.shuffle(Arrays.asList(card.getPossibleAnswers()));
-                mcFragment.setChoiceA(card.getPossibleAnswers()[0]);
-                mcFragment.setChoiceB(card.getPossibleAnswers()[1]);
-                mcFragment.setChoiceC(card.getPossibleAnswers()[2]);
-                mcFragment.setChoiceD(card.getPossibleAnswers()[3]);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        getSupportFragmentManager().
-                                beginTransaction()
-                                .replace(R.id.answerArea,mcFragment)
-                                .commitNowAllowingStateLoss();
-                        ((TextView) findViewById(R.id.questionTextArea))
-                                .setText(card.getQuestion());
-                    }
-                });
+                    mcFragment.setChoiceA(card.getPossibleAnswers()[0]);
+                    mcFragment.setChoiceB(card.getPossibleAnswers()[1]);
+                    mcFragment.setChoiceC(card.getPossibleAnswers()[2]);
+                    mcFragment.setChoiceD(card.getPossibleAnswers()[3]);
+                showCardHelper(card, mcFragment);
                 break;
             case FREE_RESPONSE:
-                final FreeResponseAnswerFragment frFragment = new FreeResponseAnswerFragment();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        getSupportFragmentManager().
-                                beginTransaction()
-                                .replace(R.id.answerArea,frFragment)
-                                .commitNowAllowingStateLoss();
-                        ((TextView) findViewById(R.id.questionTextArea))
-                                .setText(card.getQuestion());
-                    }
-                });
+                showCardHelper(card, new FreeResponseAnswerFragment());
                 break;
-            default:
+            case VERBAL_RESPONSE:
+                showCardHelper(card, new VerbalResponseAnswerFragment());
                 break;
         }
     }
 
+    private void showCardHelper(
+            final Card card,
+            final android.support.v4.app.Fragment frag){
+        runOnUiThread(new Runnable() {
+            @SuppressLint("CommitTransaction")
+            @Override
+            public void run() {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.answerArea, frag)
+                        .commitNowAllowingStateLoss();
+                ((TextView) findViewById(R.id.questionTextArea))
+                        .setText(card.getQuestion());
+                getSupportFragmentManager().executePendingTransactions();
+            }
+        });
+    }
+
     public void endGamePlay() {
-        long time = properties.getRules().getCardDisplayTime() + properties.getCardsPlayed();
+        long time = properties.getRules().getCardDisplayTime() +
+                properties.getCardsPlayed();
         endGamePlay(time);
     }
 
@@ -247,6 +230,12 @@ public class GamePlayActivity
             @Override
             public void onFinish() {
                 gamePlayHandler.onFragmentInteraction(GamePlayActivity.this, properties, null);
+                properties.setHasAnswered(true);
+
+                // Wait for Moderator if time runs out
+                if (Boolean.parseBoolean(properties.getCurrentCard().getModeratorNeeded()))
+                    return;
+
                 gamePlayHandler.handleNextCard(GamePlayActivity.this,properties);
             }
         });

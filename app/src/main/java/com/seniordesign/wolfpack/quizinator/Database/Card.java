@@ -41,16 +41,12 @@ public class Card{
                 this.maxPossibleAnswers = 4;
                 break;
             case FREE_RESPONSE:
-                // TODO implement later
+                moderatorNeeded = String.valueOf(true);
                 break;
             case VERBAL_RESPONSE:
-                // TODO implement later
+                moderatorNeeded = String.valueOf(true);
                 break;
         }
-    }
-
-    void setCardType(int cardType) {
-        setCardType(CARD_TYPES.values()[cardType]);
     }
 
     public String getQuestion() {

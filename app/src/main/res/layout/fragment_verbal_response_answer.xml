@@ -6,9 +6,9 @@
     tools:context="com.seniordesign.wolfpack.quizinator.Activities.GamePlayActivity">
 
     <Button
-        android:id="@+id/choiceAButton"
+        android:id="@+id/answer_buzzer_button"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:onClick="answerClicked"
         android:text="@string/frag_answer_buzzer"
         android:textSize="@dimen/md_text_size_game_play_button"
