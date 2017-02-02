@@ -60,6 +60,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     private QuizDataSource dataSource;
 
     private Deck deck;
+    private boolean isModeratorNeeded;
 
     WifiDirectApp wifiDirectApp;
 
@@ -72,7 +73,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         setTitle(Constants.GAME_SETTINGS);
         wifiDirectApp = (WifiDirectApp)getApplication();
         initializeDB();
-        final boolean isMultiplayer = getIntent().getExtras().getBoolean(Constants.MULTIPLAYER);
+        isModeratorNeeded = getIntent().getExtras().getBoolean(Constants.MULTIPLAYER);
 
         if (rulesSource.getAllRules().size() > 0) {
             deck = dataSource.getDeckWithId(rulesSource.getAllRules()
@@ -90,7 +91,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                     if (selected[i])
                         selectedCardTypes.add(cardTypeOptions.get(i));
                 }
-                Deck filteredDeck = dataSource.getFilteredDeck(deck.getId(), selectedCardTypes, isMultiplayer); //TODO can we find out whether or not we are in solo gp or multi gp? That wa we can pass the correct boolean
+                Deck filteredDeck = dataSource.getFilteredDeck(deck.getId(), selectedCardTypes, isModeratorNeeded); //TODO can we find out whether or not we are in solo gp or multi gp? That wa we can pass the correct boolean
 
                 if (!isInputEmpty(cardCountInput) &&
                         Integer.valueOf(cardCountInput.getText().toString()) > filteredDeck.getCards().size())
@@ -128,7 +129,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                                 if (cardTypeOptions.indexOf(type) > -1)
                                     cardTypeSpinner.selectItem(cardTypeOptions.indexOf(type), true);
                             }
-                            Deck filteredDeck = dataSource.getFilteredDeck(deck.getId(), selectedCardTypes, isMultiplayer);//TODO can we find out whether or not we are in solo gp or multi gp? That wa we can pass the correct boolean
+                            Deck filteredDeck = dataSource.getFilteredDeck(deck.getId(), selectedCardTypes, isModeratorNeeded);//TODO can we find out whether or not we are in solo gp or multi gp? That wa we can pass the correct boolean
                             filterCardCount(filteredDeck);
                             if (!isInputEmpty(cardCountInput) &&
                                     Integer.valueOf(cardCountInput.getText().toString()) > filteredDeck.getCards().size())
@@ -235,7 +236,9 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             @Override public void run() {
                 Intent i = wifiDirectApp.
                         getLaunchActivityIntent(
-                                ManageGameplayActivity.class, null);//
+                                ManageGameplayActivity.class, null);
+                i.putExtra(CARD_TYPE_FILTER, gson.toJson(deck.getCardTypes()));
+                i.putExtra(MODERATOR_NEEDED_FILTER, isModeratorNeeded);
                 startActivity(i);
                 ConnectionService.sendMessage(MSG_SEND_RULES_ACTIVITY, rulesToSend); // TODO see above line
                 finish();
@@ -244,7 +247,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         return true;
     }
 
-    private Rules updateRuleSet() {
+    public Rules updateRuleSet() {
         if (isInputEmpty(gameMinutesInput)) {
             Toast.makeText(this, GAME_MINUTES_ERROR, Toast.LENGTH_SHORT).show();
             return null;
@@ -341,7 +344,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             cardCountInput.setText(String.valueOf(rule.getMaxCardCount()));
 
         Log.d(TAG, "Selected card types: " + rule.getCardTypes());
-        Type listType = new TypeToken<ArrayList<String>>(){}.getType();
+        Type listType = new TypeToken<ArrayList<Constants.CARD_TYPES>>(){}.getType();
         selectedCardTypes = gson.fromJson(rule.getCardTypes(), listType);
         for (CARD_TYPES type: selectedCardTypes) {
             if (cardTypeOptions.indexOf(type) > -1)
@@ -378,5 +381,16 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         super.onPause();
         rulesSource.close();
         dataSource.close();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        rulesSource.close();
+        dataSource.close();
+
+        wifiDirectApp.disconnectFromGroup();
+        wifiDirectApp.mManageActivity = null;
     }
 }

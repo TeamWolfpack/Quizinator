@@ -17,6 +17,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.seniordesign.wolfpack.quizinator.Adapters.ActivePlayerAdapter;
 import com.seniordesign.wolfpack.quizinator.Adapters.NextCardAdapter;
 import com.seniordesign.wolfpack.quizinator.Constants;
@@ -31,6 +32,7 @@ import com.seniordesign.wolfpack.quizinator.Messages.Confirmation;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,7 +87,9 @@ public class ManageGameplayActivity extends AppCompatActivity {
 
         dataSource = new QuizDataSource(this);
         dataSource.open();
-        Deck deck = dataSource.getDeckWithId(rules.getDeckId()).filter(rules);
+        Type listType = new TypeToken<ArrayList<Constants.CARD_TYPES>>(){}.getType();
+        List<Constants.CARD_TYPES> cardTypeList = new Gson().fromJson(getIntent().getStringExtra(Constants.CARD_TYPE_FILTER), listType);
+        Deck deck = dataSource.getFilteredDeck(rules.getDeckId(), cardTypeList, getIntent().getBooleanExtra(Constants.MODERATOR_NEEDED_FILTER, true));
 
         cardLimit = Math.min(deck.getCards().size(),rules.getMaxCardCount());
 
