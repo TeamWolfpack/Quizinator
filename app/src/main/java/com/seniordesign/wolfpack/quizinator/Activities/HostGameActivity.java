@@ -273,7 +273,7 @@ public class HostGameActivity
             @Override public void run() {
                 Intent i = wifiDirectApp.getLaunchActivityIntent(GamePlayActivity.class, null);
                     i.putExtra(Constants.RULES, new Gson().toJson(rules));
-                    i.putExtra(Constants.GAME_MODE,false);
+                    i.putExtra(Constants.GAME_MODE, false);
                 startActivity(i);
             }
         });
@@ -351,6 +351,7 @@ public class HostGameActivity
             @Override public void run() {
                 Intent i = wifiDirectApp.getLaunchActivityIntent(
                         NewGameSettingsActivity.class, null);
+                i.putExtra(Constants.MULTIPLAYER, true);
                 startActivity(i);
             }
         });

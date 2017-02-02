@@ -103,6 +103,7 @@ public class MainMenuActivity extends AppCompatActivity
 
     public void showGameSettings(View v){
         final Intent intent = new Intent(this, NewGameSettingsActivity.class);
+        intent.putExtra(Constants.MULTIPLAYER, false);
         startActivity(intent);
     }
 

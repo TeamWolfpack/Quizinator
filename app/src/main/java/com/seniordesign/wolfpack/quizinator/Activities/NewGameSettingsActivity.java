@@ -27,7 +27,6 @@ import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 
 import io.apptik.widget.multiselectspinner.BaseMultiSelectSpinner;
@@ -51,11 +50,10 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     private EditText cardMinutesInput;
     private EditText cardSecondsInput;
 
-    private Spinner deckSpinner;
-
     private MultiSelectSpinner cardTypeSpinner;
-    private List<String> selectedCardTypes;
-    private List<String> cardTypeOptions;
+
+    private List<CARD_TYPES> selectedCardTypes;
+    private List<CARD_TYPES> cardTypeOptions;
 
     private RulesDataSource rulesSource;
 
@@ -74,11 +72,12 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         setTitle(Constants.GAME_SETTINGS);
         wifiDirectApp = (WifiDirectApp)getApplication();
         initializeDB();
+        final boolean isMultiplayer = getIntent().getExtras().getBoolean(Constants.MULTIPLAYER);
 
         if (rulesSource.getAllRules().size() > 0) {
             deck = dataSource.getDeckWithId(rulesSource.getAllRules()
                     .get(rulesSource.getAllRules().size() - 1)
-                    .getDeckId());
+                    .getDeckId()); //TODO is this just getting the last rules in the database or the last rules used
         } else if (dataSource.getAllDecks().size()>0){
             deck = dataSource.getAllDecks().get(0);
         }
@@ -91,20 +90,15 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                     if (selected[i])
                         selectedCardTypes.add(cardTypeOptions.get(i));
                 }
-                Rules tempRules = new Rules();
-                tempRules.setCardTypes(gson.toJson(selectedCardTypes));
-                Deck filteredDeck = deck.filter(tempRules);
+                Deck filteredDeck = dataSource.getFilteredDeck(deck.getId(), selectedCardTypes, isMultiplayer); //TODO can we find out whether or not we are in solo gp or multi gp? That wa we can pass the correct boolean
 
                 if (!isInputEmpty(cardCountInput) &&
                         Integer.valueOf(cardCountInput.getText().toString()) > filteredDeck.getCards().size())
-//                                cardCountInput.setText(filteredDeck.getCards().size()); //TODO
-                    cardCountInput.setText("" + filteredDeck.getCards().size());
-
+                    cardCountInput.setText(String.valueOf(filteredDeck.getCards().size()));
                 filterCardCount(filteredDeck);
             }
         };
-
-        deckSpinner = (Spinner)findViewById(R.id.deck_spinner);
+        Spinner deckSpinner = (Spinner) findViewById(R.id.deck_spinner);
             List<String> deckNames = new ArrayList<>();
             for (Deck deck: dataSource.getAllDecks()) {
                 deckNames.add(deck.getDeckName());
@@ -122,7 +116,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                             Log.d(TAG, "Deck ID is " + deck.getId());
                             // update the card type spinner with any new card types
                             cardTypeOptions = formatCardTypes(deck);
-                            ArrayAdapter<String> cardTypeAdapter = new ArrayAdapter<>(NewGameSettingsActivity.this,
+                            ArrayAdapter<CARD_TYPES> cardTypeAdapter = new ArrayAdapter<>(NewGameSettingsActivity.this,
                                     android.R.layout.simple_list_item_multiple_choice, cardTypeOptions);
                             cardTypeSpinner
                                     .setListAdapter(cardTypeAdapter)
@@ -130,21 +124,17 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                                     .setAllUncheckedText(NO_CARD_TYPES)
                                     .setMinSelectedItems(1)
                                     .setListener(multiSpinnerListener);
-                            for (String type: selectedCardTypes) {
+                            for (CARD_TYPES type: selectedCardTypes) {
                                 if (cardTypeOptions.indexOf(type) > -1)
                                     cardTypeSpinner.selectItem(cardTypeOptions.indexOf(type), true);
                             }
-
-                            // update the card count with the new deck size
-                            Rules tempRules = new Rules();
-                            tempRules.setCardTypes(gson.toJson(selectedCardTypes));
-                            Deck filteredDeck = deck.filter(tempRules);
+                            Deck filteredDeck = dataSource.getFilteredDeck(deck.getId(), selectedCardTypes, isMultiplayer);//TODO can we find out whether or not we are in solo gp or multi gp? That wa we can pass the correct boolean
                             filterCardCount(filteredDeck);
                             if (!isInputEmpty(cardCountInput) &&
                                     Integer.valueOf(cardCountInput.getText().toString()) > filteredDeck.getCards().size())
-                                cardCountInput.setText("" + filteredDeck.getCards().size());
+                                cardCountInput.setText(String.valueOf(filteredDeck.getCards().size()));
 
-                            NewGameSettingsActivity.this.deck = deck;
+                            NewGameSettingsActivity.this.deck = filteredDeck;
                             break;
                         }
                     }
@@ -162,7 +152,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         cardTypeSpinner = (MultiSelectSpinner) findViewById(R.id.card_type_spinner);
             cardTypeOptions = formatCardTypes(deck);
             selectedCardTypes = new ArrayList<>(cardTypeOptions);
-            ArrayAdapter<String> cardTypeAdapter = new ArrayAdapter<>(NewGameSettingsActivity.this,
+            ArrayAdapter<CARD_TYPES> cardTypeAdapter = new ArrayAdapter<>(NewGameSettingsActivity.this,
                     android.R.layout.simple_list_item_multiple_choice, cardTypeOptions);
             cardTypeSpinner
                     .setListAdapter(cardTypeAdapter)
@@ -174,7 +164,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         cardCountInput = (EditText)findViewById(R.id.card_count);
             filterCardCount(deck);
 //            cardCountInput.setText(deck.getCards().size()); //TODO
-            cardCountInput.setText("" + deck.getCards().size());
+            cardCountInput.setText(String.valueOf(deck.getCards().size()));
 //            cardCountInput.setText(deck.getCards().size()); // Should be deck count, change when deck is done
 
         gameMinutesInput = (EditText)findViewById(R.id.game_minutes);
@@ -196,7 +186,6 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             NumberFilter cardSecondsFilter = new NumberFilter(1);
             cardSecondsInput.setFilters(new InputFilter[]{ cardSecondsFilter });
             cardSecondsInput.setOnFocusChangeListener(cardSecondsFilter);
-
         loadPreviousRules();
     }
 
@@ -206,6 +195,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         cardCountInput.setOnFocusChangeListener(cardCountFilter);
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public boolean startGame(View v){
         if (selectedCardTypes.size() < 1) {
             Toast.makeText(this, "Must select card type", Toast.LENGTH_SHORT).show();
@@ -238,8 +228,8 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         }
 
         //send everyone the rules
-        String rulesToSend = gson.toJson(r);
-        ConnectionService.sendMessage(MSG_SEND_RULES_ACTIVITY, rulesToSend);
+        final String rulesToSend = gson.toJson(r);
+//        ConnectionService.sendMessage(MSG_SEND_RULES_ACTIVITY, rulesToSend); //TODO trying to move into the runOnUiThread because too fast (possible to move into OnGamePlayActivity)
 
         runOnUiThread(new Runnable() {
             @Override public void run() {
@@ -247,13 +237,14 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                         getLaunchActivityIntent(
                                 ManageGameplayActivity.class, null);//
                 startActivity(i);
+                ConnectionService.sendMessage(MSG_SEND_RULES_ACTIVITY, rulesToSend); // TODO see above line
                 finish();
             }
         });
         return true;
     }
 
-    public Rules updateRuleSet() {
+    private Rules updateRuleSet() {
         if (isInputEmpty(gameMinutesInput)) {
             Toast.makeText(this, GAME_MINUTES_ERROR, Toast.LENGTH_SHORT).show();
             return null;
@@ -335,32 +326,28 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         Calendar cardCal = Calendar.getInstance();
         cardCal.setTimeInMillis(rule.getCardDisplayTime());
 
-        gameMinutesInput.setText("" + gameCal.get(Calendar.MINUTE));
+        gameMinutesInput.setText(String.valueOf(gameCal.get(Calendar.MINUTE)));
         gameSecondsInput.setText(gameCal.get(Calendar.SECOND) < 10 ?
                                     "0" + gameCal.get(Calendar.SECOND) :
                                     "" + gameCal.get(Calendar.SECOND));
-        cardMinutesInput.setText("" + cardCal.get(Calendar.MINUTE));
+        cardMinutesInput.setText(String.valueOf(cardCal.get(Calendar.MINUTE)));
         cardSecondsInput.setText(cardCal.get(Calendar.SECOND) < 10 ?
                                     "0" + cardCal.get(Calendar.SECOND) :
                                     "" + cardCal.get(Calendar.SECOND));
 
-        if (rule.getMaxCardCount() > deck.filter(rule).getCards().size())
-            cardCountInput.setText("" + deck.filter(rule).getCards().size());
+        if (rule.getMaxCardCount() > deck.getCards().size())
+            cardCountInput.setText(String.valueOf(deck.getCards().size()));
         else
-            cardCountInput.setText("" + rule.getMaxCardCount());
+            cardCountInput.setText(String.valueOf(rule.getMaxCardCount()));
 
         Log.d(TAG, "Selected card types: " + rule.getCardTypes());
         Type listType = new TypeToken<ArrayList<String>>(){}.getType();
         selectedCardTypes = gson.fromJson(rule.getCardTypes(), listType);
-        for (String type: selectedCardTypes) {
+        for (CARD_TYPES type: selectedCardTypes) {
             if (cardTypeOptions.indexOf(type) > -1)
                 cardTypeSpinner.selectItem(cardTypeOptions.indexOf(type), true);
         }
         return true;
-    }
-
-    public boolean loadDeck(){
-        return false;
     }
 
     private boolean isInputEmpty(EditText input) {
@@ -373,7 +360,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         return rulesSource.open() && dataSource.open() && dataSource.open();
     }
 
-    public List<String> formatCardTypes(Deck deck) {
+    public List<CARD_TYPES> formatCardTypes(Deck deck) {
         if (deck == null)
             return new ArrayList<>();
         return deck.getCardTypes();

@@ -55,10 +55,9 @@ public class SinglePlayerHandler implements GamePlayHandler {
         if (properties.getDataSource().open()) {
             positiveDBConnections++;
 
-            //Filter and Shuffle deck
+            //Filter and Shuffle deck //TODO FIX THIS SHIT SO IT WORKS
             Deck deck = properties.getDataSource()
-                    .getDeckWithId(properties.getRules().getDeckId())
-                    .filter(properties.getRules());
+                    .getFilteredDeck(properties.getRules().getDeckId(), null, false);
             List<Card> cards = deck.getCards();
             Collections.shuffle(cards);
             deck.setCards(cards);

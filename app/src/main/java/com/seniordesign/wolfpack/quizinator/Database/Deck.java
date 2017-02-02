@@ -44,11 +44,11 @@ public class Deck {
         return true;
     }
 
-    public List<String> getCardTypes() {
-        ArrayList<String> cardTypes = new ArrayList<>();
+    public List<Constants.CARD_TYPES> getCardTypes() {
+        ArrayList<Constants.CARD_TYPES> cardTypes = new ArrayList<>();
         for (Card card: cards) {
-            if (!cardTypes.contains(Constants.CARD_TYPES.values()[card.getCardType()].toString())) {
-                cardTypes.add(Constants.CARD_TYPES.values()[card.getCardType()].toString());
+            if (!cardTypes.contains(Constants.CARD_TYPES.values()[card.getCardType()])) {
+                cardTypes.add(Constants.CARD_TYPES.values()[card.getCardType()]);
             }
         }
         return cardTypes;
@@ -114,21 +114,21 @@ public class Deck {
         this.cards = cards;
     }
 
-    public Deck filter(Rules rules) {
-        Deck filteredDeck = new Deck();
-        filteredDeck.setId(id);
-        filteredDeck.setDeckName(deckName);
-
-        Type listType = new TypeToken<ArrayList<String>>(){}.getType();
-        List<String> validCardTypes = new Gson().fromJson(rules.getCardTypes(), listType);
-
-        List<Card> validCards = new ArrayList<>();
-        for (Card card: cards) {
-            if (validCardTypes.contains(Constants.CARD_TYPES.values()[card.getCardType()].toString()))
-                validCards.add(card);
-        }
-        filteredDeck.setCards(validCards);
-
-        return filteredDeck;
-    }
+//    public Deck filter(Rules rules) {
+//        Deck filteredDeck = new Deck();
+//        filteredDeck.setId(id);
+//        filteredDeck.setDeckName(deckName);
+//
+//        Type listType = new TypeToken<ArrayList<String>>(){}.getType();
+//        List<String> validCardTypes = new Gson().fromJson(rules.getCardTypes(), listType);
+//
+//        List<Card> validCards = new ArrayList<>();
+//        for (Card card: cards) {
+//            if (validCardTypes.contains(Constants.CARD_TYPES.values()[card.getCardType()].toString()))
+//                validCards.add(card);
+//        }
+//        filteredDeck.setCards(validCards);
+//
+//        return filteredDeck;
+//    }
 }
