@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.seniordesign.wolfpack.quizinator.Constants;
+import com.seniordesign.wolfpack.quizinator.Database.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Deck;
 import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
@@ -132,12 +133,12 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                                     cardTypeSpinner.selectItem(cardTypeOptions.indexOf(type), true);
                             }
                             Deck filteredDeck = dataSource.getFilteredDeck(deck.getId(), selectedCardTypes, isModeratorNeeded);
-                            filterCardCount(filteredDeck);
 
                             if (isInputZero(cardCountInput) ||
                                     isInputEmpty(cardCountInput) ||
                                     Integer.valueOf(cardCountInput.getText().toString()) > filteredDeck.getCards().size())
                                 cardCountInput.setText(String.valueOf(filteredDeck.getCards().size()));
+                            filterCardCount(filteredDeck);
 
                             NewGameSettingsActivity.this.deck = filteredDeck;
                             break;

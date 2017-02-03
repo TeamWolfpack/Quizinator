@@ -48,16 +48,11 @@ public class NumberFilter implements View.OnFocusChangeListener {
 
         try {
             int input = text.toString().equals("") ? 0 : Integer.parseInt(text.toString());
-            Log.d("Filter", "Input is : " + input);
 
-            if (input > max) {
+            if (input > max)
                 input = max;
-                Log.d("Filter", "set input to max : " + input);
-            }
-            if (input < min) {
+            if (input < min)
                 input = min;
-                Log.d("Filter", "set input to min : " + input);
-            }
 
             editText.setText(String.valueOf(input));
 
