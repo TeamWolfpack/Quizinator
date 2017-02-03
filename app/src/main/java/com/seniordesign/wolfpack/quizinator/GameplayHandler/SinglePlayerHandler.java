@@ -2,7 +2,10 @@ package com.seniordesign.wolfpack.quizinator.GameplayHandler;
 
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.seniordesign.wolfpack.quizinator.Activities.GamePlayActivity;
+import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Database.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Deck;
 import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresDataSource;
@@ -11,6 +14,8 @@ import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -55,9 +60,11 @@ public class SinglePlayerHandler implements GamePlayHandler {
         if (properties.getDataSource().open()) {
             positiveDBConnections++;
 
-            //Filter and Shuffle deck //TODO FIX THIS SHIT SO IT WORKS
+            //Filter and Shuffle deck
+            Type listType = new TypeToken<List<Constants.CARD_TYPES>>(){}.getType();
+            List<Constants.CARD_TYPES> cardTypeList = new Gson().fromJson(properties.getRules().getCardTypes(), listType);
             Deck deck = properties.getDataSource()
-                    .getFilteredDeck(properties.getRules().getDeckId(), null, false);
+                    .getFilteredDeck(properties.getRules().getDeckId(), cardTypeList, false);
             List<Card> cards = deck.getCards();
             Collections.shuffle(cards);
             deck.setCards(cards);
@@ -70,7 +77,7 @@ public class SinglePlayerHandler implements GamePlayHandler {
     public long handleNextCard(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         properties.getCardTimerRunning().cancel();
         if (properties.getDeckLength() > properties.getDeckIndex()) {
-            ((TextView) gamePlayActivity.findViewById(R.id.scoreText)).setText("Score: " + properties.getScore());
+            ((TextView) gamePlayActivity.findViewById(R.id.scoreText)).setText(String.valueOf(properties.getScore()));
 
             //TODO Here set card to the card at the position of deckIndex
 

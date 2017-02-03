@@ -385,10 +385,10 @@ public class QuizDataSource {
                 .append(" INNER JOIN " + QuizSQLiteHelper.TABLE_DECKS + " ").append(deckTableName)
                 .append(" ON ").append(cdrTableName).append(".").append(QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK).append("=").append(deckTableName).append(".").append(QuizSQLiteHelper.DECK_COLUMN_ID)
                 .append(" WHERE ").append(cdrTableName).append(".").append(QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK).append("=\'").append(deckId).append("\'");
-        if(cardTypes == null || cardTypes.isEmpty())
-            query.append(" OR ").append(buildCardTypeWhereClause(cardTableName, cardTypes));
+        if(!(cardTypes == null || cardTypes.isEmpty()))
+            query.append(" AND ").append(buildCardTypeWhereClause(cardTableName, cardTypes));
         if(!moderatorNeeded)
-            query.append(" OR ").append(buildModeratorNeededWhereClasue(cardTableName, false));
+            query.append(" AND ").append(buildModeratorNeededWhereClasue(cardTableName, false));
         Cursor cursor = database.rawQuery(query.toString(), null);
         cursor.moveToFirst();
         while(!cursor.isAfterLast()){

@@ -36,15 +36,17 @@ public class Card{
         switch(cardType){
             case TRUE_FALSE:
                 this.maxPossibleAnswers = 2;
+                setModeratorNeeded(String.valueOf(false));
                 break;
             case MULTIPLE_CHOICE:
                 this.maxPossibleAnswers = 4;
+                setModeratorNeeded(String.valueOf(false));
                 break;
             case FREE_RESPONSE:
-                moderatorNeeded = String.valueOf(true);
+                setModeratorNeeded(String.valueOf(true));
                 break;
             case VERBAL_RESPONSE:
-                moderatorNeeded = String.valueOf(true);
+                setModeratorNeeded(String.valueOf(true));
                 break;
         }
     }
