@@ -88,10 +88,6 @@ public class EditDeckActivity extends AppCompatActivity  implements AdapterView.
         finish();
     }
 
-    public void onCancelClick(View view){
-        finish();
-    }
-
     public void onDeleteClick(View view){
         new AlertDialog.Builder(this)
                 .setTitle("Deleting Deck")
@@ -109,9 +105,6 @@ public class EditDeckActivity extends AppCompatActivity  implements AdapterView.
                 .show();
     }
 
-    /*
-     * @author kuczynskij (10/13/2016)
-     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -119,9 +112,6 @@ public class EditDeckActivity extends AppCompatActivity  implements AdapterView.
         dataSource.open();
     }
 
-    /*
-     * @author kuczynskij (10/13/2016)
-     */
     @Override
     protected void onPause() {
         super.onPause();

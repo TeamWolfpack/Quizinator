@@ -3,7 +3,7 @@
     <color name="colorPrimary">#000000</color>
     <color name="colorPrimaryDark">#222222</color>
     <color name="colorGrayedOut">#898989</color>
-    <color name="colorAccent">#dd6000</color>
+    <color name="colorAccent">#3d8fff</color>
 
     <color name="layout_border_color">#FF111111</color>
     <color name="question_background">#FFFAFAFA</color>
