@@ -15,7 +15,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
@@ -38,7 +37,6 @@ public class MainMenuActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.setDrawerListener(toggle); //TODO method deprecated, can get rid of after reviewed
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -90,21 +88,13 @@ public class MainMenuActivity extends AppCompatActivity
         else if(id == R.id.nav_show_cards){
             startActivity(new Intent(this, CardsActivity.class));
         }
-        /*
-        else if (id == R.id.nav_application_settings) {
-            // For later sprints
-        }
-        */
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
     public void showGameSettings(View v){
-        final Intent intent = new Intent(this, NewGameSettingsActivity.class);
-        intent.putExtra(Constants.MULTIPLAYER, false);
-        startActivity(intent);
+        startActivity(new Intent(this, NewGameSettingsActivity.class));
     }
 
     public void initiateHostGame(View v) {
