@@ -58,4 +58,8 @@ public final class Constants {
     public static final String CARD_SECONDS_ERROR = "Card Seconds can't be empty";
     public static final String CARD_COUNT_ERROR = "Card Count can't be empty";
     public static final String CARD_COUNT_ZERO = "Card Count can't be 0";
+    public static final String CARD_TIME_ZERO = "Card time can't be 0";
+
+    public static final String STRING_0 = "0";
+    public static final String STRING_00 = "00";
 }

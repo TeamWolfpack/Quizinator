@@ -84,11 +84,10 @@ public class ManageGameplayActivity extends AppCompatActivity {
         rulesDataSource = new RulesDataSource(this);
         rulesDataSource.open();
         rules = rulesDataSource.getAllRules().get(rulesDataSource.getAllRules().size()-1);
+        List<Constants.CARD_TYPES> cardTypeList = rules.getCardTypesList();
 
         dataSource = new QuizDataSource(this);
         dataSource.open();
-        Type listType = new TypeToken<ArrayList<Constants.CARD_TYPES>>(){}.getType();
-        List<Constants.CARD_TYPES> cardTypeList = new Gson().fromJson(getIntent().getStringExtra(Constants.CARD_TYPE_FILTER), listType);
         Deck deck = dataSource.getFilteredDeck(rules.getDeckId(), cardTypeList, getIntent().getBooleanExtra(Constants.MODERATOR_NEEDED_FILTER, true));
 
         cardLimit = Math.min(deck.getCards().size(),rules.getMaxCardCount());

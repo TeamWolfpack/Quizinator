@@ -1,5 +1,13 @@
 package com.seniordesign.wolfpack.quizinator.Database.Rules;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.seniordesign.wolfpack.quizinator.Constants;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Represents rules
  * @creation 10/4/2016.
@@ -61,6 +69,11 @@ public class Rules {
 
     public String getCardTypes() {
         return cardTypes;
+    }
+
+    public List<Constants.CARD_TYPES> getCardTypesList() {
+        Type listType = new TypeToken<ArrayList<Constants.CARD_TYPES>>(){}.getType();
+        return new Gson().fromJson(cardTypes, listType);
     }
 
     public void setCardTypes(String cardTypes) {

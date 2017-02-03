@@ -91,9 +91,10 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                     if (selected[i])
                         selectedCardTypes.add(cardTypeOptions.get(i));
                 }
-                Deck filteredDeck = dataSource.getFilteredDeck(deck.getId(), selectedCardTypes, isModeratorNeeded); //TODO can we find out whether or not we are in solo gp or multi gp? That wa we can pass the correct boolean
+                Deck filteredDeck = dataSource.getFilteredDeck(deck.getId(), selectedCardTypes, isModeratorNeeded);
 
-                if (!isInputEmpty(cardCountInput) &&
+                if (isInputZero(cardCountInput) ||
+                        isInputEmpty(cardCountInput) ||
                         Integer.valueOf(cardCountInput.getText().toString()) > filteredDeck.getCards().size())
                     cardCountInput.setText(String.valueOf(filteredDeck.getCards().size()));
                 filterCardCount(filteredDeck);
@@ -102,7 +103,8 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         Spinner deckSpinner = (Spinner) findViewById(R.id.deck_spinner);
             List<String> deckNames = new ArrayList<>();
             for (Deck deck: dataSource.getAllDecks()) {
-                deckNames.add(deck.getDeckName());
+                if (deck.getCards().size() > 0)
+                    deckNames.add(deck.getDeckName());
             }
             final ArrayAdapter<String> deckAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, deckNames);
@@ -129,9 +131,11 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                                 if (cardTypeOptions.indexOf(type) > -1)
                                     cardTypeSpinner.selectItem(cardTypeOptions.indexOf(type), true);
                             }
-                            Deck filteredDeck = dataSource.getFilteredDeck(deck.getId(), selectedCardTypes, isModeratorNeeded);//TODO can we find out whether or not we are in solo gp or multi gp? That wa we can pass the correct boolean
+                            Deck filteredDeck = dataSource.getFilteredDeck(deck.getId(), selectedCardTypes, isModeratorNeeded);
                             filterCardCount(filteredDeck);
-                            if (!isInputEmpty(cardCountInput) &&
+
+                            if (isInputZero(cardCountInput) ||
+                                    isInputEmpty(cardCountInput) ||
                                     Integer.valueOf(cardCountInput.getText().toString()) > filteredDeck.getCards().size())
                                 cardCountInput.setText(String.valueOf(filteredDeck.getCards().size()));
 
@@ -164,35 +168,28 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
         cardCountInput = (EditText)findViewById(R.id.card_count);
             filterCardCount(deck);
-//            cardCountInput.setText(deck.getCards().size()); //TODO
             cardCountInput.setText(String.valueOf(deck.getCards().size()));
-//            cardCountInput.setText(deck.getCards().size()); // Should be deck count, change when deck is done
 
         gameMinutesInput = (EditText)findViewById(R.id.game_minutes);
             NumberFilter gameMinuteFilter = new NumberFilter(1);
-            gameMinutesInput.setFilters(new InputFilter[]{ gameMinuteFilter });
             gameMinutesInput.setOnFocusChangeListener(gameMinuteFilter);
 
         gameSecondsInput = (EditText)findViewById(R.id.game_seconds);
-            NumberFilter gameSecondsFilter = new NumberFilter();
-            gameSecondsInput.setFilters(new InputFilter[]{ gameSecondsFilter });
+            NumberFilter gameSecondsFilter = new NumberFilter(0, 59, true);
             gameSecondsInput.setOnFocusChangeListener(gameSecondsFilter);
 
         cardMinutesInput = (EditText)findViewById(R.id.card_minutes);
             NumberFilter cardMinuteFilter = new NumberFilter();
-            cardMinutesInput.setFilters(new InputFilter[]{ cardMinuteFilter });
             cardMinutesInput.setOnFocusChangeListener(cardMinuteFilter);
 
         cardSecondsInput = (EditText)findViewById(R.id.card_seconds);
-            NumberFilter cardSecondsFilter = new NumberFilter(1);
-            cardSecondsInput.setFilters(new InputFilter[]{ cardSecondsFilter });
+            NumberFilter cardSecondsFilter = new NumberFilter(0, 59);
             cardSecondsInput.setOnFocusChangeListener(cardSecondsFilter);
         loadPreviousRules();
     }
 
     private void filterCardCount(Deck deck) {
         NumberFilter cardCountFilter = new NumberFilter(1, deck.getCards().size(), false);
-        cardCountInput.setFilters(new InputFilter[]{ cardCountFilter });
         cardCountInput.setOnFocusChangeListener(cardCountFilter);
     }
 
@@ -237,7 +234,6 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                 Intent i = wifiDirectApp.
                         getLaunchActivityIntent(
                                 ManageGameplayActivity.class, null);
-                i.putExtra(CARD_TYPE_FILTER, gson.toJson(deck.getCardTypes()));
                 i.putExtra(MODERATOR_NEEDED_FILTER, isModeratorNeeded);
                 startActivity(i);
                 ConnectionService.sendMessage(MSG_SEND_RULES_ACTIVITY, rulesToSend); // TODO see above line
@@ -264,10 +260,14 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             Toast.makeText(this, CARD_SECONDS_ERROR, Toast.LENGTH_SHORT).show();
             return null;
         }
+        if (isInputZero(cardSecondsInput) && isInputZero(cardMinutesInput)) {
+            Toast.makeText(this, CARD_TIME_ZERO, Toast.LENGTH_SHORT).show();
+            return null;
+        }
         if (isInputEmpty(cardCountInput)) {
             Toast.makeText(this, CARD_COUNT_ERROR, Toast.LENGTH_SHORT).show();
             return null;
-        } else if (cardCountInput.getText().toString().equals("0")) {
+        } else if (isInputZero(cardCountInput)) {
             Toast.makeText(this, CARD_COUNT_ZERO, Toast.LENGTH_SHORT).show();
             return null;
         }
@@ -340,6 +340,8 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
         if (rule.getMaxCardCount() > deck.getCards().size())
             cardCountInput.setText(String.valueOf(deck.getCards().size()));
+        else if (isInputZero(cardCountInput) || isInputEmpty(cardCountInput))
+            cardCountInput.setText(String.valueOf(deck.getCards().size()));
         else
             cardCountInput.setText(String.valueOf(rule.getMaxCardCount()));
 
@@ -355,6 +357,11 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
     private boolean isInputEmpty(EditText input) {
         return input.getText().toString().equals("");
+    }
+
+    private boolean isInputZero(EditText input) {
+        return input.getText().toString().equals(STRING_0) ||
+                input.getText().toString().equals(STRING_00);
     }
 
     private boolean initializeDB(){
@@ -381,16 +388,5 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         super.onPause();
         rulesSource.close();
         dataSource.close();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        rulesSource.close();
-        dataSource.close();
-
-        wifiDirectApp.disconnectFromGroup();
-        wifiDirectApp.mManageActivity = null;
     }
 }

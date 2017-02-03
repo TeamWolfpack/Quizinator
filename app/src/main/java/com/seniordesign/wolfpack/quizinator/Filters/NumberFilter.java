@@ -3,14 +3,18 @@ package com.seniordesign.wolfpack.quizinator.Filters;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+
+import static com.seniordesign.wolfpack.quizinator.Constants.STRING_0;
+import static com.seniordesign.wolfpack.quizinator.Constants.STRING_00;
 
 /**
  * Filter will make sure the time inputs
  * will be between 1 (0 for seconds) and 60
  */
-public class NumberFilter implements InputFilter, View.OnFocusChangeListener {
+public class NumberFilter implements View.OnFocusChangeListener {
 
     private int min = 0;
     private int max = 60;
@@ -36,35 +40,31 @@ public class NumberFilter implements InputFilter, View.OnFocusChangeListener {
     }
 
     @Override
-    public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-        try {
-            int input = Integer.parseInt(dest.toString() + source.toString());
-            if (isInRange(input))
-                return null;
-        } catch (NumberFormatException nfe) { }
-        return "";
-    }
-
-    @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if (hasFocus) return;
 
         EditText editText = (EditText)v;
         Editable text = editText.getText();
-        if (beginWithZero) {
-            if (text.toString().equals("")) {
-                editText.setText("0" + min);
+
+        try {
+            int input = text.toString().equals("") ? 0 : Integer.parseInt(text.toString());
+            Log.d("Filter", "Input is : " + input);
+
+            if (input > max) {
+                input = max;
+                Log.d("Filter", "set input to max : " + input);
             }
-            if (text.length() == 1) {
-                editText.setText("0" + text);
+            if (input < min) {
+                input = min;
+                Log.d("Filter", "set input to min : " + input);
             }
-        } else {
-            if (text.toString().equals("")) {
-                editText.setText("" + min);
-            }
-        }
-        if (text.length() > 2) {
-            editText.setText(text.subSequence(text.length() - 2, text.length()));
+
+            editText.setText(String.valueOf(input));
+
+            if (beginWithZero && input < 10)
+                editText.setText(STRING_0 + input);
+        } catch (NumberFormatException e) {
+            editText.setText(String.valueOf(max));
         }
     }
 }
