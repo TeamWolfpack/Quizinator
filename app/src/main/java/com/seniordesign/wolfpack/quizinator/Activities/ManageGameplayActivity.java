@@ -88,8 +88,8 @@ public class ManageGameplayActivity extends AppCompatActivity {
         dataSource = new QuizDataSource(this);
         dataSource.open();
         Type listType = new TypeToken<ArrayList<Constants.CARD_TYPES>>(){}.getType();
-        List<Constants.CARD_TYPES> cardTypeList = new Gson().fromJson(getIntent().getStringExtra(Constants.CARD_TYPE_FILTER), listType);
-        Deck deck = dataSource.getFilteredDeck(rules.getDeckId(), cardTypeList, getIntent().getBooleanExtra(Constants.MODERATOR_NEEDED_FILTER, true));
+        List<Constants.CARD_TYPES> cardTypeList = new Gson().fromJson(rules.getCardTypes(), listType);
+        Deck deck = dataSource.getFilteredDeck(rules.getDeckId(), cardTypeList, wifiDirectApp.mIsServer);
 
         cardLimit = Math.min(deck.getCards().size(),rules.getMaxCardCount());
 
@@ -146,8 +146,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
             selectAndRespondToFastestAnswer();
             String json = gson.toJson(rules.getTimeLimit() - gameplayTimerRemaining);
             ConnectionService.sendMessage(MSG_END_OF_GAME_ACTIVITY, json);
-            Intent i = new Intent(ManageGameplayActivity.this, MainMenuActivity.class);
-            startActivity(i);
+            startActivity(new Intent(ManageGameplayActivity.this, MainMenuActivity.class));
             finish();
             return;
         }

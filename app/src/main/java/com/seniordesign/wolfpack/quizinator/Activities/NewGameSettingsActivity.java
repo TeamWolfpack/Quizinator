@@ -60,7 +60,6 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     private QuizDataSource dataSource;
 
     private Deck deck;
-    private boolean isModeratorNeeded;
 
     WifiDirectApp wifiDirectApp;
 
@@ -73,7 +72,6 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         setTitle(Constants.GAME_SETTINGS);
         wifiDirectApp = (WifiDirectApp)getApplication();
         initializeDB();
-        isModeratorNeeded = getIntent().getExtras().getBoolean(Constants.MULTIPLAYER);
 
         if (rulesSource.getAllRules().size() > 0) {
             deck = dataSource.getDeckWithId(rulesSource.getAllRules()
@@ -91,8 +89,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                     if (selected[i])
                         selectedCardTypes.add(cardTypeOptions.get(i));
                 }
-                Deck filteredDeck = dataSource.getFilteredDeck(deck.getId(), selectedCardTypes, isModeratorNeeded); //TODO can we find out whether or not we are in solo gp or multi gp? That wa we can pass the correct boolean
-
+                Deck filteredDeck = dataSource.getFilteredDeck(deck.getId(), selectedCardTypes, wifiDirectApp.mIsServer);
                 if (!isInputEmpty(cardCountInput) &&
                         Integer.valueOf(cardCountInput.getText().toString()) > filteredDeck.getCards().size())
                     cardCountInput.setText(String.valueOf(filteredDeck.getCards().size()));
@@ -129,7 +126,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                                 if (cardTypeOptions.indexOf(type) > -1)
                                     cardTypeSpinner.selectItem(cardTypeOptions.indexOf(type), true);
                             }
-                            Deck filteredDeck = dataSource.getFilteredDeck(deck.getId(), selectedCardTypes, isModeratorNeeded);//TODO can we find out whether or not we are in solo gp or multi gp? That wa we can pass the correct boolean
+                            Deck filteredDeck = dataSource.getFilteredDeck(deck.getId(), selectedCardTypes, wifiDirectApp.mIsServer);
                             filterCardCount(filteredDeck);
                             if (!isInputEmpty(cardCountInput) &&
                                     Integer.valueOf(cardCountInput.getText().toString()) > filteredDeck.getCards().size())
@@ -220,27 +217,16 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         }
     }
 
-    private boolean startMultiplayerGamePlay(Rules r){
-        //multi-player
+    private boolean startMultiplayerGamePlay(final Rules r){
         if(!wifiDirectApp.mP2pConnected ){
             Log.d(TAG, "startChatActivity : p2p connection is " +
                     "missing, do nothing...");
             return false;
         }
-
-        //send everyone the rules
-        final String rulesToSend = gson.toJson(r);
-//        ConnectionService.sendMessage(MSG_SEND_RULES_ACTIVITY, rulesToSend); //TODO trying to move into the runOnUiThread because too fast (possible to move into OnGamePlayActivity)
-
         runOnUiThread(new Runnable() {
             @Override public void run() {
-                Intent i = wifiDirectApp.
-                        getLaunchActivityIntent(
-                                ManageGameplayActivity.class, null);
-                i.putExtra(CARD_TYPE_FILTER, gson.toJson(deck.getCardTypes()));
-                i.putExtra(MODERATOR_NEEDED_FILTER, isModeratorNeeded);
-                startActivity(i);
-                ConnectionService.sendMessage(MSG_SEND_RULES_ACTIVITY, rulesToSend); // TODO see above line
+                startActivity(wifiDirectApp.getLaunchActivityIntent(ManageGameplayActivity.class, null));
+                ConnectionService.sendMessage(MSG_SEND_RULES_ACTIVITY, gson.toJson(r));
                 finish();
             }
         });
@@ -386,11 +372,5 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        rulesSource.close();
-        dataSource.close();
-
-        wifiDirectApp.disconnectFromGroup();
-        wifiDirectApp.mManageActivity = null;
     }
 }

@@ -131,8 +131,7 @@ public class GamePlayActivity extends AppCompatActivity {
         if(properties.getGamePlayTimerRunning()!=null) {
             properties.getGamePlayTimerRunning().cancel();
         }
-        final Intent intent =
-                new Intent(this, EndOfGameplayActivity.class);
+        final Intent intent = new Intent(this, EndOfGameplayActivity.class);
         GamePlayStats s = new GamePlayStats();
         s.setScore(properties.getScore());
         s.setTimeElapsed(totalGameTime);
