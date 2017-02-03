@@ -30,5 +30,10 @@ build/
 /.idea/libraries
 *.iml
 
+/app/.idea/*
+/app/.idea/workspace.xml
+/app/.idea/libraries
+/app/*.iml
+
 # sample app's test folder
 _samples/WifiDirect/wifi-direct-chat/app/build/tmp
