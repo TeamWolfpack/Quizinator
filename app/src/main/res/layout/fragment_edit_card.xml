@@ -156,7 +156,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:paddingRight="20dp"
-                android:text="@string/_true"
+                android:text="@string/capital_true"
                 android:layout_weight="1"
                 />
             <RadioButton
@@ -164,7 +164,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:paddingRight="20dp"
-                android:text="@string/_false"
+                android:text="@string/capital_false"
                 android:layout_weight="1"
                 />
         </RadioGroup>

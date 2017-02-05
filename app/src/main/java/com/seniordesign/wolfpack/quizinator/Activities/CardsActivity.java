@@ -31,7 +31,7 @@ import java.util.List;
 import io.apptik.widget.multiselectspinner.BaseMultiSelectSpinner;
 import io.apptik.widget.multiselectspinner.MultiSelectSpinner;
 
-import static com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES.TRUE_FALSE;
+import static com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES.*;
 
 public class CardsActivity extends AppCompatActivity {
 
@@ -40,9 +40,9 @@ public class CardsActivity extends AppCompatActivity {
     private List<CARD_TYPES> cardTypes = new ArrayList<>(
             Arrays.asList(
                     TRUE_FALSE,
-                    CARD_TYPES.MULTIPLE_CHOICE,
-                    CARD_TYPES.FREE_RESPONSE,
-                    CARD_TYPES.VERBAL_RESPONSE
+                    MULTIPLE_CHOICE,
+                    FREE_RESPONSE,
+                    VERBAL_RESPONSE
             ));
 
     private QuizDataSource dataSource;
@@ -195,7 +195,7 @@ public class CardsActivity extends AppCompatActivity {
                 RadioGroup radioGroupForTrueFalse = (RadioGroup) promptsView.findViewById(R.id.edit_card_true_or_false);
                 radioGroupForTrueFalse.setVisibility(View.VISIBLE);
 
-                if(card.getCorrectAnswer() != null && card.getCorrectAnswer().equals("True")){
+                if(card.getCorrectAnswer() != null && Boolean.valueOf(card.getCorrectAnswer())){
                     RadioButton radioButton = (RadioButton) promptsView.findViewById(R.id.edit_card_true);
                     radioButton.setChecked(true);
                 }
@@ -321,10 +321,10 @@ public class CardsActivity extends AppCompatActivity {
                 int checkedID = radioGroupForTrueFalse.getCheckedRadioButtonId();
 
                 if((checkedID == R.id.edit_card_true)){
-                    card.setCorrectAnswer("True");
+                    card.setCorrectAnswer(String.valueOf(true));
                 }
                 else{
-                    card.setCorrectAnswer("False");
+                    card.setCorrectAnswer(String.valueOf(false));
                 }
                 break;
             case MULTIPLE_CHOICE:

@@ -75,8 +75,10 @@
     <string name="points">Points</string>
     <string name="answer">Answer</string>
 
-    <string name="_true">True</string>
-    <string name="_false">False</string>
+    <string name="_true">true</string>
+    <string name="_false">false</string>
+    <string name="capital_true">True</string>
+    <string name="capital_false">False</string>
 
     <string name="nav_bar_check_p2p_compliance">Check P2P Compatibility</string>
     <string name="nav_bar_edit_decks">Edit Decks</string>

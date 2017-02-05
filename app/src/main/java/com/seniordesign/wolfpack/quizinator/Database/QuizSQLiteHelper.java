@@ -100,7 +100,7 @@ public class QuizSQLiteHelper extends SQLiteOpenHelper {
     private void setDefaultCardSet(SQLiteDatabase db) {
         Gson gson = new Gson();
 
-        final String[] TRUE_FALSE_ANSWERS = new String[]{"True", "False"};
+        final String[] TRUE_FALSE_ANSWERS = new String[]{String.valueOf(true), String.valueOf(false)};
 
         StringBuilder queryBuilder = new StringBuilder()
                 .append("insert into " + TABLE_CARDS)

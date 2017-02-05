@@ -460,7 +460,7 @@ public class QuizDataSource {
                 .append("=\'")
                 .append(cardTypes.get(i).ordinal())
                 .append("\'");
-        return whereClause.toString();
+        return "(" + whereClause.toString() + ")";
     }
 
     private String buildModeratorNeededWhereClasue(String tableName, boolean moderatorNeeded) {

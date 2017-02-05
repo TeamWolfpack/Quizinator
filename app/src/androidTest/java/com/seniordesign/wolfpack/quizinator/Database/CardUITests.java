@@ -51,8 +51,8 @@ public class CardUITests {
         assertEquals(true, dataSource.getDatabase().isOpen());
         dbHelper.onUpgrade(dataSource.getDatabase(), 0, 1);
 
-        Card card = dataSource.createCard(Constants.CARD_TYPES.TRUE_FALSE.ordinal(), "Test TF Question", "True",
-                new String[]{"True", "False"}, 1, "False");
+        Card card = dataSource.createCard(Constants.CARD_TYPES.TRUE_FALSE.ordinal(), "Test TF Question", String.valueOf(true),
+                new String[]{String.valueOf(true), String.valueOf(false)}, 1, String.valueOf(false));
         assertEquals(11, dataSource.getAllCards().size());
         assertEquals(7, dataSource.getCardAllColumns().length);
         card.setPoints(3);

@@ -272,6 +272,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
             alertDialog.dismiss();
 
         wifiDirectApp.disconnectFromGroup();
+        wifiDirectApp.mIsServer = false;
         wifiDirectApp.mManageActivity = null;
     }
 
