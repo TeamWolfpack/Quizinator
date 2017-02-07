@@ -1,7 +1,9 @@
 package com.seniordesign.wolfpack.quizinator.WifiDirect;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.wifi.p2p.WifiP2pDevice;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +22,6 @@ public class PeerListAdapter extends ArrayAdapter<WifiP2pDevice>{
     private boolean isHost;
     private List<WifiP2pDevice> devices;
 
-    /**
-     * @param context
-     * @param textViewResourceId
-     * @param devices
-     */
     public PeerListAdapter(Context context, int textViewResourceId,
                                List<WifiP2pDevice> devices) {
         super(context, textViewResourceId, devices);
@@ -38,8 +35,12 @@ public class PeerListAdapter extends ArrayAdapter<WifiP2pDevice>{
         notifyDataSetChanged();
     }
 
+    @SuppressLint("InflateParams")
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position,
+                        View convertView,
+                        @NonNull ViewGroup parent) {
         View v = convertView;
         if (v == null) {
             LayoutInflater vi;
@@ -48,15 +49,20 @@ public class PeerListAdapter extends ArrayAdapter<WifiP2pDevice>{
         }
         WifiP2pDevice peerDevice = devices.get(position);
         if (peerDevice != null) {
-            TextView deviceNameTextView = (TextView) v.findViewById(R.id.device_name);
-            TextView deviceDetailsTextView = (TextView) v.findViewById(R.id.device_details);
+            TextView deviceNameTextView = (
+                    TextView) v.findViewById(R.id.device_name);
+            TextView deviceDetailsTextView =
+                    (TextView) v.findViewById(R.id.device_details);
             if (deviceNameTextView != null) {
                 deviceNameTextView.setText(peerDevice.deviceName);
             }
             if (deviceDetailsTextView != null) {
-                deviceDetailsTextView.setText(ConnectionService.getDeviceStatus(peerDevice.status));
+                deviceDetailsTextView.setText(
+                        ConnectionService.getDeviceStatus(
+                                peerDevice.status));
             }
-            LinearLayout buttons = (LinearLayout) v.findViewById(R.id.buttonsPanel);
+            LinearLayout buttons =
+                    (LinearLayout) v.findViewById(R.id.buttonsPanel);
             if(!isHost && position == selectedIndex){
                 buttons.setVisibility(View.VISIBLE);
             }else{
