@@ -16,6 +16,7 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
@@ -69,7 +70,7 @@ public class CustomDeckTests {
         onView(withId(R.id.new_deck_button)).perform(click());
         assertTrue(dataSource.getAllDecks().size() == numOfDecks);
         closeSoftKeyboard();
-        onView(withId(R.id.deck_cancel_button)).perform(click());
+        pressBack();
 
         onView(withId(R.id.new_deck_button)).perform(click());
         closeSoftKeyboard();

@@ -19,6 +19,7 @@ import org.w3c.dom.Text;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 public class ActivePlayerAdapter extends BaseAdapter {
 
@@ -84,7 +85,7 @@ public class ActivePlayerAdapter extends BaseAdapter {
         playerAnswer.setText(player.getAnswer());
 
         TextView playerTime = (TextView) view.findViewById(R.id.active_player_time);
-        playerTime.setText(player.getTimeTaken() + "");
+        playerTime.setText(String.format(Locale.US, "%.3f sec", player.getTimeTaken() / 1000000000.0));
 
         return view;
     }

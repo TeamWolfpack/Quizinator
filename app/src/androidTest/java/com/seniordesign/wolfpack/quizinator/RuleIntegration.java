@@ -159,15 +159,15 @@ public class RuleIntegration {
         });
         rulesource.close();
 
-        onView(withId(R.id.new_game)).perform(scrollTo(), click());
+        onView(withId(R.id.new_game)).perform(click());
 
         onView(withId(R.id.endOfGameScoreText)).check(matches(isDisplayed()));
     }
 
     private String getCardTypeString() {
-        List<String> types = new ArrayList<>();
-        types.add(Constants.CARD_TYPES.TRUE_FALSE.toString());
-        types.add(Constants.CARD_TYPES.MULTIPLE_CHOICE.toString());
+        List<Constants.CARD_TYPES> types = new ArrayList<>();
+        types.add(Constants.CARD_TYPES.TRUE_FALSE);
+        types.add(Constants.CARD_TYPES.MULTIPLE_CHOICE);
         return gson.toJson(types);
     }
 }
