@@ -17,7 +17,6 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.ChannelListener;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
-import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,7 +39,7 @@ public class ConnectionService extends Service implements
 
     private static final String TAG = "ConnServ";
 
-    private static ConnectionService _sinstance = null;
+    private static ConnectionService connectionService = null;
 
     private WorkHandler mWorkHandler;
     private MessageHandler mHandler;
@@ -48,29 +47,32 @@ public class ConnectionService extends Service implements
     boolean retryChannel = false;
 
     WifiDirectApp wifiDirectApp;
-    MainMenuActivity mActivity; // shall I use weak reference here ?
+    MainMenuActivity mActivity;
     ConnectionManager mConnMan;
 
     private void initializeConnectionService() {
         Log.d(TAG, "initializeConnectionService");
 
-        if (_sinstance != null) {
+        if (connectionService != null) {
             return;
         }
 
-        _sinstance = this;
+        connectionService = this;
         mWorkHandler = new WorkHandler(TAG);
         mHandler = new MessageHandler(mWorkHandler.getLooper());
 
         wifiDirectApp = (WifiDirectApp) getApplication();
-        wifiDirectApp.mP2pMan = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
-        wifiDirectApp.mP2pChannel = wifiDirectApp.mP2pMan.initialize(this, mWorkHandler.getLooper(), null);
+        wifiDirectApp.mP2pMan = (WifiP2pManager)
+                getSystemService(Context.WIFI_P2P_SERVICE);
+        wifiDirectApp.mP2pChannel =
+                wifiDirectApp.mP2pMan.initialize(this,
+                        mWorkHandler.getLooper(), null);
 
         mConnMan = new ConnectionManager(this);
     }
 
     public static ConnectionService getInstance() {
-        return _sinstance;
+        return connectionService;
     }
 
     @Override
@@ -83,7 +85,6 @@ public class ConnectionService extends Service implements
     public int onStartCommand(Intent intent, int flags, int startId) {
         initializeConnectionService();
         processIntent(intent);
-        Log.d(TAG, "onStartCommand: START_STICKY - " + START_STICKY); //TODO remove later
         return START_STICKY;
     }
 
@@ -91,19 +92,14 @@ public class ConnectionService extends Service implements
         if (intent == null)
             return;
         String action = intent.getAction();
-        Log.d(TAG, "processIntent: Action - " + action); //TODO remove later
         if (action == null)
             return;
         switch (action) {
             case WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION:
-                Log.d(TAG, "processIntent: State change"); //TODO remove later
-                int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
-                Log.d(TAG, "processIntent: State - " + state); //TODO remove later
-                deviceWifiStateChangedAction(state);
+                deviceWifiStateChangedAction(intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1));
                 break;
             case WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION:
                 //find all peers
-                Log.d(TAG, "processIntent: peers changed"); //TODO remove later
                 deviceWifiPeersChangedAction();
                 break;
             case WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION:
@@ -111,14 +107,12 @@ public class ConnectionService extends Service implements
                 // device will be group owner automatically
                 if (wifiDirectApp.mP2pMan == null)
                     return;
-                Log.d(TAG, "processIntent: connection changed"); //TODO remove later
                 deviceConnectionChangedAction(intent);
                 break;
             case WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION:
-                //p2p connected, for client, this device
-                // changed to connected first
+                //p2p connected, for client, this device changed to
+                // connected first
                 deviceDetailsHaveChanged(intent);
-                Log.d(TAG, "processIntent: this device changed"); //TODO remove later
                 break;
             default:
                 break;
@@ -127,14 +121,15 @@ public class ConnectionService extends Service implements
 
     private boolean deviceWifiStateChangedAction(int state) {
         if (state == WifiP2pManager.WIFI_P2P_STATE_ENABLED) {
-            // Wifi Direct mode is enabled
-            wifiDirectApp.mP2pChannel = wifiDirectApp.mP2pMan.initialize(this,
+            wifiDirectApp.mP2pChannel =
+                    wifiDirectApp.mP2pMan.initialize(this,
                     mWorkHandler.getLooper(), null);
             AppPreferences.setStringToPref(wifiDirectApp,
-                    AppPreferences.PREF_NAME, AppPreferences.P2P_ENABLED, "1");
+                    AppPreferences.PREF_NAME,
+                    AppPreferences.P2P_ENABLED, "1");
             return true;
         } else {
-            wifiDirectApp.mThisDevice = null;    // reset this device status
+            wifiDirectApp.mThisDevice = null;
             wifiDirectApp.mP2pChannel = null;
             wifiDirectApp.mPeers.clear();
             if (wifiDirectApp.mHomeActivity != null) {
@@ -142,21 +137,16 @@ public class ConnectionService extends Service implements
                 wifiDirectApp.mHomeActivity.resetData();
             }
             AppPreferences.setStringToPref(wifiDirectApp,
-                    AppPreferences.PREF_NAME, AppPreferences.P2P_ENABLED, "0");
+                    AppPreferences.PREF_NAME,
+                    AppPreferences.P2P_ENABLED,
+                    "0");
             return false;
         }
     }
 
     private boolean deviceWifiPeersChangedAction() {
-        // a list of peers are available after discovery,
-        // use PeerListListener to collect request available
-        // peers from the wifi p2p manager. This is an
-        // asynchronous call and the calling activity is
-        // notified with callback on
-        // PeerListListener.onPeersAvailable()
-        if(wifiDirectApp.mManageActivity != null){
+        if(wifiDirectApp.mManageActivity != null)
             wifiDirectApp.mManageActivity.validateAnswer(null);
-        }
         if (wifiDirectApp.mP2pMan != null && wifiDirectApp.mP2pChannel != null) {
             wifiDirectApp.mP2pMan.requestPeers(wifiDirectApp.mP2pChannel, this);
             return true;
@@ -167,36 +157,36 @@ public class ConnectionService extends Service implements
     private boolean deviceConnectionChangedAction(Intent intent) {
         NetworkInfo networkInfo = intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
         if (networkInfo.isConnected()) {
-            Log.d(TAG, "processIntent: WIFI_P2P_CONNECTION_CHANGED_ACTION: p2p connected ");
+            Log.d(TAG, "deviceConnectionChangedAction: WIFI_P2P_CONNECTION_CHANGED_ACTION: p2p connected ");
             // Connected with the other device, request connection
             // info for group owner IP. Callback inside details fragment.
             wifiDirectApp.mP2pMan.requestConnectionInfo(wifiDirectApp.mP2pChannel, this);
             return true;
         } else {
             // It's a disconnect
-            Log.d(TAG, "processIntent: WIFI_P2P_CONNECTION_CHANGED_ACTION: p2p " +
+            Log.d(TAG, "deviceConnectionChangedAction: WIFI_P2P_CONNECTION_CHANGED_ACTION: p2p " +
                     "disconnected, mP2pConnected = false..closeClient..");
             wifiDirectApp.mP2pConnected = false;
-            wifiDirectApp.mP2pInfo = null;   // reset connection info
-            // after connection done.
+            wifiDirectApp.mP2pInfo = null;
             mConnMan.closeClient();
             if (wifiDirectApp.mHomeActivity != null)
                 wifiDirectApp.mHomeActivity.resetData();
-
-            //End gameplay if client
             if (wifiDirectApp.mGameplayActivity != null)
                 wifiDirectApp.mGameplayActivity.endGamePlay();
-
             return false;
         }
     }
 
     private boolean deviceDetailsHaveChanged(Intent intent) {
         if(intent.hasExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE)){
-            wifiDirectApp.mThisDevice = intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
-            wifiDirectApp.mDeviceName = wifiDirectApp.mThisDevice.deviceName;
+            wifiDirectApp.mThisDevice =
+                    intent.getParcelableExtra(
+                            WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
+            wifiDirectApp.mDeviceName =
+                    wifiDirectApp.mThisDevice.deviceName;
             if (wifiDirectApp.mHomeActivity != null) {
-                wifiDirectApp.mHomeActivity.updateThisDevice(wifiDirectApp.mThisDevice);
+                wifiDirectApp.mHomeActivity.updateThisDevice(
+                        wifiDirectApp.mThisDevice);
                 return true;
             }
         }
@@ -210,15 +200,15 @@ public class ConnectionService extends Service implements
     @Override
     public void onChannelDisconnected() {
         if (!retryChannel) {
-            wifiDirectApp.mP2pChannel = wifiDirectApp.mP2pMan.initialize(this, mWorkHandler.getLooper(), null);
-            if (wifiDirectApp.mHomeActivity != null) {
+            wifiDirectApp.mP2pChannel =
+                    wifiDirectApp.mP2pMan.initialize(this,
+                            mWorkHandler.getLooper(), null);
+            if (wifiDirectApp.mHomeActivity != null)
                 wifiDirectApp.mHomeActivity.resetData();
-            }
             retryChannel = true;
         } else {
-            if (wifiDirectApp.mHomeActivity != null) {
+            if (wifiDirectApp.mHomeActivity != null)
                 wifiDirectApp.mHomeActivity.onChannelDisconnected();
-            }
             stopSelf();
         }
     }
