@@ -342,28 +342,6 @@ public class QuizDataSource {
 
     private List<Card> getAllCardsInDeck(long deckId) {
         return getFilteredCardsInDeck(deckId, null, true);
-//        ArrayList<Card> cards = new ArrayList<>();
-//        StringBuilder cardColumns = new StringBuilder();
-//        for (String cardColumn : cardAllColumns) {
-//            cardColumns.append("c.").append(cardColumn).append(",");
-//        }
-//        cardColumns.deleteCharAt(cardColumns.length()-1);
-//        StringBuilder query = new StringBuilder()
-//                .append("SELECT ").append(cardColumns.toString())
-//                .append(" FROM " + QuizSQLiteHelper.TABLE_CDRELATIONS + " cdr")
-//                .append(" INNER JOIN " + QuizSQLiteHelper.TABLE_CARDS + " c")
-//                .append(" ON cdr." + QuizSQLiteHelper.CDRELATIONS_COLUMN_FKCARD + "=c." + QuizSQLiteHelper.CARD_COLUMN_ID)
-//                .append(" INNER JOIN " + QuizSQLiteHelper.TABLE_DECKS + " d")
-//                .append(" ON cdr." + QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK + "=d." + QuizSQLiteHelper.DECK_COLUMN_ID)
-//                .append(" WHERE cdr." + QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK + "=\'").append(deckId).append("\'");
-//        Cursor cursor = database.rawQuery(query.toString(), null);
-//        cursor.moveToFirst();
-//        while(!cursor.isAfterLast()){
-//            Card card = cursorToCard(cursor);
-//            cards.add(card);
-//            cursor.moveToNext();
-//        }
-//        return cards;
     }
 
     private List<Card> getFilteredCardsInDeck(long deckId, List<Constants.CARD_TYPES> cardTypes, boolean moderatorNeeded) {
