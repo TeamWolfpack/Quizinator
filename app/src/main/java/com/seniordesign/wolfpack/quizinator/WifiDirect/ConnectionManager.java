@@ -31,7 +31,7 @@ import android.util.Log;
  */
 public class ConnectionManager {
 
-    private final String TAG = "ConnMan";
+    private final String TAG = "PTP_ConMan";
 
     private Context mContext;
     ConnectionService mService;

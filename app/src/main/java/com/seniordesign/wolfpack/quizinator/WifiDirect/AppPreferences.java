@@ -11,8 +11,9 @@ class AppPreferences {
     static final String P2P_ENABLED = "p2pEnabled";
 
     static String getStringFromPref(Context ctx,
-                            String preferenceFileName, String key) {
-        Log.d(TAG, "get string from preferences");
+                                    String preferenceFileName,
+                                    String key) {
+        Log.d(TAG, "getStringFromPref");
         String value = null;
         SharedPreferences pref = ctx.getSharedPreferences(
                                             preferenceFileName, 0);
@@ -23,9 +24,10 @@ class AppPreferences {
     }
 
     static void setStringToPref(Context ctx,
-                                String preferenceFileName, String key,
+                                String preferenceFileName,
+                                String key,
                                 String value) {
-        Log.d(TAG, "set string from preferences");
+        Log.d(TAG, "setStringToPref");
         SharedPreferences pref = ctx.getSharedPreferences(
                 preferenceFileName, 0);
         if (pref != null) {
