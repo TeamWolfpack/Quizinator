@@ -20,6 +20,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
@@ -30,6 +31,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsNot.not;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
@@ -203,6 +205,66 @@ public class GameSettingTests {
         onView(withId(R.id.card_type)).check(matches(isDisplayed()));
 
         onView(withId(R.id.new_game)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void emptyCardCount_CantStartGame() {
+        onView(withId(R.id.card_count)).perform(clearText(), typeText(""));
+        onView(withId(R.id.new_game)).perform(click());
+        onView(withText(Constants.CARD_COUNT_ERROR))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void zeroCardCount_CantStartGame() {
+        onView(withId(R.id.card_count)).perform(clearText(), typeText("0"));
+        onView(withId(R.id.new_game)).perform(click());
+        onView(withText(Constants.CARD_COUNT_ZERO))
+                .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void emptyGameTimeMinute_CantStartGame() {
+        onView(withId(R.id.game_minutes)).perform(clearText(), typeText(""));
+        onView(withId(R.id.new_game)).perform(click());
+        onView(withText(Constants.GAME_MINUTES_ERROR))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void emptyGameTimeSeconds_CantStartGame() {
+        onView(withId(R.id.game_seconds)).perform(clearText(), typeText(""));
+        onView(withId(R.id.new_game)).perform(click());
+        onView(withText(Constants.GAME_SECONDS_ERROR))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void emptyCardTimeMinutes_CantStartGame() {
+        try {
+            // May need to wait for previous toast
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        onView(withId(R.id.card_minutes)).perform(clearText(), typeText(""));
+        onView(withId(R.id.new_game)).perform(click());
+        onView(withText(Constants.CARD_MINUTES_ERROR))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void emptyCardTimeSeconds_CantStartGame() {
+        onView(withId(R.id.card_seconds)).perform(clearText(), typeText(""));
+        onView(withId(R.id.new_game)).perform(click());
+        onView(withText(Constants.CARD_SECONDS_ERROR))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
     }
 
     @Test
