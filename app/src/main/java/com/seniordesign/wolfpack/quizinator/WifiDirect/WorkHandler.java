@@ -5,19 +5,11 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Process;
 
-/**
- * Creates a standalone thread other than the main thread.
- *
- * @creation 10/26/2016
- */
 public final class WorkHandler {
 
     private HandlerThread mHandlerThread;
     private Handler mHandler;
-
-    /*
-     * @author kuczynskij (10/26/2016)
-     */
+    
     public WorkHandler(String threadName) {
         //mHandlerThread = new HandlerThread(threadName, Process.THREAD_PRIORITY_BACKGROUND);
         mHandlerThread = new HandlerThread(threadName,
