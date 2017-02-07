@@ -25,8 +25,6 @@ import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_S
 /**
  * Creates an instance of a WifiDirect Application because it is a
  * global singleton.
- *
- * @creation 10/24/2016.
  */
 public class WifiDirectApp extends Application {
 
@@ -124,10 +122,8 @@ public class WifiDirectApp extends Application {
         Log.d(TAG, "getConnectedPeer");
         WifiP2pDevice peer = null;
         for (WifiP2pDevice d : mPeers) {
-            if (d.status == WifiP2pDevice.CONNECTED) {
+            if (d.status == WifiP2pDevice.CONNECTED)
                 peer = d;
-                Log.d(TAG, "getConnectedPeer: Device Connected" + d.toString());
-            }
         }
         if(peer == null)
             Log.d(TAG, "getConnectedPeer: Will return null");
@@ -194,8 +190,6 @@ public class WifiDirectApp extends Application {
 
     /**
      * Properly resume the WifiDirectApp.
-     * @param tag
-     * @param activity
      */
     public void onResume(String tag,
                          HostGameActivity activity){
@@ -207,7 +201,6 @@ public class WifiDirectApp extends Application {
 
     /**
      * Properly pause the WifiDirectApp.
-     * @param tag
      */
     public void onPause(String tag){
         Log.d(tag, "onPause called");
@@ -217,7 +210,6 @@ public class WifiDirectApp extends Application {
 
     /**
      * Properly destroy the WifiDirectApp.
-     * @param tag
      */
     public void onDestroy(String tag){
         Log.d(tag, "onDestroy called");
