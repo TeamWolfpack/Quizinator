@@ -10,6 +10,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -79,6 +81,11 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                     .getDeckId()); //TODO is this just getting the last rules in the database or the last rules used
         } else if (dataSource.getAllDecks().size()>0){
             deck = dataSource.getAllDecks().get(0);
+        }
+
+        if (wifiDirectApp.mIsServer) {
+            TextView warning = (TextView)findViewById(R.id.card_count_solo_warning);
+            warning.setVisibility(View.GONE);
         }
 
         final BaseMultiSelectSpinner.MultiSpinnerListener multiSpinnerListener = new BaseMultiSelectSpinner.MultiSpinnerListener() {

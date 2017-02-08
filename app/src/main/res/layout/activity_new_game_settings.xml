@@ -26,7 +26,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="0"
-                android:text="@string/select_deck"/>
+                android:text="@string/select_deck"
+                android:layout_marginRight="@dimen/activity_horizontal_margin_half"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin_half" />
             <Spinner
                 android:id="@+id/deck_spinner"
                 android:layout_width="match_parent"
@@ -38,12 +40,14 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:gravity="center_vertical"
-            android:layout_marginBottom="@dimen/activity_vertical_margin">
+            android:layout_marginBottom="@dimen/activity_vertical_margin_half">
             <TextView
                 android:id="@+id/game_label"
                 android:layout_width="wrap_content"
                 android:layout_column="0"
-                android:text="@string/game_time"/>
+                android:text="@string/game_time"
+                android:layout_marginRight="@dimen/activity_horizontal_margin_half"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin_half"/>
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -78,48 +82,13 @@
             android:gravity="center_vertical"
             android:layout_marginBottom="@dimen/activity_vertical_margin">
             <TextView
-                android:id="@+id/card_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/card_type"/>
-            <io.apptik.widget.multiselectspinner.MultiSelectSpinner
-                android:id="@+id/card_type_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </TableRow>
-
-        <TableRow
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="@dimen/activity_vertical_margin">
-            <TextView
-                android:id="@+id/card_count_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/card_count"/>
-            <EditText
-                android:id="@+id/card_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spinner_padding"
-                android:layout_marginLeft="@dimen/spinner_padding"
-                android:layout_marginEnd="@dimen/spinner_padding"
-                android:layout_marginRight="@dimen/spinner_padding"
-                android:inputType="number"/>
-        </TableRow>
-
-        <TableRow
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="@dimen/activity_vertical_margin">
-            <TextView
                 android:id="@+id/card_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="0"
-                android:text="@string/card_time"/>
+                android:text="@string/card_time"
+                android:layout_marginRight="@dimen/activity_horizontal_margin_half"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin_half"/>
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -149,6 +118,58 @@
                     android:text="@string/three_secs"/>
             </LinearLayout>
         </TableRow>
+
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="@dimen/activity_vertical_margin">
+            <TextView
+                android:id="@+id/card_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/card_type"
+                android:layout_marginRight="@dimen/activity_horizontal_margin_half"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin_half"/>
+            <io.apptik.widget.multiselectspinner.MultiSelectSpinner
+                android:id="@+id/card_type_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical">
+            <TextView
+                android:id="@+id/card_count_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/card_count"
+                android:layout_marginRight="@dimen/activity_horizontal_margin_half"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin_half"/>
+            <EditText
+                android:id="@+id/card_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spinner_padding"
+                android:layout_marginLeft="@dimen/spinner_padding"
+                android:layout_marginEnd="@dimen/spinner_padding"
+                android:layout_marginRight="@dimen/spinner_padding"
+                android:inputType="number"/>
+        </TableRow>
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent">
+            <TextView
+                android:id="@+id/card_count_solo_warning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/solo_play_card_count_warning"
+                android:textSize="@dimen/md_text_size_caption"
+                android:layout_marginBottom="@dimen/activity_vertical_margin" />
+        </LinearLayout>
 
     </TableLayout>
 

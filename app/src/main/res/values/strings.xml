@@ -95,7 +95,7 @@
     <string name="wrong_answer">Wrong</string>
     <string name="default_card_points">1</string>
     <string name="current_card">Current Card</string>
-    <string name="correct_answer_label">Correct Answer</string>
+    <string name="correct_answer_label">Correct Answer(s)</string>
 
     <!--ANSWER FRAGMENT BUTTONS-->
     <string name="frag_answer_buzzer">Buzzer</string>
@@ -106,5 +106,6 @@
     <string name="frag_answer_D">D</string>
     <string name="player_answer">Answer</string>
     <string name="response_time">Response Time</string>
+    <string name="solo_play_card_count_warning">*Free and Verbal Response cards can\'t be used in Solo Play</string>
 
 </resources>
