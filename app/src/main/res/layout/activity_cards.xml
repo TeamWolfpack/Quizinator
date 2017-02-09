@@ -36,7 +36,8 @@
         <ListView
             android:id="@+id/list_of_cards"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:divider="@null"/>
     </LinearLayout>
     <android.support.design.widget.FloatingActionButton
         app:srcCompat="@drawable/ic_plus_btn_white_24dp"

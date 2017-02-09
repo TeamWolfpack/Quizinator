@@ -2,12 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/array_adapter_rounded_corners">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingRight="@dimen/array_adapter_padding"
+        android:paddingLeft="@dimen/array_adapter_padding">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -28,7 +31,9 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingRight="@dimen/array_adapter_padding"
+        android:paddingLeft="@dimen/array_adapter_padding">
 
         <ImageView
             android:layout_width="24dp"

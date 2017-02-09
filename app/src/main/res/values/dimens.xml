@@ -10,7 +10,9 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <dimen name="spinner_padding">4dp</dimen>
+    <dimen name="array_adapter_padding">3dp</dimen>
 
+    <!-- Material Design guidelines -->
     <dimen name="md_text_size_headline">24sp</dimen>
     <dimen name="md_text_size_title">20sp</dimen>
     <dimen name="md_text_size_subheading">16sp</dimen>

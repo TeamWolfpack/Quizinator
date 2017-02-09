@@ -2,18 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/array_adapter_rounded_corners">
 
     <ImageView
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_weight="0"
-        android:paddingRight="5dp"
+        android:paddingRight="@dimen/array_adapter_padding"
+        android:paddingLeft="@dimen/array_adapter_padding"
         android:id="@+id/card_type_icon" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingRight="50dp"
+        android:paddingRight="@dimen/array_adapter_padding"
+        android:paddingLeft="@dimen/array_adapter_padding"
         android:layout_weight="1"
         android:maxLines="2"
         android:ellipsize="end"
