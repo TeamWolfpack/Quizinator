@@ -316,7 +316,7 @@ public class ConnectionService extends Service implements
                 pushEndOfGameOut((String) msg.obj);
                 break;
             case MSG_SELECT_ERROR:
-                mConnMan.onSelectorError();
+                Log.d(TAG, "received an error related to the connection manager");
                 break;
             case MSG_BROKEN_CONN:
                 mConnMan.onBrokenConnection((SocketChannel) msg.obj);
