@@ -50,7 +50,6 @@ public class HighScoreUITests {
         assertEquals(true, dao.getDatabase().isOpen());
         sql.onUpgrade(dao.getDatabase(), 0, 1);
         HighScores hs = dao.createHighScore("Sample", 350000, 650);
-        assertEquals("highscores.db", dao.getSQLiteHelper().getDatabaseName());
         assertEquals(1, dao.getAllHighScores().size());
         assertEquals(4, dao.getHighScoresAllColumns().length);
         assertEquals(true, dao.deleteHighScore(hs));

@@ -53,7 +53,6 @@ public class SettingsUITests {
         assertEquals(true, dao.getDatabase().isOpen());
         sql.onUpgrade(dao.getDatabase(), 0, 1);
         Settings s = dao.createSettings(3, "Jim");
-        assertEquals("settings.db", dao.getSQLiteHelper().getDatabaseName());
         assertEquals(1, dao.getAllSettings().size());
         assertEquals(3, dao.getSettingsAllColumns().length);
         assertEquals(true, dao.deleteSetting(s));
