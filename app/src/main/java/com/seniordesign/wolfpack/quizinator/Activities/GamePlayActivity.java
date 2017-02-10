@@ -23,7 +23,7 @@ import com.seniordesign.wolfpack.quizinator.GameplayHandler.MultiplayerHandler;
 import com.seniordesign.wolfpack.quizinator.GameplayHandler.SinglePlayerHandler;
 import com.seniordesign.wolfpack.quizinator.Database.Card;
 import com.seniordesign.wolfpack.quizinator.Database.GamePlayStats;
-import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScores;
+import com.seniordesign.wolfpack.quizinator.Database.HighScores;
 import com.seniordesign.wolfpack.quizinator.Fragments.MultipleChoiceAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
@@ -160,21 +160,21 @@ public class GamePlayActivity extends AppCompatActivity {
     }
 
     private String checkGameStatsAgainstHighScoresDB(GamePlayStats stats) {
-        if (properties.getHighScoresDataSource().getAllHighScores().size() > 0) {
-            HighScores h = properties.getHighScoresDataSource().getAllHighScores().get(0);
+        if (properties.getDataSource().getAllHighScores().size() > 0) {
+            HighScores h = properties.getDataSource().getAllHighScores().get(0);
             if (properties.getScore() >= h.getBestScore()) {
                 if (properties.getScore() > h.getBestScore() || stats.getTimeElapsed() < h.getBestTime()) {
                     h.setBestTime(stats.getTimeElapsed());
                 }
                 h.setBestScore(properties.getScore());
                 h.setDeckName("Multiplayer game"); //TODO we need to look into this and change this... old code that is pointless/wrong
-                properties.getHighScoresDataSource().deleteHighScore(h);
-                properties.getHighScoresDataSource().createHighScore(h.getDeckName(), h.getBestTime(), h.getBestScore());
+                properties.getDataSource().deleteHighScore(h);
+                properties.getDataSource().createHighScore(h.getDeckName(), h.getBestTime(), h.getBestScore());
                 return Constants.UPDATED_HIGH_SCORE;
             }
             return Constants.NO_HIGH_SCORE;
         } else {
-            properties.getHighScoresDataSource().createHighScore("Multiplayer game",
+            properties.getDataSource().createHighScore("Multiplayer game",
                     stats.getTimeElapsed(), properties.getScore());
             return Constants.NEW_HIGH_SCORE;
         }

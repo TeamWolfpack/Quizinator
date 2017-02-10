@@ -7,14 +7,13 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.seniordesign.wolfpack.quizinator.Database.GamePlayStats;
-import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScores;
-import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresDataSource;
+import com.seniordesign.wolfpack.quizinator.Database.HighScores;
+import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
 
 public class EndOfGameplayActivity extends AppCompatActivity {
 
-    private HighScoresDataSource highScoresDataSource;
-    private GamePlayStats gamePlayStats;
+    private QuizDataSource highScoresDataSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +21,7 @@ public class EndOfGameplayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_end_of_gameplay);
         initializeDB();
 
+        GamePlayStats gamePlayStats;
         if (getIntent().getExtras() != null) {
             gamePlayStats = getIntent().getExtras().getParcelable("gameStats");
         } else {
@@ -32,7 +32,7 @@ public class EndOfGameplayActivity extends AppCompatActivity {
         }
 
         ((TextView)findViewById(R.id.endOfGameScoreText)).setText(
-                "Score: " + gamePlayStats.getScore()
+                String.valueOf("Score: " + gamePlayStats.getScore())
         );
         long endOfGameSeconds = (gamePlayStats.getTimeElapsed()/1000)%60;
         String formattedGameSeconds = endOfGameSeconds < 10 ? "0" + endOfGameSeconds : "" + endOfGameSeconds;
@@ -41,7 +41,7 @@ public class EndOfGameplayActivity extends AppCompatActivity {
                 "Time: " + (gamePlayStats.getTimeElapsed()/60000) + ":" + formattedGameSeconds
         );
         ((TextView)findViewById(R.id.endOfGameTotalCardsText)).setText(
-                "Total Cards: " + gamePlayStats.getTotalCardsCompleted()
+                String.valueOf("Total Cards: " + gamePlayStats.getTotalCardsCompleted())
         );
 
         HighScores highScores = new HighScores();
@@ -54,7 +54,8 @@ public class EndOfGameplayActivity extends AppCompatActivity {
         }
         long highScoreSeconds = (highScores.getBestTime()/1000)%60;
         String formattedHighScoreSeconds = highScoreSeconds < 10 ? "0" + highScoreSeconds : "" + highScoreSeconds;
-        ((TextView)findViewById(R.id.endOfGameHighScoreText)).setText("High Score: "+highScores.getBestScore());
+        ((TextView)findViewById(R.id.endOfGameHighScoreText)).setText(
+                String.valueOf("High Score: "+highScores.getBestScore()));
         ((TextView)findViewById(R.id.endOfGameHighScoreTimeText)).setText(
                 "High Score Time: " + (highScores.getBestTime()/60000) + ":" + formattedHighScoreSeconds
         );
@@ -68,7 +69,7 @@ public class EndOfGameplayActivity extends AppCompatActivity {
 
     private boolean initializeDB(){
         int positiveDBConnections = 0;
-        highScoresDataSource = new HighScoresDataSource(this);
+        highScoresDataSource = new QuizDataSource(this);
         if(highScoresDataSource.open()){
             positiveDBConnections++;
         }

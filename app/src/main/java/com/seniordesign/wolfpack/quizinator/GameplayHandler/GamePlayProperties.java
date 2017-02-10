@@ -5,9 +5,8 @@ import android.os.CountDownTimer;
 import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Database.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Deck;
-import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresDataSource;
-import com.seniordesign.wolfpack.quizinator.Database.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
+import com.seniordesign.wolfpack.quizinator.Database.Rules;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
 public class GamePlayProperties {
@@ -19,7 +18,6 @@ public class GamePlayProperties {
     private Card currentCard;
 
     private QuizDataSource dataSource;
-    private HighScoresDataSource highScoresDataSource;
 
     private int deckIndex;
     private int deckLength;
@@ -191,15 +189,7 @@ public class GamePlayProperties {
         this.dataSource = dataSource;
     }
 
-    public HighScoresDataSource getHighScoresDataSource() {
-        return highScoresDataSource;
-    }
-
-    public void setHighScoresDataSource(HighScoresDataSource highScoresDataSource) {
-        this.highScoresDataSource = highScoresDataSource;
-    }
-
-    public void setQuizDataSource(com.seniordesign.wolfpack.quizinator.Database.QuizDataSource dataSource) {
+    public void setQuizDataSource(QuizDataSource dataSource) {
         this.dataSource = dataSource;
     }
 

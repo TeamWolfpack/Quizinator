@@ -1,4 +1,4 @@
-package com.seniordesign.wolfpack.quizinator.Database.Settings;
+package com.seniordesign.wolfpack.quizinator.Database;
 
 /**
  * Represents applications settings for the game.

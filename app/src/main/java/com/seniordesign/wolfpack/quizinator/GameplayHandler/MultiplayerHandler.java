@@ -3,7 +3,7 @@ package com.seniordesign.wolfpack.quizinator.GameplayHandler;
 import android.view.View;
 
 import com.seniordesign.wolfpack.quizinator.Activities.GamePlayActivity;
-import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresDataSource;
+import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.Database.Rules;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.Messages.Answer;
@@ -54,8 +54,8 @@ public class MultiplayerHandler implements GamePlayHandler {
 
     @Override
     public boolean initializeDB(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
-        properties.setHighScoresDataSource(new HighScoresDataSource(gamePlayActivity));
-        return properties.getHighScoresDataSource().open();
+        properties.setDataSource(new QuizDataSource(gamePlayActivity));
+        return properties.getDataSource().open();
     }
 
     @Override
@@ -70,7 +70,7 @@ public class MultiplayerHandler implements GamePlayHandler {
 
     @Override
     public boolean handleCleanup(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
-        properties.getHighScoresDataSource().close();
+        properties.getDataSource().close();
 
         properties.getCardTimerStatic().cancel();
         properties.getCardTimerRunning().cancel();
@@ -82,7 +82,7 @@ public class MultiplayerHandler implements GamePlayHandler {
 
     @Override
     public boolean handleResume(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
-        properties.getHighScoresDataSource().open();
+        properties.getDataSource().open();
         return true;
     }
 

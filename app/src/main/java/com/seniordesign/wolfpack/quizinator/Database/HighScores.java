@@ -1,4 +1,4 @@
-package com.seniordesign.wolfpack.quizinator.Database.HighScore;
+package com.seniordesign.wolfpack.quizinator.Database;
 
 /**
  * Represents high scores

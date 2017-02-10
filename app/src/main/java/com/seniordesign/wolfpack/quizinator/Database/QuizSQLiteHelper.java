@@ -39,6 +39,13 @@ class QuizSQLiteHelper extends SQLiteOpenHelper {
     static final String CDRELATIONS_COLUMN_FKCARD = "_fkCard";
     static final String CDRELATIONS_COLUMN_FKDECK = "_fkDeck";
 
+    //HighScore table contents
+    public static final String TABLE_HIGHSCORES = "highscores";
+    public static final String HIGHSCORES_COLUMN_ID = "_id";
+    public static final String HIGHSCORES_COLUMN_DECKNAME = "_deckName";
+    public static final String HIGHSCORES_COLUMN_BESTTIME = "_bestTime";
+    public static final String HIGHSCORES_COLUMN_BESTSCORE = "_bestScore";
+
     // Rules table contents
     public static final String TABLE_RULES = "rules";
     public static final String RULES_COLUMN_ID = "_id";
@@ -47,6 +54,12 @@ class QuizSQLiteHelper extends SQLiteOpenHelper {
     public static final String RULES_COLUMN_MAXCARDCOUNT = "_maxCardCount";
     public static final String RULES_COLUMN_CARDTYPES = "_cardTypes";
     public static final String RULES_COLUMN_DECK_ID = "_deckId";
+
+    // Settings table contents
+    public static final String TABLE_SETTINGS = "settings";
+    public static final String SETTINGS_COLUMN_ID = "_id";
+    public static final String SETTINGS_COLUMN_USERNAME = "_userName";
+    public static final String SETTINGS_COLUMN_NUMBEROFCONNECTIONS = "_numberOfConnections";
 
     // Cards table creation sql statement
     private static final String CARDS_TABLE_CREATE = "create table "
@@ -79,6 +92,15 @@ class QuizSQLiteHelper extends SQLiteOpenHelper {
             + CDRELATIONS_COLUMN_FKDECK + " INTEGER"
             + ");";
 
+    // HighScores table creation sql statement
+    private static final String HIGHSCORES_TABLE_CREATE = "create table "
+            + TABLE_HIGHSCORES + "("
+            + HIGHSCORES_COLUMN_ID + " integer primary key autoincrement, "
+            + HIGHSCORES_COLUMN_DECKNAME + " TEXT, "
+            + HIGHSCORES_COLUMN_BESTTIME + " REAL, "
+            + HIGHSCORES_COLUMN_BESTSCORE + " INTEGER"
+            + ");";
+
     // Rules table creation sql statement
     private static final String RULES_TABLE_CREATE = "create table "
             + TABLE_RULES + "("
@@ -90,6 +112,13 @@ class QuizSQLiteHelper extends SQLiteOpenHelper {
             + RULES_COLUMN_DECK_ID + " INTEGER"
             + ");";
 
+    // Settings table creation sql statement, table columns
+    private static final String SETTINGS_TABLE_CREATE = "create table "
+            + TABLE_SETTINGS + "("
+            + SETTINGS_COLUMN_ID + " integer primary key autoincrement, "
+            + SETTINGS_COLUMN_USERNAME + " TEXT, "
+            + SETTINGS_COLUMN_NUMBEROFCONNECTIONS + " INTEGER"
+            + ");";
 
     QuizSQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -100,7 +129,9 @@ class QuizSQLiteHelper extends SQLiteOpenHelper {
         db.execSQL(CARDS_TABLE_CREATE);
         db.execSQL(DECKS_TABLE_CREATE);
         db.execSQL(CDRELATIONS_TABLE_CREATE);
+        db.execSQL(HIGHSCORES_TABLE_CREATE);
         db.execSQL(RULES_TABLE_CREATE);
+        db.execSQL(SETTINGS_TABLE_CREATE);
         setDefaultCardSet(db);
         setDefaultDeckSet(db);
         setDefaultCdRelationSet(db);
@@ -115,7 +146,9 @@ class QuizSQLiteHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CARDS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_DECKS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CDRELATIONS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_HIGHSCORES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RULES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SETTINGS);
         onCreate(db);
     }
 

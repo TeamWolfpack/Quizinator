@@ -6,9 +6,6 @@ import android.support.test.runner.AndroidJUnit4;
 import android.view.WindowManager;
 
 import com.seniordesign.wolfpack.quizinator.Activities.MainMenuActivity;
-import com.seniordesign.wolfpack.quizinator.Database.Settings.Settings;
-import com.seniordesign.wolfpack.quizinator.Database.Settings.SettingsDataSource;
-import com.seniordesign.wolfpack.quizinator.Database.Settings.SettingsSQLiteHelper;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -21,8 +18,8 @@ import static junit.framework.Assert.assertEquals;
 @LargeTest
 public class SettingsUITests {
 
-    private SettingsDataSource dao;
-    private SettingsSQLiteHelper sql;
+    private QuizDataSource dao;
+    private QuizSQLiteHelper sql;
 
     // Needed to run in Travis
     // **********************************************
@@ -42,8 +39,8 @@ public class SettingsUITests {
             }
         };
         activity.runOnUiThread(wakeUpDevice);
-        dao = new SettingsDataSource(activity);
-        sql = new SettingsSQLiteHelper(activity);
+        dao = new QuizDataSource(activity);
+        sql = new QuizSQLiteHelper(activity);
     }
     // **********************************************
 
@@ -58,7 +55,7 @@ public class SettingsUITests {
         Settings s = dao.createSettings(3, "Jim");
         assertEquals("settings.db", dao.getSQLiteHelper().getDatabaseName());
         assertEquals(1, dao.getAllSettings().size());
-        assertEquals(3, dao.getAllColumns().length);
+        assertEquals(3, dao.getSettingsAllColumns().length);
         assertEquals(true, dao.deleteSetting(s));
         assertEquals(true, dao.close());
     }

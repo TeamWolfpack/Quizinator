@@ -6,9 +6,6 @@ import android.support.test.runner.AndroidJUnit4;
 import android.view.WindowManager;
 
 import com.seniordesign.wolfpack.quizinator.Activities.MainMenuActivity;
-import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScores;
-import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresDataSource;
-import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresSQLiteHelper;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -21,8 +18,8 @@ import static junit.framework.TestCase.assertEquals;
 @LargeTest
 public class HighScoreUITests {
 
-    private HighScoresDataSource dao;
-    private HighScoresSQLiteHelper sql;
+    private QuizDataSource dao;
+    private QuizSQLiteHelper sql;
 
     // Needed to run in Travis
     // **********************************************
@@ -42,8 +39,8 @@ public class HighScoreUITests {
             }
         };
         activity.runOnUiThread(wakeUpDevice);
-        dao = new HighScoresDataSource(activity);
-        sql = new HighScoresSQLiteHelper(activity);
+        dao = new QuizDataSource(activity);
+        sql = new QuizSQLiteHelper(activity);
     }
     // **********************************************
 
@@ -55,7 +52,7 @@ public class HighScoreUITests {
         HighScores hs = dao.createHighScore("Sample", 350000, 650);
         assertEquals("highscores.db", dao.getSQLiteHelper().getDatabaseName());
         assertEquals(1, dao.getAllHighScores().size());
-        assertEquals(4, dao.getAllColumns().length);
+        assertEquals(4, dao.getHighScoresAllColumns().length);
         assertEquals(true, dao.deleteHighScore(hs));
         assertEquals(true, dao.close());
     }
