@@ -14,15 +14,19 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="0.2"
             android:text="@string/deck_name"
             android:textSize="16sp"
             android:textColor="#000000"
-            android:id="@+id/array_adapter_deck_name" />
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:id="@+id/array_adapter_deck_name"
+            android:paddingLeft="0dp"
+            android:paddingRight="5dp" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="0.8"
             android:text="@string/deck_size"
             android:textSize="16sp"
             android:textColor="#000000"
