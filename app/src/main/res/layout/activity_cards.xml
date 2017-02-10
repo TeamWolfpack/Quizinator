@@ -37,7 +37,8 @@
             android:id="@+id/list_of_cards"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:divider="@null"/>
+            android:divider="@android:color/transparent"
+            android:dividerHeight="@dimen/array_adapter_padding"/>
     </LinearLayout>
     <android.support.design.widget.FloatingActionButton
         app:srcCompat="@drawable/ic_plus_btn_white_24dp"

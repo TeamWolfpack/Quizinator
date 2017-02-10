@@ -11,7 +11,9 @@
         android:id="@+id/list_of_decks"
         android:layout_weight="0.8"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="@dimen/array_adapter_padding"/>
 
     <android.support.design.widget.FloatingActionButton
         app:srcCompat="@drawable/ic_plus_btn_white_24dp"
