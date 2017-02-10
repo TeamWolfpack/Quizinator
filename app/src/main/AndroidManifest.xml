@@ -18,9 +18,6 @@
         android:name="android.permission.ACCESS_NETWORK_STATE"
         android:required="true" />
     <uses-permission
-        android:name="android.permission.READ_PHONE_STATE"
-        android:required="true" />
-    <uses-permission
         android:name="android.permission.INTERACT_ACROSS_USERS_FULL"
         android:required="true" />
 
