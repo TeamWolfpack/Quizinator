@@ -121,7 +121,8 @@ public class RuleIntegration {
         onView(withId(R.id.card_minutes)).check(matches(withText(containsString("0"))));
         onView(withId(R.id.card_seconds)).check(matches(withText(containsString("09"))));
         onView(withId(R.id.card_count)).check(matches(withText(containsString("5"))));
-        onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString("All Types"))));
+        onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(Constants.CARD_TYPES.TRUE_FALSE.toString()))));
+        onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(Constants.CARD_TYPES.MULTIPLE_CHOICE.toString()))));
 
         rulesource.createRule(5, 90000, 10000, getCardTypeString(), 1);
         mActivityRule.getActivity().runOnUiThread(new Runnable() {
@@ -136,7 +137,8 @@ public class RuleIntegration {
         onView(withId(R.id.card_minutes)).check(matches(withText(containsString("0"))));
         onView(withId(R.id.card_seconds)).check(matches(withText(containsString("10"))));
         onView(withId(R.id.card_count)).check(matches(withText(containsString("5"))));
-        onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString("All Types"))));
+        onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(Constants.CARD_TYPES.TRUE_FALSE.toString()))));
+        onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(Constants.CARD_TYPES.MULTIPLE_CHOICE.toString()))));
 
         for (Rules rule: rulesource.getAllRules()) {
             rulesource.deleteRule(rule);

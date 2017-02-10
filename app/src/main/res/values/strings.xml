@@ -6,7 +6,7 @@
     <string name="semicolon">:</string>
     <string name="start_game">Start Game</string>
     <string name="no_time">00</string>
-    <string name="min">01</string>
+    <string name="min">05</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -15,7 +15,7 @@
     <string name="quiz_bowl_rules">Quiz Bowl Rules</string>
     <string name="card_count">Card Count</string>
     <string name="card_time">Card Time</string>
-    <string name="three_secs">10</string>
+    <string name="default_secs">15</string>
 
     <string name="new_game">New Game</string>
     <string name="solo_game">Solo Game</string>
