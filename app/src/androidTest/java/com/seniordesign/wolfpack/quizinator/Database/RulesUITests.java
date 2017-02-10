@@ -53,7 +53,6 @@ public class RulesUITests {
         assertEquals(true, dao.getDatabase().isOpen());
         sql.onUpgrade(dao.getDatabase(), 0, 1);
         Rules r = dao.createRule(4, 350000, 350000, "['TF', 'MC']", 1);
-        assertEquals("rules.db", dao.getSQLiteHelper().getDatabaseName());
         assertEquals(1, dao.getAllRules().size());
         assertEquals(6, dao.getRulesAllColumns().length);
         assertEquals(true, dao.deleteRule(r));
@@ -69,7 +68,6 @@ public class RulesUITests {
         assertEquals(true, dao.getDatabase().isOpen());
         sql.onUpgrade(dao.getDatabase(), 0, 1);
         Rules r = dao.createRule(4, 350000, 350000, "['TF', 'MC']", 1);
-        assertEquals("rules.db", dao.getSQLiteHelper().getDatabaseName());
         assertEquals(1, dao.getAllRules().size());
         assertEquals(6, dao.getRulesAllColumns().length);
 
