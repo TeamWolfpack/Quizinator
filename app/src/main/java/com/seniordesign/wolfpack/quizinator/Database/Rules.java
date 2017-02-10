@@ -1,4 +1,4 @@
-package com.seniordesign.wolfpack.quizinator.Database.Rules;
+package com.seniordesign.wolfpack.quizinator.Database;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

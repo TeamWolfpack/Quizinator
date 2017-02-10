@@ -3,14 +3,12 @@ package com.seniordesign.wolfpack.quizinator.Activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.InputFilter;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,9 +16,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Database.Deck;
+import com.seniordesign.wolfpack.quizinator.Database.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
-import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
-import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.Filters.NumberFilter;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
@@ -57,8 +54,6 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     private List<CARD_TYPES> selectedCardTypes;
     private List<CARD_TYPES> cardTypeOptions;
 
-    private RulesDataSource rulesSource;
-
     private QuizDataSource dataSource;
 
     private Deck deck;
@@ -75,9 +70,9 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         wifiDirectApp = (WifiDirectApp)getApplication();
         initializeDB();
 
-        if (rulesSource.getAllRules().size() > 0) {
-            deck = dataSource.getDeckWithId(rulesSource.getAllRules()
-                    .get(rulesSource.getAllRules().size() - 1)
+        if (dataSource.getAllRules().size() > 0) {
+            deck = dataSource.getDeckWithId(dataSource.getAllRules()
+                    .get(dataSource.getAllRules().size() - 1)
                     .getDeckId()); //TODO is this just getting the last rules in the database or the last rules used
         } else if (dataSource.getAllDecks().size()>0){
             deck = dataSource.getAllDecks().get(0);
@@ -280,9 +275,9 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
         String cardTypes = gson.toJson(selectedCardTypes);
 
-        if (rulesSource.getAllRules().size() < 1) {
+        if (dataSource.getAllRules().size() < 1) {
             Log.d(TAG, "Deck id is saved as " + (int)deck.getId());
-            return rulesSource.createRule(
+            return dataSource.createRule(
                     cardCount,
                     gameMinutesInMilli + gameSecondsInMilli,
                     cardMinutesInMilli + cardSecondsInMilli,
@@ -292,8 +287,8 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
         Log.d(TAG, "Deck id is updated as " + (int)deck.getId());
 
-        Rules rule = rulesSource.getAllRules().get(rulesSource.getAllRules().size() - 1);
-        rulesSource.deleteRule(rule);
+        Rules rule = dataSource.getAllRules().get(dataSource.getAllRules().size() - 1);
+        dataSource.deleteRule(rule);
 
         if (rule.getTimeLimit() != gameMinutesInMilli + gameSecondsInMilli) {
             rule.setTimeLimit(gameMinutesInMilli + gameSecondsInMilli);
@@ -308,15 +303,15 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             rule.setCardTypes(cardTypes);
         }
 
-        return rulesSource.createRule(rule.getMaxCardCount(),
+        return dataSource.createRule(rule.getMaxCardCount(),
                 rule.getTimeLimit(), rule.getCardDisplayTime(),
                 rule.getCardTypes(), (int)deck.getId());
     }
 
     public boolean loadPreviousRules(){
-        if (rulesSource.getAllRules().size() < 1) return false;
+        if (dataSource.getAllRules().size() < 1) return false;
 
-        Rules rule = rulesSource.getAllRules().get(rulesSource.getAllRules().size() - 1);
+        Rules rule = dataSource.getAllRules().get(dataSource.getAllRules().size() - 1);
 
         Calendar gameCal = Calendar.getInstance();
         gameCal.setTimeInMillis(rule.getTimeLimit());
@@ -360,9 +355,9 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     }
 
     private boolean initializeDB(){
-        rulesSource = new RulesDataSource(this);
         dataSource = new QuizDataSource(this);
-        return rulesSource.open() && dataSource.open() && dataSource.open();
+        dataSource = new com.seniordesign.wolfpack.quizinator.Database.QuizDataSource(this);
+        return dataSource.open() && dataSource.open() && dataSource.open();
     }
 
     public List<CARD_TYPES> formatCardTypes(Deck deck) {
@@ -374,14 +369,14 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        rulesSource.open();
+        dataSource.open();
         dataSource.open();
     }
 
     @Override
     protected void onPause(){
         super.onPause();
-        rulesSource.close();
+        dataSource.close();
         dataSource.close();
     }
 

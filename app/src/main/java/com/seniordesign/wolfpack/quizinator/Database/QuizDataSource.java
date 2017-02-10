@@ -43,6 +43,15 @@ public class QuizDataSource {
             QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK
     };
 
+    private String[] rulesAllColumns = {
+            QuizSQLiteHelper.RULES_COLUMN_ID,
+            QuizSQLiteHelper.RULES_COLUMN_TIMELIMIT,
+            QuizSQLiteHelper.RULES_COLUMN_CARDDISPLAYTIME,
+            QuizSQLiteHelper.RULES_COLUMN_MAXCARDCOUNT,
+            QuizSQLiteHelper.RULES_COLUMN_CARDTYPES,
+            QuizSQLiteHelper.RULES_COLUMN_DECK_ID
+    };
+
     public QuizDataSource(Context context) {
         dbHelper = new QuizSQLiteHelper(context);
     }
@@ -307,20 +316,7 @@ public class QuizDataSource {
     }
 
     public CardDeckRelation createCardDeckRelation(CardDeckRelation cdRelation) {
-        ContentValues values = new ContentValues();
-        values.put(QuizSQLiteHelper.CDRELATIONS_COLUMN_FKCARD, cdRelation.getFkCard());
-        values.put(QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK, cdRelation.getFkDeck());
-
-        long insertId = database.insert(QuizSQLiteHelper.TABLE_CDRELATIONS,
-                null, values);
-        Cursor cursor = database.query(QuizSQLiteHelper.TABLE_CDRELATIONS,
-                cdRelationsAllColumns, QuizSQLiteHelper.CDRELATIONS_COLUMN_ID
-                        + " = " + insertId, null,
-                null, null, null);
-        cursor.moveToFirst();
-        CardDeckRelation newCardDeckRelation = cursorToCardDeckRelation(cursor);
-        cursor.close();
-        return newCardDeckRelation;
+        return createCardDeckRelation(cdRelation.getFkCard(), cdRelation.getFkDeck());
     }
 
     public int deleteCardDeckRelation(CardDeckRelation cdRelation) {
@@ -415,6 +411,81 @@ public class QuizDataSource {
         addCardDeckRelation(deck.getId(), deck.getCards());
     }
     /************************ CARDDECKRELATION METHODS END *******************************/
+
+    /************************ RULES METHODS START *******************************/
+    public Rules createRule(int maxCardCount, long timeLimit,
+                            long cardDisplayTime, String cardTypes, long deckId) {
+        ContentValues values = new ContentValues();
+        values.put(QuizSQLiteHelper.RULES_COLUMN_TIMELIMIT, timeLimit);
+        values.put(QuizSQLiteHelper.RULES_COLUMN_CARDDISPLAYTIME, cardDisplayTime);
+        values.put(QuizSQLiteHelper.RULES_COLUMN_MAXCARDCOUNT, maxCardCount);
+        values.put(QuizSQLiteHelper.RULES_COLUMN_CARDTYPES, cardTypes);
+        values.put(QuizSQLiteHelper.RULES_COLUMN_DECK_ID, deckId);
+        long insertId = database.insert(QuizSQLiteHelper.TABLE_RULES,
+                null, values);
+        Cursor cursor = database.query(QuizSQLiteHelper.TABLE_RULES,
+                rulesAllColumns, QuizSQLiteHelper.RULES_COLUMN_ID
+                        + " = " + insertId, null, null, null, null);
+        cursor.moveToFirst();
+        Rules newRules = cursorToRule(cursor);
+        cursor.close();
+        return newRules;
+    }
+
+    public Rules createRule(Rules rule){
+        return createRule(rule.getMaxCardCount(), rule.getTimeLimit(),
+                rule.getCardDisplayTime(), rule.getCardTypes(), rule.getDeckId());
+    }
+
+    public int updateRules(Rules r){
+        ContentValues cv = new ContentValues();
+        cv.put(QuizSQLiteHelper.RULES_COLUMN_ID, r.getId());
+        cv.put(QuizSQLiteHelper.RULES_COLUMN_TIMELIMIT, r.getTimeLimit());
+        cv.put(QuizSQLiteHelper.RULES_COLUMN_CARDDISPLAYTIME, r.getCardDisplayTime());
+        cv.put(QuizSQLiteHelper.RULES_COLUMN_MAXCARDCOUNT, r.getMaxCardCount());
+        cv.put(QuizSQLiteHelper.RULES_COLUMN_CARDTYPES, r.getCardTypes());
+        cv.put(QuizSQLiteHelper.RULES_COLUMN_DECK_ID, r.getDeckId());
+        String where = QuizSQLiteHelper.RULES_COLUMN_ID + " = " + r.getId();
+        return database.update(QuizSQLiteHelper.TABLE_RULES, cv, where, null);
+    }
+
+    public boolean deleteRule(Rules rule) {
+        long id = rule.getId();
+        database.delete(QuizSQLiteHelper.TABLE_RULES,
+                QuizSQLiteHelper.RULES_COLUMN_ID + " = " + id, null);
+        return true;
+    }
+
+    public List<Rules> getAllRules() {
+        List<Rules> items = new ArrayList<Rules>();
+        Cursor cursor = database.query(QuizSQLiteHelper.TABLE_RULES,
+                rulesAllColumns, null, null, null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Rules rule = cursorToRule(cursor);
+            items.add(rule);
+            cursor.moveToNext();
+        }
+        // make sure to close the cursor
+        cursor.close();
+        return items;
+    }
+
+    public Rules cursorToRule(Cursor cursor) {
+        Rules rule = new Rules();
+        rule.setId(cursor.getLong(0));//id
+        rule.setTimeLimit(cursor.getLong(1));//time limit
+        rule.setCardDisplayTime(cursor.getLong(2));//card display time
+        rule.setMaxCardCount(cursor.getInt(3));//max card count
+        rule.setCardTypes(cursor.getString(4));//card types
+        rule.setDeckId(cursor.getLong(5));
+        return rule;
+    }
+
+    public String[] getRulesAllColumns(){
+        return rulesAllColumns;
+    }
+    /************************ RULES METHODS END *******************************/
 
     /************************ QUERY BUILDING HELPER METHODS START *******************************/
 

@@ -223,7 +223,7 @@ public class GamePlayActivity extends AppCompatActivity {
             @Override
             public void onTick(long millisUntilFinished) {
                 ((TextView) findViewById(R.id.cardTimeBackground)).setText(
-                        "Time Left: " + millisUntilFinished / 1000
+                        String.valueOf("Time Left: " + (millisUntilFinished / 1000))
                 );
             }
             @Override

@@ -23,9 +23,8 @@ import com.seniordesign.wolfpack.quizinator.Adapters.NextCardAdapter;
 import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Database.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Deck;
+import com.seniordesign.wolfpack.quizinator.Database.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
-import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
-import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.Messages.Answer;
 import com.seniordesign.wolfpack.quizinator.Messages.Confirmation;
@@ -46,7 +45,6 @@ public class ManageGameplayActivity extends AppCompatActivity {
     private WifiDirectApp wifiDirectApp;
 
     private QuizDataSource dataSource;
-    private RulesDataSource rulesDataSource;
 
     private Rules rules;
     private Card currentCard;
@@ -81,9 +79,9 @@ public class ManageGameplayActivity extends AppCompatActivity {
         wifiDirectApp = (WifiDirectApp)getApplication();
         wifiDirectApp.mManageActivity = this;
 
-        rulesDataSource = new RulesDataSource(this);
-        rulesDataSource.open();
-        rules = rulesDataSource.getAllRules().get(rulesDataSource.getAllRules().size()-1);
+        dataSource = new QuizDataSource(this);
+        dataSource.open();
+        rules = dataSource.getAllRules().get(dataSource.getAllRules().size()-1);
 
         dataSource = new QuizDataSource(this);
         dataSource.open();
@@ -254,14 +252,14 @@ public class ManageGameplayActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         dataSource.open();
-        rulesDataSource.open();
+        dataSource.open();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         dataSource.close();
-        rulesDataSource.close();
+        dataSource.close();
     }
 
     @Override

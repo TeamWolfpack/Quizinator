@@ -39,6 +39,15 @@ class QuizSQLiteHelper extends SQLiteOpenHelper {
     static final String CDRELATIONS_COLUMN_FKCARD = "_fkCard";
     static final String CDRELATIONS_COLUMN_FKDECK = "_fkDeck";
 
+    // Rules table contents
+    public static final String TABLE_RULES = "rules";
+    public static final String RULES_COLUMN_ID = "_id";
+    public static final String RULES_COLUMN_TIMELIMIT = "_timeLimit";
+    public static final String RULES_COLUMN_CARDDISPLAYTIME = "_cardDisplayTime";
+    public static final String RULES_COLUMN_MAXCARDCOUNT = "_maxCardCount";
+    public static final String RULES_COLUMN_CARDTYPES = "_cardTypes";
+    public static final String RULES_COLUMN_DECK_ID = "_deckId";
+
     // Cards table creation sql statement
     private static final String CARDS_TABLE_CREATE = "create table "
             + TABLE_CARDS + "("
@@ -70,6 +79,17 @@ class QuizSQLiteHelper extends SQLiteOpenHelper {
             + CDRELATIONS_COLUMN_FKDECK + " INTEGER"
             + ");";
 
+    // Rules table creation sql statement
+    private static final String RULES_TABLE_CREATE = "create table "
+            + TABLE_RULES + "("
+            + RULES_COLUMN_ID + " integer primary key autoincrement, "
+            + RULES_COLUMN_TIMELIMIT + " REAL, "
+            + RULES_COLUMN_CARDDISPLAYTIME + " REAL, "
+            + RULES_COLUMN_MAXCARDCOUNT + " INTEGER, "
+            + RULES_COLUMN_CARDTYPES + " TEXT, "
+            + RULES_COLUMN_DECK_ID + " INTEGER"
+            + ");";
+
 
     QuizSQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -80,6 +100,7 @@ class QuizSQLiteHelper extends SQLiteOpenHelper {
         db.execSQL(CARDS_TABLE_CREATE);
         db.execSQL(DECKS_TABLE_CREATE);
         db.execSQL(CDRELATIONS_TABLE_CREATE);
+        db.execSQL(RULES_TABLE_CREATE);
         setDefaultCardSet(db);
         setDefaultDeckSet(db);
         setDefaultCdRelationSet(db);
@@ -94,6 +115,7 @@ class QuizSQLiteHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CARDS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_DECKS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CDRELATIONS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_RULES);
         onCreate(db);
     }
 

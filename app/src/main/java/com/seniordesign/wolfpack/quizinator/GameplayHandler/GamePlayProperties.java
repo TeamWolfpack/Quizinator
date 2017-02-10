@@ -6,9 +6,8 @@ import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Database.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Deck;
 import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresDataSource;
+import com.seniordesign.wolfpack.quizinator.Database.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
-import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
-import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
 public class GamePlayProperties {
@@ -19,9 +18,8 @@ public class GamePlayProperties {
     private Deck deck;
     private Card currentCard;
 
-    private RulesDataSource rulesDataSource;
-    private HighScoresDataSource highScoresDataSource;
     private QuizDataSource dataSource;
+    private HighScoresDataSource highScoresDataSource;
 
     private int deckIndex;
     private int deckLength;
@@ -185,12 +183,12 @@ public class GamePlayProperties {
         this.currentCard = currentCard;
     }
 
-    public RulesDataSource getRulesDataSource() {
-        return rulesDataSource;
+    public QuizDataSource getDataSource() {
+        return dataSource;
     }
 
-    public void setRulesDataSource(RulesDataSource rulesDataSource) {
-        this.rulesDataSource = rulesDataSource;
+    public void setDataSource(QuizDataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     public HighScoresDataSource getHighScoresDataSource() {
@@ -201,11 +199,7 @@ public class GamePlayProperties {
         this.highScoresDataSource = highScoresDataSource;
     }
 
-    public QuizDataSource getDataSource() {
-        return dataSource;
-    }
-
-    public void setQuizDataSource(QuizDataSource dataSource) {
+    public void setQuizDataSource(com.seniordesign.wolfpack.quizinator.Database.QuizDataSource dataSource) {
         this.dataSource = dataSource;
     }
 

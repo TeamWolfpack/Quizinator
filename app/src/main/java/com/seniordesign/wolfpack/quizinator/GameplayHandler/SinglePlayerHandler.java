@@ -9,13 +9,11 @@ import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Database.Card;
 import com.seniordesign.wolfpack.quizinator.Database.Deck;
 import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresDataSource;
+import com.seniordesign.wolfpack.quizinator.Database.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
-import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
-import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -46,17 +44,17 @@ public class SinglePlayerHandler implements GamePlayHandler {
     @Override
     public boolean initializeDB(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         int positiveDBConnections = 0;
-        properties.setRulesDataSource(new RulesDataSource(gamePlayActivity));
-        if (properties.getRulesDataSource().open()) {
+        properties.setDataSource(new QuizDataSource(gamePlayActivity));
+        if (properties.getDataSource().open()) {
             positiveDBConnections++;
-            List<Rules> ruleList = properties.getRulesDataSource().getAllRules();
+            List<Rules> ruleList = properties.getDataSource().getAllRules();
             properties.setRules(ruleList.get(ruleList.size() - 1));
         }
         properties.setHighScoresDataSource(new HighScoresDataSource(gamePlayActivity));
         if (properties.getHighScoresDataSource().open()) {
             positiveDBConnections++;
         }
-        properties.setQuizDataSource(new QuizDataSource(gamePlayActivity)); //TODO
+        properties.setQuizDataSource(new com.seniordesign.wolfpack.quizinator.Database.QuizDataSource(gamePlayActivity)); //TODO
         if (properties.getDataSource().open()) {
             positiveDBConnections++;
 
@@ -101,7 +99,7 @@ public class SinglePlayerHandler implements GamePlayHandler {
 
     @Override
     public boolean handleCleanup(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
-        properties.getRulesDataSource().close();
+        properties.getDataSource().close();
         properties.getHighScoresDataSource().close();
         properties.getDataSource().close();
 
@@ -118,7 +116,7 @@ public class SinglePlayerHandler implements GamePlayHandler {
 
     @Override
     public boolean handleResume(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
-        properties.getRulesDataSource().open();
+        properties.getDataSource().open();
         properties.getHighScoresDataSource().open();
         return true;
     }

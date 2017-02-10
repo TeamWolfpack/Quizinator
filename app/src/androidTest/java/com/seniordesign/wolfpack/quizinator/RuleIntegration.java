@@ -6,9 +6,8 @@ import android.view.WindowManager;
 import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Activities.NewGameSettingsActivity;
 import com.seniordesign.wolfpack.quizinator.Database.Card;
+import com.seniordesign.wolfpack.quizinator.Database.Rules;
 import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
-import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
-import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,7 +19,6 @@ import java.util.List;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -55,9 +53,9 @@ public class RuleIntegration {
 
     @Test
     public void validateUpdatingRuleOnGameStart() {
-        RulesDataSource rulesource = new RulesDataSource(mActivityRule.getActivity());
-        rulesource.open();
-        rulesource.createRule(5, 90000, 9000, getCardTypeString(), 1);
+        QuizDataSource dataSource = new QuizDataSource(mActivityRule.getActivity());
+        dataSource.open();
+        dataSource.createRule(5, 90000, 9000, getCardTypeString(), 1);
         mActivityRule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -84,25 +82,22 @@ public class RuleIntegration {
             e.printStackTrace();
         }
 
-        Rules rule = rulesource.getAllRules().get(rulesource.getAllRules().size() - 1);
+        Rules rule = dataSource.getAllRules().get(dataSource.getAllRules().size() - 1);
         assertTrue("Game time is " + rule.getTimeLimit(), rule.getTimeLimit() == 150000);
         assertTrue(rule.getCardDisplayTime() == 30000);
         assertTrue(rule.getMaxCardCount() == 1);
         assertTrue(rule.getCardTypes().equals(getCardTypeString()));
 
-        rulesource.close();
+        dataSource.close();
     }
 
     @Test
     public void validateLoadingFromDatabase() {
-        RulesDataSource rulesource = new RulesDataSource(mActivityRule.getActivity());
-        rulesource.open();
-
         QuizDataSource dataSource = new QuizDataSource(mActivityRule.getActivity());
         dataSource.open();
 
         dataSource.createDeck("Test", "", "", true, "", new ArrayList<Card>());
-        rulesource.createRule(5, 603000, 9000, getCardTypeString(), 1);
+        dataSource.createRule(5, 603000, 9000, getCardTypeString(), 1);
         mActivityRule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -124,7 +119,7 @@ public class RuleIntegration {
         onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(Constants.CARD_TYPES.TRUE_FALSE.toString()))));
         onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(Constants.CARD_TYPES.MULTIPLE_CHOICE.toString()))));
 
-        rulesource.createRule(5, 90000, 10000, getCardTypeString(), 1);
+        dataSource.createRule(5, 90000, 10000, getCardTypeString(), 1);
         mActivityRule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -140,26 +135,26 @@ public class RuleIntegration {
         onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(Constants.CARD_TYPES.TRUE_FALSE.toString()))));
         onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(Constants.CARD_TYPES.MULTIPLE_CHOICE.toString()))));
 
-        for (Rules rule: rulesource.getAllRules()) {
-            rulesource.deleteRule(rule);
+        for (Rules rule: dataSource.getAllRules()) {
+            dataSource.deleteRule(rule);
         }
 
-        rulesource.close();
+        dataSource.close();
         dataSource.close();
     }
 
     @Test
     public void validateCardLimit() {
-        RulesDataSource rulesource = new RulesDataSource(mActivityRule.getActivity());
-        rulesource.open();
-        rulesource.createRule(1, 60000, 5000, getCardTypeString(), 1);
+        QuizDataSource dataSource = new QuizDataSource(mActivityRule.getActivity());
+        dataSource.open();
+        dataSource.createRule(1, 60000, 5000, getCardTypeString(), 1);
         mActivityRule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mActivityRule.getActivity().loadPreviousRules();
             }
         });
-        rulesource.close();
+        dataSource.close();
 
         onView(withId(R.id.new_game)).perform(click());
 

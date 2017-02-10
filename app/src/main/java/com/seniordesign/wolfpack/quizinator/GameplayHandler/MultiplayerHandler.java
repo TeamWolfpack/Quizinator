@@ -4,7 +4,7 @@ import android.view.View;
 
 import com.seniordesign.wolfpack.quizinator.Activities.GamePlayActivity;
 import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresDataSource;
-import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
+import com.seniordesign.wolfpack.quizinator.Database.Rules;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.Messages.Answer;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
