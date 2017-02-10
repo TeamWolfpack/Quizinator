@@ -43,7 +43,7 @@ public class SinglePlayerHandler implements GamePlayHandler {
     @Override
     public boolean initializeDB(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         int positiveDBConnections = 0;
-        properties.setDataSource(new com.seniordesign.wolfpack.quizinator.Database.QuizDataSource(gamePlayActivity));
+        properties.setDataSource(new QuizDataSource(gamePlayActivity));
         if (properties.getDataSource().open()) {
             positiveDBConnections++;
             List<Rules> ruleList = properties.getDataSource().getAllRules();
@@ -53,7 +53,7 @@ public class SinglePlayerHandler implements GamePlayHandler {
         if (properties.getDataSource().open()) {
             positiveDBConnections++;
         }
-        properties.setQuizDataSource(new com.seniordesign.wolfpack.quizinator.Database.QuizDataSource(gamePlayActivity)); //TODO
+        properties.setQuizDataSource(new QuizDataSource(gamePlayActivity)); //TODO
         if (properties.getDataSource().open()) {
             positiveDBConnections++;
 
