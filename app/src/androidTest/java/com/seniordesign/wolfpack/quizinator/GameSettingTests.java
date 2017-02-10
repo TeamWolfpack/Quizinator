@@ -13,6 +13,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
@@ -84,8 +85,8 @@ public class GameSettingTests {
         onData(allOf(is(instanceOf(String.class)), is(ALL_CARD_TYPES))).inAdapterView(withId(R.id.card_type_spinner)).perform(click());
         onData(allOf(is(instanceOf(CARD_TYPES.class)), is(CARD_TYPES.TRUE_FALSE))).perform(click());
         onData(allOf(is(instanceOf(CARD_TYPES.class)), is(CARD_TYPES.MULTIPLE_CHOICE))).perform(click());
-        onView(withText(CARD_TYPES.MULTIPLE_CHOICE.toString())).perform(pressBack());
-        onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(CARD_TYPES.MULTIPLE_CHOICE.toString()))));
+        onData(allOf(is(instanceOf(CARD_TYPES.class)), is(CARD_TYPES.MULTIPLE_CHOICE))).perform(pressBack());
+        onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(CARD_TYPES.FREE_RESPONSE.toString()))));
     }
 
     @Test
@@ -95,14 +96,14 @@ public class GameSettingTests {
 
     @Test
     public void validateGameMinuteInput_LowerBound() {
-        onView(withId(R.id.game_minutes)).check(matches(withText("01")));
+        onView(withId(R.id.game_minutes)).check(matches(withText("05")));
         onView(withId(R.id.game_minutes)).perform(clearText(), typeText("-1"));
         onView(withId(R.id.game_minutes)).check(matches(withText("1")));
     }
 
     @Test
     public void validateGameMinuteInput_UpperBound() {
-        onView(withId(R.id.game_minutes)).check(matches(withText("01")));
+        onView(withId(R.id.game_minutes)).check(matches(withText("05")));
         onView(withId(R.id.game_minutes)).perform(clearText(), typeText("60"));
         onView(withId(R.id.game_minutes)).check(matches(withText("60")));
 
@@ -146,7 +147,7 @@ public class GameSettingTests {
 
     @Test
     public void validateCardSecondInput_LowerBound() throws InterruptedException {
-        onView(withId(R.id.card_seconds)).check(matches(withText("10")));
+        onView(withId(R.id.card_seconds)).check(matches(withText("15")));
         onView(withId(R.id.card_seconds)).perform(clearText(), typeText("1"));
         onView(withId(R.id.card_seconds)).check(matches(withText("1")));
 
@@ -159,7 +160,7 @@ public class GameSettingTests {
 
     @Test
     public void validateCardSecondInput_UpperBound() {
-        onView(withId(R.id.card_seconds)).check(matches(withText("10")));
+        onView(withId(R.id.card_seconds)).check(matches(withText("15")));
         onView(withId(R.id.card_seconds)).perform(clearText(), typeText("60"));
         onView(withId(R.id.card_seconds)).check(matches(withText("60")));
 
@@ -169,7 +170,7 @@ public class GameSettingTests {
 
     @Test
     public void validateCardCountInput() {
-        onView(withId(R.id.card_count)).check(matches(withText("10")));
+        onView(withId(R.id.card_count)).check(matches(withText("15")));
         onView(withId(R.id.card_count)).perform(clearText(), typeText("1"));
         onView(withId(R.id.card_count)).check(matches(withText("1")));
 
@@ -219,6 +220,7 @@ public class GameSettingTests {
     @Test
     public void zeroCardCount_CantStartGame() {
         onView(withId(R.id.card_count)).perform(clearText(), typeText("0"));
+        closeSoftKeyboard();
         onView(withId(R.id.new_game)).perform(click());
         onView(withText(Constants.CARD_COUNT_ZERO))
                 .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
@@ -269,10 +271,10 @@ public class GameSettingTests {
 
     @Test
     public void validateEditTexts() {
-        onView(withId(R.id.game_minutes)).check(matches(withText(containsString("01"))));
+        onView(withId(R.id.game_minutes)).check(matches(withText(containsString("05"))));
         onView(withId(R.id.game_seconds)).check(matches(withText(containsString("00"))));
         onView(withId(R.id.card_minutes)).check(matches(withText(containsString("00"))));
-        onView(withId(R.id.card_seconds)).check(matches(withText(containsString("10"))));
-        onView(withId(R.id.card_count)).check(matches(withText(containsString("0"))));
+        onView(withId(R.id.card_seconds)).check(matches(withText(containsString("15"))));
+        onView(withId(R.id.card_count)).check(matches(withText(containsString("15"))));
     }
 }

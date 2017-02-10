@@ -115,7 +115,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:maxLength="2"
-                    android:text="@string/three_secs"/>
+                    android:text="@string/default_secs"/>
             </LinearLayout>
         </TableRow>
 
