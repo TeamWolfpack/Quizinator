@@ -314,9 +314,9 @@ public class HostGameActivity
         } else {
             wifiDirectApp.mP2pMan.connect(wifiDirectApp.mP2pChannel,
                     config, p2pActionListener);
-//            Button connectBtn = (Button)findViewById(R.id.btn_connect);
-//            connectBtn.setEnabled(false);
-            findViewById(R.id.btn_connect).setEnabled(false);
+            Button connectBtn = (Button)findViewById(R.id.btn_connect);
+            connectBtn.setEnabled(false);
+//            findViewById(R.id.btn_connect).setEnabled(false);
         }
     }
 
@@ -369,6 +369,7 @@ public class HostGameActivity
     }
 
     public void onConnectButtonClicked(View v){
+//        findViewById(R.id.btn_connect).setEnabled(false);
         PeerListFragment peerListFragment =
                 (PeerListFragment)getFragmentManager().
                         findFragmentById(R.id.frag_peer_list);
@@ -382,6 +383,7 @@ public class HostGameActivity
         peerListFragment.dismissProgressDialog();
         // perform p2p connect upon user click the connect button,
         // connect available handle when connection done.
+//        findViewById(R.id.btn_connect).setEnabled(false);
         this.connect(config);
     }
 
