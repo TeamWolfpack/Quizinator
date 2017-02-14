@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -303,6 +304,9 @@ public class HostGameActivity
         } else {
             wifiDirectApp.mP2pMan.connect(wifiDirectApp.mP2pChannel,
                     config, p2pActionListener);
+//            Button connectBtn = (Button)findViewById(R.id.btn_connect);
+//            connectBtn.setEnabled(false);
+            findViewById(R.id.btn_connect).setEnabled(false);
         }
     }
 
