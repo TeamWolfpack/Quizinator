@@ -42,9 +42,22 @@ public class HostGameActivity
         @Override
         public void onSuccess() {
         }
-
         @Override
         public void onFailure(int reason) {
+            switch (reason){
+                case 0:
+                    Log.d(TAG, "Failed to create action listener: failed to internal error");
+                    break;
+                case 1:
+                    Log.d(TAG, "Failed to create action listener: failed because p2p is unsupported");
+                    break;
+                case 2:
+                    Log.d(TAG, "Failed to create action listener: framework is busy and unable to service the request");
+                    break;
+                case 3:
+                    Log.d(TAG, "Failed to create action listener: failed because no requests are added");
+                    break;
+            }
         }
     };
 
@@ -291,9 +304,6 @@ public class HostGameActivity
         peerListFragment.updateSelectedDevice(device);
     }
 
-    /**
-     * User clicked connect button after discover peers.
-     */
     @Override
     public void connect(WifiP2pConfig config) {
         Log.d(TAG, "connect: config(" + config.toString() + ")");
