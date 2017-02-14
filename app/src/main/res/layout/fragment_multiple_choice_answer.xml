@@ -18,6 +18,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="answerClicked"
+            android:textAllCaps="false"
             android:text="@string/frag_answer_A"
             android:textSize="@dimen/md_text_size_button" />
 
@@ -27,6 +28,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="answerClicked"
+            android:textAllCaps="false"
             android:text="@string/frag_answer_B"
             android:textSize="@dimen/md_text_size_button" />
     </TableRow>
@@ -42,6 +44,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="answerClicked"
+            android:textAllCaps="false"
             android:text="@string/frag_answer_C"
             android:textSize="@dimen/md_text_size_button" />
 
@@ -51,6 +54,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="answerClicked"
+            android:textAllCaps="false"
             android:text="@string/frag_answer_D"
             android:textSize="@dimen/md_text_size_button" />
     </TableRow>
