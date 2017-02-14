@@ -11,7 +11,7 @@ import com.seniordesign.wolfpack.quizinator.Constants;
 class QuizSQLiteHelper extends SQLiteOpenHelper {
 
     // database filename
-    static final String DATABASE_NAME = "quizinator.db";
+    private static final String DATABASE_NAME = "quizinator.db";
     private static final int DATABASE_VERSION = 1;
 
     // Card table contents
@@ -40,26 +40,26 @@ class QuizSQLiteHelper extends SQLiteOpenHelper {
     static final String CDRELATIONS_COLUMN_FKDECK = "_fkDeck";
 
     //HighScore table contents
-    public static final String TABLE_HIGHSCORES = "highscores";
-    public static final String HIGHSCORES_COLUMN_ID = "_id";
-    public static final String HIGHSCORES_COLUMN_DECKNAME = "_deckName";
-    public static final String HIGHSCORES_COLUMN_BESTTIME = "_bestTime";
-    public static final String HIGHSCORES_COLUMN_BESTSCORE = "_bestScore";
+    static final String TABLE_HIGHSCORES = "highscores";
+    static final String HIGHSCORES_COLUMN_ID = "_id";
+    static final String HIGHSCORES_COLUMN_DECKNAME = "_deckName";
+    static final String HIGHSCORES_COLUMN_BESTTIME = "_bestTime";
+    static final String HIGHSCORES_COLUMN_BESTSCORE = "_bestScore";
 
     // Rules table contents
-    public static final String TABLE_RULES = "rules";
-    public static final String RULES_COLUMN_ID = "_id";
-    public static final String RULES_COLUMN_TIMELIMIT = "_timeLimit";
-    public static final String RULES_COLUMN_CARDDISPLAYTIME = "_cardDisplayTime";
-    public static final String RULES_COLUMN_MAXCARDCOUNT = "_maxCardCount";
-    public static final String RULES_COLUMN_CARDTYPES = "_cardTypes";
-    public static final String RULES_COLUMN_DECK_ID = "_deckId";
+    static final String TABLE_RULES = "rules";
+    static final String RULES_COLUMN_ID = "_id";
+    static final String RULES_COLUMN_TIMELIMIT = "_timeLimit";
+    static final String RULES_COLUMN_CARDDISPLAYTIME = "_cardDisplayTime";
+    static final String RULES_COLUMN_MAXCARDCOUNT = "_maxCardCount";
+    static final String RULES_COLUMN_CARDTYPES = "_cardTypes";
+    static final String RULES_COLUMN_DECK_ID = "_deckId";
 
     // Settings table contents
-    public static final String TABLE_SETTINGS = "settings";
-    public static final String SETTINGS_COLUMN_ID = "_id";
-    public static final String SETTINGS_COLUMN_USERNAME = "_userName";
-    public static final String SETTINGS_COLUMN_NUMBEROFCONNECTIONS = "_numberOfConnections";
+    static final String TABLE_SETTINGS = "settings";
+    static final String SETTINGS_COLUMN_ID = "_id";
+    static final String SETTINGS_COLUMN_USERNAME = "_userName";
+    static final String SETTINGS_COLUMN_NUMBEROFCONNECTIONS = "_numberOfConnections";
 
     // Cards table creation sql statement
     private static final String CARDS_TABLE_CREATE = "create table "

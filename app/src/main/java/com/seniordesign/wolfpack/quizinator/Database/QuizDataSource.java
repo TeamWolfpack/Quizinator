@@ -66,7 +66,7 @@ public class QuizDataSource {
     };
 
     public QuizDataSource(Context context) {
-        dbHelper = new com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper(context);
+        dbHelper = new QuizSQLiteHelper(context);
     }
 
     public boolean open() throws SQLException {
@@ -83,7 +83,7 @@ public class QuizDataSource {
         return database;
     }
 
-    public com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper getSQLiteHelper() {
+    public QuizSQLiteHelper getSQLiteHelper() {
         return dbHelper;
     }
 
@@ -92,21 +92,21 @@ public class QuizDataSource {
                            String[] possibleCorrectAnswers, int points,
                            String moderatorNeeded) {
         ContentValues values = new ContentValues();
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.CARD_COLUMN_CARDTYPE, cardType);
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.CARD_COLUMN_QUESTION, question);
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.CARD_COLUMN_CORRECTANSWER, correctAnswer);
+        values.put(QuizSQLiteHelper.CARD_COLUMN_CARDTYPE, cardType);
+        values.put(QuizSQLiteHelper.CARD_COLUMN_QUESTION, question);
+        values.put(QuizSQLiteHelper.CARD_COLUMN_CORRECTANSWER, correctAnswer);
 
         //TODO need to make sure that depending on card type, the correct number of possible answers is inputted... can be done here or in code calling this method
         Gson gson = new Gson();
         String stringPossibleAnswers = gson.toJson(possibleCorrectAnswers);
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.CARD_COLUMN_POSSIBLEANSWERS, stringPossibleAnswers);
+        values.put(QuizSQLiteHelper.CARD_COLUMN_POSSIBLEANSWERS, stringPossibleAnswers);
 
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.CARD_COLUMN_POINTS, points);
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.CARD_COLUMN_MODERATORNEEDED, moderatorNeeded);
-        long insertId = database.insert(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.TABLE_CARDS,
+        values.put(QuizSQLiteHelper.CARD_COLUMN_POINTS, points);
+        values.put(QuizSQLiteHelper.CARD_COLUMN_MODERATORNEEDED, moderatorNeeded);
+        long insertId = database.insert(QuizSQLiteHelper.TABLE_CARDS,
                 null, values);
-        Cursor cursor = database.query(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.TABLE_CARDS,
-                cardAllColumns, com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.CARD_COLUMN_ID
+        Cursor cursor = database.query(QuizSQLiteHelper.TABLE_CARDS,
+                cardAllColumns, QuizSQLiteHelper.CARD_COLUMN_ID
                         + " = " + insertId, null,
                 null, null, null);
         cursor.moveToFirst();
@@ -124,13 +124,13 @@ public class QuizDataSource {
         long id = card.getId();
         System.out.println("Deleted card: " + card.toString());
         deleteCardDeckRelationByCardId(id);
-        return database.delete(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.TABLE_CARDS,
-                com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.CARD_COLUMN_ID + " = " + id, null);
+        return database.delete(QuizSQLiteHelper.TABLE_CARDS,
+                QuizSQLiteHelper.CARD_COLUMN_ID + " = " + id, null);
     }
 
     public List<Card> getAllCards() {
         List<Card> cards = new ArrayList<>();
-        Cursor cursor = database.query(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.TABLE_CARDS,
+        Cursor cursor = database.query(QuizSQLiteHelper.TABLE_CARDS,
                 cardAllColumns, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -149,7 +149,7 @@ public class QuizDataSource {
     // TODO can also replace getAllCards just by passing in nulls but can be looked into later
     public List<Card> filterCards(List<Constants.CARD_TYPES> cardTypes) {
         List<Card> cards = new ArrayList<>();
-        Cursor cursor = database.query(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.TABLE_CARDS,
+        Cursor cursor = database.query(QuizSQLiteHelper.TABLE_CARDS,
                 cardAllColumns, buildCardTypeWhereClause(null, cardTypes), null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -162,7 +162,7 @@ public class QuizDataSource {
         return cards;
     }
 
-    public Card cursorToCard(Cursor cursor) {
+    private Card cursorToCard(Cursor cursor) {
         Card card = new Card();
         card.setId(cursor.getLong(0));
         card.setCardType(Constants.CARD_TYPES.values()[cursor.getInt(1)]);
@@ -181,25 +181,25 @@ public class QuizDataSource {
         return card;
     }
 
-    public String[] getCardAllColumns(){
+    String[] getCardAllColumns(){
         return cardAllColumns;
     }
 
     public int updateCard(Card card){
         ContentValues values = new ContentValues();
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.CARD_COLUMN_CARDTYPE, card.getCardType());
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.CARD_COLUMN_QUESTION, card.getQuestion());
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.CARD_COLUMN_CORRECTANSWER, card.getCorrectAnswer());
+        values.put(QuizSQLiteHelper.CARD_COLUMN_CARDTYPE, card.getCardType());
+        values.put(QuizSQLiteHelper.CARD_COLUMN_QUESTION, card.getQuestion());
+        values.put(QuizSQLiteHelper.CARD_COLUMN_CORRECTANSWER, card.getCorrectAnswer());
 
         Gson gson = new Gson();
         String possibleAnswerStr = gson.toJson(card.getPossibleAnswers());
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.CARD_COLUMN_POSSIBLEANSWERS, possibleAnswerStr);
+        values.put(QuizSQLiteHelper.CARD_COLUMN_POSSIBLEANSWERS, possibleAnswerStr);
 
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.CARD_COLUMN_MODERATORNEEDED, card.getModeratorNeeded());
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.CARD_COLUMN_POINTS, card.getPoints());
+        values.put(QuizSQLiteHelper.CARD_COLUMN_MODERATORNEEDED, card.getModeratorNeeded());
+        values.put(QuizSQLiteHelper.CARD_COLUMN_POINTS, card.getPoints());
 
-        String where = com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.CARD_COLUMN_ID + " = " + card.getId();
-        return database.update(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.TABLE_CARDS, values, where, null);
+        String where = QuizSQLiteHelper.CARD_COLUMN_ID + " = " + card.getId();
+        return database.update(QuizSQLiteHelper.TABLE_CARDS, values, where, null);
     }
 
     /************************ CARD METHODS END *******************************/
@@ -208,16 +208,16 @@ public class QuizDataSource {
     public Deck createDeck(String deckName, String category, String subject,
                            boolean duplicateCards, String owner, List<Card> cards) {
         ContentValues values = new ContentValues();
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.DECK_COLUMN_DECKNAME, deckName);
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.DECK_COLUMN_CATEGORY, category);
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.DECK_COLUMN_SUBJECT, subject);
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.DECK_COLUMN_DUPLICATECARDS, String.valueOf(duplicateCards));
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.DECK_COLUMN_OWNER, owner);
-        long insertId = database.insert(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.TABLE_DECKS,
+        values.put(QuizSQLiteHelper.DECK_COLUMN_DECKNAME, deckName);
+        values.put(QuizSQLiteHelper.DECK_COLUMN_CATEGORY, category);
+        values.put(QuizSQLiteHelper.DECK_COLUMN_SUBJECT, subject);
+        values.put(QuizSQLiteHelper.DECK_COLUMN_DUPLICATECARDS, String.valueOf(duplicateCards));
+        values.put(QuizSQLiteHelper.DECK_COLUMN_OWNER, owner);
+        long insertId = database.insert(QuizSQLiteHelper.TABLE_DECKS,
                 null, values);
 
-        Cursor cursor = database.query(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.TABLE_DECKS,
-                deckAllColumns, com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.DECK_COLUMN_ID
+        Cursor cursor = database.query(QuizSQLiteHelper.TABLE_DECKS,
+                deckAllColumns, QuizSQLiteHelper.DECK_COLUMN_ID
                         + " = " + insertId, null,
                 null, null, null);
         cursor.moveToFirst();
@@ -237,13 +237,13 @@ public class QuizDataSource {
         long id = deck.getId();
         System.out.println("Deleted item: " + deck.toString());
         deleteCardDeckRelationByDeckId(id);
-        return database.delete(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.TABLE_DECKS,
-                com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.DECK_COLUMN_ID + " = " + id, null);
+        return database.delete(QuizSQLiteHelper.TABLE_DECKS,
+                QuizSQLiteHelper.DECK_COLUMN_ID + " = " + id, null);
     }
 
     public List<Deck> getAllDecks() {
         List<Deck> decks = new ArrayList<>();
-        Cursor cursor = database.query(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.TABLE_DECKS,
+        Cursor cursor = database.query(QuizSQLiteHelper.TABLE_DECKS,
                 deckAllColumns, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -258,22 +258,11 @@ public class QuizDataSource {
 
     public Deck getDeckWithId(long id) {
         return getFilteredDeck(id, null, true);
-//        Cursor cursor = database.query(QuizSQLiteHelper.TABLE_DECKS,
-//                deckAllColumns, QuizSQLiteHelper.DECK_COLUMN_ID + " = " + id, null, null, null, null);
-//        cursor.moveToFirst();
-//        Deck deck = cursorToDeck(cursor);
-////        cursor.close();
-////        cursor = database.query(QuizSQLiteHelper.TABLE_DECKS,
-////                deckAllColumns, QuizSQLiteHelper.DECK_COLUMN_ID + " = " + id, null, null, null, null);
-////        cursor.moveToFirst();
-//        deck.setCards(getAllCardsInDeck(id));
-//        cursor.close();
-//        return deck;
     }
 
     public Deck getFilteredDeck(long id, List<Constants.CARD_TYPES> cardTypes, boolean moderatorNeeded) {
-        Cursor cursor = database.query(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.TABLE_DECKS,
-                deckAllColumns, com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.DECK_COLUMN_ID + " = " + id, null, null, null, null);
+        Cursor cursor = database.query(QuizSQLiteHelper.TABLE_DECKS,
+                deckAllColumns, QuizSQLiteHelper.DECK_COLUMN_ID + " = " + id, null, null, null, null);
         cursor.moveToFirst();
         Deck deck = cursorToDeck(cursor);
         deck.setCards(getFilteredCardsInDeck(id, cardTypes, moderatorNeeded));
@@ -292,34 +281,34 @@ public class QuizDataSource {
         return deck;
     }
 
-    public String[] getDeckAllColumns(){
+    String[] getDeckAllColumns(){
         return deckAllColumns;
     }
 
     public int updateDeck(Deck deck){
         updateCardDeckRelation(deck);
         ContentValues values = new ContentValues();
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.DECK_COLUMN_DECKNAME, deck.getDeckName());
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.DECK_COLUMN_CATEGORY, deck.getCategory());
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.DECK_COLUMN_SUBJECT, deck.getSubject());
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.DECK_COLUMN_DUPLICATECARDS, String.valueOf(deck.isDuplicateCards()));
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.DECK_COLUMN_OWNER, deck.getOwner());
+        values.put(QuizSQLiteHelper.DECK_COLUMN_DECKNAME, deck.getDeckName());
+        values.put(QuizSQLiteHelper.DECK_COLUMN_CATEGORY, deck.getCategory());
+        values.put(QuizSQLiteHelper.DECK_COLUMN_SUBJECT, deck.getSubject());
+        values.put(QuizSQLiteHelper.DECK_COLUMN_DUPLICATECARDS, String.valueOf(deck.isDuplicateCards()));
+        values.put(QuizSQLiteHelper.DECK_COLUMN_OWNER, deck.getOwner());
 
-        String where = com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.DECK_COLUMN_ID + " = " + deck.getId();
-        return database.update(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.TABLE_DECKS, values, where, null);
+        String where = QuizSQLiteHelper.DECK_COLUMN_ID + " = " + deck.getId();
+        return database.update(QuizSQLiteHelper.TABLE_DECKS, values, where, null);
     }
     /************************ DECK METHODS END *******************************/
 
     /************************ CARDDECKRELATION METHODS START *******************************/
-    public CardDeckRelation createCardDeckRelation(long fkCard, long fkDeck) {
+    private CardDeckRelation createCardDeckRelation(long fkCard, long fkDeck) {
         ContentValues values = new ContentValues();
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.CDRELATIONS_COLUMN_FKCARD, fkCard);
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK, fkDeck);
+        values.put(QuizSQLiteHelper.CDRELATIONS_COLUMN_FKCARD, fkCard);
+        values.put(QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK, fkDeck);
 
-        long insertId = database.insert(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.TABLE_CDRELATIONS,
+        long insertId = database.insert(QuizSQLiteHelper.TABLE_CDRELATIONS,
                 null, values);
-        Cursor cursor = database.query(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.TABLE_CDRELATIONS,
-                cdRelationsAllColumns, com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.CDRELATIONS_COLUMN_ID
+        Cursor cursor = database.query(QuizSQLiteHelper.TABLE_CDRELATIONS,
+                cdRelationsAllColumns, QuizSQLiteHelper.CDRELATIONS_COLUMN_ID
                         + " = " + insertId, null,
                 null, null, null);
         cursor.moveToFirst();
@@ -335,18 +324,18 @@ public class QuizDataSource {
     public int deleteCardDeckRelation(CardDeckRelation cdRelation) {
         long id = cdRelation.getId();
         System.out.println("Deleted card: " + cdRelation.toString());
-        return database.delete(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.TABLE_CDRELATIONS,
-                com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.CDRELATIONS_COLUMN_ID + " = " + id, null);
+        return database.delete(QuizSQLiteHelper.TABLE_CDRELATIONS,
+                QuizSQLiteHelper.CDRELATIONS_COLUMN_ID + " = " + id, null);
     }
 
-    public int deleteCardDeckRelationByCardId(long fkCard) {
-        return database.delete(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.TABLE_CDRELATIONS,
-                com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.CDRELATIONS_COLUMN_FKCARD + " = " + fkCard, null);
+    private int deleteCardDeckRelationByCardId(long fkCard) {
+        return database.delete(QuizSQLiteHelper.TABLE_CDRELATIONS,
+                QuizSQLiteHelper.CDRELATIONS_COLUMN_FKCARD + " = " + fkCard, null);
     }
 
-    public int deleteCardDeckRelationByDeckId(long fkDeck) {
-        return database.delete(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.TABLE_CDRELATIONS,
-                com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK + " = " + fkDeck, null);
+    private int deleteCardDeckRelationByDeckId(long fkDeck) {
+        return database.delete(QuizSQLiteHelper.TABLE_CDRELATIONS,
+                QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK + " = " + fkDeck, null);
     }
 
     private List<Card> getAllCardsInDeck(long deckId) {
@@ -366,16 +355,16 @@ public class QuizDataSource {
         cardColumns.deleteCharAt(cardColumns.length()-1);
         StringBuilder query = new StringBuilder()
                 .append("SELECT ").append(cardColumns.toString())
-                .append(" FROM " + com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.TABLE_CDRELATIONS + " ").append(cdrTableName)
-                .append(" INNER JOIN " + com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.TABLE_CARDS + " ").append(cardTableName)
-                .append(" ON ").append(cdrTableName).append(".").append(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.CDRELATIONS_COLUMN_FKCARD).append("=").append(cardTableName).append(".").append(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.CARD_COLUMN_ID)
-                .append(" INNER JOIN " + com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.TABLE_DECKS + " ").append(deckTableName)
-                .append(" ON ").append(cdrTableName).append(".").append(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK).append("=").append(deckTableName).append(".").append(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.DECK_COLUMN_ID)
-                .append(" WHERE ").append(cdrTableName).append(".").append(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK).append("=\'").append(deckId).append("\'");
+                .append(" FROM " + QuizSQLiteHelper.TABLE_CDRELATIONS + " ").append(cdrTableName)
+                .append(" INNER JOIN " + QuizSQLiteHelper.TABLE_CARDS + " ").append(cardTableName)
+                .append(" ON ").append(cdrTableName).append(".").append(QuizSQLiteHelper.CDRELATIONS_COLUMN_FKCARD).append("=").append(cardTableName).append(".").append(QuizSQLiteHelper.CARD_COLUMN_ID)
+                .append(" INNER JOIN " + QuizSQLiteHelper.TABLE_DECKS + " ").append(deckTableName)
+                .append(" ON ").append(cdrTableName).append(".").append(QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK).append("=").append(deckTableName).append(".").append(QuizSQLiteHelper.DECK_COLUMN_ID)
+                .append(" WHERE ").append(cdrTableName).append(".").append(QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK).append("=\'").append(deckId).append("\'");
         if(!(cardTypes == null || cardTypes.isEmpty()))
             query.append(" AND ").append(buildCardTypeWhereClause(cardTableName, cardTypes));
         if(!moderatorNeeded)
-            query.append(" AND ").append(buildModeratorNeededWhereClasue(cardTableName, false));
+            query.append(" AND ").append(buildModeratorNeededWhereClause(cardTableName, false));
         Cursor cursor = database.rawQuery(query.toString(), null);
         cursor.moveToFirst();
         while(!cursor.isAfterLast()){
@@ -394,7 +383,7 @@ public class QuizDataSource {
 
     public List<CardDeckRelation> getAllCardDeckRelations() {
         List<CardDeckRelation> cdRelations = new ArrayList<>();
-        Cursor cursor = database.query(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.TABLE_CDRELATIONS,
+        Cursor cursor = database.query(QuizSQLiteHelper.TABLE_CDRELATIONS,
                 cdRelationsAllColumns, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -407,7 +396,7 @@ public class QuizDataSource {
         return cdRelations;
     }
 
-    public CardDeckRelation cursorToCardDeckRelation(Cursor cursor) {
+    private CardDeckRelation cursorToCardDeckRelation(Cursor cursor) {
         CardDeckRelation cdRelation = new CardDeckRelation();
         cdRelation.setId(cursor.getLong(0));
         cdRelation.setFkCard(cursor.getLong(1));
@@ -419,7 +408,7 @@ public class QuizDataSource {
         return cdRelationsAllColumns;
     }
 
-    public void updateCardDeckRelation(Deck deck) {
+    private void updateCardDeckRelation(Deck deck) {
         deleteCardDeckRelationByDeckId(deck.getId());
         addCardDeckRelation(deck.getId(), deck.getCards());
     }
@@ -468,7 +457,7 @@ public class QuizDataSource {
             open();
         }
 
-        List<HighScores> items = new ArrayList<HighScores>();
+        List<HighScores> items = new ArrayList<>();
         Cursor cursor = database.query(QuizSQLiteHelper.TABLE_HIGHSCORES,
                 highScoresAllColumns, null, null, null, null, null);
         cursor.moveToFirst();
@@ -482,7 +471,7 @@ public class QuizDataSource {
         return items;
     }
 
-    public HighScores cursorToHighScore(Cursor cursor) {
+    private HighScores cursorToHighScore(Cursor cursor) {
         HighScores scores = new HighScores();
         scores.setId(cursor.getLong(0));//id
         scores.setDeckName(cursor.getString(1));//deck name
@@ -491,7 +480,7 @@ public class QuizDataSource {
         return scores;
     }
 
-    public String[] getHighScoresAllColumns(){
+    String[] getHighScoresAllColumns(){
         return highScoresAllColumns;
     }
     /************************ HIGHSCORE METHODS END *******************************/
@@ -500,15 +489,15 @@ public class QuizDataSource {
     public Rules createRule(int maxCardCount, long timeLimit,
                             long cardDisplayTime, String cardTypes, long deckId) {
         ContentValues values = new ContentValues();
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.RULES_COLUMN_TIMELIMIT, timeLimit);
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.RULES_COLUMN_CARDDISPLAYTIME, cardDisplayTime);
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.RULES_COLUMN_MAXCARDCOUNT, maxCardCount);
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.RULES_COLUMN_CARDTYPES, cardTypes);
-        values.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.RULES_COLUMN_DECK_ID, deckId);
-        long insertId = database.insert(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.TABLE_RULES,
+        values.put(QuizSQLiteHelper.RULES_COLUMN_TIMELIMIT, timeLimit);
+        values.put(QuizSQLiteHelper.RULES_COLUMN_CARDDISPLAYTIME, cardDisplayTime);
+        values.put(QuizSQLiteHelper.RULES_COLUMN_MAXCARDCOUNT, maxCardCount);
+        values.put(QuizSQLiteHelper.RULES_COLUMN_CARDTYPES, cardTypes);
+        values.put(QuizSQLiteHelper.RULES_COLUMN_DECK_ID, deckId);
+        long insertId = database.insert(QuizSQLiteHelper.TABLE_RULES,
                 null, values);
-        Cursor cursor = database.query(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.TABLE_RULES,
-                rulesAllColumns, com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.RULES_COLUMN_ID
+        Cursor cursor = database.query(QuizSQLiteHelper.TABLE_RULES,
+                rulesAllColumns, QuizSQLiteHelper.RULES_COLUMN_ID
                         + " = " + insertId, null, null, null, null);
         cursor.moveToFirst();
         Rules newRules = cursorToRule(cursor);
@@ -521,28 +510,28 @@ public class QuizDataSource {
                 rule.getCardDisplayTime(), rule.getCardTypes(), rule.getDeckId());
     }
 
-    public int updateRules(Rules r){
+    int updateRules(Rules r){
         ContentValues cv = new ContentValues();
-        cv.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.RULES_COLUMN_ID, r.getId());
-        cv.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.RULES_COLUMN_TIMELIMIT, r.getTimeLimit());
-        cv.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.RULES_COLUMN_CARDDISPLAYTIME, r.getCardDisplayTime());
-        cv.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.RULES_COLUMN_MAXCARDCOUNT, r.getMaxCardCount());
-        cv.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.RULES_COLUMN_CARDTYPES, r.getCardTypes());
-        cv.put(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.RULES_COLUMN_DECK_ID, r.getDeckId());
-        String where = com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.RULES_COLUMN_ID + " = " + r.getId();
-        return database.update(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.TABLE_RULES, cv, where, null);
+        cv.put(QuizSQLiteHelper.RULES_COLUMN_ID, r.getId());
+        cv.put(QuizSQLiteHelper.RULES_COLUMN_TIMELIMIT, r.getTimeLimit());
+        cv.put(QuizSQLiteHelper.RULES_COLUMN_CARDDISPLAYTIME, r.getCardDisplayTime());
+        cv.put(QuizSQLiteHelper.RULES_COLUMN_MAXCARDCOUNT, r.getMaxCardCount());
+        cv.put(QuizSQLiteHelper.RULES_COLUMN_CARDTYPES, r.getCardTypes());
+        cv.put(QuizSQLiteHelper.RULES_COLUMN_DECK_ID, r.getDeckId());
+        String where = QuizSQLiteHelper.RULES_COLUMN_ID + " = " + r.getId();
+        return database.update(QuizSQLiteHelper.TABLE_RULES, cv, where, null);
     }
 
     public boolean deleteRule(Rules rule) {
         long id = rule.getId();
-        database.delete(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.TABLE_RULES,
-                com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.RULES_COLUMN_ID + " = " + id, null);
+        database.delete(QuizSQLiteHelper.TABLE_RULES,
+                QuizSQLiteHelper.RULES_COLUMN_ID + " = " + id, null);
         return true;
     }
 
     public List<Rules> getAllRules() {
-        List<Rules> items = new ArrayList<Rules>();
-        Cursor cursor = database.query(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.TABLE_RULES,
+        List<Rules> items = new ArrayList<>();
+        Cursor cursor = database.query(QuizSQLiteHelper.TABLE_RULES,
                 rulesAllColumns, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -555,7 +544,7 @@ public class QuizDataSource {
         return items;
     }
 
-    public Rules cursorToRule(Cursor cursor) {
+    private Rules cursorToRule(Cursor cursor) {
         Rules rule = new Rules();
         rule.setId(cursor.getLong(0));//id
         rule.setTimeLimit(cursor.getLong(1));//time limit
@@ -566,13 +555,13 @@ public class QuizDataSource {
         return rule;
     }
 
-    public String[] getRulesAllColumns(){
+    String[] getRulesAllColumns(){
         return rulesAllColumns;
     }
     /************************ RULES METHODS END *******************************/
 
     /************************ SETTINGS METHODS START *******************************/
-    public Settings createSettings(int numberOfConnections, String userName) {
+    Settings createSettings(int numberOfConnections, String userName) {
         ContentValues values = new ContentValues();
         values.put(QuizSQLiteHelper.SETTINGS_COLUMN_USERNAME, userName);
         values.put(QuizSQLiteHelper.SETTINGS_COLUMN_NUMBEROFCONNECTIONS, numberOfConnections);
@@ -601,14 +590,14 @@ public class QuizDataSource {
         return database.update(QuizSQLiteHelper.TABLE_SETTINGS, cv, where, null);
     }
 
-    public boolean deleteSetting(Settings settings) {
+    boolean deleteSetting(Settings settings) {
         long id = settings.getId();
         database.delete(QuizSQLiteHelper.TABLE_SETTINGS,
                 QuizSQLiteHelper.SETTINGS_COLUMN_ID + " = " + id, null);
         return true;
     }
 
-    public List<Settings> getAllSettings() {
+    List<Settings> getAllSettings() {
         List<Settings> settings = new ArrayList<>();
         Cursor cursor = database.query(QuizSQLiteHelper.TABLE_SETTINGS,
                 settingsAllColumns, null, null, null, null, null);
@@ -623,7 +612,7 @@ public class QuizDataSource {
         return settings;
     }
 
-    public Settings cursorToSetting(Cursor cursor) {
+    private Settings cursorToSetting(Cursor cursor) {
         Settings settings = new Settings();
         settings.setId(cursor.getLong(0));//id
         settings.setUserName(cursor.getString(1));//userName
@@ -631,7 +620,7 @@ public class QuizDataSource {
         return settings;
     }
 
-    public String[] getSettingsAllColumns(){
+    String[] getSettingsAllColumns(){
         return settingsAllColumns;
     }
     /************************ SETTINGS METHODS END *******************************/
@@ -647,25 +636,25 @@ public class QuizDataSource {
         int i = 0;
         while (cardTypes.size() != i + 1) {
             whereClause.append(tableName)
-                    .append(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.CARD_COLUMN_CARDTYPE)
+                    .append(QuizSQLiteHelper.CARD_COLUMN_CARDTYPE)
                     .append("=\'")
                     .append(cardTypes.get(i).ordinal())
                     .append("\' OR ");
             i++;
         }
         whereClause.append(tableName)
-                .append(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.CARD_COLUMN_CARDTYPE)
+                .append(QuizSQLiteHelper.CARD_COLUMN_CARDTYPE)
                 .append("=\'")
                 .append(cardTypes.get(i).ordinal())
                 .append("\'");
         return "(" + whereClause.toString() + ")";
     }
 
-    private String buildModeratorNeededWhereClasue(String tableName, boolean moderatorNeeded) {
+    private String buildModeratorNeededWhereClause(String tableName, boolean moderatorNeeded) {
         tableName = tableName == null ? "" : tableName + ".";
         StringBuilder whereClause = new StringBuilder();
         whereClause.append(tableName)
-                .append(com.seniordesign.wolfpack.quizinator.Database.QuizSQLiteHelper.CARD_COLUMN_MODERATORNEEDED)
+                .append(QuizSQLiteHelper.CARD_COLUMN_MODERATORNEEDED)
                 .append("=\'")
                 .append(String.valueOf(moderatorNeeded))
                 .append("\'");
