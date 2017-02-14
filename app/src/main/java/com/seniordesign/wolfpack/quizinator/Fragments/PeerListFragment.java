@@ -124,9 +124,7 @@ public class PeerListFragment extends ListFragment {
         }
         //concurrent modification exception thrown if the user joins and leaves quickly
         //use of iterator instead of collection.removeAll resolves threading problem
-        Iterator<WifiP2pDevice> iteratorOfPeersToRemove = toRemove.iterator();
-        while (iteratorOfPeersToRemove.hasNext()) {
-            WifiP2pDevice deviceToRemove = iteratorOfPeersToRemove.next();
+        for (WifiP2pDevice deviceToRemove : toRemove) {
             if (peerList.contains(deviceToRemove))
                 peerList.remove(deviceToRemove);
         }
