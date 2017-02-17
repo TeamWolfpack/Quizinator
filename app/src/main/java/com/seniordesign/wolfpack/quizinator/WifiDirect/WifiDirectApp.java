@@ -205,7 +205,6 @@ public class WifiDirectApp extends Application {
     public void onPause(String tag){
         Log.d(tag, "onPause called");
         unregisterReceiver(mReceiver);
-        mHomeActivity = null;
     }
 
     /**
@@ -214,6 +213,11 @@ public class WifiDirectApp extends Application {
     public void onDestroy(String tag){
         Log.d(tag, "onDestroy called");
         disconnectFromGroup();
+
+        if (mHomeActivity != null)
+            mHomeActivity.finish();
+
+        mP2pConnected = false;
         mHomeActivity = null;
         mGameplayActivity = null;
         mManageActivity = null;

@@ -83,8 +83,6 @@ public class ManageGameplayActivity extends AppCompatActivity {
         dataSource.open();
         rules = dataSource.getAllRules().get(dataSource.getAllRules().size()-1);
 
-        dataSource = new QuizDataSource(this);
-        dataSource.open();
         Type listType = new TypeToken<ArrayList<Constants.CARD_TYPES>>(){}.getType();
         List<Constants.CARD_TYPES> cardTypeList = new Gson().fromJson(rules.getCardTypes(), listType);
         Deck deck = dataSource.getFilteredDeck(rules.getDeckId(), cardTypeList, wifiDirectApp.mIsServer);
@@ -269,9 +267,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
         if (alertDialog != null)
             alertDialog.dismiss();
 
-        wifiDirectApp.disconnectFromGroup();
-        wifiDirectApp.mIsServer = false;
-        wifiDirectApp.mManageActivity = null;
+        wifiDirectApp.onDestroy(TAG);
     }
 
     private void updateCurrentCardView(Card card) {
