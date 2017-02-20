@@ -1,0 +1,28 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.seniordesign.wolfpack.quizinator.Activities.GamePlayActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/submitButton"
+            android:layout_width="match_parent"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:onClick="answerClicked"
+            android:text="@string/frag_answer_submit"
+            android:textSize="@dimen/md_text_size_game_play_button" />
+
+        <EditText
+            android:id="@+id/freeResponseAnswerArea"
+            android:layout_width="match_parent"
+            android:layout_weight="8"
+            android:layout_height="0dp"
+            android:textSize="@dimen/md_text_size_game_play_button" />
+    </LinearLayout>
+</FrameLayout>

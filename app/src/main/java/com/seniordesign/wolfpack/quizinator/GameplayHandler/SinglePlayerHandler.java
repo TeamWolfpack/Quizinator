@@ -2,27 +2,22 @@ package com.seniordesign.wolfpack.quizinator.GameplayHandler;
 
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.seniordesign.wolfpack.quizinator.Activities.GamePlayActivity;
-import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
-import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
-import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckDataSource;
-import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresDataSource;
-import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
-import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
+import com.seniordesign.wolfpack.quizinator.Constants;
+import com.seniordesign.wolfpack.quizinator.Database.Card;
+import com.seniordesign.wolfpack.quizinator.Database.Deck;
+import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
+import com.seniordesign.wolfpack.quizinator.Database.Rules;
 import com.seniordesign.wolfpack.quizinator.R;
 
-import java.util.Arrays;
+import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.List;
-
-/**
- * Created by farrowc on 11/29/2016.
- */
 
 public class SinglePlayerHandler implements GamePlayHandler {
 
-    /*
-     * @author farrowc (11/30/2016)
-     */
     @Override
     public boolean handleInitialization(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         initializeDB(gamePlayActivity,properties);
@@ -30,9 +25,6 @@ public class SinglePlayerHandler implements GamePlayHandler {
         return false;
     }
 
-    /*
-     * @author farrowc (11/30/2016)
-     */
     @Override
     public long handleAnswerClicked(GamePlayActivity gamePlayActivity, GamePlayProperties properties, String answer) {
         properties.getCardTimerAreaBackgroundRunning().cancel();
@@ -41,49 +33,58 @@ public class SinglePlayerHandler implements GamePlayHandler {
         }
         else if (answer.equals(properties.getCurrentCard().getCorrectAnswer())) {
             gamePlayActivity.quickCorrectAnswerConfirmation(true);
-            properties.setScore(properties.getScore()+1);
+            properties.setScore(properties.getScore() + properties.getCurrentCard().getPoints());
         } else {
             gamePlayActivity.quickCorrectAnswerConfirmation(false);
         }
         return handleNextCard(gamePlayActivity, properties);
     }
 
-    /*
-     * @author farrowc (11/30/2016)
-     */
     @Override
     public boolean initializeDB(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         int positiveDBConnections = 0;
-        properties.setRulesDataSource(new RulesDataSource(gamePlayActivity));
-        if (properties.getRulesDataSource().open()) {
+        properties.setDataSource(new QuizDataSource(gamePlayActivity));
+        if (properties.getDataSource().open()) {
             positiveDBConnections++;
-            List<Rules> ruleList = properties.getRulesDataSource().getAllRules();
+            List<Rules> ruleList = properties.getDataSource().getAllRules();
             properties.setRules(ruleList.get(ruleList.size() - 1));
         }
-        properties.setHighScoresDataSource(new HighScoresDataSource(gamePlayActivity));
-        if (properties.getHighScoresDataSource().open()) {
+        properties.setDataSource(new QuizDataSource(gamePlayActivity));
+        if (properties.getDataSource().open()) {
             positiveDBConnections++;
         }
-        properties.setDeckDataSource(new DeckDataSource(gamePlayActivity));
-        if (properties.getDeckDataSource().open()) {
+        properties.setQuizDataSource(new QuizDataSource(gamePlayActivity)); //TODO
+        if (properties.getDataSource().open()) {
             positiveDBConnections++;
-            properties.setDeck(properties.getDeckDataSource().getAllDecks().get(0));
+
+            //Filter and Shuffle deck
+            Type listType = new TypeToken<List<Constants.CARD_TYPES>>(){}.getType();
+            List<Constants.CARD_TYPES> cardTypeList = new Gson().fromJson(properties.getRules().getCardTypes(), listType);
+            Deck deck = properties.getDataSource()
+                    .getFilteredDeck(properties.getRules().getDeckId(), cardTypeList, false);
+            List<Card> cards = deck.getCards();
+            Collections.shuffle(cards);
+            deck.setCards(cards);
+            properties.setDeck(deck);
         }
         return (positiveDBConnections == 3);
     }
 
-    /*
-     * @author farrowc (11/30/2016)
-     */
     @Override
     public long handleNextCard(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         properties.getCardTimerRunning().cancel();
         if (properties.getDeckLength() > properties.getDeckIndex()) {
-            ((TextView) gamePlayActivity.findViewById(R.id.scoreText)).setText("Score: " + properties.getScore());
+            ((TextView) gamePlayActivity.findViewById(R.id.scoreText)).setText(String.valueOf(properties.getScore()));
 
             //TODO Here set card to the card at the position of deckIndex
 
             properties.setCurrentCard(properties.getDeck().getCards().get(properties.getDeckIndex()));
+
+            // TODO NOT WHERE WE SHOULD DO THIS!!!! CLEAN ME UP LATER!!!!!!!!!!!!!!!!!!!!!
+            if(Boolean.parseBoolean(properties.getCurrentCard().getModeratorNeeded())){
+                properties.setDeckIndex(properties.getDeckIndex()+1);
+                return handleNextCard(gamePlayActivity,properties);
+            }
 
             gamePlayActivity.showCard(properties.getCurrentCard());
             properties.setCardTimerRunning(properties.getCardTimerStatic().start());
@@ -95,14 +96,11 @@ public class SinglePlayerHandler implements GamePlayHandler {
         return properties.getCurrentCard().getId();
     }
 
-    /*
-     * @author farrowc (11/30/2016)
-     */
     @Override
     public boolean handleCleanup(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
-        properties.getRulesDataSource().close();
-        properties.getHighScoresDataSource().close();
-        properties.getDeckDataSource().close();
+        properties.getDataSource().close();
+        properties.getDataSource().close();
+        properties.getDataSource().close();
 
         properties.getGamePlayTimerStatic().cancel();
         properties.getGamePlayTimerRunning().cancel();
@@ -115,41 +113,27 @@ public class SinglePlayerHandler implements GamePlayHandler {
         return true;
     }
 
-    /*
-     * @author farrowc (11/30/2016)
-     */
     @Override
     public boolean handleResume(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
-        properties.getRulesDataSource().open();
-        properties.getHighScoresDataSource().open();
+        properties.getDataSource().open();
+        properties.getDataSource().open();
         return true;
     }
 
-    /*
-     * @author farrowc (11/30/2016)
-     */
     @Override
     public boolean handlePause(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         return true;
     }
 
-    /*
-     * @author leonardj (12/6/16)
-     */
     @Override
     public boolean handleDestroy(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         return true;
     }
 
-    /*
-     * @author farrowc (11/30/2016)
-     */
     @Override
     public boolean handleInitializeGameplay(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
-        //Deck stuff
-        properties.getDeck().setDeckName("Sample");
-        properties.setDeckLength(Math.min(properties.getRules().getMaxCardCount(),properties.getDeck().getCards().size()));
-        //deckLength = Math.min(deck.getCards().length, rules.getMaxCardCount());
+        Rules rules = properties.getRules();
+        properties.setDeckLength(Math.min(rules.getMaxCardCount(), properties.getDeck().getCards().size()));
         properties.setCardTimerRunning(properties.getCardTimerStatic().start());
         properties.setGamePlayTimerRunning(properties.getGamePlayTimerStatic().start());
         properties.setCardTimerAreaBackgroundRunning(properties.getCardTimerAreaBackgroundStatic().start());
@@ -158,9 +142,6 @@ public class SinglePlayerHandler implements GamePlayHandler {
         return false;
     }
 
-    /*
-     * @author farrowc (11/30/2016)
-     */
     @Override
     public void onFragmentInteraction(GamePlayActivity gamePlayActivity, GamePlayProperties properties, String choice) {
         //Do nothing

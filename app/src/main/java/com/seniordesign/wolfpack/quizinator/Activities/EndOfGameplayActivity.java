@@ -7,30 +7,21 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.seniordesign.wolfpack.quizinator.Database.GamePlayStats;
-import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScores;
-import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresDataSource;
+import com.seniordesign.wolfpack.quizinator.Database.HighScores;
+import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
 
-import java.sql.Time;
-
-/*
- * The end of game play activity is...
- * @creation 09/28/2016
- */
 public class EndOfGameplayActivity extends AppCompatActivity {
 
-    private HighScoresDataSource highScoresDataSource;
-    private GamePlayStats gamePlayStats;
+    private QuizDataSource highScoresDataSource;
 
-    /*
-     * @author kuczynskij (09/28/2016)
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_end_of_gameplay);
         initializeDB();
 
+        GamePlayStats gamePlayStats;
         if (getIntent().getExtras() != null) {
             gamePlayStats = getIntent().getExtras().getParcelable("gameStats");
         } else {
@@ -41,7 +32,7 @@ public class EndOfGameplayActivity extends AppCompatActivity {
         }
 
         ((TextView)findViewById(R.id.endOfGameScoreText)).setText(
-                "Score: " + gamePlayStats.getScore()
+                String.valueOf("Score: " + gamePlayStats.getScore())
         );
         long endOfGameSeconds = (gamePlayStats.getTimeElapsed()/1000)%60;
         String formattedGameSeconds = endOfGameSeconds < 10 ? "0" + endOfGameSeconds : "" + endOfGameSeconds;
@@ -50,7 +41,7 @@ public class EndOfGameplayActivity extends AppCompatActivity {
                 "Time: " + (gamePlayStats.getTimeElapsed()/60000) + ":" + formattedGameSeconds
         );
         ((TextView)findViewById(R.id.endOfGameTotalCardsText)).setText(
-                "Total Cards: " + gamePlayStats.getTotalCardsCompleted()
+                String.valueOf("Total Cards: " + gamePlayStats.getTotalCardsCompleted())
         );
 
         HighScores highScores = new HighScores();
@@ -63,7 +54,8 @@ public class EndOfGameplayActivity extends AppCompatActivity {
         }
         long highScoreSeconds = (highScores.getBestTime()/1000)%60;
         String formattedHighScoreSeconds = highScoreSeconds < 10 ? "0" + highScoreSeconds : "" + highScoreSeconds;
-        ((TextView)findViewById(R.id.endOfGameHighScoreText)).setText("High Score: "+highScores.getBestScore());
+        ((TextView)findViewById(R.id.endOfGameHighScoreText)).setText(
+                String.valueOf("High Score: "+highScores.getBestScore()));
         ((TextView)findViewById(R.id.endOfGameHighScoreTimeText)).setText(
                 "High Score Time: " + (highScores.getBestTime()/60000) + ":" + formattedHighScoreSeconds
         );
@@ -72,69 +64,24 @@ public class EndOfGameplayActivity extends AppCompatActivity {
     public void showMainMenu(View v){
         final Intent intent = new Intent(this, MainMenuActivity.class);
         startActivity(intent);
+        finish();
     }
 
-    /*
-     * @author kuczynskij (09/28/2016)
-     */
-    public String onButtonClick(View view){
-        return null;
-    }
-
-    /*
-     * @author kuczynskij (09/28/2016)
-     */
     private boolean initializeDB(){
         int positiveDBConnections = 0;
-        highScoresDataSource = new HighScoresDataSource(this);
+        highScoresDataSource = new QuizDataSource(this);
         if(highScoresDataSource.open()){
             positiveDBConnections++;
         }
-//        datasource = new ItemDataSource(this);
-//        datasource.open();
         return (positiveDBConnections == 1);
     }
 
-    /*
-     * @author kuczynskij (09/28/2016)
-     */
-    private Time getGameDuration(){
-        return null;
-    }
-
-    /*
-     * @author kuczynskij (09/28/2016)
-     */
-    private int getPlayersScore(){
-        return 0;
-    }
-
-    /*
-     * @author kuczynskij (09/28/2016)
-     */
-    private int getCardsAnsweredRightTotal(){
-        return 0;
-    }
-
-    /*
-     * @author kuczynskij (09/28/2016)
-     */
-    private boolean updateHighscores(){
-        return false;
-    }
-
-    /*
-     * @author kuczynskij (09/28/2016)
-     */
     @Override
     protected void onResume(){
         super.onResume();
         highScoresDataSource.open();
     }
 
-    /*
-     * @author kuczynskij (09/28/2016)
-     */
     @Override
     protected void onPause(){
         super.onPause();

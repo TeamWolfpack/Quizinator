@@ -1,32 +1,39 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
 import android.content.Intent;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.InputFilter;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
-import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
-import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckDataSource;
-import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
-import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
+import com.google.gson.reflect.TypeToken;
+import com.seniordesign.wolfpack.quizinator.Constants;
+import com.seniordesign.wolfpack.quizinator.Database.Deck;
+import com.seniordesign.wolfpack.quizinator.Database.Rules;
+import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.Filters.NumberFilter;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
-import java.util.Arrays;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_SEND_CARD_ACTIVITY;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_SEND_RULES_ACTIVITY;
+import io.apptik.widget.multiselectspinner.BaseMultiSelectSpinner;
+import io.apptik.widget.multiselectspinner.MultiSelectSpinner;
+
+import static com.seniordesign.wolfpack.quizinator.Constants.*;
+import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.*;
+
 
 /*
  * The new game settings activity is...
@@ -41,126 +48,220 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     private EditText gameSecondsInput;
     private EditText cardMinutesInput;
     private EditText cardSecondsInput;
-    private Spinner cardTypeSpinner;
 
-    private RulesDataSource rulesSource;
-    private DeckDataSource deckDataSource;
+    private MultiSelectSpinner cardTypeSpinner;
+
+    private List<CARD_TYPES> selectedCardTypes;
+    private List<CARD_TYPES> cardTypeOptions;
+
+    private QuizDataSource dataSource;
 
     private Deck deck;
 
-    WifiDirectApp wifiDirectApp = null;
+    WifiDirectApp wifiDirectApp;
 
-    /*
-     * @author kuczynskij (09/28/2016)
-     * @author leonardj (10/4/2016)
-     */
+    Gson gson = new Gson();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_game_settings);
-        setTitle("Game Settings");
+        setTitle(Constants.GAME_SETTINGS);
         wifiDirectApp = (WifiDirectApp)getApplication();
         initializeDB();
 
-        if(deckDataSource.getAllDecks().size()>0){
-            deck = deckDataSource.getAllDecks().get(0);
-        }else{
-            deck = initializeDeck();
+        if (dataSource.getAllRules().size() > 0) {
+            deck = dataSource.getDeckWithId(dataSource.getAllRules()
+                    .get(dataSource.getAllRules().size() - 1)
+                    .getDeckId()); //TODO is this just getting the last rules in the database or the last rules used
+        } else if (dataSource.getAllDecks().size()>0){
+            deck = dataSource.getAllDecks().get(0);
         }
 
-        cardTypeSpinner = (Spinner)findViewById(R.id.card_type_spinner);
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                    R.array.card_type_array, android.R.layout.simple_spinner_item);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            cardTypeSpinner.setAdapter(adapter);
+        if (wifiDirectApp.mIsServer) {
+            TextView warning = (TextView)findViewById(R.id.card_count_solo_warning);
+            warning.setVisibility(View.GONE);
+        }
+
+        final BaseMultiSelectSpinner.MultiSpinnerListener multiSpinnerListener = new BaseMultiSelectSpinner.MultiSpinnerListener() {
+            @Override
+            public void onItemsSelected(boolean[] selected) {
+                selectedCardTypes.clear();
+                for (int i = 0; i < selected.length; i++) {
+                    if (selected[i])
+                        selectedCardTypes.add(cardTypeOptions.get(i));
+                }
+                Deck filteredDeck = dataSource.getFilteredDeck(deck.getId(), selectedCardTypes, wifiDirectApp.mIsServer);
+
+                if (isInputZero(cardCountInput) ||
+                        isInputEmpty(cardCountInput) ||
+                        Integer.valueOf(cardCountInput.getText().toString()) > filteredDeck.getCards().size())
+                    cardCountInput.setText(String.valueOf(filteredDeck.getCards().size()));
+                filterCardCount(filteredDeck);
+            }
+        };
+        Spinner deckSpinner = (Spinner) findViewById(R.id.deck_spinner);
+            List<String> deckNames = new ArrayList<>();
+            for (Deck deck: dataSource.getAllDecks()) {
+                if (deck.getCards().size() > 0)
+                    deckNames.add(deck.getDeckName());
+            }
+            final ArrayAdapter<String> deckAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, deckNames);
+            deckAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            deckSpinner.setAdapter(deckAdapter);
+            deckSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    String name = deckAdapter.getItem(position);
+                    for (Deck deck: dataSource.getAllDecks()) {
+                        if (deck.getDeckName().equals(name)) {
+                            Log.d(TAG, "Deck ID is " + deck.getId());
+                            // update the card type spinner with any new card types
+                            cardTypeOptions = formatCardTypes(deck);
+                            ArrayAdapter<CARD_TYPES> cardTypeAdapter = new ArrayAdapter<>(NewGameSettingsActivity.this,
+                                    android.R.layout.simple_list_item_multiple_choice, cardTypeOptions);
+                            cardTypeSpinner
+                                    .setListAdapter(cardTypeAdapter)
+                                    .setAllCheckedText(ALL_CARD_TYPES)
+                                    .setAllUncheckedText(NO_CARD_TYPES)
+                                    .setMinSelectedItems(1)
+                                    .setListener(multiSpinnerListener);
+                            for (CARD_TYPES type: selectedCardTypes) {
+                                if (cardTypeOptions.indexOf(type) > -1)
+                                    cardTypeSpinner.selectItem(cardTypeOptions.indexOf(type), true);
+                            }
+                            Deck filteredDeck = dataSource.getFilteredDeck(deck.getId(), selectedCardTypes, wifiDirectApp.mIsServer);
+
+                            if (isInputZero(cardCountInput) ||
+                                    isInputEmpty(cardCountInput) ||
+                                    Integer.valueOf(cardCountInput.getText().toString()) > filteredDeck.getCards().size())
+                                cardCountInput.setText(String.valueOf(filteredDeck.getCards().size()));
+                            filterCardCount(filteredDeck);
+
+                            NewGameSettingsActivity.this.deck = filteredDeck;
+                            break;
+                        }
+                    }
+                }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) { /* Do nothing */ }
+            });
+            for (int i = 0; i < deckNames.size(); i++) {
+                if (deckNames.get(i).equals(deck.getDeckName())) {
+                    deckSpinner.setSelection(i);
+                    break;
+                }
+            }
+
+        cardTypeSpinner = (MultiSelectSpinner) findViewById(R.id.card_type_spinner);
+            cardTypeOptions = formatCardTypes(deck);
+            selectedCardTypes = new ArrayList<>(cardTypeOptions);
+            ArrayAdapter<CARD_TYPES> cardTypeAdapter = new ArrayAdapter<>(NewGameSettingsActivity.this,
+                    android.R.layout.simple_list_item_multiple_choice, cardTypeOptions);
+            cardTypeSpinner
+                    .setListAdapter(cardTypeAdapter)
+                    .setAllCheckedText(ALL_CARD_TYPES)
+                    .setAllUncheckedText(NO_CARD_TYPES)
+                    .setMinSelectedItems(1)
+                    .setListener(multiSpinnerListener);
 
         cardCountInput = (EditText)findViewById(R.id.card_count);
-            NumberFilter cardCountFilter = new NumberFilter(1, deck.getCards().size(), false); // Max should be deck count, change when deck is done
-            cardCountInput.setFilters(new InputFilter[]{ cardCountFilter });
-            cardCountInput.setOnFocusChangeListener(cardCountFilter);
-            cardCountInput.setText(""+deck.getCards().size()); // Should be deck count, change when deck is done
+            filterCardCount(deck);
+            cardCountInput.setText(String.valueOf(deck.getCards().size()));
 
         gameMinutesInput = (EditText)findViewById(R.id.game_minutes);
             NumberFilter gameMinuteFilter = new NumberFilter(1);
-            gameMinutesInput.setFilters(new InputFilter[]{ gameMinuteFilter });
             gameMinutesInput.setOnFocusChangeListener(gameMinuteFilter);
 
         gameSecondsInput = (EditText)findViewById(R.id.game_seconds);
-            NumberFilter gameSecondsFilter = new NumberFilter();
-            gameSecondsInput.setFilters(new InputFilter[]{ gameSecondsFilter });
+            NumberFilter gameSecondsFilter = new NumberFilter(0, 59, true);
             gameSecondsInput.setOnFocusChangeListener(gameSecondsFilter);
 
         cardMinutesInput = (EditText)findViewById(R.id.card_minutes);
             NumberFilter cardMinuteFilter = new NumberFilter();
-            cardMinutesInput.setFilters(new InputFilter[]{ cardMinuteFilter });
             cardMinutesInput.setOnFocusChangeListener(cardMinuteFilter);
 
         cardSecondsInput = (EditText)findViewById(R.id.card_seconds);
-            NumberFilter cardSecondsFilter = new NumberFilter(1);
-            cardSecondsInput.setFilters(new InputFilter[]{ cardSecondsFilter });
+            NumberFilter cardSecondsFilter = new NumberFilter(0, 59);
             cardSecondsInput.setOnFocusChangeListener(cardSecondsFilter);
-
         loadPreviousRules();
     }
 
-    /*
-     * @author kuczynskij (09/28/2016)
-     * @author leonardj (10/4/2016)
-     */
+    private void filterCardCount(Deck deck) {
+        NumberFilter cardCountFilter = new NumberFilter(1, deck.getCards().size(), false);
+        cardCountInput.setOnFocusChangeListener(cardCountFilter);
+    }
+
+    @SuppressWarnings({"UnusedDeclaration"})
     public boolean startGame(View v){
+        if (selectedCardTypes.size() < 1) {
+            Toast.makeText(this, "Must select card type", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         Rules r = updateRuleSet();
+        if (r == null)
+            return false;
+
         if(wifiDirectApp.isHost() == 15){
             return startMultiplayerGamePlay(r);
         }else{
             //single player
             final Intent startGameIntent = new Intent(this,
                     GamePlayActivity.class);
-            startGameIntent.putExtra("GameMode",true);
+            startGameIntent.putExtra(Constants.GAME_MODE,true);
             startActivity(startGameIntent);
+            finish();
             return true;
         }
     }
 
-    /*
-     * @author kuczynskij (10/31/2016)
-     * @author leonardj (10/31/2016)
-     */
-    private boolean startMultiplayerGamePlay(Rules r){
-        //multi-player
+    private boolean startMultiplayerGamePlay(final Rules r){
         if(!wifiDirectApp.mP2pConnected ){
             Log.d(TAG, "startChatActivity : p2p connection is " +
                     "missing, do nothing...");
             return false;
         }
-
-        Gson gson = new Gson();
-
-        //send everyone the rules
-        String rulesToSend = gson.toJson(r);
-        ConnectionService.sendMessage(MSG_SEND_RULES_ACTIVITY, rulesToSend);
-
-        //Send first card
-//        String cardToSend = gson.toJson(deck.getCards().get(0));
-//        ConnectionService.sendMessage(MSG_SEND_CARD_ACTIVITY, cardToSend);
-
         runOnUiThread(new Runnable() {
             @Override public void run() {
-                Intent i = wifiDirectApp.
-                        getLaunchActivityIntent(
-                                ManageGameplayActivity.class, null);//
-                startActivity(i);
+                startActivity(wifiDirectApp.getLaunchActivityIntent(ManageGameplayActivity.class, null));
+                ConnectionService.sendMessage(MSG_SEND_RULES_ACTIVITY, gson.toJson(r));
                 finish();
             }
         });
         return true;
-
     }
 
-    /*
-     * @author leonardj (10/31/2016)
-     * @author kuczynskij (10/31/2016)
-     */
     public Rules updateRuleSet() {
+        if (isInputEmpty(gameMinutesInput)) {
+            Toast.makeText(this, GAME_MINUTES_ERROR, Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        if (isInputEmpty(gameSecondsInput)) {
+            Toast.makeText(this, GAME_SECONDS_ERROR, Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        if (isInputEmpty(cardMinutesInput)) {
+            Toast.makeText(this, CARD_MINUTES_ERROR, Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        if (isInputEmpty(cardSecondsInput)) {
+            Toast.makeText(this, CARD_SECONDS_ERROR, Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        if (isInputZero(cardSecondsInput) && isInputZero(cardMinutesInput)) {
+            Toast.makeText(this, CARD_TIME_ZERO, Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        if (isInputEmpty(cardCountInput)) {
+            Toast.makeText(this, CARD_COUNT_ERROR, Toast.LENGTH_SHORT).show();
+            return null;
+        } else if (isInputZero(cardCountInput)) {
+            Toast.makeText(this, CARD_COUNT_ZERO, Toast.LENGTH_SHORT).show();
+            return null;
+        }
+
         long gameMinutesInMilli = Integer.valueOf(
                 gameMinutesInput.getText().toString()) * 60000;
         long gameSecondsInMilli = Integer.valueOf(
@@ -171,16 +272,23 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                 cardSecondsInput.getText().toString()) * 1000;
         int cardCount = Integer.valueOf(
                 cardCountInput.getText().toString());
-        String cardTypes = cardTypeSpinner.getSelectedItem().toString();
 
-        if (rulesSource.getAllRules().size() < 1) {
-            return rulesSource.createRule(cardCount,
+        String cardTypes = gson.toJson(selectedCardTypes);
+
+        if (dataSource.getAllRules().size() < 1) {
+            Log.d(TAG, "Deck id is saved as " + (int)deck.getId());
+            return dataSource.createRule(
+                    cardCount,
                     gameMinutesInMilli + gameSecondsInMilli,
-                    cardMinutesInMilli + cardSecondsInMilli, cardTypes);
+                    cardMinutesInMilli + cardSecondsInMilli,
+                    cardTypes,
+                    deck.getId());
         }
 
-        Rules rule = rulesSource.getAllRules().get(rulesSource.getAllRules().size() - 1);
-        rulesSource.deleteRule(rule);
+        Log.d(TAG, "Deck id is updated as " + (int)deck.getId());
+
+        Rules rule = dataSource.getAllRules().get(dataSource.getAllRules().size() - 1);
+        dataSource.deleteRule(rule);
 
         if (rule.getTimeLimit() != gameMinutesInMilli + gameSecondsInMilli) {
             rule.setTimeLimit(gameMinutesInMilli + gameSecondsInMilli);
@@ -195,139 +303,85 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             rule.setCardTypes(cardTypes);
         }
 
-        return rulesSource.createRule(rule.getMaxCardCount(),
+        return dataSource.createRule(rule.getMaxCardCount(),
                 rule.getTimeLimit(), rule.getCardDisplayTime(),
-                rule.getCardTypes());
+                rule.getCardTypes(), (int)deck.getId());
     }
 
-    /*
-     * @author kuczynskij (09/28/2016)
-     * @author leonardj (10/14/2016)
-     */
     public boolean loadPreviousRules(){
-        if (rulesSource.getAllRules().size() < 1) return false;
+        if (dataSource.getAllRules().size() < 1) return false;
 
-        Rules rule = rulesSource.getAllRules().get(rulesSource.getAllRules().size() - 1);
+        Rules rule = dataSource.getAllRules().get(dataSource.getAllRules().size() - 1);
+
         Calendar gameCal = Calendar.getInstance();
         gameCal.setTimeInMillis(rule.getTimeLimit());
 
         Calendar cardCal = Calendar.getInstance();
         cardCal.setTimeInMillis(rule.getCardDisplayTime());
 
-        gameMinutesInput.setText("" + gameCal.get(Calendar.MINUTE));
+        gameMinutesInput.setText(String.valueOf(gameCal.get(Calendar.MINUTE)));
         gameSecondsInput.setText(gameCal.get(Calendar.SECOND) < 10 ?
                                     "0" + gameCal.get(Calendar.SECOND) :
                                     "" + gameCal.get(Calendar.SECOND));
-        cardMinutesInput.setText("" + cardCal.get(Calendar.MINUTE));
+        cardMinutesInput.setText(String.valueOf(cardCal.get(Calendar.MINUTE)));
         cardSecondsInput.setText(cardCal.get(Calendar.SECOND) < 10 ?
                                     "0" + cardCal.get(Calendar.SECOND) :
                                     "" + cardCal.get(Calendar.SECOND));
 
-        int position = 0;
-        String type = rule.getCardTypes();
-        if (type.equals("True/False")) {
-            position = 0;
-        } else if (type.equals("Multiple Choice")) {
-            position = 1;
-        } else if (type.equals("Both")) {
-            position = 2;
-        }
+        if (rule.getMaxCardCount() > deck.getCards().size())
+            cardCountInput.setText(String.valueOf(deck.getCards().size()));
+        else if (isInputZero(cardCountInput) || isInputEmpty(cardCountInput))
+            cardCountInput.setText(String.valueOf(deck.getCards().size()));
+        else
+            cardCountInput.setText(String.valueOf(rule.getMaxCardCount()));
 
-        cardTypeSpinner.setSelection(position);
+        Log.d(TAG, "Selected card types: " + rule.getCardTypes());
+        Type listType = new TypeToken<ArrayList<Constants.CARD_TYPES>>(){}.getType();
+        selectedCardTypes = gson.fromJson(rule.getCardTypes(), listType);
+        for (CARD_TYPES type: selectedCardTypes) {
+            if (cardTypeOptions.indexOf(type) > -1)
+                cardTypeSpinner.selectItem(cardTypeOptions.indexOf(type), true);
+        }
         return true;
     }
 
-    /*
-     * @author kuczynskij (09/28/2016)
-     */
-    public boolean loadDeck(){
-        return false;
+    private boolean isInputEmpty(EditText input) {
+        return input.getText().toString().equals("");
     }
 
-    /*
-     * @author kuczynskij (09/28/2016)
-     * @author leonardj (10/14/2016)
-     * @author farrowc (10/31/2016)
-     */
+    private boolean isInputZero(EditText input) {
+        return input.getText().toString().equals(STRING_0) ||
+                input.getText().toString().equals(STRING_00);
+    }
+
     private boolean initializeDB(){
-        rulesSource = new RulesDataSource(this);
-        deckDataSource = new DeckDataSource(this);
-        return rulesSource.open() && deckDataSource.open();
+        dataSource = new QuizDataSource(this);
+        dataSource = new com.seniordesign.wolfpack.quizinator.Database.QuizDataSource(this);
+        return dataSource.open() && dataSource.open() && dataSource.open();
     }
 
-    /*
-     * @author farrowc (10/31/2016)
-     * TEMP returns a sample deck for testing
-     */
-    private Deck initializeDeck() {
-        Deck newDeck = new Deck();
-        Card[] cards = new Card[10];
-        cards[0] = new Card();
-        cards[0].setQuestion("1+1 = ?");
-        cards[0].setCorrectAnswer("2");
-        String[] answerArea = {"1","2","3","4"};
-        cards[0].setPossibleAnswers(answerArea);
-        cards[0].setCardType("MC");
-        cards[1] = new Card();
-        cards[1].setQuestion("1*2 = 0");
-        cards[1].setCorrectAnswer("False");
-        cards[1].setCardType("TF");
-        cards[2] = new Card();
-        cards[2].setQuestion("4*5 = 20");
-        cards[2].setCorrectAnswer("True");
-        cards[2].setCardType("TF");
-        cards[3] = new Card();
-        cards[3].setQuestion("20*10 = 100");
-        cards[3].setCorrectAnswer("False");
-        cards[3].setCardType("TF");
-        cards[4] = new Card();
-        cards[4].setQuestion("10*91 = 901");
-        cards[4].setCorrectAnswer("False");
-        cards[4].setCardType("TF");
-        cards[5] = new Card();
-        cards[5].setQuestion("100^2 = 10000");
-        cards[5].setCorrectAnswer("True");
-        cards[5].setCardType("TF");
-        cards[6] = new Card();
-        cards[6].setQuestion("10*102 = 1002");
-        cards[6].setCorrectAnswer("False");
-        cards[6].setCardType("TF");
-        cards[7] = new Card();
-        cards[7].setQuestion("8/2 = 4");
-        cards[7].setCorrectAnswer("True");
-        cards[7].setCardType("TF");
-        cards[8] = new Card();
-        cards[8].setQuestion("120/4 = 30");
-        cards[8].setCorrectAnswer("True");
-        cards[8].setCardType("TF");
-        cards[9] = new Card();
-        cards[9].setQuestion("6*7 = 41");
-        cards[9].setCorrectAnswer("False");
-        cards[9].setCardType("TF");
-        newDeck.setCards(Arrays.asList(cards));
-
-        deckDataSource.createDeck("Default", Arrays.asList(cards));
-
-        return newDeck;
+    public List<CARD_TYPES> formatCardTypes(Deck deck) {
+        if (deck == null)
+            return new ArrayList<>();
+        return deck.getCardTypes();
     }
 
-    /*
-     * @author kuczynskij (09/28/2016)
-     */
     @Override
     protected void onResume(){
         super.onResume();
-        rulesSource.open();
-        deckDataSource.open();
+        dataSource.open();
+        dataSource.open();
     }
 
-    /*
-     * @author kuczynskij (09/28/2016)
-     */
     @Override
     protected void onPause(){
         super.onPause();
-        rulesSource.close();
-        deckDataSource.close();
+        dataSource.close();
+        dataSource.close();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

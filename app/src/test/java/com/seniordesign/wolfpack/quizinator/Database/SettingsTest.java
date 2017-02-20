@@ -1,8 +1,5 @@
 package com.seniordesign.wolfpack.quizinator.Database;
 
-import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScores;
-import com.seniordesign.wolfpack.quizinator.Database.Settings.Settings;
-
 import org.junit.Before;
 import org.junit.Test;
 

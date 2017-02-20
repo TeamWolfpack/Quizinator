@@ -6,9 +6,6 @@ import android.support.test.runner.AndroidJUnit4;
 import android.view.WindowManager;
 
 import com.seniordesign.wolfpack.quizinator.Activities.MainMenuActivity;
-import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScores;
-import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresDataSource;
-import com.seniordesign.wolfpack.quizinator.Database.HighScore.HighScoresSQLiteHelper;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -17,16 +14,12 @@ import org.junit.runner.RunWith;
 
 import static junit.framework.TestCase.assertEquals;
 
-/**
- * Tests the High Score database files that need a Context object
- * @creation 10/10/2016.
- */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class HighScoreUITests {
 
-    private HighScoresDataSource dao;
-    private HighScoresSQLiteHelper sql;
+    private QuizDataSource dao;
+    private QuizSQLiteHelper sql;
 
     // Needed to run in Travis
     // **********************************************
@@ -46,23 +39,19 @@ public class HighScoreUITests {
             }
         };
         activity.runOnUiThread(wakeUpDevice);
-        dao = new HighScoresDataSource(activity);
-        sql = new HighScoresSQLiteHelper(activity);
+        dao = new QuizDataSource(activity);
+        sql = new QuizSQLiteHelper(activity);
     }
     // **********************************************
 
-    /*
-     * @author kuczynskij (10/12/2016)
-     */
     @Test
     public void normalFlow_HighScoresDataSource() throws Exception{
         assertEquals(true, dao.open());
         assertEquals(true, dao.getDatabase().isOpen());
         sql.onUpgrade(dao.getDatabase(), 0, 1);
         HighScores hs = dao.createHighScore("Sample", 350000, 650);
-        assertEquals("highscores.db", dao.getSQLiteHelper().getDatabaseName());
         assertEquals(1, dao.getAllHighScores().size());
-        assertEquals(4, dao.getAllColumns().length);
+        assertEquals(4, dao.getHighScoresAllColumns().length);
         assertEquals(true, dao.deleteHighScore(hs));
         assertEquals(true, dao.close());
     }

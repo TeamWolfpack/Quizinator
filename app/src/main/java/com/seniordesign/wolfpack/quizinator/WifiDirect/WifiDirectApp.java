@@ -19,14 +19,12 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_STARTCLIENT;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_STARTSERVER;
+import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_STARTCLIENT;
+import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_STARTSERVER;
 
 /**
  * Creates an instance of a WifiDirect Application because it is a
  * global singleton.
- *
- * @creation 10/24/2016.
  */
 public class WifiDirectApp extends Application {
 
@@ -124,10 +122,8 @@ public class WifiDirectApp extends Application {
         Log.d(TAG, "getConnectedPeer");
         WifiP2pDevice peer = null;
         for (WifiP2pDevice d : mPeers) {
-            if (d.status == WifiP2pDevice.CONNECTED) {
+            if (d.status == WifiP2pDevice.CONNECTED)
                 peer = d;
-                Log.d(TAG, "getConnectedPeer: Device Connected" + d.toString());
-            }
         }
         if(peer == null)
             Log.d(TAG, "getConnectedPeer: Will return null");
@@ -194,36 +190,37 @@ public class WifiDirectApp extends Application {
 
     /**
      * Properly resume the WifiDirectApp.
-     * @param tag
-     * @param activity
      */
     public void onResume(String tag,
                          HostGameActivity activity){
         Log.d(tag, "onResume called");
-        mReceiver = new WiFiDirectBroadcastReceiver(this, activity);
+        mReceiver = new WiFiDirectBroadcastReceiver();
         registerReceiver(mReceiver, mIntentFilter);
         mHomeActivity = activity;
     }
 
     /**
      * Properly pause the WifiDirectApp.
-     * @param tag
      */
     public void onPause(String tag){
         Log.d(tag, "onPause called");
         unregisterReceiver(mReceiver);
-        mHomeActivity = null;
     }
 
     /**
      * Properly destroy the WifiDirectApp.
-     * @param tag
      */
     public void onDestroy(String tag){
         Log.d(tag, "onDestroy called");
         disconnectFromGroup();
+
+        if (mHomeActivity != null)
+            mHomeActivity.finish();
+
+        mP2pConnected = false;
         mHomeActivity = null;
         mGameplayActivity = null;
         mManageActivity = null;
+        mIsServer = false;
     }
 }

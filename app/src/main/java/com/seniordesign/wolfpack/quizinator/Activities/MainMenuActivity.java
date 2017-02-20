@@ -15,37 +15,28 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 
-/*
- * The main menu activity
- * @creation 10/4/2016
- */
 public class MainMenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
-    /*
-     * @author farrowc (10/4/2016)
-     * @author chuna (10/23/2016)
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Main Menu");
+        toolbar.setTitle(Constants.MAIN_MENU);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.setDrawerListener(toggle); //TODO method deprecated, can get rid of after reviewed
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -63,9 +54,6 @@ public class MainMenuActivity extends AppCompatActivity
         }
     }
 
-    /*
-     * @author farrowc 10/4/2016
-     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -76,44 +64,13 @@ public class MainMenuActivity extends AppCompatActivity
         }
     }
 
-    /*
-     * @author farrowc 10/4/2016
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.navigation_drawer, menu);
-        return true;
-    }
-
-    /*
-     * @author farrowc 10/4/2016
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    /*
-     * @author farrowc 10/4/2016
-     */
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_quiz_bowl_rules) {
-            Uri uriUrl = Uri.parse("https://www.naqt.com/rules.html");
+            Uri uriUrl = Uri.parse(Constants.NAQT_RULES_URL);
             Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
             startActivity(launchBrowser);
         }
@@ -125,28 +82,21 @@ public class MainMenuActivity extends AppCompatActivity
                 Toast.makeText(this, "Device is not compatible with P2P", Toast.LENGTH_SHORT).show();
             }
         }
-        /*
-        else if (id == R.id.nav_application_settings) {
-            // For later sprints
+        else if(id == R.id.nav_show_decks) {
+            startActivity(new Intent(this, DecksActivity.class));
         }
-        */
-
+        else if(id == R.id.nav_show_cards){
+            startActivity(new Intent(this, CardsActivity.class));
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    /*
-     * @author farrowc 10/4/2016
-     */
     public void showGameSettings(View v){
-        final Intent intent = new Intent(this, NewGameSettingsActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(this, NewGameSettingsActivity.class));
     }
 
-    /*
-     * @author leonardj (10/26/16)
-     */
     public void initiateHostGame(View v) {
         if(isWifiDirectSupported(this)) {
             enableWifi();
@@ -158,9 +108,6 @@ public class MainMenuActivity extends AppCompatActivity
         }
     }
 
-    /*
-     * @author leonardj (10/26/16)
-     */
     public void initiateJoinGame(View v) {
         if(isWifiDirectSupported(this)) {
             enableWifi();
@@ -190,5 +137,4 @@ public class MainMenuActivity extends AppCompatActivity
             Toast.makeText(this, R.string.enabling_wifi, Toast.LENGTH_LONG).show();
         }
     }
-
 }

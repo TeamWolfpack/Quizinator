@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_decks"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.seniordesign.wolfpack.quizinator.Activities.DecksActivity">
+    
+    <ListView
+        android:id="@+id/list_of_decks"
+        android:layout_weight="0.8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="@dimen/array_adapter_padding"/>
+
+    <android.support.design.widget.FloatingActionButton
+        app:srcCompat="@drawable/ic_plus_btn_white_24dp"
+        android:id="@+id/new_deck_button"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:onClick="newDeckClick" />
+
+
+</RelativeLayout>

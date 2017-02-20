@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.*;
+import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.*;
 import static org.junit.Assert.*;
 
 @MediumTest

@@ -13,22 +13,27 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.seniordesign.wolfpack.quizinator.Constants.*;
 import static junit.framework.Assert.assertEquals;
-import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsNot.not;
 
-/*
- * @author leonardj (10/2/2016)
- */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class GameSettingTests {
@@ -60,31 +65,50 @@ public class GameSettingTests {
     }
 
     @Test
-    public void validateSpinnerOptions() {
-        String[] cardTypes = new String[] {"True/False", "Multiple Choice", "Both"};
-        for (int index = 0; index < cardTypes.length; index++) {
-            String type = cardTypes[index];
-            onView(withId(R.id.card_type_spinner)).perform();
-            onData(anything()).inAdapterView(withId(R.id.card_type_spinner)).atPosition(index).perform();
-            onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(type))));
-        }
+    public void validateSpinnerTrueFalse() {
+        onData(allOf(is(instanceOf(String.class)), is(ALL_CARD_TYPES))).inAdapterView(withId(R.id.card_type_spinner)).perform(click());
+        onData(allOf(is(instanceOf(CARD_TYPES.class)), is(CARD_TYPES.MULTIPLE_CHOICE))).perform(click());
+        onView(withText(CARD_TYPES.TRUE_FALSE.toString())).perform(pressBack());
+        onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(CARD_TYPES.TRUE_FALSE.toString()))));
+    }
+
+    @Test
+    public void validateSpinnerMultiChoice() {
+        onData(allOf(is(instanceOf(String.class)), is(ALL_CARD_TYPES))).inAdapterView(withId(R.id.card_type_spinner)).perform(click());
+        onData(allOf(is(instanceOf(CARD_TYPES.class)), is(CARD_TYPES.TRUE_FALSE))).perform(click());
+        onView(withText(CARD_TYPES.MULTIPLE_CHOICE.toString())).perform(pressBack());
+        onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(CARD_TYPES.MULTIPLE_CHOICE.toString()))));
+    }
+
+    @Test
+    public void validateSpinnerAtLeastOneSelected() {
+        onData(allOf(is(instanceOf(String.class)), is(ALL_CARD_TYPES))).inAdapterView(withId(R.id.card_type_spinner)).perform(click());
+        onData(allOf(is(instanceOf(CARD_TYPES.class)), is(CARD_TYPES.TRUE_FALSE))).perform(click());
+        onData(allOf(is(instanceOf(CARD_TYPES.class)), is(CARD_TYPES.MULTIPLE_CHOICE))).perform(click());
+        onData(allOf(is(instanceOf(CARD_TYPES.class)), is(CARD_TYPES.MULTIPLE_CHOICE))).perform(pressBack());
+        onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(CARD_TYPES.FREE_RESPONSE.toString()))));
+    }
+
+    @Test
+    public void validateDeckSpinner() {
+        onView(withId(R.id.deck_spinner)).check(matches(withSpinnerText(containsString("Default"))));
     }
 
     @Test
     public void validateGameMinuteInput_LowerBound() {
-        onView(withId(R.id.game_minutes)).check(matches(withText("01")));
+        onView(withId(R.id.game_minutes)).check(matches(withText("05")));
         onView(withId(R.id.game_minutes)).perform(clearText(), typeText("-1"));
         onView(withId(R.id.game_minutes)).check(matches(withText("1")));
     }
 
     @Test
     public void validateGameMinuteInput_UpperBound() {
-        onView(withId(R.id.game_minutes)).check(matches(withText("01")));
+        onView(withId(R.id.game_minutes)).check(matches(withText("05")));
         onView(withId(R.id.game_minutes)).perform(clearText(), typeText("60"));
         onView(withId(R.id.game_minutes)).check(matches(withText("60")));
 
         onView(withId(R.id.game_minutes)).perform(clearText(), typeText("61"));
-        onView(withId(R.id.game_minutes)).check(matches(withText("6")));
+        onView(withId(R.id.game_minutes)).check(matches(withText("61")));
     }
 
     @Test
@@ -101,7 +125,7 @@ public class GameSettingTests {
         onView(withId(R.id.game_seconds)).check(matches(withText("60")));
 
         onView(withId(R.id.game_seconds)).perform(clearText(), typeText("61"));
-        onView(withId(R.id.game_seconds)).check(matches(withText("6")));
+        onView(withId(R.id.game_seconds)).check(matches(withText("61")));
     }
 
     @Test
@@ -118,17 +142,17 @@ public class GameSettingTests {
         onView(withId(R.id.card_minutes)).check(matches(withText("60")));
 
         onView(withId(R.id.card_minutes)).perform(clearText(), typeText("61"));
-        onView(withId(R.id.card_minutes)).check(matches(withText("6")));
+        onView(withId(R.id.card_minutes)).check(matches(withText("61")));
     }
 
     @Test
     public void validateCardSecondInput_LowerBound() throws InterruptedException {
-        onView(withId(R.id.card_seconds)).check(matches(withText("03")));
+        onView(withId(R.id.card_seconds)).check(matches(withText("15")));
         onView(withId(R.id.card_seconds)).perform(clearText(), typeText("1"));
         onView(withId(R.id.card_seconds)).check(matches(withText("1")));
 
         onView(withId(R.id.card_seconds)).perform(clearText(), typeText("00"));
-        onView(withId(R.id.card_seconds)).check(matches(withText("")));
+        onView(withId(R.id.card_seconds)).check(matches(withText("00")));
 
         onView(withId(R.id.card_seconds)).perform(clearText(), typeText("-1"));
         onView(withId(R.id.card_seconds)).check(matches(withText("1")));
@@ -136,28 +160,28 @@ public class GameSettingTests {
 
     @Test
     public void validateCardSecondInput_UpperBound() {
-        onView(withId(R.id.card_seconds)).check(matches(withText("03")));
+        onView(withId(R.id.card_seconds)).check(matches(withText("15")));
         onView(withId(R.id.card_seconds)).perform(clearText(), typeText("60"));
         onView(withId(R.id.card_seconds)).check(matches(withText("60")));
 
         onView(withId(R.id.card_seconds)).perform(clearText(), typeText("61"));
-        onView(withId(R.id.card_seconds)).check(matches(withText("6")));
+        onView(withId(R.id.card_seconds)).check(matches(withText("61")));
     }
 
     @Test
     public void validateCardCountInput() {
-        onView(withId(R.id.card_count)).check(matches(withText("10")));
+        onView(withId(R.id.card_count)).check(matches(withText("15")));
         onView(withId(R.id.card_count)).perform(clearText(), typeText("1"));
         onView(withId(R.id.card_count)).check(matches(withText("1")));
 
-        onView(withId(R.id.card_count)).perform(clearText(), typeText("00"));
-        onView(withId(R.id.card_count)).check(matches(withText("")));
+        onView(withId(R.id.card_count)).perform(clearText(), typeText("0"));
+        onView(withId(R.id.card_count)).check(matches(withText("0")));
 
         onView(withId(R.id.card_count)).perform(clearText(), typeText("-1"));
         onView(withId(R.id.card_count)).check(matches(withText("1")));
 
         onView(withId(R.id.card_count)).perform(clearText(), typeText("20"));
-        onView(withId(R.id.card_count)).check(matches(withText("2")));
+        onView(withId(R.id.card_count)).check(matches(withText("20")));
 
         onView(withId(R.id.card_count)).perform(clearText(), typeText("10"));
         onView(withId(R.id.card_count)).check(matches(withText("10")));
@@ -185,11 +209,72 @@ public class GameSettingTests {
     }
 
     @Test
+    public void emptyCardCount_CantStartGame() {
+        onView(withId(R.id.card_count)).perform(clearText(), typeText(""));
+        onView(withId(R.id.new_game)).perform(click());
+        onView(withText(Constants.CARD_COUNT_ERROR))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void zeroCardCount_CantStartGame() {
+        onView(withId(R.id.card_count)).perform(clearText(), typeText("0"));
+        closeSoftKeyboard();
+        onView(withId(R.id.new_game)).perform(click());
+        onView(withText(Constants.CARD_COUNT_ZERO))
+                .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void emptyGameTimeMinute_CantStartGame() {
+        onView(withId(R.id.game_minutes)).perform(clearText(), typeText(""));
+        onView(withId(R.id.new_game)).perform(click());
+        onView(withText(Constants.GAME_MINUTES_ERROR))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void emptyGameTimeSeconds_CantStartGame() {
+        onView(withId(R.id.game_seconds)).perform(clearText(), typeText(""));
+        onView(withId(R.id.new_game)).perform(click());
+        onView(withText(Constants.GAME_SECONDS_ERROR))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void emptyCardTimeMinutes_CantStartGame() {
+        try {
+            // May need to wait for previous toast
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        onView(withId(R.id.card_minutes)).perform(clearText(), typeText(""));
+        onView(withId(R.id.new_game)).perform(click());
+        onView(withText(Constants.CARD_MINUTES_ERROR))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void emptyCardTimeSeconds_CantStartGame() {
+        onView(withId(R.id.card_seconds)).perform(clearText(), typeText(""));
+        onView(withId(R.id.new_game)).perform(click());
+        onView(withText(Constants.CARD_SECONDS_ERROR))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
     public void validateEditTexts() {
-        onView(withId(R.id.game_minutes)).check(matches(withText(containsString("01"))));
+        onView(withId(R.id.game_minutes)).check(matches(withText(containsString("05"))));
         onView(withId(R.id.game_seconds)).check(matches(withText(containsString("00"))));
         onView(withId(R.id.card_minutes)).check(matches(withText(containsString("00"))));
-        onView(withId(R.id.card_seconds)).check(matches(withText(containsString("03"))));
-        onView(withId(R.id.card_count)).check(matches(withText(containsString("10"))));
+        onView(withId(R.id.card_seconds)).check(matches(withText(containsString("15"))));
+        onView(withId(R.id.card_count)).check(matches(withText(containsString("15"))));
     }
 }

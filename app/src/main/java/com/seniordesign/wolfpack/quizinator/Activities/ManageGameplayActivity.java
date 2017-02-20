@@ -1,52 +1,67 @@
 package com.seniordesign.wolfpack.quizinator.Activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.os.CountDownTimer;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.seniordesign.wolfpack.quizinator.Database.Card.Card;
-import com.seniordesign.wolfpack.quizinator.Database.Deck.Deck;
-import com.seniordesign.wolfpack.quizinator.Database.Deck.DeckDataSource;
-import com.seniordesign.wolfpack.quizinator.Database.Rules.Rules;
-import com.seniordesign.wolfpack.quizinator.Database.Rules.RulesDataSource;
+import com.google.gson.reflect.TypeToken;
+import com.seniordesign.wolfpack.quizinator.Adapters.ActivePlayerAdapter;
+import com.seniordesign.wolfpack.quizinator.Adapters.NextCardAdapter;
+import com.seniordesign.wolfpack.quizinator.Constants;
+import com.seniordesign.wolfpack.quizinator.Database.Card;
+import com.seniordesign.wolfpack.quizinator.Database.Deck;
+import com.seniordesign.wolfpack.quizinator.Database.Rules;
+import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.Messages.Answer;
 import com.seniordesign.wolfpack.quizinator.Messages.Confirmation;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_ANSWER_CONFIRMATION_ACTIVITY;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_END_OF_GAME_ACTIVITY;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.Constants.MSG_SEND_CARD_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES.*;
+import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_ANSWER_CONFIRMATION_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_END_OF_GAME_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_SEND_CARD_ACTIVITY;
 
 public class ManageGameplayActivity extends AppCompatActivity {
 
     private WifiDirectApp wifiDirectApp;
 
-    private DeckDataSource deckDataSource;
-    private RulesDataSource rulesDataSource;
-
-    private Deck deck;
-    private Card currentCard;
-    private int currentCardPosition;
-    private int cardLimit;
-
-    private int clientsResponded;
+    private QuizDataSource dataSource;
 
     private Rules rules;
+    private Card currentCard;
+    private int cardLimit;
 
+    private int cardsPlayed;
+    private int clientsResponded;
+
+    private Spinner nextCardSpinner;
     private Gson gson = new Gson();
 
     private CountDownTimer gameplayTimerStatic;
     private CountDownTimer gameplayTimerRunning;
     private long gameplayTimerRemaining;
+
+    private android.app.AlertDialog alertDialog;
+    private boolean viewingPlayers;
 
     public static final String TAG = "ACT_MANAGE";
 
@@ -59,126 +74,226 @@ public class ManageGameplayActivity extends AppCompatActivity {
 
         answers = new ArrayList<>();
 
-        setTitle("Hosting Game");
+        setTitle(Constants.HOSTING_GAME);
 
         wifiDirectApp = (WifiDirectApp)getApplication();
         wifiDirectApp.mManageActivity = this;
 
-        deckDataSource = new DeckDataSource(this);
-        deckDataSource.open();
-        deck = deckDataSource.getAllDecks().get(0);
+        dataSource = new QuizDataSource(this);
+        dataSource.open();
+        rules = dataSource.getAllRules().get(dataSource.getAllRules().size()-1);
 
-        rulesDataSource = new RulesDataSource(this);
-        rulesDataSource.open();
-        rules = rulesDataSource.getAllRules().get(rulesDataSource.getAllRules().size()-1);
+        Type listType = new TypeToken<ArrayList<Constants.CARD_TYPES>>(){}.getType();
+        List<Constants.CARD_TYPES> cardTypeList = new Gson().fromJson(rules.getCardTypes(), listType);
+        Deck deck = dataSource.getFilteredDeck(rules.getDeckId(), cardTypeList, wifiDirectApp.mIsServer);
 
         cardLimit = Math.min(deck.getCards().size(),rules.getMaxCardCount());
+
+        nextCardSpinner = (Spinner) findViewById(R.id.next_card_spinner);
+        NextCardAdapter nextCardAdapter = new NextCardAdapter(this, deck.getCards());
+        nextCardSpinner.setAdapter(nextCardAdapter);
+        shuffle(null);
 
         initializeGameTimer(rules.getTimeLimit());
         gameplayTimerRunning = gameplayTimerStatic.start();
     }
 
-    /*
-     * @author leonard (11/5/2016)
-     */
+    public void shuffle(View v) {
+        ((NextCardAdapter)nextCardSpinner.getAdapter()).shuffle();
+        nextCardSpinner.setSelection(0);
+    }
+
     public void sendCard(View v) {
         clientsResponded=0;
-        if(currentCardPosition<cardLimit) {
-            currentCard = deck.getCards().get(currentCardPosition);
-            currentCardPosition++;
+        if(cardsPlayed < cardLimit) {
+            currentCard = (Card)nextCardSpinner.getSelectedItem();
             String json = gson.toJson(currentCard);
             ConnectionService.sendMessage(MSG_SEND_CARD_ACTIVITY, json);
-        }
-        else {
+            cardsPlayed++;
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (nextCardSpinner.getCount() > 1) {
+                        ((NextCardAdapter)nextCardSpinner.getAdapter())
+                                .removeItem(nextCardSpinner.getSelectedItemPosition());
+                        nextCardSpinner.setSelection(0);
+                    }
+                    updateCurrentCardView(currentCard);
+                }
+            });
+        } else {
             endGame(null);
+        }
+        if (cardsPlayed == cardLimit) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    nextCardSpinner.setEnabled(false);
+                    findViewById(R.id.shuffle).setEnabled(false);
+                    findViewById(R.id.send_card).setEnabled(false);
+                }
+            });
         }
     }
 
-    /*
-     * @author leonard (11/5/2016)
-     */
     public void endGame(View v) {
-        gameplayTimerRunning.cancel();
-        selectAndRespondToFastestAnswer();
-        String json = gson.toJson(rules.getTimeLimit() - gameplayTimerRemaining);
-        ConnectionService.sendMessage(MSG_END_OF_GAME_ACTIVITY, json);
-        Intent i = new Intent(ManageGameplayActivity.this, MainMenuActivity.class);
-        startActivity(i);
-        finish();
+        if (v == null) {
+            gameplayTimerRunning.cancel();
+            selectAndRespondToFastestAnswer();
+            String json = gson.toJson(rules.getTimeLimit() - gameplayTimerRemaining);
+            ConnectionService.sendMessage(MSG_END_OF_GAME_ACTIVITY, json);
+            startActivity(new Intent(ManageGameplayActivity.this, MainMenuActivity.class));
+            finish();
+            return;
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle("End Game")
+                .setMessage("Are you sure you want to end the game?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        endGame(null);
+                    }
+
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 
     /**
      * This is called in ConnectionSerive.onPullInData(...) when a ready message
      * is received.
      */
-    /*
-     * @author leonard (11/5/2016)
-     */
     public void deviceIsReady(String deviceName) {
+        //TODO start the game when all devices are ready
+        //or
         //TODO show that the device is ready
+    }
+
+    public void showPlayersDialog(View v) {
+        if (alertDialog != null)
+            alertDialog.dismiss();
+
+        LayoutInflater li = LayoutInflater.from(this);
+        final View promptsView = li.inflate(R.layout.fragment_active_players, null);
+        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
+        alertDialogBuilder.setView(promptsView);
+        alertDialogBuilder
+                .setCancelable(false)
+                .setTitle(Constants.PLAYERS_RESPONSE);
+
+        if (v != null) {
+            viewingPlayers = true;
+            alertDialogBuilder
+                    .setTitle(Constants.ACTIVE_PLAYERS)
+                    .setPositiveButton(Constants.CLOSE, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            dialog.cancel();
+                            viewingPlayers = false;
+                        }
+                    });
+        } else {
+            alertDialogBuilder
+                    .setPositiveButton(Constants.NO_WINNER, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            dialog.cancel();
+                            noPlayerAnsweredFreeOrVerbalResponseCorrectly();
+                            sendCard(null);
+                            clientsResponded = 0;
+                        }
+                    });
+        }
+
+        alertDialog = alertDialogBuilder.create();
+        handlePlayerDialog(promptsView, v == null);
+        alertDialog.show();
     }
 
     /**
      * This is called in ConnectionSerive.onPullInData(...) when a answer message
      * is received.
      */
-    /*
-     * @author leonard (11/5/2016)
-     */
     public void validateAnswer(Answer answer) {
-        //boolean correct = currentCard.getCorrectAnswer().equals(answer.getAnswer());
+        if (answer == null)
+            return;
 
-        //String playerName = answer.getDeviceName();
-        //String playerAddress = answer.getAddress();
-
-        //String confirmation = gson.toJson(new Confirmation(playerAddress, correct));
-        //ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
-        if(answers!=null && answer!= null) {
+        if (answers!=null) {
             answers.add(answer);
         }
         clientsResponded++;
 
         Log.d(TAG, "Clients responded: " + clientsResponded);
-        Log.d(TAG, "Number of Peers: " + wifiDirectApp.mPeers.size());
+        Log.d(TAG, "Number of Players: " + wifiDirectApp.getConnectedPeers().size());
 
-        checkClientCount();
+        Log.d(TAG, "Current Card: " + currentCard.toString());
+
+        if (Boolean.parseBoolean(currentCard.getModeratorNeeded())) {
+            if (alertDialog == null || !alertDialog.isShowing()) {
+                showPlayersDialog(null);
+            } else if (viewingPlayers) {
+                alertDialog.cancel();
+                showPlayersDialog(null);
+            }
+            ListView playersList = (ListView) alertDialog.findViewById(R.id.active_player_dialog_list);
+            ActivePlayerAdapter playerAdapter = (ActivePlayerAdapter)(playersList.getAdapter());
+            playerAdapter.addItem(answer);
+        } else {
+            checkClientCount();
+        }
     }
 
-    /*
-     * @author leonard (11/4/2016)
-     */
     @Override
     protected void onResume() {
         super.onResume();
-        deckDataSource.open();
-        rulesDataSource.open();
+        dataSource.open();
+        dataSource.open();
     }
 
-    /*
-     * @author leonard (11/4/2016)
-     */
     @Override
     protected void onPause() {
         super.onPause();
-        //gameplayTimerRunning.cancel();
-        //gameplayTimerStatic.cancel();
-        deckDataSource.close();
-        rulesDataSource.close();
+        dataSource.close();
+        dataSource.close();
     }
 
-    /*
-     * @author leonard (11/4/2016)
-     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        wifiDirectApp.disconnectFromGroup();
-        wifiDirectApp.mManageActivity = null;
+
+        if (alertDialog != null)
+            alertDialog.dismiss();
+
+        wifiDirectApp.onDestroy(TAG);
     }
 
-    /*
-     * @author farrowc 10/14/2016
-     */
+    private void updateCurrentCardView(Card card) {
+        TextView question = (TextView) findViewById(R.id.current_card_question);
+            question.setText(card.getQuestion());
+
+        TextView points = (TextView) findViewById(R.id.current_card_points);
+            points.setText(getResources().getText(R.string.points) + ": " + card.getPoints());
+
+        ImageView type = (ImageView) findViewById(R.id.current_card_type_icon);
+            if (card.getCardType() == TRUE_FALSE.ordinal())
+                type.setImageResource(R.drawable.tf_icon);
+            else if (card.getCardType() == MULTIPLE_CHOICE.ordinal())
+                type.setImageResource(R.drawable.mc_icon);
+            else if (card.getCardType() == FREE_RESPONSE.ordinal())
+                type.setImageResource(R.drawable.fr_icon);
+            else if (card.getCardType() == VERBAL_RESPONSE.ordinal())
+                type.setImageResource(R.drawable.vr_icon);
+
+        TextView answerLabel = (TextView) findViewById(R.id.current_card_answer_label);
+            answerLabel.setText(R.string.correct_answer_label);
+
+        TextView answer = (TextView) findViewById(R.id.current_card_correct_answer);
+            answer.setText(card.getCorrectAnswer());
+    }
+
     private boolean initializeGameTimer(long time) {
         System.out.println("Time: "+time);
         gameplayTimerStatic = new CountDownTimer(time, 10) {
@@ -196,6 +311,34 @@ public class ManageGameplayActivity extends AppCompatActivity {
             }
         };
         return true;
+    }
+
+    private void noPlayerAnsweredFreeOrVerbalResponseCorrectly() {
+        Log.d(TAG,"Moderator determined no one answered correctly");
+
+        for (WifiP2pDevice device : wifiDirectApp.getConnectedPeers()) {
+            String confirmation = gson.toJson(new Confirmation(device.deviceAddress, false));
+            ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+        }
+        answers = new ArrayList<>();
+    }
+
+    private void selectAndRespondToSelectedAnswer(Answer selectedAnswer){
+        Log.d(TAG,"selecting Selected Answer");
+
+        // Selected Player gets the points
+        String confirmation = gson.toJson(new Confirmation(selectedAnswer.getAddress(), true));
+        ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+
+        for (WifiP2pDevice device : wifiDirectApp.getConnectedPeers()) {
+            if (device.deviceAddress.equals(selectedAnswer.getAddress()))
+                continue;
+
+            confirmation = gson.toJson(new Confirmation(device.deviceAddress, false));
+            ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+        }
+        answers = new ArrayList<>();
+        alertDialog.cancel();
     }
 
     private long selectAndRespondToFastestAnswer(){
@@ -230,6 +373,41 @@ public class ManageGameplayActivity extends AppCompatActivity {
         }
         answers = new ArrayList<>();
         return fastestCorrectAnswer == null ? -1 : fastestCorrectAnswer.getTimeTaken();
+    }
+
+    private void handlePlayerDialog(View dialogView, boolean mustPickWinner) {
+        final ListView playersDialogList = (ListView) dialogView.findViewById(R.id.active_player_dialog_list);
+
+        TextView correctAnswerLabel = (TextView) dialogView.findViewById(R.id.dialog_correct_answer_label);
+        TextView correctAnswer = (TextView) dialogView.findViewById(R.id.dialog_correct_answer);
+        if (currentCard != null)
+            correctAnswer.setText(currentCard.getCorrectAnswer());
+
+        ActivePlayerAdapter playerAdapter = new ActivePlayerAdapter(dialogView.getContext(), new ArrayList<Answer>(), mustPickWinner);
+        if (!mustPickWinner) {
+            List<Answer> players = new ArrayList<>();
+            for (WifiP2pDevice device : wifiDirectApp.getConnectedPeers()) {
+                players.add(new Answer(device.deviceName, device.deviceAddress, null, 0));
+            }
+            playerAdapter = new ActivePlayerAdapter(dialogView.getContext(), players, mustPickWinner);
+
+            correctAnswerLabel.setVisibility(View.GONE);
+            correctAnswer.setVisibility(View.GONE);
+        }
+
+        playersDialogList.setAdapter(playerAdapter);
+
+        if (mustPickWinner) {
+            playersDialogList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Answer answer = (Answer) playersDialogList.getAdapter().getItem(i);
+                    selectAndRespondToSelectedAnswer(answer);
+                    sendCard(null);
+                    clientsResponded = 0;
+                }
+            });
+        }
     }
 
     public int checkClientCount() {

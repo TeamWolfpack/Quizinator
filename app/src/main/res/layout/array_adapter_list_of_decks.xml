@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/array_adapter_rounded_corners">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingRight="@dimen/array_adapter_padding"
+        android:paddingLeft="@dimen/array_adapter_padding">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:text="@string/deck_name"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:id="@+id/array_adapter_deck_name"
+            android:paddingLeft="0dp"
+            android:paddingRight="5dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.8"
+            android:text="@string/deck_size"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:id="@+id/array_adapter_deck_size" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingRight="@dimen/array_adapter_padding"
+        android:paddingLeft="@dimen/array_adapter_padding">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_weight="0"
+            android:paddingRight="5dp"
+            android:src="@drawable/mc_icon"
+            android:id="@+id/array_adapter_deck_MC_icon" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/MC_count"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:id="@+id/array_adapter_deck_MC_count" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_weight="0"
+            android:paddingRight="5dp"
+            android:src="@drawable/tf_icon"
+            android:id="@+id/array_adapter_deck_TF_icon" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/TF_count"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:id="@+id/array_adapter_deck_TF_count" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_weight="0"
+            android:paddingRight="5dp"
+            android:src="@drawable/fr_icon"
+            android:id="@+id/array_adapter_deck_FR_icon" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/FR_count"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:id="@+id/array_adapter_deck_FR_count" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_weight="0"
+            android:paddingRight="5dp"
+            android:src="@drawable/vr_icon"
+            android:id="@+id/array_adapter_deck_VR_icon" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/VR_count"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:id="@+id/array_adapter_deck_VR_count" />
+    </LinearLayout>
+</LinearLayout>

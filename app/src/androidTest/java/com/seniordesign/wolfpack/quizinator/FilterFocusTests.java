@@ -1,7 +1,6 @@
 package com.seniordesign.wolfpack.quizinator;
 
 import android.support.test.rule.ActivityTestRule;
-import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.seniordesign.wolfpack.quizinator.Activities.NewGameSettingsActivity;
@@ -13,9 +12,6 @@ import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 
-/*
- * @creation 10/10/2016.
- */
 public class FilterFocusTests {
 
     private EditText editText;

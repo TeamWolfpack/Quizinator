@@ -1,6 +1,6 @@
 package com.seniordesign.wolfpack.quizinator.Database;
 
-import com.seniordesign.wolfpack.quizinator.Database.Card.*;
+import com.seniordesign.wolfpack.quizinator.Constants;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +22,7 @@ public class CardTest {
     @Before
     public void init(){
         tfCard.setId(1);
-        tfCard.setCardType("TF");
+        tfCard.setCardType(Constants.CARD_TYPES.TRUE_FALSE);
         tfCard.setQuestion("Test Question");
         tfCard.setCorrectAnswer("True");
         String[] possibleAnswers = new String[]{"True", "False"};
@@ -31,7 +31,7 @@ public class CardTest {
         tfCard.setPoints(1);
 
         mcCard.setId(2);
-        mcCard.setCardType("MC");
+        mcCard.setCardType(Constants.CARD_TYPES.MULTIPLE_CHOICE);
         mcCard.setQuestion("Test Question MC");
         mcCard.setCorrectAnswer("Yes");
         possibleAnswers = new String[]{"1", "2", "Yes", "No"};

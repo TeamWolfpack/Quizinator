@@ -4,30 +4,67 @@
     android:layout_width="fill_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
     android:background="?android:attr/activatedBackgroundIndicator"
-    android:padding="6dip">
+    android:padding="6dip"
+    >
+
     <ImageView
         android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_marginRight="2dip"
-        android:src="@drawable/machine" />
+        android:src="@drawable/machine"
+        />
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="0dip"
         android:layout_weight="1"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        >
+
         <TextView
             android:id="@+id/device_name"
             android:layout_width="fill_parent"
             android:layout_height="0dip"
             android:layout_weight="1"
-            android:gravity="center_vertical" />
+            android:gravity="center_vertical"
+            />
+
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="0dip"
             android:layout_weight="1"
             android:id="@+id/device_details"
-            android:singleLine="true"
-            android:ellipsize="marquee" />
+            android:maxLines="1"
+            android:ellipsize="marquee"
+            />
+
+        <LinearLayout
+            android:id="@+id/buttonsPanel"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            >
+
+            <Button
+                android:id="@+id/btn_connect"
+                android:onClick="onConnectButtonClicked"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/connect_peer_button"
+                />
+
+            <Button
+                android:id="@+id/btn_disconnect"
+                android:onClick="onDisconnectButtonClicked"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/disconnect_peer_button"
+                />
+
+        </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>
