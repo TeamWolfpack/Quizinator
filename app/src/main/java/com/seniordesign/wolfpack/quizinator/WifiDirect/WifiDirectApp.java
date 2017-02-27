@@ -55,11 +55,23 @@ public class WifiDirectApp extends Application {
     // limit to the latest 50 messages
     JSONArray mMessageArray = new JSONArray();
 
+    // Singleton instance
+    private static WifiDirectApp sInstance = null;
+
     @Override
     public void onCreate() {
         Log.d(TAG, "onCreate");
         super.onCreate();
+        sInstance = this;
         instantiateIntentFilter();
+    }
+
+    /**
+     * Getter to access Singleton instance.
+     * @return the WifiDirectApp
+     */
+    public static WifiDirectApp getInstance() {
+        return sInstance ;
     }
 
     private void instantiateIntentFilter(){
