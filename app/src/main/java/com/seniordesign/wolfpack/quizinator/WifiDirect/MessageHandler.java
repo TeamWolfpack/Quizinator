@@ -132,7 +132,7 @@ public class MessageHandler extends Handler {
         if (wifiDirectApp.mHomeActivity != null)
             wifiDirectApp.mHomeActivity.onConnectionInfoAvailable(wifiDirectApp.mP2pInfo);
     }
-
+    
     private void pushConfirmationOut(String data) {
         Log.d(TAG, "pushConfirmationOut: " + data);
         Confirmation confirmation = new Gson().fromJson(data,
@@ -144,10 +144,21 @@ public class MessageHandler extends Handler {
                 confirmation.getClientAddress());
     }
 
+    /**
+     * Creates a quiz message from passed in opcode and message.
+     * @param code opcode of quiz message
+     * @param message appended message
+     * @return gsonified quiz message
+     */
     private String createQuizMessage(int code, String message) {
         return new Gson().toJson(new QuizMessage(code, message));
     }
 
+    /**
+     * Handles the message type: MSG_PULLIN_DATA
+     * @param b
+     * @return
+     */
     private String onPullInData(Bundle b){
         String data = b.getString("DATA");
         Log.d(TAG, "onPullInData: received message - " + data);
@@ -191,6 +202,9 @@ public class MessageHandler extends Handler {
         return data;
     }
 
+    /**
+     * Helps onPullInData parse through the data message(s).
+     */
     public List<QuizMessage> parseInData(String data) {
         Log.d(TAG, "parseInData: " + data);
         Gson gson = new Gson();
