@@ -36,6 +36,9 @@ import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_S
 import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_STARTSERVER;
 import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_REGISTER_ACTIVITY;
 
+/**
+ * Handles the messages over the WifiDirect connection.
+ */
 public class MessageHandler extends Handler {
 
     private static final String TAG = "MsgHnd";
@@ -43,7 +46,7 @@ public class MessageHandler extends Handler {
     private ConnectionManager mConnMan;
     private WifiDirectApp wifiDirectApp;
 
-    MainMenuActivity mActivity;
+//    private MainMenuActivity mActivity;
 
     MessageHandler(Looper looper, ConnectionManager connMan) {
         super(looper);
@@ -53,17 +56,13 @@ public class MessageHandler extends Handler {
 
     @Override
     public void handleMessage(Message msg) {
-        processMessage(msg);
-    }
-
-    private void processMessage(Message msg) {
         Log.d(TAG, "processMessage: message - " + msg.toString());
         switch (msg.what) {
             case MSG_NULL:
                 break;
-            case MSG_REGISTER_ACTIVITY:
-                onActivityRegister((MainMenuActivity) msg.obj, msg.arg1);
-                break;
+//            case MSG_REGISTER_ACTIVITY:
+//                onActivityRegister((MainMenuActivity) msg.obj, msg.arg1);
+//                break;
             case MSG_STARTSERVER:
                 if (mConnMan.startServerSelector() >= 0)
                     sendMessageToUpDatePeerListFragment();
@@ -116,18 +115,18 @@ public class MessageHandler extends Handler {
         }
     }
 
-    /**
-     * Register the activity that uses this service.
-     */
-    private void onActivityRegister(MainMenuActivity activity,
-                                    int register) {
-        Log.d(TAG, "onActivityRegister: activity register " +
-                "itself to service : " + register);
-        if (register == 1)
-            mActivity = activity;
-        else
-            mActivity = null;
-    }
+//    /**
+//     * Register the activity that uses this service.
+//     */
+//    private void onActivityRegister(MainMenuActivity activity,
+//                                    int register) {
+//        Log.d(TAG, "onActivityRegister: activity register " +
+//                "itself to service : " + register);
+//        if (register == 1)
+//            mActivity = activity;
+//        else
+//            mActivity = null;
+//    }
 
     private void sendMessageToUpDatePeerListFragment() {
         if (wifiDirectApp.mHomeActivity != null)

@@ -1,8 +1,5 @@
 package com.seniordesign.wolfpack.quizinator.WifiDirect;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -15,11 +12,10 @@ import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
 
-import com.google.gson.Gson;
-
-import com.seniordesign.wolfpack.quizinator.Activities.MainMenuActivity;
-import com.seniordesign.wolfpack.quizinator.Messages.QuizMessage;
-
+/**
+ *
+ * @url -> https://developer.android.com/reference/android/app/Service.html
+ */
 public class ConnectionService extends Service implements ChannelListener {
 
     private static final String TAG = "ConnServ";
@@ -32,9 +28,11 @@ public class ConnectionService extends Service implements ChannelListener {
     boolean retryChannel = false;
 
     WifiDirectApp wifiDirectApp;
-//    MainMenuActivity mActivity;
     ConnectionManager mConnMan;
 
+    /**
+     * Simple singleton.
+     */
     @Override
     public void onCreate() {
         super.onCreate();
@@ -45,17 +43,22 @@ public class ConnectionService extends Service implements ChannelListener {
         initializeConnectionService();
     }
 
+    /**
+     * Returns an instance of this service.
+     * @return the connection service
+     */
     public static ConnectionService getInstance() {
         return mInstance;
     }
 
+    /**
+     * Initializes a new Connection Service.
+     */
     private void initializeConnectionService() {
         Log.d(TAG, "initializeConnectionService");
-
         mWorkHandler = new WorkHandler(TAG);
         mHandler = new MessageHandler(mWorkHandler.getLooper(), mConnMan);
         mConnMan = new ConnectionManager(this);
-
         wifiDirectApp = (WifiDirectApp) getApplication();
         wifiDirectApp.mP2pMan = (WifiP2pManager)
                 getSystemService(Context.WIFI_P2P_SERVICE);
@@ -64,6 +67,10 @@ public class ConnectionService extends Service implements ChannelListener {
                         mWorkHandler.getLooper(), null);
     }
 
+    /**
+     * Creates new Connection Service and handles the intent.
+     * @param intent to be processed
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         initializeConnectionService();
@@ -91,16 +98,30 @@ public class ConnectionService extends Service implements ChannelListener {
         }
     }
 
+    /**
+     * Creates a new Binder.
+     * NEEDED FOR Service to be inherited
+     * @param intent *unimplemented* update intent of service
+     * @return new Binder object
+     */
     @Override
-    public IBinder onBind(Intent arg0) {
+    public IBinder onBind(Intent intent) {
         return new Binder();
     }
 
+    /**
+     * Returns the MessageHandler so that other classes can read messages.
+     */
     public Handler getHandler() {
+        //TODO -> external classes call this, they should not be able to
         return mHandler;
     }
 
+    /**
+     * Sends message(s) to peer(s).
+     */
     public static boolean sendMessage(int code, String message) {
+        //TODO -> external classes call this, they should not be able to
         Message result = getInstance().getHandler().obtainMessage();
             result.what = code;
             result.obj = message;
@@ -108,6 +129,12 @@ public class ConnectionService extends Service implements ChannelListener {
     }
 
 
+    /**
+     * Returns status of device.
+     * Used by Peer List label's.
+     * @param deviceStatus numerical value of device status
+     * @return string device status label
+     */
     public static String getDeviceStatus(int deviceStatus) {
         switch (deviceStatus) {
             case WifiP2pDevice.AVAILABLE:

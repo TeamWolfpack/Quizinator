@@ -59,7 +59,6 @@ class ServiceIntentHandler implements
                         mService, mWorkHandler);
                 break;
             case WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION:
-                //find all peers
                 deviceWifiPeersChangedAction();
                 break;
             case WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION:
