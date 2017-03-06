@@ -28,7 +28,7 @@ import android.util.Log;
  */
 public class ConnectionManager {
 
-    private final String TAG = "PTP_ConMan";
+    private final String TAG = "ConnMan";
 
     private ConnectionService mService;
     private WifiDirectApp mApp;

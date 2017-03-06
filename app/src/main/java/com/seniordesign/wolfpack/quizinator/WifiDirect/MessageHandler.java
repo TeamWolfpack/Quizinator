@@ -132,7 +132,7 @@ public class MessageHandler extends Handler {
         if (wifiDirectApp.mHomeActivity != null)
             wifiDirectApp.mHomeActivity.onConnectionInfoAvailable(wifiDirectApp.mP2pInfo);
     }
-    
+
     private void pushConfirmationOut(String data) {
         Log.d(TAG, "pushConfirmationOut: " + data);
         Confirmation confirmation = new Gson().fromJson(data,

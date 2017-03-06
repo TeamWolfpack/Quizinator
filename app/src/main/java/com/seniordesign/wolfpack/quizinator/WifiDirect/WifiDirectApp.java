@@ -206,6 +206,7 @@ public class WifiDirectApp extends Application {
     public void onResume(String tag,
                          HostGameActivity activity){
         Log.d(tag, "onResume called");
+        //mReceiver = new WiFiDirectBroadcastReceiver();
         mReceiver = new WiFiDirectBroadcastReceiver();
         registerReceiver(mReceiver, mIntentFilter);
         mHomeActivity = activity;

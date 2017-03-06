@@ -22,7 +22,7 @@ public class ConnectionService extends Service implements ChannelListener {
 
     private static ConnectionService mInstance = null;
 
-    private WorkHandler mWorkHandler;
+    WorkHandler mWorkHandler;
     private MessageHandler mHandler;
 
     boolean retryChannel = false;
@@ -57,25 +57,14 @@ public class ConnectionService extends Service implements ChannelListener {
     private void initializeConnectionService() {
         Log.d(TAG, "initializeConnectionService");
         mWorkHandler = new WorkHandler(TAG);
-        mHandler = new MessageHandler(mWorkHandler.getLooper(), mConnMan);
         mConnMan = new ConnectionManager(this);
+        mHandler = new MessageHandler(mWorkHandler.getLooper(), mConnMan);
         wifiDirectApp = (WifiDirectApp) getApplication();
         wifiDirectApp.mP2pMan = (WifiP2pManager)
                 getSystemService(Context.WIFI_P2P_SERVICE);
         wifiDirectApp.mP2pChannel =
                 wifiDirectApp.mP2pMan.initialize(this,
                         mWorkHandler.getLooper(), null);
-    }
-
-    /**
-     * Creates new Connection Service and handles the intent.
-     * @param intent to be processed
-     */
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        initializeConnectionService();
-        new ServiceIntentHandler(this, mConnMan, mWorkHandler, intent);
-        return START_STICKY;
     }
 
     /**
