@@ -1,13 +1,11 @@
 package com.seniordesign.wolfpack.quizinator.Fragments;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import android.app.ListFragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pInfo;
@@ -21,7 +19,7 @@ import android.widget.TextView;
 
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.PeerListAdapter;
+import com.seniordesign.wolfpack.quizinator.Adapters.PeerListAdapter;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
 /**
