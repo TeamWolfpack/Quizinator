@@ -263,6 +263,8 @@ public class GamePlayActivity extends AppCompatActivity {
     public void answerConfirmed(boolean correct) {
         if (correct)
             properties.setScore(properties.getScore() + properties.getCurrentCard().getPoints());
+        else if (properties.getCurrentCard().isDoubleEdge())
+            properties.setScore(Math.max(0,properties.getScore() - properties.getCurrentCard().getPoints()));
 
         runOnUiThread(new Runnable() {
             @Override
