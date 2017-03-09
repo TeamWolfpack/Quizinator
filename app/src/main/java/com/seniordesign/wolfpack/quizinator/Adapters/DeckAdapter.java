@@ -1,4 +1,4 @@
-package com.seniordesign.wolfpack.quizinator.Adapters;
+package com.seniordesign.wolfpack.quizinator.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,8 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES;
-import com.seniordesign.wolfpack.quizinator.Database.Card;
-import com.seniordesign.wolfpack.quizinator.Database.Deck;
+import com.seniordesign.wolfpack.quizinator.database.Card;
+import com.seniordesign.wolfpack.quizinator.database.Deck;
 import com.seniordesign.wolfpack.quizinator.R;
 
 import java.util.List;

@@ -1,6 +1,6 @@
-package com.seniordesign.wolfpack.quizinator.GameplayHandler;
+package com.seniordesign.wolfpack.quizinator.gameplayHandler;
 
-import com.seniordesign.wolfpack.quizinator.Activities.GamePlayActivity;
+import com.seniordesign.wolfpack.quizinator.activities.GamePlayActivity;
 
 public interface GamePlayHandler {
 

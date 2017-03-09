@@ -1,4 +1,4 @@
-package com.seniordesign.wolfpack.quizinator.WifiDirect;
+package com.seniordesign.wolfpack.quizinator.wifiDirect;
 
 public final class MessageCodes {
 

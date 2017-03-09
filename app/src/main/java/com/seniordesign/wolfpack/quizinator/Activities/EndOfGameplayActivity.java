@@ -1,4 +1,4 @@
-package com.seniordesign.wolfpack.quizinator.Activities;
+package com.seniordesign.wolfpack.quizinator.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.seniordesign.wolfpack.quizinator.Database.GamePlayStats;
-import com.seniordesign.wolfpack.quizinator.Database.HighScores;
-import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
+import com.seniordesign.wolfpack.quizinator.database.GamePlayStats;
+import com.seniordesign.wolfpack.quizinator.database.HighScores;
+import com.seniordesign.wolfpack.quizinator.database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
 
 public class EndOfGameplayActivity extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package com.seniordesign.wolfpack.quizinator.WifiDirect;
+package com.seniordesign.wolfpack.quizinator.wifiDirect;
 
 import android.app.Application;
 import android.content.Intent;
@@ -10,17 +10,17 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Message;
 import android.util.Log;
 
-import com.seniordesign.wolfpack.quizinator.Activities.GamePlayActivity;
-import com.seniordesign.wolfpack.quizinator.Activities.HostGameActivity;
-import com.seniordesign.wolfpack.quizinator.Activities.ManageGameplayActivity;
+import com.seniordesign.wolfpack.quizinator.activities.GamePlayActivity;
+import com.seniordesign.wolfpack.quizinator.activities.HostGameActivity;
+import com.seniordesign.wolfpack.quizinator.activities.ManageGameplayActivity;
 
 import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_STARTCLIENT;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_STARTSERVER;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_STARTCLIENT;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_STARTSERVER;
 
 /**
  * Creates an instance of a WifiDirect Application because it is a

@@ -1,4 +1,4 @@
-package com.seniordesign.wolfpack.quizinator.Fragments;
+package com.seniordesign.wolfpack.quizinator.fragments;
 
 import android.content.Context;
 import android.os.Bundle;

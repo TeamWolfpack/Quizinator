@@ -1,14 +1,10 @@
-package com.seniordesign.wolfpack.quizinator.Filters;
+package com.seniordesign.wolfpack.quizinator.filters;
 
 import android.text.Editable;
-import android.text.InputFilter;
-import android.text.Spanned;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
 import static com.seniordesign.wolfpack.quizinator.Constants.STRING_0;
-import static com.seniordesign.wolfpack.quizinator.Constants.STRING_00;
 
 /**
  * Filter will make sure the time inputs

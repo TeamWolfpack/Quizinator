@@ -6,7 +6,7 @@
     android:id="@+id/activity_new_game_settings"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.seniordesign.wolfpack.quizinator.Activities.NewGameSettingsActivity">
+    tools:context="com.seniordesign.wolfpack.quizinator.activities.NewGameSettingsActivity">
 
     <TableLayout
         android:layout_height="wrap_content"

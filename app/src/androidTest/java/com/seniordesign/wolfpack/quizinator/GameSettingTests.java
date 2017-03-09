@@ -6,7 +6,7 @@ import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.WindowManager;
-import com.seniordesign.wolfpack.quizinator.Activities.NewGameSettingsActivity;
+import com.seniordesign.wolfpack.quizinator.activities.NewGameSettingsActivity;
 
 import org.junit.Before;
 import org.junit.Rule;

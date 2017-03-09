@@ -1,4 +1,4 @@
-package com.seniordesign.wolfpack.quizinator.Activities;
+package com.seniordesign.wolfpack.quizinator.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,9 +19,10 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.activeandroid.ActiveAndroid;
 import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.R;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
+import com.seniordesign.wolfpack.quizinator.wifiDirect.ConnectionService;
 
 public class MainMenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -29,6 +30,7 @@ public class MainMenuActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActiveAndroid.initialize(this);
         setContentView(R.layout.activity_navigation_drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(Constants.MAIN_MENU);

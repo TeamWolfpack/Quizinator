@@ -27,32 +27,32 @@
         android:required="true" />
 
     <application
-        android:name=".WifiDirect.WifiDirectApp"
+        android:name=".wifiDirect.WifiDirectApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".Activities.DecksActivity" />
-        <activity android:name=".Activities.EndOfGameplayActivity" />
-        <activity android:name=".Activities.NewGameSettingsActivity" />
-        <activity android:name=".Activities.HostGameActivity"
+        <activity android:name=".activities.DecksActivity" />
+        <activity android:name=".activities.EndOfGameplayActivity" />
+        <activity android:name=".activities.NewGameSettingsActivity" />
+        <activity android:name=".activities.HostGameActivity"
             android:configChanges="orientation|screenSize" />
-        <activity android:name=".Activities.CardsActivity"
+        <activity android:name=".activities.CardsActivity"
             android:configChanges="orientation|screenSize" />
-        <activity android:name=".Activities.EditDeckActivity"
+        <activity android:name=".activities.EditDeckActivity"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".Activities.ManageGameplayActivity"
+        <activity android:name=".activities.ManageGameplayActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activities.GamePlayActivity"
+            android:name=".activities.GamePlayActivity"
             android:label="@string/app_name"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activities.MainMenuActivity"
+            android:name=".activities.MainMenuActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -61,7 +61,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".WifiDirect.WiFiDirectBroadcastReceiver">
+        <receiver android:name=".wifiDirect.WiFiDirectBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.net.wifi.p2p.STATE_CHANGED" />
                 <action android:name="android.net.wifi.p2p.PEERS_CHANGED" />
@@ -70,7 +70,7 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".WifiDirect.ConnectionService"
+        <service android:name=".wifiDirect.ConnectionService"
             android:enabled="true" />
 
         <meta-data android:name="AA_DB_NAME" android:value="wumbo" />

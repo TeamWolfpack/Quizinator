@@ -1,4 +1,4 @@
-package com.seniordesign.wolfpack.quizinator.Activities;
+package com.seniordesign.wolfpack.quizinator.activities;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,14 +21,14 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Constants;
-import com.seniordesign.wolfpack.quizinator.Database.Rules;
+import com.seniordesign.wolfpack.quizinator.database.Rules;
 import com.seniordesign.wolfpack.quizinator.R;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
-import com.seniordesign.wolfpack.quizinator.Fragments.PeerListFragment;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.WiFiDirectBroadcastReceiver;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
+import com.seniordesign.wolfpack.quizinator.wifiDirect.ConnectionService;
+import com.seniordesign.wolfpack.quizinator.fragments.PeerListFragment;
+import com.seniordesign.wolfpack.quizinator.wifiDirect.WiFiDirectBroadcastReceiver;
+import com.seniordesign.wolfpack.quizinator.wifiDirect.WifiDirectApp;
 
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_DISCONNECT_FROM_ALL_PEERS;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_DISCONNECT_FROM_ALL_PEERS;
 
 public class HostGameActivity
         extends AppCompatActivity

@@ -1,4 +1,4 @@
-package com.seniordesign.wolfpack.quizinator.Fragments;
+package com.seniordesign.wolfpack.quizinator.fragments;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +18,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.seniordesign.wolfpack.quizinator.R;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
-import com.seniordesign.wolfpack.quizinator.Adapters.PeerListAdapter;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
+import com.seniordesign.wolfpack.quizinator.wifiDirect.ConnectionService;
+import com.seniordesign.wolfpack.quizinator.adapters.PeerListAdapter;
+import com.seniordesign.wolfpack.quizinator.wifiDirect.WifiDirectApp;
 
 /**
  * A ListFragment that displays available peerDevicesList on discovery
