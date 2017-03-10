@@ -93,18 +93,20 @@
     <android.support.design.widget.FloatingActionButton
         app:srcCompat="@drawable/ic_redo_white_24dp"
         android:id="@+id/skip_question_button"
+        android:visibility="invisible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@id/toolbar"
         android:layout_margin="@dimen/fab_margin"
-        android:onClick="onDeleteClick"/>
+        android:onClick="onSkipQuestionClick"/>
 
     <TextView
         app:srcCompat="@drawable/ic_redo_white_24dp"
         android:id="@+id/double_edge_notifier"
+        android:visibility="invisible"
         android:textSize="18dp"
         android:textColor="@color/colorAccent"
         android:textStyle="bold"

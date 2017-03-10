@@ -150,7 +150,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
     public void endGame(View v) {
         if (v == null) {
             gameplayTimerRunning.cancel();
-            selectAndRespondToFastestAnswer();
+            autoSelectAnswers();
             String json = gson.toJson(rules.getTimeLimit() - gameplayTimerRemaining);
             ConnectionService.sendMessage(MSG_END_OF_GAME_ACTIVITY, json);
             startActivity(new Intent(ManageGameplayActivity.this, MainMenuActivity.class));
@@ -327,32 +327,28 @@ public class ManageGameplayActivity extends AppCompatActivity {
     private void noPlayerAnsweredFreeOrVerbalResponseCorrectly() {
         Log.d(TAG,"Moderator determined no one answered correctly");
         if(!multipleWinners) {
-            for (WifiP2pDevice device : wifiDirectApp.getConnectedPeers()) {
-                for(Answer answer : answers){
-                    if( answer.getAddress().equals(device.deviceAddress)){
-                        if(currentCard.isDoubleEdge() && !answer.getAnswer().isEmpty()) {
-                            String confirmation = gson.toJson(new Confirmation(device.deviceAddress, false));
-                            ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
-                        }
-                    }
+
+            for(Answer answer : answers){
+                if(currentCard.isDoubleEdge() && !answer.getAnswer().isEmpty()) {
+                    String confirmation = gson.toJson(new Confirmation(answer.getAddress(), false));
+                    ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+                }
+                else if(!currentCard.isDoubleEdge()){
+                    String confirmation = gson.toJson(new Confirmation(answer.getAddress(), false));
+                    ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
                 }
             }
         }
         else{
-            for (WifiP2pDevice device : wifiDirectApp.getConnectedPeers()) {
-                boolean answerSelected = false;
-                for(Answer answer : selectedAnswers){
-                    if(answer.getAddress().equals(device.deviceAddress))
-                        answerSelected = true;
-                }
-                if(!answerSelected) {
-                    for(Answer answer : answers){
-                        if( answer.getAddress().equals(device.deviceAddress)){
-                            if(currentCard.isDoubleEdge() && !answer.getAnswer().isEmpty()) {
-                                String confirmation = gson.toJson(new Confirmation(device.deviceAddress, false));
-                                ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
-                            }
-                        }
+            for (Answer answer : answers) {
+                if(!(selectedAnswers.contains(answer))) {
+                    if(currentCard.isDoubleEdge() && !answer.getAnswer().isEmpty()) {
+                        String confirmation = gson.toJson(new Confirmation(answer.getAddress(), false));
+                        ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+                    }
+                    else if(!currentCard.isDoubleEdge()){
+                        String confirmation = gson.toJson(new Confirmation(answer.getAddress(), false));
+                        ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
                     }
                 }
             }
@@ -372,7 +368,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
                 continue;
 
             for(Answer answer : answers){
-                if( answer.getAddress().equals(device.deviceAddress)){
+                if( device.deviceAddress.equals(selectedAnswer.getAddress())){
                     if(currentCard.isDoubleEdge() && !answer.getAnswer().isEmpty()) {
                         confirmation = gson.toJson(new Confirmation(device.deviceAddress, false));
                         ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
@@ -479,7 +475,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
 
     public int checkClientCount() {
         if (clientsResponded >= wifiDirectApp.getConnectedPeers().size()) {
-            selectAndRespondToFastestAnswer();
+            autoSelectAnswers();
             sendCard(null);
             clientsResponded = 0;
         }
@@ -513,5 +509,34 @@ public class ManageGameplayActivity extends AppCompatActivity {
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setText("Close");
         multipleWinners = true;
         selectedAnswers.add(selectedAnswer);
+    }
+
+    private void selectAndRespondToAnswers(){
+        for(Answer answerI : answers){
+            if(answerI.getAnswer().equals(currentCard.getCorrectAnswer())){
+                String confirmation = gson.toJson(new Confirmation(answerI.getAddress(), true));
+                ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+            }
+            else if(currentCard.isDoubleEdge() && !answerI.getAnswer().isEmpty()){
+                String confirmation = gson.toJson(new Confirmation(answerI.getAddress(), false));
+                ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+            }
+            else if(!currentCard.isDoubleEdge()) {
+                String confirmation = gson.toJson(new Confirmation(answerI.getAddress(), false));
+                ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+            }
+
+            answers = new ArrayList<>();
+        }
+    }
+
+    private void autoSelectAnswers(){
+        if(rules.getMultipleWinners()){
+            selectAndRespondToAnswers();
+        }
+        else{
+
+            selectAndRespondToFastestAnswer();
+        }
     }
 }

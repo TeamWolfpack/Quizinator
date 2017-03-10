@@ -59,12 +59,25 @@ public class MultiplayerHandler implements GamePlayHandler {
     }
 
     @Override
-    public long handleNextCard(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
+    public long handleNextCard(final GamePlayActivity gamePlayActivity,final GamePlayProperties properties) {
         properties.setHasAnswered(false);
         timeTaken = System.nanoTime();
         gamePlayActivity.showCard(properties.getCurrentCard());
         properties.setCardsPlayed(properties.getCardsPlayed()+1);
         properties.setCardTimerRunning(properties.getCardTimerStatic().start());
+        gamePlayActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (properties.getCurrentCard().isDoubleEdge()) {
+                    gamePlayActivity.findViewById(R.id.double_edge_notifier).setVisibility(View.VISIBLE);
+                    gamePlayActivity.findViewById(R.id.skip_question_button).setVisibility(View.VISIBLE);
+                } else {
+                    gamePlayActivity.findViewById(R.id.double_edge_notifier).setVisibility(View.INVISIBLE);
+                    gamePlayActivity.findViewById(R.id.skip_question_button).setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
         return properties.getCurrentCard().getId();
     }
 

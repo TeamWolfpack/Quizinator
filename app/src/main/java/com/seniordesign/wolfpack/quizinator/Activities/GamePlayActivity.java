@@ -281,4 +281,17 @@ public class GamePlayActivity extends AppCompatActivity {
         properties.setCardTimerAreaBackgroundRunning(properties.getCardTimerAreaBackgroundStatic().start());
         return true;
     }
+
+    public void onSkipQuestionClick(View v){
+        if(properties.getHasAnswered())
+            return;
+        gamePlayHandler.onFragmentInteraction(GamePlayActivity.this, properties, null);
+        properties.setHasAnswered(true);
+
+        // Wait for Moderator if time runs out
+        if (Boolean.parseBoolean(properties.getCurrentCard().getModeratorNeeded()))
+            return;
+
+        gamePlayHandler.handleNextCard(GamePlayActivity.this,properties);
+    }
 }
