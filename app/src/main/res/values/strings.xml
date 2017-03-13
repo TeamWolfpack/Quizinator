@@ -70,6 +70,7 @@
     <string name="cancel">Cancel</string>
     <string name="Delete">Delete</string>
     <string name="select_deck">Select Deck</string>
+    <string name="select_ruleset">Select Ruleset</string>
 
     <string name="type">Type</string>
     <string name="points">Points</string>
