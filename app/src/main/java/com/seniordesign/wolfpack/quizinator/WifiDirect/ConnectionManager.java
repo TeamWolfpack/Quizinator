@@ -114,7 +114,6 @@ public class ConnectionManager {
             mClientAddr = mClientSocketChannel.socket().getLocalAddress().getHostName();
             sChannel.register(mClientSelector, SelectionKey.OP_READ);
             mApp.setMyAddress(mClientAddr);
-            mApp.clearMessages();
             new SelectorAsyncTask(mService, mClientSelector).execute();
             return 0;
         } catch (Exception e) {

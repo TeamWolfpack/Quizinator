@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,22 +18,49 @@ import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 
 import java.util.List;
 
+import static android.graphics.Typeface.BOLD;
+
 public class PeerListAdapter extends ArrayAdapter<WifiP2pDevice>{
 
     private int selectedIndex = ListView.NO_ID;
     private boolean isHost;
+    private boolean connected;
+    private int connectedIndex = ListView.NO_ID;
     private List<WifiP2pDevice> devices;
 
     public PeerListAdapter(Context context, int textViewResourceId,
-                               List<WifiP2pDevice> devices) {
+                               List<WifiP2pDevice> devices, boolean isHost) {
         super(context, textViewResourceId, devices);
         this.devices = devices;
+        this.isHost = isHost;
     }
 
-    public void setSelectedIndex(int index, boolean isHost){
+    public void setSelectedIndex(int index){
         this.selectedIndex = index;
-        this.isHost = isHost;
-        // re-draw the list by informing the view of the changes
+        notifyDataSetChanged();
+    }
+
+    public WifiP2pDevice getSelectedDevice() {
+        return devices.get(selectedIndex);
+    }
+
+    public void addPeers(List<WifiP2pDevice> peers) {
+        devices = peers;
+        clear();
+        addAll(devices);
+        notifyDataSetChanged();
+    }
+
+    public void clearPeers() {
+        devices.clear();
+        clear();
+        notifyDataSetChanged();
+    }
+
+    public void setConnected(boolean connected) {
+        this.connected = connected;
+        if (connected)
+            connectedIndex = selectedIndex;
         notifyDataSetChanged();
     }
 
@@ -54,18 +82,20 @@ public class PeerListAdapter extends ArrayAdapter<WifiP2pDevice>{
                     TextView) v.findViewById(R.id.device_name);
             TextView deviceDetailsTextView =
                     (TextView) v.findViewById(R.id.device_details);
-            if (deviceNameTextView != null) {
-                deviceNameTextView.setText(peerDevice.deviceName);
-            }
-            if (deviceDetailsTextView != null) {
-                deviceDetailsTextView.setText(
-                        ConnectionService.getDeviceStatus(
-                                peerDevice.status));
-            }
-            LinearLayout buttons =
-                    (LinearLayout) v.findViewById(R.id.buttonsPanel);
+            deviceNameTextView.setText(peerDevice.deviceName);
+            deviceDetailsTextView.setText(
+                    ConnectionService.getDeviceStatus(peerDevice.status));
+            LinearLayout buttons = (LinearLayout) v.findViewById(R.id.buttonsPanel);
             if(!isHost && position == selectedIndex){
                 buttons.setVisibility(View.VISIBLE);
+                Button connectButton = (Button) v.findViewById(R.id.btn_connect);
+                Button disconnectButton = (Button) v.findViewById(R.id.btn_disconnect);
+                if (connected && position == connectedIndex) {
+                    //deviceNameTextView.setTypeface(null, BOLD);
+                    //deviceDetailsTextView.setTypeface(null, BOLD);
+                    connectButton.setEnabled(false);
+                    disconnectButton.setEnabled(true);
+                }
             }else{
                 buttons.setVisibility(View.GONE);
             }

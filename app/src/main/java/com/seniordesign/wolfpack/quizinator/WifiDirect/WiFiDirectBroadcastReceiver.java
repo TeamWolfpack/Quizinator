@@ -114,13 +114,13 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver
         wifiDirectApp.mPeers.clear();
         wifiDirectApp.mPeers.addAll(peerList.getDeviceList());
         if (wifiDirectApp.mP2pInfo != null &&
-                wifiDirectApp.getConnectedPeer() != null &&
+                wifiDirectApp.getConnectedPeers().size() > 0 &&
                 wifiDirectApp.mP2pInfo.groupFormed &&
                 wifiDirectApp.mP2pInfo.isGroupOwner) {
             wifiDirectApp.startSocketServer();
         }
         if (wifiDirectApp.mHomeActivity != null)
-            wifiDirectApp.mHomeActivity.onPeersAvailable(peerList);
+            wifiDirectApp.mHomeActivity.onPeersAvailable();
     }
 
     /**
@@ -145,8 +145,11 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver
             wifiDirectApp.mP2pConnected = false;
             wifiDirectApp.mP2pInfo = null;
             ConnectionService.getInstance().mConnMan.closeClient();
-            if (wifiDirectApp.mHomeActivity != null)
+            if (wifiDirectApp.mHomeActivity != null) {
                 wifiDirectApp.mHomeActivity.resetData();
+                if (!wifiDirectApp.mIsServer)
+                    wifiDirectApp.mHomeActivity.discoverPeers();
+            }
             if (wifiDirectApp.mGameplayActivity != null)
                 wifiDirectApp.mGameplayActivity.endGamePlay();
             return false;
