@@ -98,7 +98,7 @@
     <string name="correct_answer_label">Correct Answer(s)</string>
 
     <!--ANSWER FRAGMENT BUTTONS-->
-    <string name="frag_answer_buzzer">Buzzer</string>
+    <string name="frag_answer_buzzer">Buzz In</string>
     <string name="frag_answer_submit">Submit</string>
     <string name="frag_answer_A">A</string>
     <string name="frag_answer_B">B</string>
