@@ -112,8 +112,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     }
 
     private BaseMultiSelectSpinner.MultiSpinnerListener initializeMultiSpinnerListener(){
-        final BaseMultiSelectSpinner.MultiSpinnerListener
-                multiSpinnerListener = new BaseMultiSelectSpinner.MultiSpinnerListener() {
+        return new BaseMultiSelectSpinner.MultiSpinnerListener() {
             @Override
             public void onItemsSelected(boolean[] selected) {
                 selectedCardTypes.clear();
@@ -131,19 +130,19 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                 filterCardCount(filteredDeck);
             }
         };
-        return multiSpinnerListener;
     }
 
     private void initializeRulesetSpinner(){
-        Spinner rulesetSpinner = (Spinner) findViewById(R.id.nav_quiz_bowl_rules);
+        Spinner rulesetSpinner = (Spinner) findViewById(R.id.ruleset_spinner);
         List<String> rulesetNames = new ArrayList<>();
         for(Rules rule : dataSource.getAllRules()){
             //TODO -> update this when rulesets are implemented
             rulesetNames.add(rule.toString());
         }
-        final ArrayAdapter<String> deckAdapter = new ArrayAdapter<>(this,
+        final ArrayAdapter<String> rulesetAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, rulesetNames);
-        rulesetSpinner.setAdapter(deckAdapter);
+        rulesetAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        rulesetSpinner.setAdapter(rulesetAdapter);
         rulesetSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -184,36 +183,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         deckSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String name = deckAdapter.getItem(position);
-                for (Deck deck: dataSource.getAllDecks()) {
-                    if (deck.getDeckName().equals(name)) {
-                        Log.d(TAG, "Deck ID is " + deck.getId());
-                        // update the card type spinner with any new card types
-                        cardTypeOptions = formatCardTypes(deck);
-                        ArrayAdapter<CARD_TYPES> cardTypeAdapter = new ArrayAdapter<>(NewGameSettingsActivity.this,
-                                android.R.layout.simple_list_item_multiple_choice, cardTypeOptions);
-                        cardTypeSpinner
-                                .setListAdapter(cardTypeAdapter)
-                                .setAllCheckedText(ALL_CARD_TYPES)
-                                .setAllUncheckedText(NO_CARD_TYPES)
-                                .setMinSelectedItems(1)
-                                .setListener(multiSpinnerListener);
-                        for (CARD_TYPES type: selectedCardTypes) {
-                            if (cardTypeOptions.indexOf(type) > -1)
-                                cardTypeSpinner.selectItem(cardTypeOptions.indexOf(type), true);
-                        }
-                        Deck filteredDeck = dataSource.getFilteredDeck(deck.getId(), selectedCardTypes, wifiDirectApp.mIsServer);
-
-                        if (isInputZero(cardCountInput) ||
-                                isInputEmpty(cardCountInput) ||
-                                Integer.valueOf(cardCountInput.getText().toString()) > filteredDeck.getCards().size())
-                            cardCountInput.setText(String.valueOf(filteredDeck.getCards().size()));
-                        filterCardCount(filteredDeck);
-
-                        NewGameSettingsActivity.this.deck = filteredDeck;
-                        break;
-                    }
-                }
+                deckItemListener(position, deckAdapter, multiSpinnerListener);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) { /* Do nothing */ }
@@ -221,6 +191,40 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         for (int i = 0; i < deckNames.size(); i++) {
             if (deckNames.get(i).equals(deck.getDeckName())) {
                 deckSpinner.setSelection(i);
+                break;
+            }
+        }
+    }
+
+    private void deckItemListener(int position, ArrayAdapter<String> deckAdapter,
+                  BaseMultiSelectSpinner.MultiSpinnerListener multiSpinnerListener){
+        String name = deckAdapter.getItem(position);
+        for (Deck deck: dataSource.getAllDecks()) {
+            if (deck.getDeckName().equals(name)) {
+                Log.d(TAG, "Deck ID is " + deck.getId());
+                // update the card type spinner with any new card types
+                cardTypeOptions = formatCardTypes(deck);
+                ArrayAdapter<CARD_TYPES> cardTypeAdapter = new ArrayAdapter<>(NewGameSettingsActivity.this,
+                        android.R.layout.simple_list_item_multiple_choice, cardTypeOptions);
+                cardTypeSpinner
+                        .setListAdapter(cardTypeAdapter)
+                        .setAllCheckedText(ALL_CARD_TYPES)
+                        .setAllUncheckedText(NO_CARD_TYPES)
+                        .setMinSelectedItems(1)
+                        .setListener(multiSpinnerListener);
+                for (CARD_TYPES type: selectedCardTypes) {
+                    if (cardTypeOptions.indexOf(type) > -1)
+                        cardTypeSpinner.selectItem(cardTypeOptions.indexOf(type), true);
+                }
+                Deck filteredDeck = dataSource.getFilteredDeck(deck.getId(), selectedCardTypes, wifiDirectApp.mIsServer);
+
+                if (isInputZero(cardCountInput) ||
+                        isInputEmpty(cardCountInput) ||
+                        Integer.valueOf(cardCountInput.getText().toString()) > filteredDeck.getCards().size())
+                    cardCountInput.setText(String.valueOf(filteredDeck.getCards().size()));
+                filterCardCount(filteredDeck);
+
+                NewGameSettingsActivity.this.deck = filteredDeck;
                 break;
             }
         }
