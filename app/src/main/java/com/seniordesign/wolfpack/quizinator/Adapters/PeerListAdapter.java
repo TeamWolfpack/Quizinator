@@ -18,8 +18,6 @@ import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 
 import java.util.List;
 
-import static android.graphics.Typeface.BOLD;
-
 public class PeerListAdapter extends ArrayAdapter<WifiP2pDevice>{
 
     private int selectedIndex = ListView.NO_ID;
@@ -85,21 +83,25 @@ public class PeerListAdapter extends ArrayAdapter<WifiP2pDevice>{
             deviceNameTextView.setText(peerDevice.deviceName);
             deviceDetailsTextView.setText(
                     ConnectionService.getDeviceStatus(peerDevice.status));
-            LinearLayout buttons = (LinearLayout) v.findViewById(R.id.buttonsPanel);
-            if(!isHost && position == selectedIndex){
-                buttons.setVisibility(View.VISIBLE);
-                Button connectButton = (Button) v.findViewById(R.id.btn_connect);
-                Button disconnectButton = (Button) v.findViewById(R.id.btn_disconnect);
-                if (connected && position == connectedIndex) {
-                    //deviceNameTextView.setTypeface(null, BOLD);
-                    //deviceDetailsTextView.setTypeface(null, BOLD);
-                    connectButton.setEnabled(false);
-                    disconnectButton.setEnabled(true);
-                }
-            }else{
-                buttons.setVisibility(View.GONE);
-            }
+            handleButtonsPanel(v, position);
         }
         return v;
+    }
+
+    private void handleButtonsPanel(View v, int position){
+        LinearLayout buttons = (LinearLayout) v.findViewById(R.id.buttonsPanel);
+        Button connectButton = (Button) v.findViewById(R.id.btn_connect);
+        Button disconnectButton = (Button) v.findViewById(R.id.btn_disconnect);
+        if(!isHost && position == selectedIndex){
+            buttons.setVisibility(View.VISIBLE);
+            if(connected && position == connectedIndex){
+                connectButton.setEnabled(false);
+                disconnectButton.setEnabled(true);
+            }else if(connected){
+                buttons.setVisibility(View.GONE);
+            }
+        }else{
+            buttons.setVisibility(View.GONE);
+        }
     }
 }
