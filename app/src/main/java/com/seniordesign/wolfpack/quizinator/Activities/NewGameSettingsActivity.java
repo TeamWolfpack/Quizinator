@@ -135,7 +135,25 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     }
 
     private void initializeRulesetSpinner(){
-
+        Spinner rulesetSpinner = (Spinner) findViewById(R.id.nav_quiz_bowl_rules);
+        List<String> rulesetNames = new ArrayList<>();
+        for(Rules rule : dataSource.getAllRules()){
+            //TODO -> update this when rulesets are implemented
+            rulesetNames.add(rule.toString());
+        }
+        final ArrayAdapter<String> deckAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, rulesetNames);
+        rulesetSpinner.setAdapter(deckAdapter);
+        rulesetSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //TODO -> update this when rulesets are implemented
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                //TODO -> update this when rulesets are implemented
+            }
+        });
     }
 
     private void initializeCardSpinner(final BaseMultiSelectSpinner.MultiSpinnerListener multiSpinnerListener){
