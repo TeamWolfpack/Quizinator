@@ -28,6 +28,7 @@ import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.Messages.Answer;
 import com.seniordesign.wolfpack.quizinator.Messages.Confirmation;
+import com.seniordesign.wolfpack.quizinator.Util;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
@@ -277,15 +278,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
         TextView points = (TextView) findViewById(R.id.current_card_points);
             points.setText(getResources().getText(R.string.points) + ": " + card.getPoints());
 
-        ImageView type = (ImageView) findViewById(R.id.current_card_type_icon);
-            if (card.getCardType() == TRUE_FALSE.ordinal())
-                type.setImageResource(R.drawable.tf_icon);
-            else if (card.getCardType() == MULTIPLE_CHOICE.ordinal())
-                type.setImageResource(R.drawable.mc_icon);
-            else if (card.getCardType() == FREE_RESPONSE.ordinal())
-                type.setImageResource(R.drawable.fr_icon);
-            else if (card.getCardType() == VERBAL_RESPONSE.ordinal())
-                type.setImageResource(R.drawable.vr_icon);
+        Util.updateCardTypeIcon(card, (ImageView) findViewById(R.id.current_card_type_icon));
 
         TextView answerLabel = (TextView) findViewById(R.id.current_card_answer_label);
             answerLabel.setText(R.string.correct_answer_label);
