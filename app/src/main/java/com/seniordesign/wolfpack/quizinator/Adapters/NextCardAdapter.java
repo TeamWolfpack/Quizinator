@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Database.Card;
 import com.seniordesign.wolfpack.quizinator.R;
+import com.seniordesign.wolfpack.quizinator.Util;
 
 import java.util.Collections;
 import java.util.List;
@@ -62,21 +63,7 @@ public class NextCardAdapter extends BaseAdapter {
 
         if (card != null) {
             ImageView icon = (ImageView) v.findViewById(R.id.card_type_icon);
-            Constants.CARD_TYPES cardType = Constants.CARD_TYPES.values()[card.getCardType()];
-            switch(cardType) {
-                case TRUE_FALSE:
-                    icon.setImageResource(R.drawable.tf_icon);
-                    break;
-                case MULTIPLE_CHOICE:
-                    icon.setImageResource(R.drawable.mc_icon);
-                    break;
-                case FREE_RESPONSE:
-                    icon.setImageResource(R.drawable.fr_icon);
-                    break;
-                case VERBAL_RESPONSE:
-                    icon.setImageResource(R.drawable.vr_icon);
-                    break;
-            }
+            Util.updateCardTypeIcon(card, icon);
             TextView question = (TextView) v.findViewById(R.id.array_adapter_card_question);
             question.setText(card.getQuestion());
         }
