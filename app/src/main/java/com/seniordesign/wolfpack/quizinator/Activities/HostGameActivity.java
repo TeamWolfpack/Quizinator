@@ -202,7 +202,9 @@ public class HostGameActivity
         Log.d(TAG, "resetData: resetting the data");
         runOnUiThread(new Runnable() {
             @Override public void run() {
-                getPeerListFragment().clearPeers();
+                PeerListFragment peerListFragment = getPeerListFragment();
+                peerListFragment.setConnected(false);
+                peerListFragment.clearPeers();
             }
         });
     }

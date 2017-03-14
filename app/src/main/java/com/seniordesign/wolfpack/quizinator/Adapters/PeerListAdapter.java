@@ -24,12 +24,10 @@ public class PeerListAdapter extends ArrayAdapter<WifiP2pDevice>{
     private boolean isHost;
     private boolean connected;
     private int connectedIndex = ListView.NO_ID;
-    private List<WifiP2pDevice> devices;
 
     public PeerListAdapter(Context context, int textViewResourceId,
-                               List<WifiP2pDevice> devices, boolean isHost) {
+                           List<WifiP2pDevice> devices, boolean isHost) {
         super(context, textViewResourceId, devices);
-        this.devices = devices;
         this.isHost = isHost;
     }
 
@@ -39,26 +37,33 @@ public class PeerListAdapter extends ArrayAdapter<WifiP2pDevice>{
     }
 
     public WifiP2pDevice getSelectedDevice() {
-        return devices.get(selectedIndex);
+        return getItem(selectedIndex);
     }
 
     public void addPeers(List<WifiP2pDevice> peers) {
-        devices = peers;
         clear();
-        addAll(devices);
+        addAll(peers);
+        if (!isHost && connected && !peers.isEmpty() &&
+                peers.get(0).status == WifiP2pDevice.CONNECTED) {
+            selectedIndex = 0;
+            connectedIndex = 0;
+        }
         notifyDataSetChanged();
     }
 
     public void clearPeers() {
-        devices.clear();
         clear();
         notifyDataSetChanged();
     }
 
     public void setConnected(boolean connected) {
         this.connected = connected;
-        if (connected)
+        if (connected) {
             connectedIndex = selectedIndex;
+        } else {
+            connectedIndex = ListView.NO_ID;
+            selectedIndex = ListView.NO_ID;
+        }
         notifyDataSetChanged();
     }
 
@@ -74,7 +79,7 @@ public class PeerListAdapter extends ArrayAdapter<WifiP2pDevice>{
             vi = LayoutInflater.from(getContext());
             v = vi.inflate(R.layout.row_devices, null);
         }
-        WifiP2pDevice peerDevice = devices.get(position);
+        WifiP2pDevice peerDevice = getItem(position);
         if (peerDevice != null) {
             TextView deviceNameTextView = (
                     TextView) v.findViewById(R.id.device_name);
@@ -92,16 +97,28 @@ public class PeerListAdapter extends ArrayAdapter<WifiP2pDevice>{
         LinearLayout buttons = (LinearLayout) v.findViewById(R.id.buttonsPanel);
         Button connectButton = (Button) v.findViewById(R.id.btn_connect);
         Button disconnectButton = (Button) v.findViewById(R.id.btn_disconnect);
-        if(!isHost && position == selectedIndex){
-            buttons.setVisibility(View.VISIBLE);
-            if(connected && position == connectedIndex){
+
+        //Always show connected Host buttons
+        if (connected) {
+            if(position == connectedIndex) {
+                buttons.setVisibility(View.VISIBLE);
                 connectButton.setEnabled(false);
                 disconnectButton.setEnabled(true);
-            }else if(connected){
+            } else {
                 buttons.setVisibility(View.GONE);
             }
-        }else{
-            buttons.setVisibility(View.GONE);
+        } else {
+            if(!isHost && position == selectedIndex){
+                buttons.setVisibility(View.VISIBLE);
+                if(connected && position == connectedIndex){
+                    connectButton.setEnabled(false);
+                    disconnectButton.setEnabled(true);
+                }else if(connected){
+                    buttons.setVisibility(View.GONE);
+                }
+            }else{
+                buttons.setVisibility(View.GONE);
+            }
         }
     }
 }
