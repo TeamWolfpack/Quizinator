@@ -2,14 +2,20 @@ package com.seniordesign.wolfpack.quizinator.Activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.os.CountDownTimer;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -66,6 +72,10 @@ public class ManageGameplayActivity extends AppCompatActivity {
     public static final String TAG = "ACT_MANAGE";
 
     private ArrayList<Answer> answers;
+    private ArrayList<Answer> selectedAnswers;
+
+    private boolean doubleEdgeActive = false;
+    private boolean multipleWinners = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +117,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
         clientsResponded=0;
         if(cardsPlayed < cardLimit) {
             currentCard = (Card)nextCardSpinner.getSelectedItem();
+            currentCard.setDoubleEdge(doubleEdgeActive);
             String json = gson.toJson(currentCard);
             ConnectionService.sendMessage(MSG_SEND_CARD_ACTIVITY, json);
             cardsPlayed++;
@@ -139,7 +150,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
     public void endGame(View v) {
         if (v == null) {
             gameplayTimerRunning.cancel();
-            selectAndRespondToFastestAnswer();
+            autoSelectAnswers();
             String json = gson.toJson(rules.getTimeLimit() - gameplayTimerRemaining);
             ConnectionService.sendMessage(MSG_END_OF_GAME_ACTIVITY, json);
             startActivity(new Intent(ManageGameplayActivity.this, MainMenuActivity.class));
@@ -315,10 +326,32 @@ public class ManageGameplayActivity extends AppCompatActivity {
 
     private void noPlayerAnsweredFreeOrVerbalResponseCorrectly() {
         Log.d(TAG,"Moderator determined no one answered correctly");
+        if(!multipleWinners) {
 
-        for (WifiP2pDevice device : wifiDirectApp.getConnectedPeers()) {
-            String confirmation = gson.toJson(new Confirmation(device.deviceAddress, false));
-            ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+            for(Answer answer : answers){
+                if(currentCard.isDoubleEdge() && !answer.getAnswer().isEmpty()) {
+                    String confirmation = gson.toJson(new Confirmation(answer.getAddress(), false));
+                    ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+                }
+                else if(!currentCard.isDoubleEdge()){
+                    String confirmation = gson.toJson(new Confirmation(answer.getAddress(), false));
+                    ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+                }
+            }
+        }
+        else{
+            for (Answer answer : answers) {
+                if(!(selectedAnswers.contains(answer))) {
+                    if(currentCard.isDoubleEdge() && !answer.getAnswer().isEmpty()) {
+                        String confirmation = gson.toJson(new Confirmation(answer.getAddress(), false));
+                        ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+                    }
+                    else if(!currentCard.isDoubleEdge()){
+                        String confirmation = gson.toJson(new Confirmation(answer.getAddress(), false));
+                        ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+                    }
+                }
+            }
         }
         answers = new ArrayList<>();
     }
@@ -334,11 +367,16 @@ public class ManageGameplayActivity extends AppCompatActivity {
             if (device.deviceAddress.equals(selectedAnswer.getAddress()))
                 continue;
 
-            confirmation = gson.toJson(new Confirmation(device.deviceAddress, false));
-            ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+            for(Answer answer : answers){
+                if( device.deviceAddress.equals(selectedAnswer.getAddress())){
+                    if(currentCard.isDoubleEdge() && !answer.getAnswer().isEmpty()) {
+                        confirmation = gson.toJson(new Confirmation(device.deviceAddress, false));
+                        ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+                    }
+                }
+            }
         }
         answers = new ArrayList<>();
-        alertDialog.cancel();
     }
 
     private long selectAndRespondToFastestAnswer(){
@@ -350,19 +388,25 @@ public class ManageGameplayActivity extends AppCompatActivity {
                 if(fastestCorrectAnswer==null || answerI.getTimeTaken()<fastestCorrectAnswer.getTimeTaken()){
                     if(fastestCorrectAnswer!=null){
                         Log.d(TAG,"Setting Fastest Answer");
-                        String confirmation = gson.toJson(new Confirmation(fastestCorrectAnswer.getAddress(), false));
-                        ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+                        if(currentCard.isDoubleEdge() && !fastestCorrectAnswer.getAnswer().isEmpty()) {
+                            String confirmation = gson.toJson(new Confirmation(fastestCorrectAnswer.getAddress(), false));
+                            ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+                        }
                     }
                     fastestCorrectAnswer = answerI;
                 }
                 else{
-                    String confirmation = gson.toJson(new Confirmation(answerI.getAddress(), false));
-                    ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+                    if(currentCard.isDoubleEdge() && !answerI.getAnswer().isEmpty()) {
+                        String confirmation = gson.toJson(new Confirmation(answerI.getAddress(), false));
+                        ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+                    }
                 }
             }
             else{
-                String confirmation = gson.toJson(new Confirmation(answerI.getAddress(), false));
-                ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+                if(currentCard.isDoubleEdge() && !answerI.getAnswer().isEmpty()) {
+                    String confirmation = gson.toJson(new Confirmation(answerI.getAddress(), false));
+                    ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+                }
             }
         }
         Log.d(TAG,"Found Fastest Answer");
@@ -376,6 +420,8 @@ public class ManageGameplayActivity extends AppCompatActivity {
     }
 
     private void handlePlayerDialog(View dialogView, boolean mustPickWinner) {
+        selectedAnswers = new ArrayList<Answer>();
+        multipleWinners = false;
         final ListView playersDialogList = (ListView) dialogView.findViewById(R.id.active_player_dialog_list);
 
         TextView correctAnswerLabel = (TextView) dialogView.findViewById(R.id.dialog_correct_answer_label);
@@ -394,28 +440,103 @@ public class ManageGameplayActivity extends AppCompatActivity {
             correctAnswerLabel.setVisibility(View.GONE);
             correctAnswer.setVisibility(View.GONE);
         }
-
         playersDialogList.setAdapter(playerAdapter);
 
         if (mustPickWinner) {
-            playersDialogList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Answer answer = (Answer) playersDialogList.getAdapter().getItem(i);
-                    selectAndRespondToSelectedAnswer(answer);
-                    sendCard(null);
-                    clientsResponded = 0;
-                }
-            });
+
+            if(rules.getMultipleWinners())
+            {
+                //Allow for multiple correct answers
+                playersDialogList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Answer answer = (Answer) playersDialogList.getAdapter().getItem(i);
+                        selectAndRespondToMultipleSelectedAnswers(answer);
+                    }
+                });
+            }
+            else {
+                playersDialogList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Answer answer = (Answer) playersDialogList.getAdapter().getItem(i);
+                        selectAndRespondToSelectedAnswer(answer);
+                        sendCard(null);
+                        clientsResponded = 0;
+                    }
+                });
+            }
+
+
+
+
         }
     }
 
     public int checkClientCount() {
         if (clientsResponded >= wifiDirectApp.getConnectedPeers().size()) {
-            selectAndRespondToFastestAnswer();
+            autoSelectAnswers();
             sendCard(null);
             clientsResponded = 0;
         }
         return wifiDirectApp.getConnectedPeers().size();
+    }
+
+    public void doubleEdgeSelect(View v) {
+        if(rules.getDoubleEdgeSword()){
+            doubleEdgeActive = !doubleEdgeActive;
+            if(doubleEdgeActive){
+                v.setBackgroundColor(ContextCompat.getColor(this,R.color.colorDoublePointsActive));
+            }else{
+                v.setBackgroundColor(ContextCompat.getColor(this,android.R.color.transparent));
+            }
+        }
+
+    }
+
+    private void selectAndRespondToMultipleSelectedAnswers(Answer selectedAnswer){
+        if(selectedAnswers == null){
+            selectedAnswers = new ArrayList<Answer>();
+        }
+        if(selectedAnswers.contains(selectedAnswer))
+            return;
+        Log.d(TAG,"selecting Selected Answer");
+
+        // Selected Player gets the points
+        String confirmation = gson.toJson(new Confirmation(selectedAnswer.getAddress(), true));
+        ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setText("Close");
+        multipleWinners = true;
+        selectedAnswers.add(selectedAnswer);
+    }
+
+    private void selectAndRespondToAnswers(){
+        for(Answer answerI : answers){
+            if(answerI.getAnswer().equals(currentCard.getCorrectAnswer())){
+                String confirmation = gson.toJson(new Confirmation(answerI.getAddress(), true));
+                ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+            }
+            else if(currentCard.isDoubleEdge() && !answerI.getAnswer().isEmpty()){
+                String confirmation = gson.toJson(new Confirmation(answerI.getAddress(), false));
+                ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+            }
+            else if(!currentCard.isDoubleEdge()) {
+                String confirmation = gson.toJson(new Confirmation(answerI.getAddress(), false));
+                ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+            }
+
+            answers = new ArrayList<>();
+        }
+    }
+
+    private void autoSelectAnswers(){
+        if(rules.getMultipleWinners()){
+            selectAndRespondToAnswers();
+        }
+        else{
+
+            selectAndRespondToFastestAnswer();
+        }
     }
 }

@@ -102,6 +102,15 @@
             <Button
                 android:background="@android:color/transparent"
                 android:textColor="@color/colorAccent"
+                android:id="@+id/double_edge"
+                android:onClick="doubleEdgeSelect"
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="0.2"
+                android:text="@string/double_edge"/>
+            <Button
+                android:background="@android:color/transparent"
+                android:textColor="@color/colorAccent"
                 android:id="@+id/send_card"
                 android:onClick="sendCard"
                 android:layout_height="match_parent"

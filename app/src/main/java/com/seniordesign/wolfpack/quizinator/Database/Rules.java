@@ -19,6 +19,8 @@ public class Rules {
     private long timeLimit;
     private long cardDisplayTime;
     private long deckId;
+    private boolean doubleEdgeSword;
+    private boolean multipleWinners;
     /*
      * Using String because going to use an Array of Strings to limit what choice
      * of Card Type in that class instead of using an enum. We thought this
@@ -83,4 +85,20 @@ public class Rules {
     public long getDeckId() { return deckId; }
 
     public void setDeckId(long deckId) { this.deckId = deckId; }
+
+    public boolean getDoubleEdgeSword() {
+        //TODO Return proper val
+        return true;
+    }
+    public void setDoubleEdgeSword(boolean doubleEdgeSword) {
+        this.doubleEdgeSword = doubleEdgeSword;
+    }
+
+    public boolean getMultipleWinners() {
+        //TODO Return proper val
+        return true;
+    }
+    public void setMultipleWinners(boolean multipleWinners) {
+        this.multipleWinners = multipleWinners;
+    }
 }

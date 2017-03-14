@@ -263,6 +263,8 @@ public class GamePlayActivity extends AppCompatActivity {
     public void answerConfirmed(boolean correct) {
         if (correct)
             properties.setScore(properties.getScore() + properties.getCurrentCard().getPoints());
+        else if (properties.getCurrentCard().isDoubleEdge())
+            properties.setScore(Math.max(0,properties.getScore() - properties.getCurrentCard().getPoints()));
 
         runOnUiThread(new Runnable() {
             @Override
@@ -278,5 +280,18 @@ public class GamePlayActivity extends AppCompatActivity {
         setCorrectnessColors(correct);
         properties.setCardTimerAreaBackgroundRunning(properties.getCardTimerAreaBackgroundStatic().start());
         return true;
+    }
+
+    public void onSkipQuestionClick(View v){
+        if(properties.getHasAnswered())
+            return;
+        gamePlayHandler.onFragmentInteraction(GamePlayActivity.this, properties, null);
+        properties.setHasAnswered(true);
+
+        // Wait for Moderator if time runs out
+        if (Boolean.parseBoolean(properties.getCurrentCard().getModeratorNeeded()))
+            return;
+
+        gamePlayHandler.handleNextCard(GamePlayActivity.this,properties);
     }
 }
