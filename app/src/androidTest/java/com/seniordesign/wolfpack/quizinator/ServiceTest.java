@@ -1,6 +1,7 @@
 package com.seniordesign.wolfpack.quizinator;
 
 import android.content.Intent;
+import android.renderscript.RenderScript;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.MediumTest;
 import android.support.test.rule.ServiceTestRule;
@@ -12,6 +13,7 @@ import com.seniordesign.wolfpack.quizinator.Messages.Confirmation;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionManager;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.Messages.QuizMessage;
+import com.seniordesign.wolfpack.quizinator.WifiDirect.MessageHandler;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
 import org.junit.Before;
@@ -53,7 +55,7 @@ public class ServiceTest {
         String message1 = gson.toJson(new QuizMessage(
                 MSG_SEND_ANSWER_ACTIVITY, answer));
 
-        List<QuizMessage> messages = service.parseInData(message1);
+        List<QuizMessage> messages = ((MessageHandler)service.getHandler()).parseInData(message1);
 
         assertTrue("Only one message parsed", messages.size() == 1);
 
@@ -70,7 +72,7 @@ public class ServiceTest {
         String message2 = gson.toJson(new QuizMessage(
                 MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation));
 
-        List<QuizMessage> messages = service.parseInData(message1 + message2);
+        List<QuizMessage> messages = ((MessageHandler)service.getHandler()).parseInData(message1 + message2);
 
         assertTrue("Both messages are parsed", messages.size() == 2);
 
@@ -91,7 +93,7 @@ public class ServiceTest {
         String message3 = gson.toJson(new QuizMessage(
                 MSG_END_OF_GAME_ACTIVITY, endGame));
 
-        List<QuizMessage> messages = service.parseInData(message1 + message2 + message3);
+        List<QuizMessage> messages = ((MessageHandler)service.getHandler()).parseInData(message1 + message2 + message3);
 
         assertTrue("Both messages are parsed", messages.size() == 3);
 

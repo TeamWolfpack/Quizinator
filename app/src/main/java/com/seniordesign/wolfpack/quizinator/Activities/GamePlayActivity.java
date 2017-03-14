@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.seniordesign.wolfpack.quizinator.Constants;
@@ -26,6 +27,7 @@ import com.seniordesign.wolfpack.quizinator.Database.GamePlayStats;
 import com.seniordesign.wolfpack.quizinator.Database.HighScores;
 import com.seniordesign.wolfpack.quizinator.Fragments.MultipleChoiceAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.R;
+import com.seniordesign.wolfpack.quizinator.Util;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
 
 import java.util.Arrays;
@@ -111,8 +113,9 @@ public class GamePlayActivity extends AppCompatActivity {
                         .beginTransaction()
                         .replace(R.id.answerArea, frag)
                         .commitNowAllowingStateLoss();
-                ((TextView) findViewById(R.id.questionTextArea))
-                        .setText(card.getQuestion());
+//                ((ImageView)findViewById(R.id.questionCardTypeIcon)).setImageResource(R.drawable.mc_icon);
+                Util.updateCardTypeIcon(card, (ImageView)findViewById(R.id.questionCardTypeIcon));
+                ((TextView) findViewById(R.id.questionTextArea)).setText(card.getQuestion());
                 getSupportFragmentManager().executePendingTransactions();
             }
         });

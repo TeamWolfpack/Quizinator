@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
-import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pGroup;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
@@ -16,7 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -37,27 +35,39 @@ public class HostGameActivity
     private static final String TAG = "ACT_HG";
     private WifiDirectApp wifiDirectApp;
 
-    private WifiP2pManager.ActionListener p2pActionListener =
+    private WifiP2pManager.ActionListener p2pConnectListener =
             new WifiP2pManager.ActionListener() {
         @Override
         public void onSuccess() {
+            Log.d(TAG, "Successfully connected to group.");
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    getPeerListFragment().setConnected(true);
+                }
+            });
         }
         @Override
         public void onFailure(int reason) {
-            switch (reason){
-                case 0:
-                    Log.d(TAG, "Failed to create action listener: failed to internal error");
-                    break;
-                case 1:
-                    Log.d(TAG, "Failed to create action listener: failed because p2p is unsupported");
-                    break;
-                case 2:
-                    Log.d(TAG, "Failed to create action listener: framework is busy and unable to service the request");
-                    break;
-                case 3:
-                    Log.d(TAG, "Failed to create action listener: failed because no requests are added");
-                    break;
-            }
+            logActionListenerFailure(reason);
+        }
+    };
+    private WifiP2pManager.ActionListener p2pDisconnectListener =
+            new WifiP2pManager.ActionListener() {
+        @Override
+        public void onSuccess() {
+            Log.d(TAG, "Successfully removed group");
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    getPeerListFragment().setConnected(false);
+                }
+            });
+        }
+
+        @Override
+        public void onFailure(int reason) {
+            logActionListenerFailure(reason);
         }
     };
 
@@ -83,7 +93,7 @@ public class HostGameActivity
         wifiDirectApp.mP2pChannel = wifiDirectApp.mP2pMan.initialize(
                 this, getMainLooper(), null);
         wifiDirectApp.mReceiver = new WiFiDirectBroadcastReceiver();
-        initiateDiscovery();
+        discoverPeers();
     }
 
     @Override
@@ -104,22 +114,16 @@ public class HostGameActivity
         wifiDirectApp.onDestroy(TAG);
     }
 
-    public void initiateDiscovery(){
-        Log.d(TAG, "initiateDiscovery");
-        if( !wifiDirectApp.isP2pEnabled() ){
-            Toast.makeText(this, R.string.p2p_off_warning,
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-        final PeerListFragment peerListFragment =
-                (PeerListFragment) getFragmentManager().
-                        findFragmentById(R.id.frag_peer_list);
-        peerListFragment.onInitiateDiscovery();
-        discoverPeers(peerListFragment);
+    private PeerListFragment getPeerListFragment() {
+        return (PeerListFragment) getFragmentManager().findFragmentById(R.id.frag_peer_list);
     }
 
-    private void discoverPeers(final PeerListFragment fragment){
+    public void discoverPeers(){
         Log.d(TAG, "discoverPeers");
+        if(!wifiDirectApp.isP2pEnabled()){
+            Toast.makeText(this, R.string.p2p_off_warning, Toast.LENGTH_LONG).show();
+            return;
+        }
         wifiDirectApp.mP2pMan.discoverPeers(wifiDirectApp.mP2pChannel,
                 new WifiP2pManager.ActionListener() {
             @Override
@@ -128,7 +132,7 @@ public class HostGameActivity
             }
             @Override
             public void onFailure(int reasonCode) {
-                fragment.clearPeers();
+                getPeerListFragment().clearPeers();
             }
         });
     }
@@ -149,7 +153,7 @@ public class HostGameActivity
                 removeExistingGroup();
             else
                 wifiDirectApp.mP2pMan.createGroup(
-                        wifiDirectApp.mP2pChannel, p2pActionListener);
+                        wifiDirectApp.mP2pChannel, p2pConnectListener);
         }
     };
 
@@ -164,10 +168,11 @@ public class HostGameActivity
             @Override
             public void onSuccess() {
                 wifiDirectApp.mP2pMan.createGroup(
-                        wifiDirectApp.mP2pChannel, p2pActionListener);
+                        wifiDirectApp.mP2pChannel, p2pConnectListener);
             }
             @Override
             public void onFailure(int reason) {
+                logActionListenerFailure(reason);
             }
         };
 
@@ -184,12 +189,7 @@ public class HostGameActivity
 
         runOnUiThread(new Runnable() {
             @Override public void run() {
-                PeerListFragment peerListFragment =
-                        (PeerListFragment)getFragmentManager().
-                                findFragmentById(R.id.frag_peer_list);
-                if (peerListFragment != null) {
-                    peerListFragment.updateThisDevice(device);
-                }
+                getPeerListFragment().updateThisDevice(device);
             }
         });
     }
@@ -202,13 +202,9 @@ public class HostGameActivity
         Log.d(TAG, "resetData: resetting the data");
         runOnUiThread(new Runnable() {
             @Override public void run() {
-                PeerListFragment peerListFragment =
-                        (PeerListFragment) getFragmentManager().
-                                findFragmentById(R.id.frag_peer_list);
-                if (peerListFragment != null) {
-                    peerListFragment.clearPeers();
-                    peerListFragment.dismissProgressDialog();
-                }
+                PeerListFragment peerListFragment = getPeerListFragment();
+                peerListFragment.setConnected(false);
+                peerListFragment.clearPeers();
             }
         });
     }
@@ -221,32 +217,16 @@ public class HostGameActivity
                 "the fragment detail\n" +
                 "info - " + info.toString() + "\n" +
                 "group owner - " + info.isGroupOwner);
-        runOnUiThread(new Runnable() {
-            @Override public void run() {
-                PeerListFragment peerListFragment =
-                        (PeerListFragment) getFragmentManager().
-                                findFragmentById(R.id.frag_peer_list);
-                peerListFragment.onConnectionInfoAvailable(info);
-            }
-        });
     }
 
     /**
      * Update the device list fragment.
      */
-    public void onPeersAvailable(final WifiP2pDeviceList peerList){
+    public void onPeersAvailable(){
         Log.d(TAG, "onPeersAvailable: peer list available");
         runOnUiThread(new Runnable() {
             @Override public void run() {
-                PeerListFragment peerListFragment =
-                        (PeerListFragment) getFragmentManager().findFragmentById(R.id.frag_peer_list);
-                peerListFragment.onPeersAvailable(wifiDirectApp.mPeers);  // use application cached list.
-
-                for(WifiP2pDevice d : peerList.getDeviceList()){
-                    if( d.status == WifiP2pDevice.FAILED ){
-                        peerListFragment.dismissProgressDialog();
-                    }
-                }
+                getPeerListFragment().onPeersAvailable(wifiDirectApp.getFilteredPeerList());  // use application cached list.
             }
         });
     }
@@ -293,17 +273,6 @@ public class HostGameActivity
         return true;
     }
 
-    /**
-     * user taps on peer from discovered list of peers, show this peer's detail.
-     */
-    @Override
-    public void showDetails(WifiP2pDevice device) {
-        Log.d(TAG, "updateSelectedDevice: device - " + device.toString());
-        PeerListFragment peerListFragment = (PeerListFragment)
-                getFragmentManager().findFragmentById(R.id.frag_peer_list);
-        peerListFragment.updateSelectedDevice(device);
-    }
-
     @Override
     public void connect(WifiP2pConfig config) {
         Log.d(TAG, "connect: config(" + config.toString() + ")");
@@ -313,10 +282,7 @@ public class HostGameActivity
             connectIsServerCreateGroup();
         } else {
             wifiDirectApp.mP2pMan.connect(wifiDirectApp.mP2pChannel,
-                    config, p2pActionListener);
-            Button connectBtn = (Button)findViewById(R.id.btn_connect);
-            connectBtn.setEnabled(false);
-//            findViewById(R.id.btn_connect).setEnabled(false);
+                    config, p2pConnectListener);
         }
     }
 
@@ -331,7 +297,7 @@ public class HostGameActivity
                 } else {
                     Log.d(TAG, "group == null");
                     wifiDirectApp.mP2pMan.createGroup(
-                            wifiDirectApp.mP2pChannel, p2pActionListener);
+                            wifiDirectApp.mP2pChannel, p2pConnectListener);
                 }
             }
         });
@@ -341,13 +307,7 @@ public class HostGameActivity
     public void disconnect() {
         Log.d(TAG, "disconnect: disconnects from all peers and reset " +
                 "the peer list fragment");
-        final PeerListFragment peerListFragment = (PeerListFragment)
-                getFragmentManager().findFragmentById(R.id.frag_peer_list);
-        if (peerListFragment != null) {
-            peerListFragment.clearPeers();
-            peerListFragment.dismissProgressDialog();
-        }
-        wifiDirectApp.mP2pMan.removeGroup(wifiDirectApp.mP2pChannel, null);
+        wifiDirectApp.mP2pMan.removeGroup(wifiDirectApp.mP2pChannel, p2pDisconnectListener);
     }
 
     /**
@@ -369,32 +329,49 @@ public class HostGameActivity
     }
 
     public void onConnectButtonClicked(View v){
-//        findViewById(R.id.btn_connect).setEnabled(false);
-        PeerListFragment peerListFragment =
-                (PeerListFragment)getFragmentManager().
-                        findFragmentById(R.id.frag_peer_list);
+        if (wifiDirectApp.mP2pConnected) {
+            Toast.makeText(this, "Already Connected", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         WifiP2pConfig config = new WifiP2pConfig();
-        config.deviceAddress = peerListFragment.getSelectedDevice().deviceAddress;
+        config.deviceAddress = getPeerListFragment().getSelectedDevice().deviceAddress;
         config.wps.setup = WpsInfo.PBC;
         // least inclination to be group owner.
-            // 15 is highest group owner (host)
-            // 0 is lowest (player)
+        // 15 is highest group owner (host)
+        // 0 is lowest (player)
         config.groupOwnerIntent = wifiDirectApp.isHost();
-        peerListFragment.dismissProgressDialog();
         // perform p2p connect upon user click the connect button,
         // connect available handle when connection done.
 //        findViewById(R.id.btn_connect).setEnabled(false);
-        this.connect(config);
+        connect(config);
     }
 
     public void onDisconnectButtonClicked(View v){
-        this.disconnect();
+        disconnect();
     }
 
     public boolean onDisconnectAllButtonClicked(View v){
         ConnectionService.sendMessage(MSG_DISCONNECT_FROM_ALL_PEERS, "");
-        this.disconnect();
+        disconnect();
         finish();
         return true;
+    }
+
+    private void logActionListenerFailure(int reason) {
+        switch (reason){
+            case 0:
+                Log.d(TAG, "Failed to create action listener: failed to internal error");
+                break;
+            case 1:
+                Log.d(TAG, "Failed to create action listener: failed because p2p is unsupported");
+                break;
+            case 2:
+                Log.d(TAG, "Failed to create action listener: framework is busy and unable to service the request");
+                break;
+            case 3:
+                Log.d(TAG, "Failed to create action listener: failed because no requests are added");
+                break;
+        }
     }
 }

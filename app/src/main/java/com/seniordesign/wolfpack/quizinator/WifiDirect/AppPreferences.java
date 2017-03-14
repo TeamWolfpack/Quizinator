@@ -10,6 +10,7 @@ class AppPreferences {
     static final String PREF_NAME = MessageCodes.PACKAGE_NAME;
     static final String P2P_ENABLED = "p2pEnabled";
 
+    // TODO - this is only called once, might be possible to remove this class
     static String getStringFromPref(Context ctx,
                                     String preferenceFileName,
                                     String key) {
