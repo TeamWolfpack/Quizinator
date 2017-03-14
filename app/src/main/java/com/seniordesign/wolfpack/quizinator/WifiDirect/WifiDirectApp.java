@@ -150,7 +150,8 @@ public class WifiDirectApp extends Application {
             Log.d(TAG, "onPeersAvailable: wifiDirectApp.mServer is false (CLIENT)");
             for (WifiP2pDevice device : mPeers) {
                 //Order connected device to the top of the list
-                if (device.isGroupOwner() && device.status == WifiP2pDevice.CONNECTED)
+                if (device.isGroupOwner() && (device.status == WifiP2pDevice.CONNECTED ||
+                        device.status == WifiP2pDevice.INVITED))
                     filteredPeers.add(0, device);
                 else if (device.isGroupOwner())
                     filteredPeers.add(device);
