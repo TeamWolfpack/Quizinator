@@ -4,16 +4,11 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import android.util.Log;
-
-import com.google.gson.Gson;
-import com.seniordesign.wolfpack.quizinator.Constants;
-
 class QuizSQLiteHelper extends SQLiteOpenHelper {
 
     // database filename
     private static final String DATABASE_NAME = "quizinator.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // Card table contents
     static final String TABLE_CARDS = "cards";
@@ -58,7 +53,7 @@ class QuizSQLiteHelper extends SQLiteOpenHelper {
     static final String RULES_COLUMN_RULESET_NAME = "_ruleSetName";
     static final String RULES_COLUMN_DOUBLE_EDGE_SWORD = "_doubleEdgeSword";
     static final String RULES_COLUMN_LAST_CARD_WAGER = "_lastCardWager";
-    static final String RULES_COLUMN_FASTEST_ANSWER = "_fastestAnswer";
+    static final String RULES_COLUMN_MULTIPLE_WINNERS = "multipleWinners";
 
     // Settings table contents
     static final String TABLE_SETTINGS = "settings";

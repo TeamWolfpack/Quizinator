@@ -21,7 +21,6 @@ public class Rules {
     private String ruleSetName;
     private boolean doubleEdgeSword;
     private boolean lastCardWager;
-    private boolean fastestAnswer;
     private boolean multipleWinners;
 
     /*
@@ -111,14 +110,6 @@ public class Rules {
 
     public void setLastCardWager(boolean lastCardWager) {
         this.lastCardWager = lastCardWager;
-    }
-
-    public boolean isFastestAnswer() {
-        return fastestAnswer;
-    }
-
-    public void setFastestAnswer(boolean fastestAnswer) {
-        this.fastestAnswer = fastestAnswer;
     }
 
     public boolean getMultipleWinners() {

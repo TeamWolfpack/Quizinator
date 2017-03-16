@@ -27,7 +27,7 @@ class DBUpgrader {
                 + " ADD COLUMN " + QuizSQLiteHelper.RULES_COLUMN_RULESET_NAME + " TEXT AND "
                 + " ADD COLUMN " + QuizSQLiteHelper.RULES_COLUMN_DOUBLE_EDGE_SWORD + " TEXT DEFAULT NULL AND "
                 + " ADD COLUMN " + QuizSQLiteHelper.RULES_COLUMN_LAST_CARD_WAGER + " TEXT DEFAULT NULL AND "
-                + " ADD COLUMN " + QuizSQLiteHelper.RULES_COLUMN_FASTEST_ANSWER + " TEXT DEFAULT NULL;";
+                + " ADD COLUMN " + QuizSQLiteHelper.RULES_COLUMN_MULTIPLE_WINNERS + " TEXT DEFAULT NULL;";
         db.execSQL(ALTER_TABLE_ADD_COLUMNS);
     }
 }
