@@ -10,7 +10,6 @@ import java.util.List;
 
 /**
  * Represents rules
- * @creation 10/4/2016.
  */
 public class Rules {
 
@@ -19,12 +18,17 @@ public class Rules {
     private long timeLimit;
     private long cardDisplayTime;
     private long deckId;
+    private String ruleSetName;
+    private boolean doubleEdgeSword;
+    private boolean lastCardWager;
+    private boolean fastestAnswer;
+
     /*
-     * Using String because going to use an Array of Strings to limit what choice
-     * of Card Type in that class instead of using an enum. We thought this
-     * would be easier to implement than converting an enum to a string
-     * or converting and storing blobs.
-     */
+         * Using String because going to use an Array of Strings to limit what choice
+         * of Card Type in that class instead of using an enum. We thought this
+         * would be easier to implement than converting an enum to a string
+         * or converting and storing blobs.
+         */
     private String cardTypes;
 
     @Override
@@ -83,4 +87,36 @@ public class Rules {
     public long getDeckId() { return deckId; }
 
     public void setDeckId(long deckId) { this.deckId = deckId; }
+
+    public String getRuleSetName() {
+        return ruleSetName;
+    }
+
+    public void setRuleSetName(String ruleSetName) {
+        this.ruleSetName = ruleSetName;
+    }
+
+    public boolean isDoubleEdgeSword() {
+        return doubleEdgeSword;
+    }
+
+    public void setDoubleEdgeSword(boolean doubleEdgeSword) {
+        this.doubleEdgeSword = doubleEdgeSword;
+    }
+
+    public boolean isLastCardWager() {
+        return lastCardWager;
+    }
+
+    public void setLastCardWager(boolean lastCardWager) {
+        this.lastCardWager = lastCardWager;
+    }
+
+    public boolean isFastestAnswer() {
+        return fastestAnswer;
+    }
+
+    public void setFastestAnswer(boolean fastestAnswer) {
+        this.fastestAnswer = fastestAnswer;
+    }
 }
