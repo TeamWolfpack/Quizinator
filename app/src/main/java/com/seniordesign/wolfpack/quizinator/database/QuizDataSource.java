@@ -497,6 +497,7 @@ public class QuizDataSource {
         long insertId = database.insert(QuizSQLiteHelper.TABLE_RULESETS,
                 null, values);
         Cursor cursor = database.query(QuizSQLiteHelper.TABLE_RULESETS,
+
                 rulesAllColumns, QuizSQLiteHelper.RULES_COLUMN_ID
                         + " = " + insertId, null, null, null, null);
         cursor.moveToFirst();
@@ -525,6 +526,7 @@ public class QuizDataSource {
     public boolean deleteRule(Rules rule) {
         long id = rule.getId();
         database.delete(QuizSQLiteHelper.TABLE_RULESETS,
+
                 QuizSQLiteHelper.RULES_COLUMN_ID + " = " + id, null);
         return true;
     }
@@ -532,6 +534,7 @@ public class QuizDataSource {
     public List<Rules> getAllRules() {
         List<Rules> items = new ArrayList<>();
         Cursor cursor = database.query(QuizSQLiteHelper.TABLE_RULESETS,
+
                 rulesAllColumns, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {

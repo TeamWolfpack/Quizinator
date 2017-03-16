@@ -23,13 +23,13 @@ public class Rules {
     private boolean lastCardWager;
     private boolean fastestAnswer;
     private boolean multipleWinners;
-  
+
     /*
-         * Using String because going to use an Array of Strings to limit what choice
-         * of Card Type in that class instead of using an enum. We thought this
-         * would be easier to implement than converting an enum to a string
-         * or converting and storing blobs.
-         */
+     * Using String because going to use an Array of Strings to limit what choice
+     * of Card Type in that class instead of using an enum. We thought this
+     * would be easier to implement than converting an enum to a string
+     * or converting and storing blobs.
+     */
     private String cardTypes;
 
     @Override
@@ -120,7 +120,7 @@ public class Rules {
     public void setFastestAnswer(boolean fastestAnswer) {
         this.fastestAnswer = fastestAnswer;
     }
-  
+
     public boolean getMultipleWinners() {
         //TODO Return proper val
         return true;

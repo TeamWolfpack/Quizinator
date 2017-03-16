@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.fragments.FreeResponseAnswerFragment;
+import com.seniordesign.wolfpack.quizinator.fragments.MultipleChoiceAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.fragments.TrueFalseAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.fragments.VerbalResponseAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.gameplayHandler.GamePlayHandler;
@@ -25,7 +26,6 @@ import com.seniordesign.wolfpack.quizinator.gameplayHandler.SinglePlayerHandler;
 import com.seniordesign.wolfpack.quizinator.database.Card;
 import com.seniordesign.wolfpack.quizinator.database.GamePlayStats;
 import com.seniordesign.wolfpack.quizinator.database.HighScores;
-import com.seniordesign.wolfpack.quizinator.fragments.MultipleChoiceAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.Util;
 import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;

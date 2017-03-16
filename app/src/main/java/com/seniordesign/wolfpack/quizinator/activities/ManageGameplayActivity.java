@@ -32,11 +32,12 @@ import com.seniordesign.wolfpack.quizinator.database.Deck;
 import com.seniordesign.wolfpack.quizinator.database.Rules;
 import com.seniordesign.wolfpack.quizinator.database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
-import com.seniordesign.wolfpack.quizinator.Messages.Answer;
-import com.seniordesign.wolfpack.quizinator.Messages.Confirmation;
+
+import com.seniordesign.wolfpack.quizinator.messages.Answer;
+import com.seniordesign.wolfpack.quizinator.messages.Confirmation;
 import com.seniordesign.wolfpack.quizinator.Util;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
+import com.seniordesign.wolfpack.quizinator.wifiDirect.ConnectionService;
+import com.seniordesign.wolfpack.quizinator.wifiDirect.WifiDirectApp;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
