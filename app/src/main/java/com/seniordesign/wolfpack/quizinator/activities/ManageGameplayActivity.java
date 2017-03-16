@@ -477,7 +477,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
     }
 
     public void doubleEdgeSelect(View v) {
-        if(rules.getDoubleEdgeSword()){
+        if(rules.isDoubleEdgeSword()){
             doubleEdgeActive = !doubleEdgeActive;
             if(doubleEdgeActive){
                 v.setBackgroundColor(ContextCompat.getColor(this,R.color.colorDoublePointsActive));
