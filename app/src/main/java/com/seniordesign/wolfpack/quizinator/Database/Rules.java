@@ -22,7 +22,8 @@ public class Rules {
     private boolean doubleEdgeSword;
     private boolean lastCardWager;
     private boolean fastestAnswer;
-
+    private boolean multipleWinners;
+  
     /*
          * Using String because going to use an Array of Strings to limit what choice
          * of Card Type in that class instead of using an enum. We thought this
@@ -118,5 +119,13 @@ public class Rules {
 
     public void setFastestAnswer(boolean fastestAnswer) {
         this.fastestAnswer = fastestAnswer;
+    }
+  
+    public boolean getMultipleWinners() {
+        //TODO Return proper val
+        return true;
+    }
+    public void setMultipleWinners(boolean multipleWinners) {
+        this.multipleWinners = multipleWinners;
     }
 }
