@@ -1,4 +1,4 @@
-package com.seniordesign.wolfpack.quizinator.Adapters;
+package com.seniordesign.wolfpack.quizinator.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -14,7 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.seniordesign.wolfpack.quizinator.R;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
+import com.seniordesign.wolfpack.quizinator.wifiDirect.ConnectionService;
 
 import java.util.List;
 

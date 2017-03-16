@@ -1,15 +1,15 @@
-package com.seniordesign.wolfpack.quizinator.GameplayHandler;
+package com.seniordesign.wolfpack.quizinator.gameplayHandler;
 
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.seniordesign.wolfpack.quizinator.Activities.GamePlayActivity;
+import com.seniordesign.wolfpack.quizinator.activities.GamePlayActivity;
 import com.seniordesign.wolfpack.quizinator.Constants;
-import com.seniordesign.wolfpack.quizinator.Database.Card;
-import com.seniordesign.wolfpack.quizinator.Database.Deck;
-import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
-import com.seniordesign.wolfpack.quizinator.Database.Rules;
+import com.seniordesign.wolfpack.quizinator.database.Card;
+import com.seniordesign.wolfpack.quizinator.database.Deck;
+import com.seniordesign.wolfpack.quizinator.database.QuizDataSource;
+import com.seniordesign.wolfpack.quizinator.database.Rules;
 import com.seniordesign.wolfpack.quizinator.R;
 
 import java.lang.reflect.Type;

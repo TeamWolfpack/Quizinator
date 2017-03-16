@@ -1,13 +1,13 @@
-package com.seniordesign.wolfpack.quizinator.GameplayHandler;
+package com.seniordesign.wolfpack.quizinator.gameplayHandler;
 
 import android.os.CountDownTimer;
 
 import com.google.gson.Gson;
-import com.seniordesign.wolfpack.quizinator.Database.Card;
-import com.seniordesign.wolfpack.quizinator.Database.Deck;
-import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
-import com.seniordesign.wolfpack.quizinator.Database.Rules;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
+import com.seniordesign.wolfpack.quizinator.database.Card;
+import com.seniordesign.wolfpack.quizinator.database.Deck;
+import com.seniordesign.wolfpack.quizinator.database.QuizDataSource;
+import com.seniordesign.wolfpack.quizinator.database.Rules;
+import com.seniordesign.wolfpack.quizinator.wifiDirect.WifiDirectApp;
 
 public class GamePlayProperties {
 

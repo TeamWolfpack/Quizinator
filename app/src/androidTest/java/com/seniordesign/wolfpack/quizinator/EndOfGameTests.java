@@ -6,7 +6,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.seniordesign.wolfpack.quizinator.Activities.EndOfGameplayActivity;
+import com.seniordesign.wolfpack.quizinator.activities.EndOfGameplayActivity;
 
 import org.junit.Before;
 import org.junit.Rule;

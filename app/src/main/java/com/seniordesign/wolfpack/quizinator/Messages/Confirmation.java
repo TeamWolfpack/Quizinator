@@ -1,4 +1,4 @@
-package com.seniordesign.wolfpack.quizinator.Messages;
+package com.seniordesign.wolfpack.quizinator.messages;
 
 /**
  * Created by leonardj on 12/5/2016.

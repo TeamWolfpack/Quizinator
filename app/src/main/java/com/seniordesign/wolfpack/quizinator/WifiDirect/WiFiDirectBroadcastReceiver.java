@@ -1,4 +1,4 @@
-package com.seniordesign.wolfpack.quizinator.WifiDirect;
+package com.seniordesign.wolfpack.quizinator.wifiDirect;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

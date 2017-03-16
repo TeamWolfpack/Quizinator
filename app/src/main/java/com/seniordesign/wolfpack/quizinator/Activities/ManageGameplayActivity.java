@@ -1,8 +1,7 @@
-package com.seniordesign.wolfpack.quizinator.Activities;
+package com.seniordesign.wolfpack.quizinator.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.os.CountDownTimer;
 import android.support.v4.content.ContextCompat;
@@ -10,12 +9,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ActionMode;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -24,28 +19,29 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.seniordesign.wolfpack.quizinator.Adapters.ActivePlayerAdapter;
-import com.seniordesign.wolfpack.quizinator.Adapters.NextCardAdapter;
+import com.seniordesign.wolfpack.quizinator.adapters.ActivePlayerAdapter;
+import com.seniordesign.wolfpack.quizinator.adapters.NextCardAdapter;
 import com.seniordesign.wolfpack.quizinator.Constants;
-import com.seniordesign.wolfpack.quizinator.Database.Card;
-import com.seniordesign.wolfpack.quizinator.Database.Deck;
-import com.seniordesign.wolfpack.quizinator.Database.Rules;
-import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
+import com.seniordesign.wolfpack.quizinator.database.Card;
+import com.seniordesign.wolfpack.quizinator.database.Deck;
+import com.seniordesign.wolfpack.quizinator.database.Rules;
+import com.seniordesign.wolfpack.quizinator.database.QuizDataSource;
+import com.seniordesign.wolfpack.quizinator.messages.Wager;
 import com.seniordesign.wolfpack.quizinator.R;
-import com.seniordesign.wolfpack.quizinator.Messages.Answer;
-import com.seniordesign.wolfpack.quizinator.Messages.Confirmation;
+import com.seniordesign.wolfpack.quizinator.messages.Answer;
+import com.seniordesign.wolfpack.quizinator.messages.Confirmation;
 import com.seniordesign.wolfpack.quizinator.Util;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
+import com.seniordesign.wolfpack.quizinator.wifiDirect.ConnectionService;
+import com.seniordesign.wolfpack.quizinator.wifiDirect.WifiDirectApp;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES.*;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_ANSWER_CONFIRMATION_ACTIVITY;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_END_OF_GAME_ACTIVITY;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_SEND_CARD_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_ANSWER_CONFIRMATION_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_END_OF_GAME_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_SEND_CARD_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_SEND_WAGER_ACTIVITY;
 
 public class ManageGameplayActivity extends AppCompatActivity {
 
@@ -77,6 +73,9 @@ public class ManageGameplayActivity extends AppCompatActivity {
 
     private boolean doubleEdgeActive = false;
     private boolean multipleWinners = false;
+
+    private boolean receivedWagers = false;
+    private ArrayList<Wager> wagers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +114,11 @@ public class ManageGameplayActivity extends AppCompatActivity {
     }
 
     public void sendCard(View v) {
+        if(!(cardsPlayed+1 < cardLimit) && !receivedWagers){
+            String msg = "final_question";
+            ConnectionService.sendMessage(MSG_SEND_WAGER_ACTIVITY, msg);
+            return;
+        }
         clientsResponded=0;
         if(cardsPlayed < cardLimit) {
             currentCard = (Card)nextCardSpinner.getSelectedItem();
@@ -531,5 +535,17 @@ public class ManageGameplayActivity extends AppCompatActivity {
 
             selectAndRespondToFastestAnswer();
         }
+    }
+
+    public void receiveWager(Wager wager){
+        if(wagers==null)
+            wagers = new ArrayList<Wager>();
+
+        wagers.add(wager);
+        if(wagers.size() == wifiDirectApp.getConnectedPeers().size()){
+            receivedWagers = true;
+            sendCard(null);
+        }
+
     }
 }

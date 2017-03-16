@@ -1,20 +1,15 @@
-package com.seniordesign.wolfpack.quizinator.Adapters;
+package com.seniordesign.wolfpack.quizinator.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.seniordesign.wolfpack.quizinator.Constants;
-import com.seniordesign.wolfpack.quizinator.Database.Card;
-import com.seniordesign.wolfpack.quizinator.Messages.Answer;
+import com.seniordesign.wolfpack.quizinator.messages.Answer;
 import com.seniordesign.wolfpack.quizinator.R;
-
-import org.w3c.dom.Text;
 
 import java.util.Collections;
 import java.util.Comparator;

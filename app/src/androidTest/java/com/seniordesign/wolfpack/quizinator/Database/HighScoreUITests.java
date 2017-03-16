@@ -1,11 +1,11 @@
-package com.seniordesign.wolfpack.quizinator.Database;
+package com.seniordesign.wolfpack.quizinator.database;
 
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.WindowManager;
 
-import com.seniordesign.wolfpack.quizinator.Activities.MainMenuActivity;
+import com.seniordesign.wolfpack.quizinator.activities.MainMenuActivity;
 
 import org.junit.Before;
 import org.junit.Rule;

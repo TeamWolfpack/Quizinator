@@ -1,4 +1,4 @@
-package com.seniordesign.wolfpack.quizinator.Database;
+package com.seniordesign.wolfpack.quizinator.database;
 
 import com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES;
 

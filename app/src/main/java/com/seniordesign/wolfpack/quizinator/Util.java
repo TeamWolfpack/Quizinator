@@ -2,7 +2,7 @@ package com.seniordesign.wolfpack.quizinator;
 
 import android.widget.ImageView;
 
-import com.seniordesign.wolfpack.quizinator.Database.Card;
+import com.seniordesign.wolfpack.quizinator.database.Card;
 
 import static com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES.FREE_RESPONSE;
 import static com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES.MULTIPLE_CHOICE;

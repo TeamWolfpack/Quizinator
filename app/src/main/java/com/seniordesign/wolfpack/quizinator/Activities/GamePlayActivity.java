@@ -1,12 +1,14 @@
-package com.seniordesign.wolfpack.quizinator.Activities;
+package com.seniordesign.wolfpack.quizinator.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -15,28 +17,35 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.seniordesign.wolfpack.quizinator.Constants;
-import com.seniordesign.wolfpack.quizinator.Fragments.FreeResponseAnswerFragment;
-import com.seniordesign.wolfpack.quizinator.Fragments.TrueFalseAnswerFragment;
-import com.seniordesign.wolfpack.quizinator.Fragments.VerbalResponseAnswerFragment;
-import com.seniordesign.wolfpack.quizinator.GameplayHandler.GamePlayHandler;
-import com.seniordesign.wolfpack.quizinator.GameplayHandler.GamePlayProperties;
-import com.seniordesign.wolfpack.quizinator.GameplayHandler.MultiplayerHandler;
-import com.seniordesign.wolfpack.quizinator.GameplayHandler.SinglePlayerHandler;
-import com.seniordesign.wolfpack.quizinator.Database.Card;
-import com.seniordesign.wolfpack.quizinator.Database.GamePlayStats;
-import com.seniordesign.wolfpack.quizinator.Database.HighScores;
-import com.seniordesign.wolfpack.quizinator.Fragments.MultipleChoiceAnswerFragment;
+import com.seniordesign.wolfpack.quizinator.filters.NumberFilter;
+import com.seniordesign.wolfpack.quizinator.fragments.FreeResponseAnswerFragment;
+import com.seniordesign.wolfpack.quizinator.fragments.TrueFalseAnswerFragment;
+import com.seniordesign.wolfpack.quizinator.fragments.VerbalResponseAnswerFragment;
+import com.seniordesign.wolfpack.quizinator.gameplayHandler.GamePlayHandler;
+import com.seniordesign.wolfpack.quizinator.gameplayHandler.GamePlayProperties;
+import com.seniordesign.wolfpack.quizinator.gameplayHandler.MultiplayerHandler;
+import com.seniordesign.wolfpack.quizinator.gameplayHandler.SinglePlayerHandler;
+import com.seniordesign.wolfpack.quizinator.database.Card;
+import com.seniordesign.wolfpack.quizinator.database.GamePlayStats;
+import com.seniordesign.wolfpack.quizinator.database.HighScores;
+import com.seniordesign.wolfpack.quizinator.fragments.MultipleChoiceAnswerFragment;
+import com.seniordesign.wolfpack.quizinator.messages.Wager;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.Util;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
+import com.seniordesign.wolfpack.quizinator.wifiDirect.ConnectionService;
+import com.seniordesign.wolfpack.quizinator.wifiDirect.WifiDirectApp;
 
 import java.util.Arrays;
 import java.util.Collections;
+
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_SEND_WAGER_CONFIRMATION_ACTIVITY;
 
 public class GamePlayActivity extends AppCompatActivity {
 
     GamePlayProperties properties;
     GamePlayHandler gamePlayHandler;
+    android.app.AlertDialog wagerDialog;
+    Wager wager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -264,11 +273,18 @@ public class GamePlayActivity extends AppCompatActivity {
     }
 
     public void answerConfirmed(boolean correct) {
-        if (correct)
-            properties.setScore(properties.getScore() + properties.getCurrentCard().getPoints());
-        else if (properties.getCurrentCard().isDoubleEdge())
-            properties.setScore(Math.max(0,properties.getScore() - properties.getCurrentCard().getPoints()));
+        int score = properties.getCurrentCard().getPoints();
+        if(!(wager == null)){
+            score = wager.getWager();
+        }
+        if (!correct) {
+            if (properties.getCurrentCard().isDoubleEdge())
+                score = -score;
+            else
+                score = 0;
+        }
 
+        properties.setScore(Math.max(0,properties.getScore() + score));
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -297,4 +313,44 @@ public class GamePlayActivity extends AppCompatActivity {
 
         gamePlayHandler.handleNextCard(GamePlayActivity.this,properties);
     }
+
+    public void createWager(){
+
+        LayoutInflater li = LayoutInflater.from(this);
+        final View promptsView = li.inflate(R.layout.fragment_create_wager, null);
+        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
+        alertDialogBuilder.setView(promptsView);
+        alertDialogBuilder
+                .setCancelable(false)
+                .setTitle(Constants.FINAL_QUESTION);
+
+        alertDialogBuilder
+                .setTitle(Constants.ACTIVE_PLAYERS)
+                .setPositiveButton(Constants.CLOSE, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        sendWager();
+                        dialog.cancel();
+                    }
+                });
+
+        wagerDialog = alertDialogBuilder.create();
+        EditText wagerEditText = (EditText) wagerDialog.findViewById(R.id.wager_value);
+        NumberFilter cardCountFilter = new NumberFilter(0, properties.getScore(), true);
+        wagerEditText.setOnFocusChangeListener(cardCountFilter);
+
+    }
+
+    public void sendWager(){
+        EditText wagerEditText = (EditText) wagerDialog.findViewById(R.id.wager_value);
+        int wagerVal = Integer.parseInt(wagerEditText.getText().toString());
+        wager = new Wager(
+                properties.getWifiDirectApp().mDeviceName,
+                properties.getWifiDirectApp().mMyAddress,
+                wagerVal
+        );
+        if(properties.getHasAnswered())
+            return;
+        String json = properties.getGson().toJson(wager);
+        ConnectionService.sendMessage(MSG_SEND_WAGER_CONFIRMATION_ACTIVITY, json);
 }

@@ -111,4 +111,6 @@
     <string name="response_time">Response Time</string>
     <string name="solo_play_card_count_warning">*Free and Verbal Response cards can\'t be used in Solo Play</string>
 
+    <string name="create_wager">Set Your Wager</string>
+
 </resources>

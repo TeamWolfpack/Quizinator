@@ -6,7 +6,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              tools:context="com.seniordesign.wolfpack.quizinator.Activities.EditDeckActivity">
+              tools:context="com.seniordesign.wolfpack.quizinator.activities.EditDeckActivity">
 
     <LinearLayout
         android:orientation="horizontal"

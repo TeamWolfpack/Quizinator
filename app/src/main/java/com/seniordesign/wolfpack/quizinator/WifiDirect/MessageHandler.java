@@ -1,4 +1,4 @@
-package com.seniordesign.wolfpack.quizinator.WifiDirect;
+package com.seniordesign.wolfpack.quizinator.wifiDirect;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -7,34 +7,35 @@ import android.os.Message;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.seniordesign.wolfpack.quizinator.Activities.MainMenuActivity;
-import com.seniordesign.wolfpack.quizinator.Database.Card;
-import com.seniordesign.wolfpack.quizinator.Database.Rules;
-import com.seniordesign.wolfpack.quizinator.Messages.Answer;
-import com.seniordesign.wolfpack.quizinator.Messages.Confirmation;
-import com.seniordesign.wolfpack.quizinator.Messages.QuizMessage;
+import com.seniordesign.wolfpack.quizinator.database.Card;
+import com.seniordesign.wolfpack.quizinator.database.Rules;
+import com.seniordesign.wolfpack.quizinator.messages.Answer;
+import com.seniordesign.wolfpack.quizinator.messages.Confirmation;
+import com.seniordesign.wolfpack.quizinator.messages.QuizMessage;
+import com.seniordesign.wolfpack.quizinator.messages.Wager;
 
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_ANSWER_CONFIRMATION_ACTIVITY;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_BROKEN_CONN;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_DISCONNECT_FROM_ALL_PEERS;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_END_OF_GAME_ACTIVITY;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_FINISH_CONNECT;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_NEW_CLIENT;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_NULL;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_PLAYER_READY_ACTIVITY;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_PULLIN_DATA;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_PUSHOUT_DATA;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_SELECT_ERROR;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_SEND_ANSWER_ACTIVITY;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_SEND_CARD_ACTIVITY;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_SEND_RULES_ACTIVITY;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_STARTCLIENT;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_STARTSERVER;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_REGISTER_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_ANSWER_CONFIRMATION_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_BROKEN_CONN;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_DISCONNECT_FROM_ALL_PEERS;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_END_OF_GAME_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_FINISH_CONNECT;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_NEW_CLIENT;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_NULL;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_PLAYER_READY_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_PULLIN_DATA;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_PUSHOUT_DATA;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_SELECT_ERROR;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_SEND_ANSWER_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_SEND_CARD_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_SEND_RULES_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_SEND_WAGER_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_SEND_WAGER_CONFIRMATION_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_STARTCLIENT;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_STARTSERVER;
 
 /**
  * Handles the messages over the WifiDirect connection.
@@ -100,6 +101,12 @@ public class MessageHandler extends Handler {
                 break;
             case MSG_END_OF_GAME_ACTIVITY:
                 mConnMan.pushOutData(createQuizMessage(MSG_END_OF_GAME_ACTIVITY, (String) msg.obj));
+                break;
+            case MSG_SEND_WAGER_ACTIVITY:
+                mConnMan.pushOutData(createQuizMessage(MSG_SEND_WAGER_ACTIVITY, (String) msg.obj));
+                break;
+            case MSG_SEND_WAGER_CONFIRMATION_ACTIVITY:
+                mConnMan.pushOutData(createQuizMessage(MSG_SEND_WAGER_CONFIRMATION_ACTIVITY, (String) msg.obj));
                 break;
             case MSG_SELECT_ERROR:
                 Log.d(TAG, "received an error related to the connection manager");
@@ -190,6 +197,12 @@ public class MessageHandler extends Handler {
                 case MSG_END_OF_GAME_ACTIVITY:
                     wifiDirectApp.mGameplayActivity.endGamePlay(
                             Long.parseLong(message));
+                    break;
+                case MSG_SEND_WAGER_ACTIVITY:
+                    wifiDirectApp.mGameplayActivity.createWager();
+                    break;
+                case MSG_SEND_WAGER_CONFIRMATION_ACTIVITY:
+                    wifiDirectApp.mManageActivity.receiveWager(gson.fromJson(message, Wager.class));
                     break;
                 case MSG_DISCONNECT_FROM_ALL_PEERS:
                     if(wifiDirectApp.mHomeActivity != null){

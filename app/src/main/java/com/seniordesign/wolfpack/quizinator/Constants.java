@@ -47,6 +47,7 @@ public final class Constants {
 
     public static final String ACTIVE_PLAYERS = "Active Players";
     public static final String PLAYERS_RESPONSE = "Select a Winner";
+    public static final String FINAL_QUESTION = "Final Question";
 
     public static final String UPDATED_HIGH_SCORE = "Updated High Scores";
     public static final String NO_HIGH_SCORE = "No High Scores";
