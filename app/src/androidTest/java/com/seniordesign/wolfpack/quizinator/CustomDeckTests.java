@@ -7,10 +7,10 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.WindowManager;
 
-import com.seniordesign.wolfpack.quizinator.Activities.CardsActivity;
-import com.seniordesign.wolfpack.quizinator.Activities.DecksActivity;
-import com.seniordesign.wolfpack.quizinator.Database.Deck;
-import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
+import com.seniordesign.wolfpack.quizinator.activities.CardsActivity;
+import com.seniordesign.wolfpack.quizinator.activities.DecksActivity;
+import com.seniordesign.wolfpack.quizinator.database.Deck;
+import com.seniordesign.wolfpack.quizinator.database.QuizDataSource;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -19,19 +19,15 @@ import org.junit.runner.RunWith;
 
 import java.util.List;
 
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerActions.open;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withChild;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;

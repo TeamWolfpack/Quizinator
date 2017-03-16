@@ -4,10 +4,10 @@ import android.support.test.rule.ActivityTestRule;
 import android.view.WindowManager;
 
 import com.google.gson.Gson;
-import com.seniordesign.wolfpack.quizinator.Activities.NewGameSettingsActivity;
-import com.seniordesign.wolfpack.quizinator.Database.Card;
-import com.seniordesign.wolfpack.quizinator.Database.Rules;
-import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
+import com.seniordesign.wolfpack.quizinator.activities.NewGameSettingsActivity;
+import com.seniordesign.wolfpack.quizinator.database.Card;
+import com.seniordesign.wolfpack.quizinator.database.Rules;
+import com.seniordesign.wolfpack.quizinator.database.QuizDataSource;
 
 import org.junit.Before;
 import org.junit.Rule;

@@ -1,4 +1,4 @@
-package com.seniordesign.wolfpack.quizinator.WifiDirect;
+package com.seniordesign.wolfpack.quizinator.wifiDirect;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

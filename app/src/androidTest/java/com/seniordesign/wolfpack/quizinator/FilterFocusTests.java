@@ -3,8 +3,8 @@ package com.seniordesign.wolfpack.quizinator;
 import android.support.test.rule.ActivityTestRule;
 import android.widget.EditText;
 
-import com.seniordesign.wolfpack.quizinator.Activities.NewGameSettingsActivity;
-import com.seniordesign.wolfpack.quizinator.Filters.NumberFilter;
+import com.seniordesign.wolfpack.quizinator.activities.NewGameSettingsActivity;
+import com.seniordesign.wolfpack.quizinator.filters.NumberFilter;
 
 import org.junit.Before;
 import org.junit.Rule;

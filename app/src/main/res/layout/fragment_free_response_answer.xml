@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.seniordesign.wolfpack.quizinator.Activities.GamePlayActivity">
+    tools:context="com.seniordesign.wolfpack.quizinator.activities.GamePlayActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

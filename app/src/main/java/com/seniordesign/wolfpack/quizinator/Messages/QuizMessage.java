@@ -1,4 +1,4 @@
-package com.seniordesign.wolfpack.quizinator.Messages;
+package com.seniordesign.wolfpack.quizinator.messages;
 
 public class QuizMessage {
 

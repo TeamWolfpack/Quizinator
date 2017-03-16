@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.seniordesign.wolfpack.quizinator.Activities.EndOfGameplayActivity">
+    tools:context="com.seniordesign.wolfpack.quizinator.activities.EndOfGameplayActivity">
 
     <TextView
         android:id="@+id/endOfGameText"

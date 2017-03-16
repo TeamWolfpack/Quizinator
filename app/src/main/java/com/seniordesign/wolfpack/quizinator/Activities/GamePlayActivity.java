@@ -1,4 +1,4 @@
-package com.seniordesign.wolfpack.quizinator.Activities;
+package com.seniordesign.wolfpack.quizinator.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -15,20 +15,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.seniordesign.wolfpack.quizinator.Constants;
-import com.seniordesign.wolfpack.quizinator.Fragments.FreeResponseAnswerFragment;
-import com.seniordesign.wolfpack.quizinator.Fragments.TrueFalseAnswerFragment;
-import com.seniordesign.wolfpack.quizinator.Fragments.VerbalResponseAnswerFragment;
-import com.seniordesign.wolfpack.quizinator.GameplayHandler.GamePlayHandler;
-import com.seniordesign.wolfpack.quizinator.GameplayHandler.GamePlayProperties;
-import com.seniordesign.wolfpack.quizinator.GameplayHandler.MultiplayerHandler;
-import com.seniordesign.wolfpack.quizinator.GameplayHandler.SinglePlayerHandler;
-import com.seniordesign.wolfpack.quizinator.Database.Card;
-import com.seniordesign.wolfpack.quizinator.Database.GamePlayStats;
-import com.seniordesign.wolfpack.quizinator.Database.HighScores;
-import com.seniordesign.wolfpack.quizinator.Fragments.MultipleChoiceAnswerFragment;
+import com.seniordesign.wolfpack.quizinator.fragments.FreeResponseAnswerFragment;
+import com.seniordesign.wolfpack.quizinator.fragments.MultipleChoiceAnswerFragment;
+import com.seniordesign.wolfpack.quizinator.fragments.TrueFalseAnswerFragment;
+import com.seniordesign.wolfpack.quizinator.fragments.VerbalResponseAnswerFragment;
+import com.seniordesign.wolfpack.quizinator.gameplayHandler.GamePlayHandler;
+import com.seniordesign.wolfpack.quizinator.gameplayHandler.GamePlayProperties;
+import com.seniordesign.wolfpack.quizinator.gameplayHandler.MultiplayerHandler;
+import com.seniordesign.wolfpack.quizinator.gameplayHandler.SinglePlayerHandler;
+import com.seniordesign.wolfpack.quizinator.database.Card;
+import com.seniordesign.wolfpack.quizinator.database.GamePlayStats;
+import com.seniordesign.wolfpack.quizinator.database.HighScores;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.Util;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
+import com.seniordesign.wolfpack.quizinator.wifiDirect.WifiDirectApp;
 
 import java.util.Arrays;
 import java.util.Collections;

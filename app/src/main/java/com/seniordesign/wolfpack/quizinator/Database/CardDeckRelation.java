@@ -1,4 +1,4 @@
-package com.seniordesign.wolfpack.quizinator.Database;
+package com.seniordesign.wolfpack.quizinator.database;
 
 /**
  * Created by aaron on 1/10/2017.

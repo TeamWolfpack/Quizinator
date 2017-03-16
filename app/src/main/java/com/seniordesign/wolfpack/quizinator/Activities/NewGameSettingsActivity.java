@@ -1,4 +1,4 @@
-package com.seniordesign.wolfpack.quizinator.Activities;
+package com.seniordesign.wolfpack.quizinator.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -15,13 +15,13 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.seniordesign.wolfpack.quizinator.Constants;
-import com.seniordesign.wolfpack.quizinator.Database.Deck;
-import com.seniordesign.wolfpack.quizinator.Database.Rules;
-import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
-import com.seniordesign.wolfpack.quizinator.Filters.NumberFilter;
+import com.seniordesign.wolfpack.quizinator.database.Deck;
+import com.seniordesign.wolfpack.quizinator.database.Rules;
+import com.seniordesign.wolfpack.quizinator.database.QuizDataSource;
+import com.seniordesign.wolfpack.quizinator.filters.NumberFilter;
 import com.seniordesign.wolfpack.quizinator.R;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
+import com.seniordesign.wolfpack.quizinator.wifiDirect.ConnectionService;
+import com.seniordesign.wolfpack.quizinator.wifiDirect.WifiDirectApp;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ import io.apptik.widget.multiselectspinner.BaseMultiSelectSpinner;
 import io.apptik.widget.multiselectspinner.MultiSelectSpinner;
 
 import static com.seniordesign.wolfpack.quizinator.Constants.*;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.*;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.*;
 
 public class NewGameSettingsActivity extends AppCompatActivity {
 
@@ -398,7 +398,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
     private boolean initializeDB(){
         dataSource = new QuizDataSource(this);
-        dataSource = new com.seniordesign.wolfpack.quizinator.Database.QuizDataSource(this);
+        dataSource = new com.seniordesign.wolfpack.quizinator.database.QuizDataSource(this);
         return dataSource.open() && dataSource.open() && dataSource.open();
     }
 

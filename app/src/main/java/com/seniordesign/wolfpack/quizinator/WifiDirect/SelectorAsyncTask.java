@@ -1,6 +1,6 @@
-package com.seniordesign.wolfpack.quizinator.WifiDirect;
+package com.seniordesign.wolfpack.quizinator.wifiDirect;
 
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.*;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.*;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

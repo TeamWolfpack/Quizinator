@@ -1,4 +1,4 @@
-package com.seniordesign.wolfpack.quizinator.Database;
+package com.seniordesign.wolfpack.quizinator.database;
 
 import org.junit.Before;
 import org.junit.Test;

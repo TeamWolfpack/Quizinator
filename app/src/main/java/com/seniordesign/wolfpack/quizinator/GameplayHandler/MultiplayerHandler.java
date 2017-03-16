@@ -1,17 +1,17 @@
-package com.seniordesign.wolfpack.quizinator.GameplayHandler;
+package com.seniordesign.wolfpack.quizinator.gameplayHandler;
 
 import android.view.View;
 
-import com.seniordesign.wolfpack.quizinator.Activities.GamePlayActivity;
-import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
-import com.seniordesign.wolfpack.quizinator.Database.Rules;
+import com.seniordesign.wolfpack.quizinator.activities.GamePlayActivity;
+import com.seniordesign.wolfpack.quizinator.database.QuizDataSource;
+import com.seniordesign.wolfpack.quizinator.database.Rules;
 import com.seniordesign.wolfpack.quizinator.R;
-import com.seniordesign.wolfpack.quizinator.Messages.Answer;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
+import com.seniordesign.wolfpack.quizinator.messages.Answer;
+import com.seniordesign.wolfpack.quizinator.wifiDirect.ConnectionService;
+import com.seniordesign.wolfpack.quizinator.wifiDirect.WifiDirectApp;
 
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_PLAYER_READY_ACTIVITY;
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.MSG_SEND_ANSWER_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_PLAYER_READY_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_SEND_ANSWER_ACTIVITY;
 
 public class MultiplayerHandler implements GamePlayHandler {
 
