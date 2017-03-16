@@ -494,9 +494,10 @@ public class QuizDataSource {
         values.put(QuizSQLiteHelper.RULES_COLUMN_MAXCARDCOUNT, maxCardCount);
         values.put(QuizSQLiteHelper.RULES_COLUMN_CARDTYPES, cardTypes);
         values.put(QuizSQLiteHelper.RULES_COLUMN_DECK_ID, deckId);
-        long insertId = database.insert(QuizSQLiteHelper.TABLE_RULES,
+        long insertId = database.insert(QuizSQLiteHelper.TABLE_RULESETS,
                 null, values);
-        Cursor cursor = database.query(QuizSQLiteHelper.TABLE_RULES,
+        Cursor cursor = database.query(QuizSQLiteHelper.TABLE_RULESETS,
+
                 rulesAllColumns, QuizSQLiteHelper.RULES_COLUMN_ID
                         + " = " + insertId, null, null, null, null);
         cursor.moveToFirst();
@@ -519,19 +520,21 @@ public class QuizDataSource {
         cv.put(QuizSQLiteHelper.RULES_COLUMN_CARDTYPES, r.getCardTypes());
         cv.put(QuizSQLiteHelper.RULES_COLUMN_DECK_ID, r.getDeckId());
         String where = QuizSQLiteHelper.RULES_COLUMN_ID + " = " + r.getId();
-        return database.update(QuizSQLiteHelper.TABLE_RULES, cv, where, null);
+        return database.update(QuizSQLiteHelper.TABLE_RULESETS, cv, where, null);
     }
 
     public boolean deleteRule(Rules rule) {
         long id = rule.getId();
-        database.delete(QuizSQLiteHelper.TABLE_RULES,
+        database.delete(QuizSQLiteHelper.TABLE_RULESETS,
+
                 QuizSQLiteHelper.RULES_COLUMN_ID + " = " + id, null);
         return true;
     }
 
     public List<Rules> getAllRules() {
         List<Rules> items = new ArrayList<>();
-        Cursor cursor = database.query(QuizSQLiteHelper.TABLE_RULES,
+        Cursor cursor = database.query(QuizSQLiteHelper.TABLE_RULESETS,
+
                 rulesAllColumns, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
