@@ -55,8 +55,10 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="send_card">Send Card</string>
+    <string name="double_edge">High Risk!</string>
     <string name="end_game">End Game</string>
     <string name="question">Question</string>
+    <string name="double_edge_notifier">High Risk!</string>
 
     <string name="deck_name">Deck Name</string>
     <string name="deck_size">Deck Size</string>
@@ -70,6 +72,7 @@
     <string name="cancel">Cancel</string>
     <string name="Delete">Delete</string>
     <string name="select_deck">Select Deck</string>
+    <string name="select_ruleset">Select Ruleset</string>
 
     <string name="type">Type</string>
     <string name="points">Points</string>
@@ -98,7 +101,7 @@
     <string name="correct_answer_label">Correct Answer(s)</string>
 
     <!--ANSWER FRAGMENT BUTTONS-->
-    <string name="frag_answer_buzzer">Buzzer</string>
+    <string name="frag_answer_buzzer">Buzz In</string>
     <string name="frag_answer_submit">Submit</string>
     <string name="frag_answer_A">A</string>
     <string name="frag_answer_B">B</string>

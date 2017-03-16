@@ -14,8 +14,6 @@ import com.seniordesign.wolfpack.quizinator.activities.GamePlayActivity;
 import com.seniordesign.wolfpack.quizinator.activities.HostGameActivity;
 import com.seniordesign.wolfpack.quizinator.activities.ManageGameplayActivity;
 
-import org.json.JSONArray;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,8 +50,6 @@ public class WifiDirectApp extends Application {
 
     // update on every peers available
     public List<WifiP2pDevice> mPeers = new ArrayList<>();
-    // limit to the latest 50 messages
-    JSONArray mMessageArray = new JSONArray();
 
     // Singleton instance
     private static WifiDirectApp sInstance = null;
@@ -130,20 +126,6 @@ public class WifiDirectApp extends Application {
         ConnectionService.getInstance().getHandler().sendMessage(msg);
     }
 
-    public WifiP2pDevice getConnectedPeer() {
-        Log.d(TAG, "getConnectedPeer");
-        WifiP2pDevice peer = null;
-        for (WifiP2pDevice d : mPeers) {
-            if (d.status == WifiP2pDevice.CONNECTED)
-                peer = d;
-        }
-        if(peer == null)
-            Log.d(TAG, "getConnectedPeer: Will return null");
-        else
-            Log.d(TAG, "getConnectedPeer: Device returned" + peer.toString());
-        return peer;
-    }
-
     public List<WifiP2pDevice> getConnectedPeers() {
         Log.d(TAG, "getConnectedPeers");
         ArrayList<WifiP2pDevice> peers = new ArrayList<>();
@@ -154,6 +136,27 @@ public class WifiDirectApp extends Application {
             }
         }
         return peers;
+    }
+
+    public List<WifiP2pDevice> getFilteredPeerList() {
+        List<WifiP2pDevice> filteredPeers = new ArrayList<>();
+        if (mIsServer) {
+            Log.d(TAG, "onPeersAvailable: wifiDirectApp.mServer is true (HOST)");
+            for (WifiP2pDevice device : mPeers) {
+                if (device.status == WifiP2pDevice.CONNECTED)
+                    filteredPeers.add(device);
+            }
+        } else {
+            Log.d(TAG, "onPeersAvailable: wifiDirectApp.mServer is false (CLIENT)");
+            for (WifiP2pDevice device : mPeers) {
+                //Order connected device to the top of the list
+                if (device.isGroupOwner() && device.status == WifiP2pDevice.CONNECTED)
+                    filteredPeers.add(0, device);
+                else if (device.isGroupOwner())
+                    filteredPeers.add(device);
+            }
+        }
+        return filteredPeers;
     }
 
     public void disconnectFromGroup() {
@@ -179,11 +182,6 @@ public class WifiDirectApp extends Application {
                 }
             }
         });
-    }
-
-    public void clearMessages() {
-        Log.d(TAG, "clearMessages");
-        mMessageArray = new JSONArray();
     }
 
     public void setMyAddress(String addr) {

@@ -11,6 +11,7 @@ public class Card{
     private String [] possibleAnswers;
     private String moderatorNeeded;
     private int points = 1;
+    private boolean doubleEdge;
 
     private int maxPossibleAnswers;   //Can't have over 4 options
 
@@ -89,5 +90,13 @@ public class Card{
 
     public void setPoints(int points) {
         this.points = points;
+    }
+
+    public void setDoubleEdge(boolean doubleEdge){
+        this.doubleEdge = doubleEdge;
+    }
+
+    public boolean isDoubleEdge(){
+        return doubleEdge;
     }
 }

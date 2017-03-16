@@ -1,14 +1,10 @@
 package com.seniordesign.wolfpack.quizinator.fragments;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ListFragment;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
-import android.net.wifi.p2p.WifiP2pInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,9 +13,9 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.seniordesign.wolfpack.quizinator.adapters.PeerListAdapter;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.wifiDirect.ConnectionService;
-import com.seniordesign.wolfpack.quizinator.adapters.PeerListAdapter;
 import com.seniordesign.wolfpack.quizinator.wifiDirect.WifiDirectApp;
 
 /**
@@ -30,27 +26,21 @@ public class PeerListFragment extends ListFragment {
 
     private static final String TAG = "PTP_ListFrag";
 
-    private List<WifiP2pDevice> peerDevicesList = new ArrayList<>();
-
-    private ProgressDialog progressDialog = null;
-    private View mContentView = null;
+    private View mContentView;
     private WifiP2pDevice myDevice;
-    WifiP2pInfo wifiP2pInfo;
-
-    private WifiDirectApp wifiDirectApp = null;
     private PeerListAdapter peerListAdapter;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         Log.d(TAG, "onActivityCreated");
         super.onActivityCreated(savedInstanceState);
+
+        WifiDirectApp wifiDirectApp = (WifiDirectApp) getActivity().getApplication();
+
         //initialize peer list adapter
-        peerListAdapter = new PeerListAdapter(getActivity(),
-                R.layout.row_devices, peerDevicesList);
-        this.setListAdapter(peerListAdapter);
-        //find application reference
-        wifiDirectApp = (WifiDirectApp) getActivity().getApplication();
-        onPeersAvailable(wifiDirectApp.mPeers);
+        peerListAdapter = new PeerListAdapter(getActivity(), R.layout.row_devices,
+                wifiDirectApp.getFilteredPeerList(), wifiDirectApp.mIsServer);
+        setListAdapter(peerListAdapter);
     }
 
     @Override
@@ -68,9 +58,12 @@ public class PeerListFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         Log.d(TAG, "onListItemClick");
-        WifiP2pDevice device = (WifiP2pDevice) getListAdapter().getItem(position);
-        ((DeviceActionListener) getActivity()).showDetails(device);
-        peerListAdapter.setSelectedIndex(position, wifiDirectApp.mIsServer);
+        peerListAdapter.setSelectedIndex(position);
+    }
+
+    public void setConnected(boolean connected) {
+        if (peerListAdapter != null)
+            peerListAdapter.setConnected(connected);
     }
 
     /**
@@ -90,11 +83,14 @@ public class PeerListFragment extends ListFragment {
         } else if (this.myDevice != null) {
             deviceNameTextView.setText(this.myDevice.deviceName);
             deviceDetailsTextView.setText(R.string.wifi_direct_disabled);
+        } else {
+            deviceNameTextView.setText(R.string.empty);
+            deviceDetailsTextView.setText(R.string.wifi_direct_disabled);
         }
     }
 
     public WifiP2pDevice getSelectedDevice(){
-        return myDevice;
+        return peerListAdapter.getSelectedDevice();
     }
 
     /**
@@ -102,32 +98,8 @@ public class PeerListFragment extends ListFragment {
      * from WifiP2pManager.requestPeers(channel, PeerListListener);
      */
     public void onPeersAvailable(List<WifiP2pDevice> peerList) {
-        Log.d(TAG, "onPeersAvailable");
-        dismissProgressDialog();
-        peerDevicesList.clear();
-        List<WifiP2pDevice> toRemove = new ArrayList<>();
-        //filter peers based on if the device is the host
-        if (wifiDirectApp.mIsServer) {
-            Log.d(TAG, "onPeersAvailable: wifiDirectApp.mServer is true (HOST)");
-            for (WifiP2pDevice device : peerList) {
-                if (device.isGroupOwner())
-                    toRemove.add(device);
-            }
-        } else {
-            Log.d(TAG, "onPeersAvailable: wifiDirectApp.mServer is false (CLIENT)");
-            for (WifiP2pDevice device : peerList) {
-                if (!device.isGroupOwner())
-                    toRemove.add(device);
-            }
-        }
-        //concurrent modification exception thrown if the user joins and leaves quickly
-        //use of iterator instead of collection.removeAll resolves threading problem
-        for (WifiP2pDevice deviceToRemove : toRemove) {
-            if (peerList.contains(deviceToRemove))
-                peerList.remove(deviceToRemove);
-        }
-        peerDevicesList.addAll(peerList);
-        ((PeerListAdapter) getListAdapter()).notifyDataSetChanged();
+        Log.d(TAG, "onPeersAvailable " + peerList.size());
+        peerListAdapter.addPeers(peerList);
     }
 
     public void clearPeers() {
@@ -135,52 +107,9 @@ public class PeerListFragment extends ListFragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                dismissProgressDialog();
-                peerDevicesList.clear();
-                ((PeerListAdapter) getListAdapter()).notifyDataSetChanged();
+                peerListAdapter.clearPeers();
             }
         });
-    }
-
-    public void onInitiateDiscovery() {
-        Log.d(TAG, "onInitiateDiscovery");
-        dismissProgressDialog();
-        progressDialog = ProgressDialog.show(getActivity(),
-                "Press back to cancel", "finding peerDevicesList",
-                true, true, new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-            }
-        });
-    }
-
-    /**
-     * p2p connection setup, proceed to setup socket connection.
-     */
-    public void onConnectionInfoAvailable(final WifiP2pInfo info) {
-        Log.d(TAG, "onConnectionInfoAvailable");
-        dismissProgressDialog();
-        this.wifiP2pInfo = info;
-    }
-
-    /**
-     * Updates the UI with myDevice data
-     */
-    public void updateSelectedDevice(WifiP2pDevice device) {
-        Log.d(TAG, "showDetail");
-        this.myDevice = device;
-    }
-
-    /**
-     * Hides the progress dialog which is used to ask the user to
-     * accept connections from another peer.
-     */
-    public boolean dismissProgressDialog(){
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -188,8 +117,6 @@ public class PeerListFragment extends ListFragment {
      * interaction events.
      */
     public interface DeviceActionListener {
-        void showDetails(WifiP2pDevice device);
-//        void cancelDisconnect();
         void connect(WifiP2pConfig config);
         void disconnect();
     }
