@@ -112,6 +112,7 @@ public class HostGameActivity
     @Override
     public void onDestroy(){
         super.onDestroy();
+        wifiDirectApp.onDestroy(TAG);
     }
 
     @Override
@@ -120,7 +121,6 @@ public class HostGameActivity
             ConnectionService.sendMessage(MSG_DISCONNECT_FROM_ALL_PEERS, "");
             disconnect();
         }
-        wifiDirectApp.onDestroy(TAG);
         finish();
     }
 
@@ -338,7 +338,6 @@ public class HostGameActivity
                 startActivity(wifiDirectApp.getLaunchActivityIntent(NewGameSettingsActivity.class, null));
             }
         });
-        finish();
         return true;
     }
 
