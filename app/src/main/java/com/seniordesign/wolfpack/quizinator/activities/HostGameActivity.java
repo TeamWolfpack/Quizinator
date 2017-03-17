@@ -83,7 +83,7 @@ public class HostGameActivity
             setTitle(Constants.HOST_GAME);
         } else {
             setTitle(Constants.JOIN_GAME);
-            findViewById(R.id.buttonsPanel).setVisibility(View.GONE);
+            findViewById(R.id.start_game_settings).setVisibility(View.GONE);
         }
         // If service not started yet, start it.
         new Intent(this, ConnectionService.class);
