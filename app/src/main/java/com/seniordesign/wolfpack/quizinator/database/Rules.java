@@ -10,7 +10,6 @@ import java.util.List;
 
 /**
  * Represents rules
- * @creation 10/4/2016.
  */
 public class Rules {
 
@@ -19,7 +18,9 @@ public class Rules {
     private long timeLimit;
     private long cardDisplayTime;
     private long deckId;
+    private String ruleSetName;
     private boolean doubleEdgeSword;
+    private boolean lastCardWager;
     private boolean multipleWinners;
     private boolean finalWager;
     /*
@@ -87,12 +88,28 @@ public class Rules {
 
     public void setDeckId(long deckId) { this.deckId = deckId; }
 
-    public boolean getDoubleEdgeSword() {
-        //TODO Return proper val
-        return true;
+    public String getRuleSetName() {
+        return ruleSetName;
     }
+
+    public void setRuleSetName(String ruleSetName) {
+        this.ruleSetName = ruleSetName;
+    }
+
+    public boolean isDoubleEdgeSword() {
+        return doubleEdgeSword;
+    }
+
     public void setDoubleEdgeSword(boolean doubleEdgeSword) {
         this.doubleEdgeSword = doubleEdgeSword;
+    }
+
+    public boolean isLastCardWager() {
+        return lastCardWager;
+    }
+
+    public void setLastCardWager(boolean lastCardWager) {
+        this.lastCardWager = lastCardWager;
     }
 
     public boolean getMultipleWinners() {
