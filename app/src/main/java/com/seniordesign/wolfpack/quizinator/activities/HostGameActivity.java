@@ -52,7 +52,8 @@ public class HostGameActivity
             logActionListenerFailure(reason);
         }
     };
-    private WifiP2pManager.ActionListener p2pDisconnectListener =
+
+    public WifiP2pManager.ActionListener p2pDisconnectListener =
             new WifiP2pManager.ActionListener() {
         @Override
         public void onSuccess() {
@@ -111,7 +112,16 @@ public class HostGameActivity
     @Override
     public void onDestroy(){
         super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(wifiDirectApp.mIsServer){
+            ConnectionService.sendMessage(MSG_DISCONNECT_FROM_ALL_PEERS, "");
+            disconnect();
+        }
         wifiDirectApp.onDestroy(TAG);
+        finish();
     }
 
     private PeerListFragment getPeerListFragment() {
@@ -132,7 +142,8 @@ public class HostGameActivity
             }
             @Override
             public void onFailure(int reasonCode) {
-                getPeerListFragment().clearPeers();
+                if(getPeerListFragment() != null)
+                    getPeerListFragment().clearPeers();
             }
         });
     }
@@ -189,7 +200,8 @@ public class HostGameActivity
 
         runOnUiThread(new Runnable() {
             @Override public void run() {
-                getPeerListFragment().updateThisDevice(device);
+                if(getPeerListFragment() != null)
+                    getPeerListFragment().updateThisDevice(device);
             }
         });
     }
@@ -226,7 +238,8 @@ public class HostGameActivity
         Log.d(TAG, "onPeersAvailable: peer list available");
         runOnUiThread(new Runnable() {
             @Override public void run() {
-                getPeerListFragment().onPeersAvailable(wifiDirectApp.getFilteredPeerList());  // use application cached list.
+                if(getPeerListFragment() != null)
+                    getPeerListFragment().onPeersAvailable(wifiDirectApp.getFilteredPeerList());  // use application cached list.
             }
         });
     }
@@ -315,7 +328,7 @@ public class HostGameActivity
      */
     public boolean onGameSettingsButtonClicked(View v){
         Log.d(TAG, "startGameSettingsActivity: view(" + v.toString() + ")");
-        if(!wifiDirectApp.mP2pConnected ){
+        if(!wifiDirectApp.mP2pConnected || wifiDirectApp.mPeers.size() < 1){
             Toast.makeText(this, "You are not connected to anyone",
                     Toast.LENGTH_SHORT).show();
             return false;
@@ -325,6 +338,7 @@ public class HostGameActivity
                 startActivity(wifiDirectApp.getLaunchActivityIntent(NewGameSettingsActivity.class, null));
             }
         });
+        finish();
         return true;
     }
 

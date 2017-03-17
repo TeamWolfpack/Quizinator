@@ -1,6 +1,7 @@
 package com.seniordesign.wolfpack.quizinator.activities;
 
 import android.content.Intent;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -261,8 +262,6 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
     private boolean startMultiplayerGamePlay(final Rules r){
         if(!wifiDirectApp.mP2pConnected ){
-            Log.d(TAG, "startChatActivity : p2p connection is " +
-                    "missing, do nothing...");
             return false;
         }
         runOnUiThread(new Runnable() {
@@ -425,5 +424,15 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(wifiDirectApp.mIsServer){
+            ConnectionService.sendMessage(MSG_DISCONNECT_FROM_ALL_PEERS, "");
+            wifiDirectApp.mP2pMan.removeGroup(wifiDirectApp.mP2pChannel, null);
+        }
+        finish();
     }
 }
