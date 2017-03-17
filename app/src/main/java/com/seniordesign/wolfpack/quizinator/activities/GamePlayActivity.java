@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.CountDownTimer;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -54,17 +55,17 @@ public class GamePlayActivity extends AppCompatActivity {
 
         properties = new GamePlayProperties();
 
-        properties.setWifiDirectApp((WifiDirectApp)getApplication());
-        if(getIntent().getExtras().getBoolean("GameMode")){
+        properties.setWifiDirectApp((WifiDirectApp) getApplication());
+        if (getIntent().getExtras().getBoolean("GameMode")) {
             gamePlayHandler = new SinglePlayerHandler();
-        }else{
+        } else {
             gamePlayHandler = new MultiplayerHandler();
         }
         gamePlayHandler.handleInitialization(this, properties);
         initializeCardTimer(properties.getRules().getCardDisplayTime());
         initializeGameTimer(properties.getRules().getTimeLimit());
         initializeCorrectnessColorController();
-        gamePlayHandler.handleInitializeGameplay(this,properties);
+        gamePlayHandler.handleInitializeGameplay(this, properties);
     }
 
     @Override
@@ -88,7 +89,7 @@ public class GamePlayActivity extends AppCompatActivity {
     public void showCard(final Card card) {
         Constants.CARD_TYPES cardType =
                 Constants.CARD_TYPES.values()[card.getCardType()];
-        switch(cardType){
+        switch (cardType) {
             case TRUE_FALSE:
                 showCardHelper(card, new TrueFalseAnswerFragment());
                 break;
@@ -96,10 +97,10 @@ public class GamePlayActivity extends AppCompatActivity {
                 final MultipleChoiceAnswerFragment mcFragment =
                         new MultipleChoiceAnswerFragment();
                 Collections.shuffle(Arrays.asList(card.getPossibleAnswers()));
-                    mcFragment.setChoiceA(card.getPossibleAnswers()[0]);
-                    mcFragment.setChoiceB(card.getPossibleAnswers()[1]);
-                    mcFragment.setChoiceC(card.getPossibleAnswers()[2]);
-                    mcFragment.setChoiceD(card.getPossibleAnswers()[3]);
+                mcFragment.setChoiceA(card.getPossibleAnswers()[0]);
+                mcFragment.setChoiceB(card.getPossibleAnswers()[1]);
+                mcFragment.setChoiceC(card.getPossibleAnswers()[2]);
+                mcFragment.setChoiceD(card.getPossibleAnswers()[3]);
                 showCardHelper(card, mcFragment);
                 break;
             case FREE_RESPONSE:
@@ -113,7 +114,7 @@ public class GamePlayActivity extends AppCompatActivity {
 
     private void showCardHelper(
             final Card card,
-            final android.support.v4.app.Fragment frag){
+            final android.support.v4.app.Fragment frag) {
         runOnUiThread(new Runnable() {
             @SuppressLint("CommitTransaction")
             @Override
@@ -123,7 +124,7 @@ public class GamePlayActivity extends AppCompatActivity {
                         .replace(R.id.answerArea, frag)
                         .commitNowAllowingStateLoss();
 //                ((ImageView)findViewById(R.id.questionCardTypeIcon)).setImageResource(R.drawable.mc_icon);
-                Util.updateCardTypeIcon(card, (ImageView)findViewById(R.id.questionCardTypeIcon));
+                Util.updateCardTypeIcon(card, (ImageView) findViewById(R.id.questionCardTypeIcon));
                 ((TextView) findViewById(R.id.questionTextArea)).setText(card.getQuestion());
                 getSupportFragmentManager().executePendingTransactions();
             }
@@ -137,10 +138,10 @@ public class GamePlayActivity extends AppCompatActivity {
     }
 
     public void endGamePlay(long totalGameTime) {
-        if(properties.getCardTimerRunning()!=null) {
+        if (properties.getCardTimerRunning() != null) {
             properties.getCardTimerRunning().cancel();
         }
-        if(properties.getGamePlayTimerRunning()!=null) {
+        if (properties.getGamePlayTimerRunning() != null) {
             properties.getGamePlayTimerRunning().cancel();
         }
         final Intent intent = new Intent(this, EndOfGameplayActivity.class);
@@ -158,10 +159,10 @@ public class GamePlayActivity extends AppCompatActivity {
         properties.getCardTimerAreaBackgroundRunning().cancel();
         Button clickedButton = (Button) v;
         String answer = clickedButton.getText().toString();
-        if(answer.equals("Submit")){
+        if (answer.equals("Submit")) {
             View view = this.getCurrentFocus();
             if (view != null) {
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
 
@@ -194,9 +195,9 @@ public class GamePlayActivity extends AppCompatActivity {
 
     private boolean adjustCardTimerColor() {
         findViewById(R.id.cardTimeBackground).setBackgroundColor(Color.rgb(properties.getR(), properties.getG(), properties.getB()));
-        properties.setR((int)(properties.getR()/1.05));
-        properties.setG((int)(properties.getG()/1.05));
-        properties.setB((int)(properties.getB()/1.05));
+        properties.setR((int) (properties.getR() / 1.05));
+        properties.setG((int) (properties.getG() / 1.05));
+        properties.setB((int) (properties.getB() / 1.05));
         return true;
     }
 
@@ -222,6 +223,7 @@ public class GamePlayActivity extends AppCompatActivity {
                 );
                 properties.setGamePlayTimerRemaining(millisUntilFinished);
             }
+
             @Override
             public void onFinish() {
                 endGamePlay(properties.getRules().getTimeLimit() - properties.getGamePlayTimerRemaining());
@@ -238,6 +240,7 @@ public class GamePlayActivity extends AppCompatActivity {
                         String.valueOf("Time Left: " + (millisUntilFinished / 1000))
                 );
             }
+
             @Override
             public void onFinish() {
                 gamePlayHandler.onFragmentInteraction(GamePlayActivity.this, properties, null);
@@ -247,7 +250,7 @@ public class GamePlayActivity extends AppCompatActivity {
                 if (Boolean.parseBoolean(properties.getCurrentCard().getModeratorNeeded()))
                     return;
 
-                gamePlayHandler.handleNextCard(GamePlayActivity.this,properties);
+                gamePlayHandler.handleNextCard(GamePlayActivity.this, properties);
             }
         });
         return true;
@@ -259,6 +262,7 @@ public class GamePlayActivity extends AppCompatActivity {
             public void onTick(long millisUntilFinished) {
                 adjustCardTimerColor();
             }
+
             @Override
             public void onFinish() {
                 findViewById(R.id.cardTimeBackground).setBackgroundColor(Color.rgb(0, 0, 0));
@@ -274,7 +278,7 @@ public class GamePlayActivity extends AppCompatActivity {
 
     public void answerConfirmed(boolean correct) {
         int score = properties.getCurrentCard().getPoints();
-        if(!(wager == null)){
+        if (!(wager == null)) {
             score = wager.getWager();
         }
         if (!correct) {
@@ -284,7 +288,7 @@ public class GamePlayActivity extends AppCompatActivity {
                 score = 0;
         }
 
-        properties.setScore(Math.max(0,properties.getScore() + score));
+        properties.setScore(Math.max(0, properties.getScore() + score));
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -301,8 +305,8 @@ public class GamePlayActivity extends AppCompatActivity {
         return true;
     }
 
-    public void onSkipQuestionClick(View v){
-        if(properties.getHasAnswered())
+    public void onSkipQuestionClick(View v) {
+        if (properties.getHasAnswered())
             return;
         gamePlayHandler.onFragmentInteraction(GamePlayActivity.this, properties, null);
         properties.setHasAnswered(true);
@@ -311,10 +315,11 @@ public class GamePlayActivity extends AppCompatActivity {
         if (Boolean.parseBoolean(properties.getCurrentCard().getModeratorNeeded()))
             return;
 
-        gamePlayHandler.handleNextCard(GamePlayActivity.this,properties);
+        gamePlayHandler.handleNextCard(GamePlayActivity.this, properties);
     }
 
-    public void createWager(){
+    public void createWager() {
+        properties.getCardTimerRunning().cancel();
 
         LayoutInflater li = LayoutInflater.from(this);
         final View promptsView = li.inflate(R.layout.fragment_create_wager, null);
@@ -322,11 +327,8 @@ public class GamePlayActivity extends AppCompatActivity {
         alertDialogBuilder.setView(promptsView);
         alertDialogBuilder
                 .setCancelable(false)
-                .setTitle(Constants.FINAL_QUESTION);
-
-        alertDialogBuilder
-                .setTitle(Constants.ACTIVE_PLAYERS)
-                .setPositiveButton(Constants.CLOSE, new DialogInterface.OnClickListener() {
+                .setTitle(Constants.FINAL_QUESTION)
+                .setPositiveButton(Constants.ACCEPT, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
                         sendWager();
@@ -335,22 +337,25 @@ public class GamePlayActivity extends AppCompatActivity {
                 });
 
         wagerDialog = alertDialogBuilder.create();
+        wagerDialog.show();
         EditText wagerEditText = (EditText) wagerDialog.findViewById(R.id.wager_value);
-        NumberFilter cardCountFilter = new NumberFilter(0, properties.getScore(), true);
-        wagerEditText.setOnFocusChangeListener(cardCountFilter);
+        NumberFilter wagerFilter = new NumberFilter(0, properties.getScore(), false);
+        wagerEditText.setOnFocusChangeListener(wagerFilter);
 
     }
 
-    public void sendWager(){
+    public void sendWager() {
         EditText wagerEditText = (EditText) wagerDialog.findViewById(R.id.wager_value);
-        int wagerVal = Integer.parseInt(wagerEditText.getText().toString());
+        int wagerVal = 0;
+        wagerVal = Integer.parseInt(wagerEditText.getText().toString());
+        wagerVal = Math.min(wagerVal,properties.getScore());
+        wagerVal = Math.max(wagerVal, 0);
         wager = new Wager(
                 properties.getWifiDirectApp().mDeviceName,
                 properties.getWifiDirectApp().mMyAddress,
                 wagerVal
         );
-        if(properties.getHasAnswered())
-            return;
         String json = properties.getGson().toJson(wager);
         ConnectionService.sendMessage(MSG_SEND_WAGER_CONFIRMATION_ACTIVITY, json);
+    }
 }

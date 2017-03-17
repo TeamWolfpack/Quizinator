@@ -112,5 +112,11 @@
     <string name="solo_play_card_count_warning">*Free and Verbal Response cards can\'t be used in Solo Play</string>
 
     <string name="create_wager">Set Your Wager</string>
+    <string name="note">Note:</string>
+    <string name="wager_text_min">A blank wager is zero points</string>
+    <string name="wager_text_max">A wager higher than your score wagers all your points</string>
+    <string name="accept">Accept</string>
+    <string name="wager">Wager:</string>
+    <string name="player_wagers">Wagers:</string>
 
 </resources>
