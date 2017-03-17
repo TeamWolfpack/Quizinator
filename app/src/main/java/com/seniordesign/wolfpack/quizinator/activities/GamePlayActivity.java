@@ -2,11 +2,14 @@ package com.seniordesign.wolfpack.quizinator.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.CountDownTimer;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -15,8 +18,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.seniordesign.wolfpack.quizinator.Constants;
+import com.seniordesign.wolfpack.quizinator.filters.NumberFilter;
 import com.seniordesign.wolfpack.quizinator.fragments.FreeResponseAnswerFragment;
-import com.seniordesign.wolfpack.quizinator.fragments.MultipleChoiceAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.fragments.TrueFalseAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.fragments.VerbalResponseAnswerFragment;
 import com.seniordesign.wolfpack.quizinator.gameplayHandler.GamePlayHandler;
@@ -26,17 +29,24 @@ import com.seniordesign.wolfpack.quizinator.gameplayHandler.SinglePlayerHandler;
 import com.seniordesign.wolfpack.quizinator.database.Card;
 import com.seniordesign.wolfpack.quizinator.database.GamePlayStats;
 import com.seniordesign.wolfpack.quizinator.database.HighScores;
+import com.seniordesign.wolfpack.quizinator.fragments.MultipleChoiceAnswerFragment;
+import com.seniordesign.wolfpack.quizinator.messages.Wager;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.Util;
+import com.seniordesign.wolfpack.quizinator.wifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.wifiDirect.WifiDirectApp;
 
 import java.util.Arrays;
 import java.util.Collections;
 
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_SEND_WAGER_CONFIRMATION_ACTIVITY;
+
 public class GamePlayActivity extends AppCompatActivity {
 
     GamePlayProperties properties;
     GamePlayHandler gamePlayHandler;
+    android.app.AlertDialog wagerDialog;
+    Wager wager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,17 +55,17 @@ public class GamePlayActivity extends AppCompatActivity {
 
         properties = new GamePlayProperties();
 
-        properties.setWifiDirectApp((WifiDirectApp)getApplication());
-        if(getIntent().getExtras().getBoolean("GameMode")){
+        properties.setWifiDirectApp((WifiDirectApp) getApplication());
+        if (getIntent().getExtras().getBoolean("GameMode")) {
             gamePlayHandler = new SinglePlayerHandler();
-        }else{
+        } else {
             gamePlayHandler = new MultiplayerHandler();
         }
         gamePlayHandler.handleInitialization(this, properties);
         initializeCardTimer(properties.getRules().getCardDisplayTime());
         initializeGameTimer(properties.getRules().getTimeLimit());
         initializeCorrectnessColorController();
-        gamePlayHandler.handleInitializeGameplay(this,properties);
+        gamePlayHandler.handleInitializeGameplay(this, properties);
     }
 
     @Override
@@ -79,7 +89,7 @@ public class GamePlayActivity extends AppCompatActivity {
     public void showCard(final Card card) {
         Constants.CARD_TYPES cardType =
                 Constants.CARD_TYPES.values()[card.getCardType()];
-        switch(cardType){
+        switch (cardType) {
             case TRUE_FALSE:
                 showCardHelper(card, new TrueFalseAnswerFragment());
                 break;
@@ -87,10 +97,10 @@ public class GamePlayActivity extends AppCompatActivity {
                 final MultipleChoiceAnswerFragment mcFragment =
                         new MultipleChoiceAnswerFragment();
                 Collections.shuffle(Arrays.asList(card.getPossibleAnswers()));
-                    mcFragment.setChoiceA(card.getPossibleAnswers()[0]);
-                    mcFragment.setChoiceB(card.getPossibleAnswers()[1]);
-                    mcFragment.setChoiceC(card.getPossibleAnswers()[2]);
-                    mcFragment.setChoiceD(card.getPossibleAnswers()[3]);
+                mcFragment.setChoiceA(card.getPossibleAnswers()[0]);
+                mcFragment.setChoiceB(card.getPossibleAnswers()[1]);
+                mcFragment.setChoiceC(card.getPossibleAnswers()[2]);
+                mcFragment.setChoiceD(card.getPossibleAnswers()[3]);
                 showCardHelper(card, mcFragment);
                 break;
             case FREE_RESPONSE:
@@ -104,7 +114,7 @@ public class GamePlayActivity extends AppCompatActivity {
 
     private void showCardHelper(
             final Card card,
-            final android.support.v4.app.Fragment frag){
+            final android.support.v4.app.Fragment frag) {
         runOnUiThread(new Runnable() {
             @SuppressLint("CommitTransaction")
             @Override
@@ -114,7 +124,7 @@ public class GamePlayActivity extends AppCompatActivity {
                         .replace(R.id.answerArea, frag)
                         .commitNowAllowingStateLoss();
 //                ((ImageView)findViewById(R.id.questionCardTypeIcon)).setImageResource(R.drawable.mc_icon);
-                Util.updateCardTypeIcon(card, (ImageView)findViewById(R.id.questionCardTypeIcon));
+                Util.updateCardTypeIcon(card, (ImageView) findViewById(R.id.questionCardTypeIcon));
                 ((TextView) findViewById(R.id.questionTextArea)).setText(card.getQuestion());
                 getSupportFragmentManager().executePendingTransactions();
             }
@@ -128,10 +138,10 @@ public class GamePlayActivity extends AppCompatActivity {
     }
 
     public void endGamePlay(long totalGameTime) {
-        if(properties.getCardTimerRunning()!=null) {
+        if (properties.getCardTimerRunning() != null) {
             properties.getCardTimerRunning().cancel();
         }
-        if(properties.getGamePlayTimerRunning()!=null) {
+        if (properties.getGamePlayTimerRunning() != null) {
             properties.getGamePlayTimerRunning().cancel();
         }
         final Intent intent = new Intent(this, EndOfGameplayActivity.class);
@@ -149,10 +159,10 @@ public class GamePlayActivity extends AppCompatActivity {
         properties.getCardTimerAreaBackgroundRunning().cancel();
         Button clickedButton = (Button) v;
         String answer = clickedButton.getText().toString();
-        if(answer.equals("Submit")){
+        if (answer.equals("Submit")) {
             View view = this.getCurrentFocus();
             if (view != null) {
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
 
@@ -185,9 +195,9 @@ public class GamePlayActivity extends AppCompatActivity {
 
     private boolean adjustCardTimerColor() {
         findViewById(R.id.cardTimeBackground).setBackgroundColor(Color.rgb(properties.getR(), properties.getG(), properties.getB()));
-        properties.setR((int)(properties.getR()/1.05));
-        properties.setG((int)(properties.getG()/1.05));
-        properties.setB((int)(properties.getB()/1.05));
+        properties.setR((int) (properties.getR() / 1.05));
+        properties.setG((int) (properties.getG() / 1.05));
+        properties.setB((int) (properties.getB() / 1.05));
         return true;
     }
 
@@ -213,6 +223,7 @@ public class GamePlayActivity extends AppCompatActivity {
                 );
                 properties.setGamePlayTimerRemaining(millisUntilFinished);
             }
+
             @Override
             public void onFinish() {
                 endGamePlay(properties.getRules().getTimeLimit() - properties.getGamePlayTimerRemaining());
@@ -229,6 +240,7 @@ public class GamePlayActivity extends AppCompatActivity {
                         String.valueOf("Time Left: " + (millisUntilFinished / 1000))
                 );
             }
+
             @Override
             public void onFinish() {
                 gamePlayHandler.onFragmentInteraction(GamePlayActivity.this, properties, null);
@@ -238,7 +250,7 @@ public class GamePlayActivity extends AppCompatActivity {
                 if (Boolean.parseBoolean(properties.getCurrentCard().getModeratorNeeded()))
                     return;
 
-                gamePlayHandler.handleNextCard(GamePlayActivity.this,properties);
+                gamePlayHandler.handleNextCard(GamePlayActivity.this, properties);
             }
         });
         return true;
@@ -250,6 +262,7 @@ public class GamePlayActivity extends AppCompatActivity {
             public void onTick(long millisUntilFinished) {
                 adjustCardTimerColor();
             }
+
             @Override
             public void onFinish() {
                 findViewById(R.id.cardTimeBackground).setBackgroundColor(Color.rgb(0, 0, 0));
@@ -264,11 +277,18 @@ public class GamePlayActivity extends AppCompatActivity {
     }
 
     public void answerConfirmed(boolean correct) {
-        if (correct)
-            properties.setScore(properties.getScore() + properties.getCurrentCard().getPoints());
-        else if (properties.getCurrentCard().isDoubleEdge())
-            properties.setScore(Math.max(0,properties.getScore() - properties.getCurrentCard().getPoints()));
+        int score = properties.getCurrentCard().getPoints();
+        if (!(wager == null)) {
+            score = wager.getWager();
+        }
+        if (!correct) {
+            if (properties.getCurrentCard().isDoubleEdge())
+                score = -score;
+            else
+                score = 0;
+        }
 
+        properties.setScore(Math.max(0, properties.getScore() + score));
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -285,8 +305,8 @@ public class GamePlayActivity extends AppCompatActivity {
         return true;
     }
 
-    public void onSkipQuestionClick(View v){
-        if(properties.getHasAnswered())
+    public void onSkipQuestionClick(View v) {
+        if (properties.getHasAnswered())
             return;
         gamePlayHandler.onFragmentInteraction(GamePlayActivity.this, properties, null);
         properties.setHasAnswered(true);
@@ -295,6 +315,47 @@ public class GamePlayActivity extends AppCompatActivity {
         if (Boolean.parseBoolean(properties.getCurrentCard().getModeratorNeeded()))
             return;
 
-        gamePlayHandler.handleNextCard(GamePlayActivity.this,properties);
+        gamePlayHandler.handleNextCard(GamePlayActivity.this, properties);
+    }
+
+    public void createWager() {
+        properties.getCardTimerRunning().cancel();
+
+        LayoutInflater li = LayoutInflater.from(this);
+        final View promptsView = li.inflate(R.layout.fragment_create_wager, null);
+        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
+        alertDialogBuilder.setView(promptsView);
+        alertDialogBuilder
+                .setCancelable(false)
+                .setTitle(Constants.FINAL_QUESTION)
+                .setPositiveButton(Constants.ACCEPT, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        sendWager();
+                        dialog.cancel();
+                    }
+                });
+
+        wagerDialog = alertDialogBuilder.create();
+        wagerDialog.show();
+        EditText wagerEditText = (EditText) wagerDialog.findViewById(R.id.wager_value);
+        NumberFilter wagerFilter = new NumberFilter(0, properties.getScore(), false);
+        wagerEditText.setOnFocusChangeListener(wagerFilter);
+
+    }
+
+    public void sendWager() {
+        EditText wagerEditText = (EditText) wagerDialog.findViewById(R.id.wager_value);
+        int wagerVal = 0;
+        wagerVal = Integer.parseInt(wagerEditText.getText().toString());
+        wagerVal = Math.min(wagerVal,properties.getScore());
+        wagerVal = Math.max(wagerVal, 0);
+        wager = new Wager(
+                properties.getWifiDirectApp().mDeviceName,
+                properties.getWifiDirectApp().mMyAddress,
+                wagerVal
+        );
+        String json = properties.getGson().toJson(wager);
+        ConnectionService.sendMessage(MSG_SEND_WAGER_CONFIRMATION_ACTIVITY, json);
     }
 }

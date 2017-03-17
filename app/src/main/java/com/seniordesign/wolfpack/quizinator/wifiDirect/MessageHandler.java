@@ -12,6 +12,7 @@ import com.seniordesign.wolfpack.quizinator.database.Rules;
 import com.seniordesign.wolfpack.quizinator.messages.Answer;
 import com.seniordesign.wolfpack.quizinator.messages.Confirmation;
 import com.seniordesign.wolfpack.quizinator.messages.QuizMessage;
+import com.seniordesign.wolfpack.quizinator.messages.Wager;
 
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
@@ -31,6 +32,8 @@ import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_S
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_SEND_ANSWER_ACTIVITY;
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_SEND_CARD_ACTIVITY;
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_SEND_RULES_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_SEND_WAGER_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_SEND_WAGER_CONFIRMATION_ACTIVITY;
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_STARTCLIENT;
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_STARTSERVER;
 
@@ -98,6 +101,12 @@ public class MessageHandler extends Handler {
                 break;
             case MSG_END_OF_GAME_ACTIVITY:
                 mConnMan.pushOutData(createQuizMessage(MSG_END_OF_GAME_ACTIVITY, (String) msg.obj));
+                break;
+            case MSG_SEND_WAGER_ACTIVITY:
+                mConnMan.pushOutData(createQuizMessage(MSG_SEND_WAGER_ACTIVITY, (String) msg.obj));
+                break;
+            case MSG_SEND_WAGER_CONFIRMATION_ACTIVITY:
+                mConnMan.pushOutData(createQuizMessage(MSG_SEND_WAGER_CONFIRMATION_ACTIVITY, (String) msg.obj));
                 break;
             case MSG_SELECT_ERROR:
                 Log.d(TAG, "received an error related to the connection manager");
@@ -188,6 +197,12 @@ public class MessageHandler extends Handler {
                 case MSG_END_OF_GAME_ACTIVITY:
                     wifiDirectApp.mGameplayActivity.endGamePlay(
                             Long.parseLong(message));
+                    break;
+                case MSG_SEND_WAGER_ACTIVITY:
+                    wifiDirectApp.mGameplayActivity.createWager();
+                    break;
+                case MSG_SEND_WAGER_CONFIRMATION_ACTIVITY:
+                    wifiDirectApp.mManageActivity.receiveWager(gson.fromJson(message, Wager.class));
                     break;
                 case MSG_DISCONNECT_FROM_ALL_PEERS:
                     if(wifiDirectApp.mHomeActivity != null){

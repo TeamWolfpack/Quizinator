@@ -24,6 +24,8 @@ public final class MessageCodes {
     public static final int MSG_SEND_ANSWER_ACTIVITY = 3003;
     public static final int MSG_ANSWER_CONFIRMATION_ACTIVITY = 3004;
     public static final int MSG_END_OF_GAME_ACTIVITY = 3005;
+    public static final int MSG_SEND_WAGER_ACTIVITY = 3006;
+    public static final int MSG_SEND_WAGER_CONFIRMATION_ACTIVITY = 3007;
 
     //update peerlist
     public static final int MSG_DISCONNECT_FROM_ALL_PEERS = 4000;

@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -27,10 +28,12 @@ import com.google.gson.reflect.TypeToken;
 import com.seniordesign.wolfpack.quizinator.adapters.ActivePlayerAdapter;
 import com.seniordesign.wolfpack.quizinator.adapters.NextCardAdapter;
 import com.seniordesign.wolfpack.quizinator.Constants;
+import com.seniordesign.wolfpack.quizinator.adapters.WagerPlayerAdapter;
 import com.seniordesign.wolfpack.quizinator.database.Card;
 import com.seniordesign.wolfpack.quizinator.database.Deck;
 import com.seniordesign.wolfpack.quizinator.database.Rules;
 import com.seniordesign.wolfpack.quizinator.database.QuizDataSource;
+import com.seniordesign.wolfpack.quizinator.messages.Wager;
 import com.seniordesign.wolfpack.quizinator.R;
 
 import com.seniordesign.wolfpack.quizinator.messages.Answer;
@@ -47,6 +50,7 @@ import static com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES.*;
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_ANSWER_CONFIRMATION_ACTIVITY;
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_END_OF_GAME_ACTIVITY;
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_SEND_CARD_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_SEND_WAGER_ACTIVITY;
 
 public class ManageGameplayActivity extends AppCompatActivity {
 
@@ -78,6 +82,12 @@ public class ManageGameplayActivity extends AppCompatActivity {
 
     private boolean doubleEdgeActive = false;
     private boolean multipleWinners = false;
+
+    private boolean receivedWagers = false;
+    private ArrayList<Wager> wagers;
+    private boolean gettingWagers = false;
+
+    private android.app.AlertDialog wagerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +126,15 @@ public class ManageGameplayActivity extends AppCompatActivity {
     }
 
     public void sendCard(View v) {
+        if(!(cardsPlayed+1 < cardLimit) && !gettingWagers && rules.getFinalWager() ){
+            if(gettingWagers)
+                return;
+            gettingWagers = true;
+            String msg = "final_question";
+            ConnectionService.sendMessage(MSG_SEND_WAGER_ACTIVITY, msg);
+            showWagersDialog(null);
+            return;
+        }
         clientsResponded=0;
         if(cardsPlayed < cardLimit) {
             currentCard = (Card)nextCardSpinner.getSelectedItem();
@@ -532,5 +551,53 @@ public class ManageGameplayActivity extends AppCompatActivity {
 
             selectAndRespondToFastestAnswer();
         }
+    }
+
+    public void receiveWager(Wager wager){
+        System.out.println("ReceivedWager");
+        if(wagers==null)
+            wagers = new ArrayList<Wager>();
+        wagers.add(wager);
+        ListView wagersList = (ListView) wagerDialog.findViewById(R.id.wager_player_dialog_list);
+        if(wagersList!=null){
+            WagerPlayerAdapter playerAdapter = (WagerPlayerAdapter) wagersList.getAdapter();
+            playerAdapter.addItem(wager);
+        }
+        if(wagers.size() >= wifiDirectApp.getConnectedPeers().size()){
+            receivedWagers = true;
+            wagerDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this,R.color.colorAccent));
+        }
+
+    }
+
+    public void showWagersDialog(View v) {
+        if(wagers==null)
+            wagers = new ArrayList<Wager>();
+        if (wagerDialog != null)
+            wagerDialog.dismiss();
+
+        LayoutInflater li = LayoutInflater.from(this);
+        final View promptsView = li.inflate(R.layout.fragment_player_wagers, null);
+        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
+        alertDialogBuilder.setView(promptsView);
+        alertDialogBuilder
+                .setCancelable(false)
+                .setTitle(Constants.PLAYER_WAGERS)
+                .setPositiveButton(Constants.SEND_CARD, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        if(receivedWagers) {
+                            dialog.cancel();
+                            sendCard(null);
+                        }
+                    }
+                });
+
+        wagerDialog = alertDialogBuilder.create();
+        wagerDialog.show();
+        wagerDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this,R.color.colorGrayedOut));
+        ListView wagersList = (ListView) wagerDialog.findViewById(R.id.wager_player_dialog_list);
+        WagerPlayerAdapter playerAdapter = new WagerPlayerAdapter(wagerDialog.getContext(), new ArrayList<Wager>());
+        wagersList.setAdapter(playerAdapter);
     }
 }
