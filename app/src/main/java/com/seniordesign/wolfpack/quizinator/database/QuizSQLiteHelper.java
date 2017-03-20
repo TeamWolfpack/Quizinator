@@ -62,7 +62,7 @@ class QuizSQLiteHelper extends SQLiteOpenHelper {
     static final String SETTINGS_COLUMN_NUMBEROFCONNECTIONS = "_numberOfConnections";
 
     // Cards table creation sql statement
-    private static final String CARDS_TABLE_CREATE = "create table "
+    static final String CARDS_TABLE_CREATE = "create table if not exists "
             + TABLE_CARDS + "("
             + CARD_COLUMN_ID + " integer primary key autoincrement, "
             + CARD_COLUMN_CARDTYPE + " INTEGER, "
@@ -74,7 +74,7 @@ class QuizSQLiteHelper extends SQLiteOpenHelper {
             + ");";
 
     // Decks table creation sql statement
-    private static final String DECKS_TABLE_CREATE = "create table "
+    static final String DECKS_TABLE_CREATE = "create table if not exists "
             + TABLE_DECKS + "("
             + DECK_COLUMN_ID + " integer primary key autoincrement, "
             + DECK_COLUMN_DECKNAME + " TEXT, "
@@ -85,7 +85,7 @@ class QuizSQLiteHelper extends SQLiteOpenHelper {
             + ");";
 
     // CardDeckRelations table creation sql statement
-    private static final String CDRELATIONS_TABLE_CREATE = "create table "
+    static final String CDRELATIONS_TABLE_CREATE = "create table if not exists "
             + TABLE_CDRELATIONS + "("
             + CDRELATIONS_COLUMN_ID + " integer primary key autoincrement, "
             + CDRELATIONS_COLUMN_FKCARD + " INTEGER, "
@@ -93,7 +93,7 @@ class QuizSQLiteHelper extends SQLiteOpenHelper {
             + ");";
 
     // HighScores table creation sql statement
-    private static final String HIGHSCORES_TABLE_CREATE = "create table "
+    static final String HIGHSCORES_TABLE_CREATE = "create table if not exists "
             + TABLE_HIGHSCORES + "("
             + HIGHSCORES_COLUMN_ID + " integer primary key autoincrement, "
             + HIGHSCORES_COLUMN_DECKNAME + " TEXT, "
@@ -102,7 +102,7 @@ class QuizSQLiteHelper extends SQLiteOpenHelper {
             + ");";
 
     // Rules table creation sql statement
-    private static final String RULES_TABLE_CREATE = "create table "
+    static final String RULES_TABLE_CREATE = "create table if not exists "
             + TABLE_RULESETS + "("
             + RULES_COLUMN_ID + " integer primary key autoincrement, "
             + RULES_COLUMN_TIMELIMIT + " REAL, "
@@ -113,7 +113,7 @@ class QuizSQLiteHelper extends SQLiteOpenHelper {
             + ");";
 
     // Settings table creation sql statement, table columns
-    private static final String SETTINGS_TABLE_CREATE = "create table "
+    static final String SETTINGS_TABLE_CREATE = "create table if not exists "
             + TABLE_SETTINGS + "("
             + SETTINGS_COLUMN_ID + " integer primary key autoincrement, "
             + SETTINGS_COLUMN_USERNAME + " TEXT, "
