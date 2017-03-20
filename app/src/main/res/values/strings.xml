@@ -24,6 +24,7 @@
     <string name="cards">Cards</string>
 
     <string name="game_over">Game Over</string>
+    <string name="results">Results</string>
     <string name="main_menu">Main Menu</string>
 
     <string name="enabling_wifi">Enabling Wifi...</string>

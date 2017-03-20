@@ -35,6 +35,7 @@ public final class Constants {
     public static final String RULES = "Rules";
     public static final String GAME_MODE = "GameMode";
     public static final String MULTIPLAYER = "Multiplayer";
+    public static final String END_OF_GAMEPLAY = "Game Over";
 
     public static final String CARD_TYPE_FILTER = "Card Type Filter";
     public static final String MODERATOR_NEEDED_FILTER = "Moderator Needed Filter";
