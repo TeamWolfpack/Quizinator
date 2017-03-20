@@ -10,7 +10,9 @@ import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Constants;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class QuizDataSource {
 
@@ -534,7 +536,6 @@ public class QuizDataSource {
     public List<Rules> getAllRules() {
         List<Rules> items = new ArrayList<>();
         Cursor cursor = database.query(QuizSQLiteHelper.TABLE_RULESETS,
-
                 rulesAllColumns, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -545,6 +546,24 @@ public class QuizDataSource {
         // make sure to close the cursor
         cursor.close();
         return items;
+    }
+
+    public List<String> getAllRulesetsNames(){
+        Set<String> rules = new HashSet<>();
+        List<String> ruleSetNames = new ArrayList<>();
+        Cursor cursor = database.query(QuizSQLiteHelper.TABLE_RULESETS,
+                rulesAllColumns, null, null, null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Rules rule = cursorToRule(cursor);
+            //TODO -> once we update the base rules, then we need to make this add ruleset names
+            if(rules.add(rule.getCardTypes()))
+                ruleSetNames.add(rule.getCardTypes());
+            cursor.moveToNext();
+        }
+        // make sure to close the cursor
+        cursor.close();
+        return ruleSetNames;
     }
 
     private Rules cursorToRule(Cursor cursor) {
@@ -561,6 +580,7 @@ public class QuizDataSource {
     String[] getRulesAllColumns(){
         return rulesAllColumns;
     }
+
     /************************ RULES METHODS END *******************************/
 
     /************************ SETTINGS METHODS START *******************************/
