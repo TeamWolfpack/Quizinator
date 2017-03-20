@@ -99,18 +99,6 @@
 
         </LinearLayout>
     </LinearLayout>
-    <android.support.design.widget.FloatingActionButton
-        app:srcCompat="@drawable/ic_redo_white_24dp"
-        android:id="@+id/skip_question_button"
-        android:visibility="invisible"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/double_edge_notifier"
-        android:layout_margin="@dimen/fab_margin"
-        android:onClick="onSkipQuestionClick"/>
 
     <TextView
         app:srcCompat="@drawable/ic_redo_white_24dp"
@@ -127,4 +115,18 @@
         android:layout_below="@id/toolbar"
         android:layout_margin="@dimen/fab_margin"
         android:text="@string/double_edge_notifier"/>
+
+    <android.support.design.widget.FloatingActionButton
+        app:srcCompat="@drawable/ic_redo_white_24dp"
+        android:id="@+id/skip_question_button"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/double_edge_notifier"
+        android:layout_margin="@dimen/fab_margin"
+        android:onClick="onSkipQuestionClick"/>
+
 </RelativeLayout>
