@@ -113,15 +113,13 @@ public class Rules {
     }
 
     public boolean getMultipleWinners() {
-        //TODO Return proper val
-        return true;
+        return multipleWinners;
     }
     public void setMultipleWinners(boolean multipleWinners) {
         this.multipleWinners = multipleWinners;
     }
     public boolean getFinalWager() {
-        //TODO Return proper val
-        return true;
+        return finalWager;
     }
     public void setFinalWager(boolean finalWager) {
         this.finalWager = finalWager;
