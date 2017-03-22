@@ -35,6 +35,7 @@ public class EditDeckActivity extends AppCompatActivity  implements AdapterView.
         String jsonDeck = getIntent().getStringExtra("Deck");
         Gson gson = new Gson();
         deck = gson.fromJson(jsonDeck,Deck.class);
+        setTitle("Edit: " + deck.getDeckName());
 
         initializeDB();
         cardsAvailable = dataSource.getAllCards();
