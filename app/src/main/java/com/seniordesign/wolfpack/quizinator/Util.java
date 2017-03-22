@@ -1,8 +1,10 @@
 package com.seniordesign.wolfpack.quizinator;
 
+import android.view.View;
 import android.widget.ImageView;
 
 import com.seniordesign.wolfpack.quizinator.database.Card;
+import com.seniordesign.wolfpack.quizinator.views.CardIcon;
 
 import static com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES.FREE_RESPONSE;
 import static com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES.MULTIPLE_CHOICE;
@@ -32,5 +34,23 @@ public class Util {
             iv.setImageResource(R.drawable.fr_icon);
         else if (c.getCardType() == VERBAL_RESPONSE.ordinal())
             iv.setImageResource(R.drawable.vr_icon);
+    }
+
+    //TODO
+        //remove imageview and replace with CardIcon view
+        //create colors in styles for all card types
+        //remove png files
+        //check to see if you can remove shape object and just
+            //create it dynamically
+    public static void updateCardTypeIcon2(Card c, View v, int id){
+        CardIcon cardIcon = (CardIcon) v.findViewById(id);
+        if (c.getCardType() == TRUE_FALSE.ordinal())
+            cardIcon.setIcon("TF", R.color.question_icon_TF);
+        else if (c.getCardType() == MULTIPLE_CHOICE.ordinal())
+            cardIcon.setIcon("MC", R.color.question_icon_TF);
+        else if (c.getCardType() == FREE_RESPONSE.ordinal())
+            cardIcon.setIcon("FR", R.color.question_icon_TF);
+        else if (c.getCardType() == VERBAL_RESPONSE.ordinal())
+            cardIcon.setIcon("VR", R.color.question_icon_TF);
     }
 }
