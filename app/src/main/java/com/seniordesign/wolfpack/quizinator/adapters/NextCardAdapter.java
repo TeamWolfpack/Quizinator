@@ -5,13 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.database.Card;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.Util;
+import com.seniordesign.wolfpack.quizinator.views.CardIcon;
 
 import java.util.Collections;
 import java.util.List;
@@ -62,8 +61,7 @@ public class NextCardAdapter extends BaseAdapter {
         Card card = cards.get(position);
 
         if (card != null) {
-            ImageView icon = (ImageView) v.findViewById(R.id.card_type_icon);
-            Util.updateCardTypeIcon(card, icon);
+            Util.updateCardTypeIcon(card, (CardIcon) v.findViewById(R.id.card_type_icon), 100);
             TextView question = (TextView) v.findViewById(R.id.array_adapter_card_question);
             question.setText(card.getQuestion());
         }

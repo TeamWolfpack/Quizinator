@@ -1,8 +1,6 @@
 package com.seniordesign.wolfpack.quizinator;
 
 import android.graphics.Color;
-import android.view.View;
-import android.widget.ImageView;
 
 import com.seniordesign.wolfpack.quizinator.database.Card;
 import com.seniordesign.wolfpack.quizinator.views.CardIcon;
@@ -23,34 +21,64 @@ public class Util {
 
     /**
      * Updates an image view with the image of the card type.
-     * @param c the card thats' type needs to be checked
-     * @param iv the image view to update
+     * @param c the card which type needs to be checked
+     * @param cardIcon CardIcon to update
      */
-    public static void updateCardTypeIcon(Card c, ImageView iv){
-        if (c.getCardType() == TRUE_FALSE.ordinal())
-            iv.setImageResource(R.drawable.tf_icon);
-        else if (c.getCardType() == MULTIPLE_CHOICE.ordinal())
-            iv.setImageResource(R.drawable.mc_icon);
-        else if (c.getCardType() == FREE_RESPONSE.ordinal())
-            iv.setImageResource(R.drawable.fr_icon);
-        else if (c.getCardType() == VERBAL_RESPONSE.ordinal())
-            iv.setImageResource(R.drawable.vr_icon);
+    public static void updateCardTypeIcon(Card c, CardIcon cardIcon){
+        updateCardTypeIcon(c, cardIcon, 125);
     }
 
-    //TODO
-        //remove imageview and replace with CardIcon view
-        //create colors in styles for all card types
-        //remove png files
-        //check to see if you can remove shape object and just
-            //create it dynamically
-    public static void updateCardTypeIcon2(Card c, CardIcon cardIcon){
+    /**
+     * Updates an image view with the image of the card type.
+     * @param c the card which type needs to be checked
+     * @param cardIcon CardIcon to update
+     * @param iconSize size of CardIcon
+     */
+    public static void updateCardTypeIcon(Card c, CardIcon cardIcon,
+                                          int iconSize){
         if (c.getCardType() == TRUE_FALSE.ordinal())
-            cardIcon.setIcon("TF", Color.argb(255, 0, 175, 80));
+            setCardIconToTF(cardIcon, iconSize);
         else if (c.getCardType() == MULTIPLE_CHOICE.ordinal())
-            cardIcon.setIcon("MC", Color.argb(255, 0, 112, 191));
+            setCardIconToMC(cardIcon, iconSize);
         else if (c.getCardType() == FREE_RESPONSE.ordinal())
-            cardIcon.setIcon("FR", Color.argb(255, 253, 191, 1));
+            setCardIconToFR(cardIcon, iconSize);
         else if (c.getCardType() == VERBAL_RESPONSE.ordinal())
-            cardIcon.setIcon("VR", Color.argb(255, 255, 0, 250));
+            setCardIconToVR(cardIcon, iconSize);
+    }
+
+    /**
+     * Makes the CardIcon into a true/false card.
+     * @param cardIcon to be set
+     * @param iconSize size to set icon
+     */
+    public static void setCardIconToTF(CardIcon cardIcon, int iconSize){
+        cardIcon.setIcon("TF", Color.argb(255, 0, 175, 80), iconSize);
+    }
+
+    /**
+     * Makes the CardIcon into a multiple choice card.
+     * @param cardIcon to be set
+     * @param iconSize size to set icon
+     */
+    public static void setCardIconToMC(CardIcon cardIcon, int iconSize){
+        cardIcon.setIcon("MC", Color.argb(255, 0, 112, 191), iconSize);
+    }
+
+    /**
+     * Makes the CardIcon into a free response card.
+     * @param cardIcon to be set
+     * @param iconSize size to set icon
+     */
+    public static void setCardIconToFR(CardIcon cardIcon, int iconSize){
+        cardIcon.setIcon("FR", Color.argb(255, 253, 191, 1), iconSize);
+    }
+
+    /**
+     * Makes the CardIcon into a verbal response card.
+     * @param cardIcon to be set
+     * @param iconSize size to set icon
+     */
+    public static void setCardIconToVR(CardIcon cardIcon, int iconSize){
+        cardIcon.setIcon("VR", Color.argb(255, 255, 0, 250), iconSize);
     }
 }
