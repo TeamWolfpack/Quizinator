@@ -19,10 +19,9 @@ public class Rules {
     private long cardDisplayTime;
     private long deckId;
     private String ruleSetName;
-    private boolean doubleEdgeSword;
-    private boolean lastCardWager;
-    private boolean multipleWinners;
-    private boolean finalWager;
+    private Boolean doubleEdgeSword;
+    private Boolean lastCardWager;
+    private Boolean multipleWinners;
     /*
      * Using String because going to use an Array of Strings to limit what choice
      * of Card Type in that class instead of using an enum. We thought this
@@ -96,32 +95,27 @@ public class Rules {
         this.ruleSetName = ruleSetName;
     }
 
-    public boolean isDoubleEdgeSword() {
+    public Boolean isDoubleEdgeSword() {
         return doubleEdgeSword;
     }
 
-    public void setDoubleEdgeSword(boolean doubleEdgeSword) {
+    public void setDoubleEdgeSword(Boolean doubleEdgeSword) {
         this.doubleEdgeSword = doubleEdgeSword;
     }
 
-    public boolean isLastCardWager() {
+    public Boolean isLastCardWager() {
         return lastCardWager;
     }
 
-    public void setLastCardWager(boolean lastCardWager) {
+    public void setLastCardWager(Boolean lastCardWager) {
         this.lastCardWager = lastCardWager;
     }
 
-    public boolean getMultipleWinners() {
+    public Boolean getMultipleWinners() {
         return multipleWinners;
     }
-    public void setMultipleWinners(boolean multipleWinners) {
+
+    public void setMultipleWinners(Boolean multipleWinners) {
         this.multipleWinners = multipleWinners;
-    }
-    public boolean getFinalWager() {
-        return finalWager;
-    }
-    public void setFinalWager(boolean finalWager) {
-        this.finalWager = finalWager;
     }
 }

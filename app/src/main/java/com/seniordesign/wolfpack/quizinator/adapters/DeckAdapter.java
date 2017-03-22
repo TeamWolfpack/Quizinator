@@ -8,9 +8,11 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES;
+import com.seniordesign.wolfpack.quizinator.Util;
 import com.seniordesign.wolfpack.quizinator.database.Card;
 import com.seniordesign.wolfpack.quizinator.database.Deck;
 import com.seniordesign.wolfpack.quizinator.R;
+import com.seniordesign.wolfpack.quizinator.views.CardIcon;
 
 import java.util.List;
 
@@ -35,6 +37,11 @@ public class DeckAdapter extends ArrayAdapter<Deck> {
             vi = LayoutInflater.from(getContext());
             v = vi.inflate(R.layout.array_adapter_list_of_decks, null);
         }
+
+        Util.setCardIconToMC((CardIcon)v.findViewById(R.id.array_adapter_deck_MC_icon), 75);
+        Util.setCardIconToTF((CardIcon)v.findViewById(R.id.array_adapter_deck_TF_icon), 75);
+        Util.setCardIconToFR((CardIcon)v.findViewById(R.id.array_adapter_deck_FR_icon), 75);
+        Util.setCardIconToVR((CardIcon)v.findViewById(R.id.array_adapter_deck_VR_icon), 75);
 
         Deck deck = getItem(position);
 

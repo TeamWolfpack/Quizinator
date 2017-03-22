@@ -2,7 +2,6 @@ package com.seniordesign.wolfpack.quizinator.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.os.CountDownTimer;
 import android.support.v4.content.ContextCompat;
@@ -10,15 +9,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ActionMode;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -39,6 +32,7 @@ import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.messages.Answer;
 import com.seniordesign.wolfpack.quizinator.messages.Confirmation;
 import com.seniordesign.wolfpack.quizinator.Util;
+import com.seniordesign.wolfpack.quizinator.views.CardIcon;
 import com.seniordesign.wolfpack.quizinator.wifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.wifiDirect.WifiDirectApp;
 
@@ -46,7 +40,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES.*;
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_ANSWER_CONFIRMATION_ACTIVITY;
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_END_OF_GAME_ACTIVITY;
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_SEND_CARD_ACTIVITY;
@@ -126,7 +119,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
     }
 
     public void sendCard(View v) {
-        if(!(cardsPlayed+1 < cardLimit) && !gettingWagers && rules.getFinalWager() ){
+        if(!(cardsPlayed+1 < cardLimit) && !gettingWagers && rules.isLastCardWager()){
             if(gettingWagers)
                 return;
             gettingWagers = true;
@@ -309,7 +302,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
         TextView points = (TextView) findViewById(R.id.current_card_points);
             points.setText(getResources().getText(R.string.points) + ": " + card.getPoints());
 
-        Util.updateCardTypeIcon(card, (ImageView) findViewById(R.id.current_card_type_icon));
+        Util.updateCardTypeIcon(card, (CardIcon) findViewById(R.id.current_card_type_icon));
 
         TextView answerLabel = (TextView) findViewById(R.id.current_card_answer_label);
             answerLabel.setText(R.string.correct_answer_label);

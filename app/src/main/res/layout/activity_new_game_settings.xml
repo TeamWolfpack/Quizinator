@@ -159,7 +159,8 @@
         <TableRow
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:layout_marginBottom="@dimen/activity_vertical_margin_half">
             <TextView
                 android:id="@+id/card_count_label"
                 android:layout_width="wrap_content"
@@ -176,6 +177,54 @@
                 android:layout_marginEnd="@dimen/spinner_padding"
                 android:layout_marginRight="@dimen/spinner_padding"
                 android:inputType="number"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:visibility="gone"
+            android:id="@+id/allow_multiple_winners_row"
+            android:layout_marginBottom="@dimen/activity_vertical_margin_half">
+            <CheckBox
+                android:id="@+id/allow_multiple_winners"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_span="2"
+                android:text="@string/allow_multiple_winners"
+                android:textColor="?android:attr/textColorTertiary" />
+        </TableRow>
+
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:visibility="gone"
+            android:id="@+id/double_edge_questions_row"
+            android:layout_marginBottom="@dimen/activity_vertical_margin_half">
+            <CheckBox
+                android:id="@+id/include_double_edge_questions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_span="2"
+                android:text="@string/double_edge_sword_questions"
+                android:textColor="?android:attr/textColorTertiary" />
+        </TableRow>
+
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:visibility="gone"
+            android:id="@+id/final_wager_question_row"
+            android:layout_marginBottom="@dimen/activity_vertical_margin_half">
+            <CheckBox
+                android:id="@+id/include_final_wager_question"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_span="2"
+                android:text="@string/wager_final_question"
+                android:textColor="?android:attr/textColorTertiary" />
         </TableRow>
 
         <LinearLayout

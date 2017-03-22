@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.activeandroid.ActiveAndroid;
 import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.R;
+import com.seniordesign.wolfpack.quizinator.views.CardIcon;
 import com.seniordesign.wolfpack.quizinator.wifiDirect.ConnectionService;
 
 public class MainMenuActivity extends AppCompatActivity

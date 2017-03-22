@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ import com.seniordesign.wolfpack.quizinator.wifiDirect.WifiDirectApp;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -87,7 +89,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
         initializeTextFieldListeners();
 
-        loadPreviousRules();
+        loadPreviousRules(0);
     }
 
     private void initializeTextFieldListeners(){
@@ -143,11 +145,20 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         rulesetSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //TODO -> update this when rulesets are implemented
+                if (position < 1) {
+                    findViewById(R.id.allow_multiple_winners_row).setVisibility(View.GONE);
+                    findViewById(R.id.double_edge_questions_row).setVisibility(View.GONE);
+                    findViewById(R.id.final_wager_question_row).setVisibility(View.GONE);
+                } else {
+                    findViewById(R.id.allow_multiple_winners_row).setVisibility(View.VISIBLE);
+                    findViewById(R.id.double_edge_questions_row).setVisibility(View.VISIBLE);
+                    findViewById(R.id.final_wager_question_row).setVisibility(View.VISIBLE);
+                }
+                loadPreviousRules(position);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                //TODO -> update this when rulesets are implemented
+                // Do Nothing
             }
         });
     }
@@ -312,20 +323,9 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
         String cardTypes = gson.toJson(selectedCardTypes);
 
-        if (dataSource.getAllRules().size() < 1) {
-            Log.d(TAG, "Deck id is saved as " + (int)deck.getId());
-            return dataSource.createRule(
-                    cardCount,
-                    gameMinutesInMilli + gameSecondsInMilli,
-                    cardMinutesInMilli + cardSecondsInMilli,
-                    cardTypes,
-                    deck.getId());
-        }
-
-        Log.d(TAG, "Deck id is updated as " + (int)deck.getId());
-
-        Rules rule = dataSource.getAllRules().get(dataSource.getAllRules().size() - 1);
-        dataSource.deleteRule(rule);
+        Spinner ruleSetSpinner = (Spinner) findViewById(R.id.ruleset_spinner);
+        int rulePosition = ruleSetSpinner.getSelectedItemPosition();
+        Rules rule = dataSource.getAllRules().get(rulePosition);
 
         if (rule.getTimeLimit() != gameMinutesInMilli + gameSecondsInMilli) {
             rule.setTimeLimit(gameMinutesInMilli + gameSecondsInMilli);
@@ -341,15 +341,55 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         }
 
         //TODO change to update this
-        return dataSource.createRule(rule.getMaxCardCount(),
-                rule.getTimeLimit(), rule.getCardDisplayTime(),
-                rule.getCardTypes(), (int)deck.getId());
+        rule.setDeckId((int) deck.getId());
+        if (rule.getRuleSetName().equals("Default")) {
+            rule.setDoubleEdgeSword(null);
+            rule.setLastCardWager(null);
+            rule.setMultipleWinners(null);
+        } else {
+            CheckBox doubleEdge = (CheckBox) findViewById(R.id.include_double_edge_questions);
+            CheckBox finalWager = (CheckBox) findViewById(R.id.include_final_wager_question);
+            CheckBox multiWinners = (CheckBox) findViewById(R.id.allow_multiple_winners);
+            rule.setDoubleEdgeSword(doubleEdge.isChecked());
+            rule.setLastCardWager(finalWager.isChecked());
+            rule.setMultipleWinners(multiWinners.isChecked());
+        }
+
+        dataSource.updateRules(rule);
+        return rule;
     }
 
-    public boolean loadPreviousRules(){
-        if (dataSource.getAllRules().size() < 1) return false;
+    public boolean loadPreviousRules(int ruleIndex){
+        // ******************************************************************
+        // TODO -> Remove code below when rulesets are created with the db
+        if (dataSource.getAllRules().size() > 2) {
+            for (Rules rule : dataSource.getAllRules()) {
+                dataSource.deleteRule(rule);
+            }
+        }
+        if (dataSource.getAllRules().size() < 1) {
+            // Default Rule
+            dataSource.createRule(deck.getCards().size(), 5 * 60000, 15000,
+                    gson.toJson(new ArrayList<>(Arrays.asList(
+                            CARD_TYPES.TRUE_FALSE,
+                            CARD_TYPES.MULTIPLE_CHOICE,
+                            CARD_TYPES.FREE_RESPONSE,
+                            CARD_TYPES.VERBAL_RESPONSE))),
+                    1, "Default", null, null, null);
+            // Double Down Rule
+            dataSource.createRule(deck.getCards().size(), 5 * 60000, 15000,
+                    gson.toJson(new ArrayList<>(Arrays.asList(
+                            CARD_TYPES.TRUE_FALSE,
+                            CARD_TYPES.MULTIPLE_CHOICE,
+                            CARD_TYPES.FREE_RESPONSE,
+                            CARD_TYPES.VERBAL_RESPONSE))),
+                    1, "Double Down", true, true, true);
+            // Reset Ruleset Spinner
+            initializeRulesetSpinner();
+        }
+        // ******************************************************************
 
-        Rules rule = dataSource.getAllRules().get(dataSource.getAllRules().size() - 1);
+        Rules rule = dataSource.getAllRules().get(ruleIndex);
 
         Calendar gameCal = Calendar.getInstance();
         gameCal.setTimeInMillis(rule.getTimeLimit());
@@ -380,6 +420,22 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             if (cardTypeOptions.indexOf(type) > -1)
                 cardTypeSpinner.selectItem(cardTypeOptions.indexOf(type), true);
         }
+
+        if (ruleIndex > 0) {
+            CheckBox multiWinners = (CheckBox) findViewById(R.id.allow_multiple_winners);
+            CheckBox doubleEdge = (CheckBox) findViewById(R.id.include_double_edge_questions);
+            CheckBox finalWager = (CheckBox) findViewById(R.id.include_final_wager_question);
+
+            Log.d(TAG, "multiWinner: " + rule.getMultipleWinners());
+
+            multiWinners.setChecked(
+                    rule.getMultipleWinners() == null ? false : rule.getMultipleWinners());
+            doubleEdge.setChecked(
+                    rule.isDoubleEdgeSword() == null ? false : rule.isDoubleEdgeSword());
+            finalWager.setChecked(
+                    rule.isLastCardWager() == null ? false : rule.isLastCardWager());
+        }
+
         return true;
     }
 
