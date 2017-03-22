@@ -135,11 +135,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
     private void initializeRulesetSpinner(){
         Spinner rulesetSpinner = (Spinner) findViewById(R.id.ruleset_spinner);
-        List<String> rulesetNames = new ArrayList<>();
-        for(Rules rule : dataSource.getAllRules()){
-            //TODO -> update this when rulesets are implemented
-            rulesetNames.add(rule.toString());
-        }
+        List<String> rulesetNames = dataSource.getAllRulesetsNames();
         final ArrayAdapter<String> rulesetAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, rulesetNames);
         rulesetAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

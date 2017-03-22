@@ -6,10 +6,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.database.GamePlayStats;
 import com.seniordesign.wolfpack.quizinator.database.HighScores;
 import com.seniordesign.wolfpack.quizinator.database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
+import com.seniordesign.wolfpack.quizinator.wifiDirect.ConnectionService;
+
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_DISCONNECT_FROM_ALL_PEERS;
 
 public class EndOfGameplayActivity extends AppCompatActivity {
 
@@ -19,6 +23,7 @@ public class EndOfGameplayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_end_of_gameplay);
+        setTitle(Constants.END_OF_GAMEPLAY);
         initializeDB();
 
         GamePlayStats gamePlayStats;
@@ -32,16 +37,15 @@ public class EndOfGameplayActivity extends AppCompatActivity {
         }
 
         ((TextView)findViewById(R.id.endOfGameScoreText)).setText(
-                String.valueOf("Score: " + gamePlayStats.getScore())
+                String.valueOf(gamePlayStats != null ? gamePlayStats.getScore() : 0)
         );
         long endOfGameSeconds = (gamePlayStats.getTimeElapsed()/1000)%60;
         String formattedGameSeconds = endOfGameSeconds < 10 ? "0" + endOfGameSeconds : "" + endOfGameSeconds;
         ((TextView)findViewById(R.id.endOfGameTimeText)).setText(
-
-                "Time: " + (gamePlayStats.getTimeElapsed()/60000) + ":" + formattedGameSeconds
+                (gamePlayStats.getTimeElapsed()/60000) + ":" + formattedGameSeconds
         );
         ((TextView)findViewById(R.id.endOfGameTotalCardsText)).setText(
-                String.valueOf("Total Cards: " + gamePlayStats.getTotalCardsCompleted())
+                String.valueOf(gamePlayStats.getTotalCardsCompleted())
         );
 
         HighScores highScores = new HighScores();
@@ -55,9 +59,9 @@ public class EndOfGameplayActivity extends AppCompatActivity {
         long highScoreSeconds = (highScores.getBestTime()/1000)%60;
         String formattedHighScoreSeconds = highScoreSeconds < 10 ? "0" + highScoreSeconds : "" + highScoreSeconds;
         ((TextView)findViewById(R.id.endOfGameHighScoreText)).setText(
-                String.valueOf("High Score: "+highScores.getBestScore()));
+                String.valueOf(highScores.getBestScore()));
         ((TextView)findViewById(R.id.endOfGameHighScoreTimeText)).setText(
-                "High Score Time: " + (highScores.getBestTime()/60000) + ":" + formattedHighScoreSeconds
+                (highScores.getBestTime()/60000) + ":" + formattedHighScoreSeconds
         );
     }
 
@@ -86,5 +90,10 @@ public class EndOfGameplayActivity extends AppCompatActivity {
     protected void onPause(){
         super.onPause();
         highScoresDataSource.close();
+    }
+
+    @Override
+    public void onBackPressed() {
+        showMainMenu(this.getCurrentFocus());
     }
 }
