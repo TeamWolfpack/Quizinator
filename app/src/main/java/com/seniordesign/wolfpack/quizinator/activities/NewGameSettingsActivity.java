@@ -340,6 +340,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             rule.setCardTypes(cardTypes);
         }
 
+        //TODO change to update this
         return dataSource.createRule(rule.getMaxCardCount(),
                 rule.getTimeLimit(), rule.getCardDisplayTime(),
                 rule.getCardTypes(), (int)deck.getId());

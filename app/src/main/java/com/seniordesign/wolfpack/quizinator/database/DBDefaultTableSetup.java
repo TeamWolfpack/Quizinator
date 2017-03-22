@@ -5,15 +5,13 @@ import android.database.sqlite.SQLiteDatabase;
 import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Constants;
 
-import java.util.ArrayList;
-import java.util.List;
-
 class DBDefaultTableSetup {
 
     static void setupDefaultTables(SQLiteDatabase db){
         setDefaultCardSet(db);
         setDefaultDeckSet(db);
         setDefaultCdRelationSet(db);
+        setDefaultRuleSet(db);
     }
 
     private static void setDefaultCardSet(SQLiteDatabase db) {

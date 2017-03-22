@@ -514,6 +514,7 @@ public class QuizDataSource {
     }
 
     int updateRules(Rules r){
+        //TODO check ruleset name and branch off from there maybe?
         ContentValues cv = new ContentValues();
         cv.put(QuizSQLiteHelper.RULES_COLUMN_ID, r.getId());
         cv.put(QuizSQLiteHelper.RULES_COLUMN_TIMELIMIT, r.getTimeLimit());
