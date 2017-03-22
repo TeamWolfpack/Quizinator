@@ -126,7 +126,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
     }
 
     public void sendCard(View v) {
-        if(!(cardsPlayed+1 < cardLimit) && !gettingWagers && rules.getFinalWager() ){
+        if(!(cardsPlayed+1 < cardLimit) && !gettingWagers && rules.isLastCardWager()){
             if(gettingWagers)
                 return;
             gettingWagers = true;

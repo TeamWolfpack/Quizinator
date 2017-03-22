@@ -109,7 +109,11 @@ class QuizSQLiteHelper extends SQLiteOpenHelper {
             + RULES_COLUMN_CARDDISPLAYTIME + " REAL, "
             + RULES_COLUMN_MAXCARDCOUNT + " INTEGER, "
             + RULES_COLUMN_CARDTYPES + " TEXT, "
-            + RULES_COLUMN_DECK_ID + " INTEGER"
+            + RULES_COLUMN_DECK_ID + " INTEGER, "
+            + RULES_COLUMN_RULESET_NAME + " TEXT, "
+            + RULES_COLUMN_DOUBLE_EDGE_SWORD + " TEXT DEFAULT NULL, "
+            + RULES_COLUMN_LAST_CARD_WAGER + " TEXT DEFAULT NULL, "
+            + RULES_COLUMN_MULTIPLE_WINNERS + " TEXT DEFAULT NULL"
             + ");";
 
     // Settings table creation sql statement, table columns

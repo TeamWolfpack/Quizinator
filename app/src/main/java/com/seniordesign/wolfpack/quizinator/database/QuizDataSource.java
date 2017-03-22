@@ -58,7 +58,11 @@ public class QuizDataSource {
             QuizSQLiteHelper.RULES_COLUMN_CARDDISPLAYTIME,
             QuizSQLiteHelper.RULES_COLUMN_MAXCARDCOUNT,
             QuizSQLiteHelper.RULES_COLUMN_CARDTYPES,
-            QuizSQLiteHelper.RULES_COLUMN_DECK_ID
+            QuizSQLiteHelper.RULES_COLUMN_DECK_ID,
+            QuizSQLiteHelper.RULES_COLUMN_RULESET_NAME,
+            QuizSQLiteHelper.RULES_COLUMN_DOUBLE_EDGE_SWORD,
+            QuizSQLiteHelper.RULES_COLUMN_LAST_CARD_WAGER,
+            QuizSQLiteHelper.RULES_COLUMN_MULTIPLE_WINNERS
     };
 
     private String[] settingsAllColumns = {
@@ -489,17 +493,22 @@ public class QuizDataSource {
 
     /************************ RULES METHODS START *******************************/
     public Rules createRule(int maxCardCount, long timeLimit,
-                            long cardDisplayTime, String cardTypes, long deckId) {
+                            long cardDisplayTime, String cardTypes, long deckId,
+                            String ruleSetName, Boolean doubleEdgeSword,
+                            Boolean wagerLast, Boolean multiWinners) {
         ContentValues values = new ContentValues();
         values.put(QuizSQLiteHelper.RULES_COLUMN_TIMELIMIT, timeLimit);
         values.put(QuizSQLiteHelper.RULES_COLUMN_CARDDISPLAYTIME, cardDisplayTime);
         values.put(QuizSQLiteHelper.RULES_COLUMN_MAXCARDCOUNT, maxCardCount);
         values.put(QuizSQLiteHelper.RULES_COLUMN_CARDTYPES, cardTypes);
         values.put(QuizSQLiteHelper.RULES_COLUMN_DECK_ID, deckId);
+        values.put(QuizSQLiteHelper.RULES_COLUMN_RULESET_NAME, ruleSetName);
+        values.put(QuizSQLiteHelper.RULES_COLUMN_DOUBLE_EDGE_SWORD, doubleEdgeSword == null ? "NULL" : doubleEdgeSword.toString());
+        values.put(QuizSQLiteHelper.RULES_COLUMN_LAST_CARD_WAGER, wagerLast == null ? "NULL" : wagerLast.toString());
+        values.put(QuizSQLiteHelper.RULES_COLUMN_MULTIPLE_WINNERS, multiWinners == null ? "NULL" : multiWinners.toString());
         long insertId = database.insert(QuizSQLiteHelper.TABLE_RULESETS,
                 null, values);
         Cursor cursor = database.query(QuizSQLiteHelper.TABLE_RULESETS,
-
                 rulesAllColumns, QuizSQLiteHelper.RULES_COLUMN_ID
                         + " = " + insertId, null, null, null, null);
         cursor.moveToFirst();
@@ -510,10 +519,12 @@ public class QuizDataSource {
 
     public Rules createRule(Rules rule){
         return createRule(rule.getMaxCardCount(), rule.getTimeLimit(),
-                rule.getCardDisplayTime(), rule.getCardTypes(), rule.getDeckId());
+                rule.getCardDisplayTime(), rule.getCardTypes(), rule.getDeckId(),
+                rule.getRuleSetName(), rule.isDoubleEdgeSword(), rule.isLastCardWager(),
+                rule.getMultipleWinners());
     }
 
-    int updateRules(Rules r){
+    public int updateRules(Rules r){
         ContentValues cv = new ContentValues();
         cv.put(QuizSQLiteHelper.RULES_COLUMN_ID, r.getId());
         cv.put(QuizSQLiteHelper.RULES_COLUMN_TIMELIMIT, r.getTimeLimit());
@@ -521,6 +532,10 @@ public class QuizDataSource {
         cv.put(QuizSQLiteHelper.RULES_COLUMN_MAXCARDCOUNT, r.getMaxCardCount());
         cv.put(QuizSQLiteHelper.RULES_COLUMN_CARDTYPES, r.getCardTypes());
         cv.put(QuizSQLiteHelper.RULES_COLUMN_DECK_ID, r.getDeckId());
+        cv.put(QuizSQLiteHelper.RULES_COLUMN_RULESET_NAME, r.getRuleSetName());
+        cv.put(QuizSQLiteHelper.RULES_COLUMN_DOUBLE_EDGE_SWORD, r.isDoubleEdgeSword() == null ? "NULL" : r.isDoubleEdgeSword().toString());
+        cv.put(QuizSQLiteHelper.RULES_COLUMN_LAST_CARD_WAGER, r.isLastCardWager() == null ? "NULL" : r.isLastCardWager().toString());
+        cv.put(QuizSQLiteHelper.RULES_COLUMN_MULTIPLE_WINNERS, r.getMultipleWinners() == null ? "NULL" : r.getMultipleWinners().toString());
         String where = QuizSQLiteHelper.RULES_COLUMN_ID + " = " + r.getId();
         return database.update(QuizSQLiteHelper.TABLE_RULESETS, cv, where, null);
     }
@@ -549,16 +564,13 @@ public class QuizDataSource {
     }
 
     public List<String> getAllRulesetsNames(){
-        Set<String> rules = new HashSet<>();
         List<String> ruleSetNames = new ArrayList<>();
         Cursor cursor = database.query(QuizSQLiteHelper.TABLE_RULESETS,
                 rulesAllColumns, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Rules rule = cursorToRule(cursor);
-            //TODO -> once we update the base rules, then we need to make this add ruleset names
-            if(rules.add(rule.getCardTypes()))
-                ruleSetNames.add(rule.getCardTypes());
+            ruleSetNames.add(rule.getRuleSetName());
             cursor.moveToNext();
         }
         // make sure to close the cursor
@@ -574,6 +586,10 @@ public class QuizDataSource {
         rule.setMaxCardCount(cursor.getInt(3));//max card count
         rule.setCardTypes(cursor.getString(4));//card types
         rule.setDeckId(cursor.getLong(5));
+        rule.setRuleSetName(cursor.getString(6));
+        rule.setDoubleEdgeSword(cursor.getString(7) == null ? null : Boolean.valueOf(cursor.getString(7)));
+        rule.setLastCardWager(cursor.getString(8) == null ? null : Boolean.valueOf(cursor.getString(8)));
+        rule.setMultipleWinners(cursor.getString(9) == null ? null : Boolean.valueOf(cursor.getString(9)));
         return rule;
     }
 

@@ -121,4 +121,5 @@
     <string name="player_wagers">Wagers:</string>
     <string name="double_edge_sword_questions">Double Edge Sword Questions</string>
     <string name="wager_final_question">Wager Final Question</string>
+    <string name="allow_multiple_winners">Allow Multiple Winners</string>
 </resources>
