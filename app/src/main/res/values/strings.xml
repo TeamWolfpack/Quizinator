@@ -119,4 +119,6 @@
     <string name="accept">Accept</string>
     <string name="wager">Wager:</string>
     <string name="player_wagers">Wagers:</string>
+    <string name="double_edge_sword_questions">Double Edge Sword Questions</string>
+    <string name="wager_final_question">Wager Final Question</string>
 </resources>
