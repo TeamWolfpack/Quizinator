@@ -1,5 +1,6 @@
 package com.seniordesign.wolfpack.quizinator;
 
+import android.graphics.Color;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -42,15 +43,14 @@ public class Util {
         //remove png files
         //check to see if you can remove shape object and just
             //create it dynamically
-    public static void updateCardTypeIcon2(Card c, View v, int id){
-        CardIcon cardIcon = (CardIcon) v.findViewById(id);
+    public static void updateCardTypeIcon2(Card c, CardIcon cardIcon){
         if (c.getCardType() == TRUE_FALSE.ordinal())
-            cardIcon.setIcon("TF", R.color.question_icon_TF);
+            cardIcon.setIcon("TF", Color.argb(255, 0, 175, 80));
         else if (c.getCardType() == MULTIPLE_CHOICE.ordinal())
-            cardIcon.setIcon("MC", R.color.question_icon_TF);
+            cardIcon.setIcon("MC", Color.argb(255, 0, 112, 191));
         else if (c.getCardType() == FREE_RESPONSE.ordinal())
-            cardIcon.setIcon("FR", R.color.question_icon_TF);
+            cardIcon.setIcon("FR", Color.argb(255, 253, 191, 1));
         else if (c.getCardType() == VERBAL_RESPONSE.ordinal())
-            cardIcon.setIcon("VR", R.color.question_icon_TF);
+            cardIcon.setIcon("VR", Color.argb(255, 255, 0, 250));
     }
 }
