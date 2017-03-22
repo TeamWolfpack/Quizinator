@@ -1,5 +1,9 @@
 package com.seniordesign.wolfpack.quizinator;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public final class Constants {
 
     public static final String NAQT_RULES_URL = "https://www.naqt.com/rules.html";
@@ -20,10 +24,17 @@ public final class Constants {
         public String toString(){
             return typeStr;
         }
+
+        public static List<CARD_TYPES> getAllCardTypes(){
+           return new ArrayList<>(Arrays.asList(TRUE_FALSE, MULTIPLE_CHOICE, FREE_RESPONSE, VERBAL_RESPONSE));
+        }
     }
 
     public static final String ALL_CARD_TYPES = "All Types";
     public static final String NO_CARD_TYPES = "None Selected";
+
+    public static final String LAST_RULESET_USED = "Last RuleSet Used";
+    public static final String DOUBLE_DOWN_RULESET = "Double Down";
 
     public static final String MAIN_MENU = "Main Menu";
     public static final String HOST_GAME = "Host Game";
