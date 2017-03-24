@@ -71,6 +71,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             deck = dataSource.getDeckWithId(dataSource.getAllRules()
                     .get(dataSource.getAllRules().size() - 1)
                     .getDeckId()); //TODO is this just getting the last rules in the database or the last rules used
+            //TODO check to make sure deck still exists
         } else if (dataSource.getAllDecks().size()>0){
             deck = dataSource.getAllDecks().get(0);
         }
@@ -449,8 +450,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
     private boolean initializeDB(){
         dataSource = new QuizDataSource(this);
-        dataSource = new com.seniordesign.wolfpack.quizinator.database.QuizDataSource(this);
-        return dataSource.open() && dataSource.open() && dataSource.open();
+        return dataSource.open();
     }
 
     public List<CARD_TYPES> formatCardTypes(Deck deck) {
@@ -463,27 +463,16 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
         dataSource.open();
-        dataSource.open();
     }
 
     @Override
     protected void onPause(){
         super.onPause();
         dataSource.close();
-        dataSource.close();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if(wifiDirectApp.mIsServer){
-            ConnectionService.sendMessage(MSG_DISCONNECT_FROM_ALL_PEERS, "");
-            wifiDirectApp.mP2pMan.removeGroup(wifiDirectApp.mP2pChannel, null);
-        }
-        finish();
     }
 }

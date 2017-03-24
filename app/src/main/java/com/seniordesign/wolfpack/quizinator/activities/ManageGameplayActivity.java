@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -111,6 +112,13 @@ public class ManageGameplayActivity extends AppCompatActivity {
 
         initializeGameTimer(rules.getTimeLimit());
         gameplayTimerRunning = gameplayTimerStatic.start();
+
+        Button highRiskButton = (Button) findViewById(R.id.double_edge);
+        if(rules.isDoubleEdgeSword()){
+            highRiskButton.setVisibility(View.VISIBLE);
+        }else{
+            highRiskButton.setVisibility(View.INVISIBLE);
+        }
     }
 
     public void shuffle(View v) {

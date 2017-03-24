@@ -328,7 +328,7 @@ public class HostGameActivity
      */
     public boolean onGameSettingsButtonClicked(View v){
         Log.d(TAG, "startGameSettingsActivity: view(" + v.toString() + ")");
-        if(!wifiDirectApp.mP2pConnected || wifiDirectApp.mPeers.size() < 1){
+        if(!wifiDirectApp.mP2pConnected || wifiDirectApp.getConnectedPeers().size() < 1){
             Toast.makeText(this, "You are not connected to anyone",
                     Toast.LENGTH_SHORT).show();
             return false;
