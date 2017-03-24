@@ -450,8 +450,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
     private boolean initializeDB(){
         dataSource = new QuizDataSource(this);
-        dataSource = new com.seniordesign.wolfpack.quizinator.database.QuizDataSource(this);
-        return dataSource.open() && dataSource.open() && dataSource.open();
+        return dataSource.open();
     }
 
     public List<CARD_TYPES> formatCardTypes(Deck deck) {
@@ -464,13 +463,11 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
         dataSource.open();
-        dataSource.open();
     }
 
     @Override
     protected void onPause(){
         super.onPause();
-        dataSource.close();
         dataSource.close();
     }
 
