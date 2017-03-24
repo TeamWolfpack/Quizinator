@@ -45,17 +45,8 @@ public class SinglePlayerHandler implements GamePlayHandler {
         int positiveDBConnections = 0;
         properties.setDataSource(new QuizDataSource(gamePlayActivity));
         if (properties.getDataSource().open()) {
-            positiveDBConnections++;
             List<Rules> ruleList = properties.getDataSource().getAllRules();
-            properties.setRules(ruleList.get(ruleList.size() - 1));
-        }
-        properties.setDataSource(new QuizDataSource(gamePlayActivity));
-        if (properties.getDataSource().open()) {
-            positiveDBConnections++;
-        }
-        properties.setQuizDataSource(new QuizDataSource(gamePlayActivity)); //TODO
-        if (properties.getDataSource().open()) {
-            positiveDBConnections++;
+            properties.setRules(ruleList.get(ruleList.size() - 1)); //TODO need to change this to get the correct ruleset
 
             //Filter and Shuffle deck
             Type listType = new TypeToken<List<Constants.CARD_TYPES>>(){}.getType();

@@ -306,7 +306,7 @@ class DBDefaultTableSetup {
                     "\'15\' AS \'" + QuizSQLiteHelper.RULES_COLUMN_MAXCARDCOUNT + "\' " +
                     "\'" + cardTypes + "\' AS \'" + QuizSQLiteHelper.RULES_COLUMN_CARDTYPES + "\' " +
                     "\'1\' AS \'" + QuizSQLiteHelper.RULES_COLUMN_DECK_ID + "\' " +
-                    "\'" + Constants.LAST_RULESET_USED + "\' AS \'" + QuizSQLiteHelper.RULES_COLUMN_RULESET_NAME + "\' " +
+                    "\'" + Constants.DEFAULT_RULESET + "\' AS \'" + QuizSQLiteHelper.RULES_COLUMN_RULESET_NAME + "\' " +
                     "\'null\' AS \'" + QuizSQLiteHelper.RULES_COLUMN_DOUBLE_EDGE_SWORD + "\' " +
                     "\'null\' AS \'" + QuizSQLiteHelper.RULES_COLUMN_LAST_CARD_WAGER + "\' " +
                     "\'null\' AS \'" + QuizSQLiteHelper.RULES_COLUMN_MULTIPLE_WINNERS + "\' " +

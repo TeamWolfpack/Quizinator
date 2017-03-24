@@ -1,7 +1,6 @@
 package com.seniordesign.wolfpack.quizinator.activities;
 
 import android.content.Intent;
-import android.net.wifi.p2p.WifiP2pManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -362,31 +361,31 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     public boolean loadPreviousRules(int ruleIndex){
         // ******************************************************************
         // TODO -> Remove code below when rulesets are created with the db
-        if (dataSource.getAllRules().size() > 2) {
-            for (Rules rule : dataSource.getAllRules()) {
-                dataSource.deleteRule(rule);
-            }
-        }
-        if (dataSource.getAllRules().size() < 1) {
-            // Default Rule
-            dataSource.createRule(deck.getCards().size(), 5 * 60000, 15000,
-                    gson.toJson(new ArrayList<>(Arrays.asList(
-                            CARD_TYPES.TRUE_FALSE,
-                            CARD_TYPES.MULTIPLE_CHOICE,
-                            CARD_TYPES.FREE_RESPONSE,
-                            CARD_TYPES.VERBAL_RESPONSE))),
-                    1, "Default", null, null, null);
-            // Double Down Rule
-            dataSource.createRule(deck.getCards().size(), 5 * 60000, 15000,
-                    gson.toJson(new ArrayList<>(Arrays.asList(
-                            CARD_TYPES.TRUE_FALSE,
-                            CARD_TYPES.MULTIPLE_CHOICE,
-                            CARD_TYPES.FREE_RESPONSE,
-                            CARD_TYPES.VERBAL_RESPONSE))),
-                    1, "Double Down", true, true, true);
+//        if (dataSource.getAllRules().size() > 2) {
+//            for (Rules rule : dataSource.getAllRules()) {
+//                dataSource.deleteRule(rule);
+//            }
+//        }
+//        if (dataSource.getAllRules().size() < 1) {
+//            // Default Rule
+//            dataSource.createRule(deck.getCards().size(), 5 * 60000, 15000,
+//                    gson.toJson(new ArrayList<>(Arrays.asList(
+//                            CARD_TYPES.TRUE_FALSE,
+//                            CARD_TYPES.MULTIPLE_CHOICE,
+//                            CARD_TYPES.FREE_RESPONSE,
+//                            CARD_TYPES.VERBAL_RESPONSE))),
+//                    1, "Default", null, null, null);
+//            // Double Down Rule
+//            dataSource.createRule(deck.getCards().size(), 5 * 60000, 15000,
+//                    gson.toJson(new ArrayList<>(Arrays.asList(
+//                            CARD_TYPES.TRUE_FALSE,
+//                            CARD_TYPES.MULTIPLE_CHOICE,
+//                            CARD_TYPES.FREE_RESPONSE,
+//                            CARD_TYPES.VERBAL_RESPONSE))),
+//                    1, "Double Down", true, true, true);
             // Reset Ruleset Spinner
-            initializeRulesetSpinner();
-        }
+//            initializeRulesetSpinner();
+//        }
         // ******************************************************************
 
         Rules rule = dataSource.getAllRules().get(ruleIndex);
