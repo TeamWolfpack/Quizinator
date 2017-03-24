@@ -60,8 +60,20 @@ public class CardIcon extends TextView {
      * @param iconSize sets the sie of the circle shape
      */
     public void setIcon(String text, int color, int iconSize){
+        setIcon(text, color, iconSize, this.getTextSize());
+    }
+
+    /**
+     * Sets the text, color, and size of the icon.
+     * @param text of the TextView
+     * @param color of the circle shape
+     * @param iconSize sets the sie of the circle shape
+     * @param textSize The scaled pixel size.
+     */
+    public void setIcon(String text, int color, int iconSize, float textSize){
         setColorOfShape(color);
         setText(text);
+        setTextSize(textSize);
         setIconSize(iconSize);
         this.setTextColor(Color.WHITE);
         this.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
