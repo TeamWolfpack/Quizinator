@@ -26,7 +26,6 @@ import com.seniordesign.wolfpack.quizinator.wifiDirect.WifiDirectApp;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -69,9 +68,6 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         initializeRulesetSpinner();
 
         if (dataSource.getAllRules().size() > 0) {
-//            deck = dataSource.getDeckWithId(dataSource.getAllRules()
-//                    .get(dataSource.getAllRules().size() - 1)
-//                    .getDeckId()); //TODO old code, trying to fix keeping just in case
             deck = dataSource.getDeckFromRuleSetName(Constants.DEFAULT_MULTIPLE_RULESET);
             //TODO check to make sure deck still exists...
                 // this section might need to be looked at and redone
@@ -371,11 +367,15 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         Calendar cardCal = Calendar.getInstance();
         cardCal.setTimeInMillis(rule.getCardDisplayTime());
 
-        gameMinutesInput.setText(String.valueOf(gameCal.get(Calendar.MINUTE)));
+        gameMinutesInput.setText(gameCal.get(Calendar.MINUTE) < 10 ?
+                                    "0" + gameCal.get(Calendar.MINUTE) :
+                                    "" + gameCal.get(Calendar.MINUTE));
         gameSecondsInput.setText(gameCal.get(Calendar.SECOND) < 10 ?
                                     "0" + gameCal.get(Calendar.SECOND) :
                                     "" + gameCal.get(Calendar.SECOND));
-        cardMinutesInput.setText(String.valueOf(cardCal.get(Calendar.MINUTE)));
+        cardMinutesInput.setText(cardCal.get(Calendar.MINUTE) < 10 ?
+                                    "0" + cardCal.get(Calendar.MINUTE) :
+                                    "" + cardCal.get(Calendar.MINUTE));
         cardSecondsInput.setText(cardCal.get(Calendar.SECOND) < 10 ?
                                     "0" + cardCal.get(Calendar.SECOND) :
                                     "" + cardCal.get(Calendar.SECOND));
