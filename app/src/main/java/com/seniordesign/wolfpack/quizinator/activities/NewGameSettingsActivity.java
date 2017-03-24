@@ -66,12 +66,15 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         setTitle(Constants.GAME_SETTINGS);
         wifiDirectApp = (WifiDirectApp)getApplication();
         initializeDB();
+        initializeRulesetSpinner();
 
         if (dataSource.getAllRules().size() > 0) {
-            deck = dataSource.getDeckWithId(dataSource.getAllRules()
-                    .get(dataSource.getAllRules().size() - 1)
-                    .getDeckId()); //TODO is this just getting the last rules in the database or the last rules used
-            //TODO check to make sure deck still exists
+//            deck = dataSource.getDeckWithId(dataSource.getAllRules()
+//                    .get(dataSource.getAllRules().size() - 1)
+//                    .getDeckId()); //TODO old code, trying to fix keeping just in case
+            deck = dataSource.getDeckFromRuleSetName(Constants.DEFAULT_MULTIPLE_RULESET);
+            //TODO check to make sure deck still exists...
+                // this section might need to be looked at and redone
         } else if (dataSource.getAllDecks().size()>0){
             deck = dataSource.getAllDecks().get(0);
         }
@@ -85,11 +88,10 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                 multiSpinnerListener = initializeMultiSpinnerListener();
         initializeDeckSpinner(multiSpinnerListener);
         initializeCardSpinner(multiSpinnerListener);
-        initializeRulesetSpinner();
 
         initializeTextFieldListeners();
 
-        loadPreviousRules(0);
+        loadPreviousRules(Constants.DEFAULT_MULTIPLE_RULESET);
     }
 
     private void initializeTextFieldListeners(){
@@ -137,7 +139,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
     private void initializeRulesetSpinner(){
         Spinner rulesetSpinner = (Spinner) findViewById(R.id.ruleset_spinner);
-        List<String> rulesetNames = dataSource.getAllRulesetsNames();
+        List<String> rulesetNames = dataSource.getMultiplayerRulesetsNames();
         final ArrayAdapter<String> rulesetAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, rulesetNames);
         rulesetAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -145,7 +147,8 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         rulesetSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position < 1) {
+                String select = parent.getSelectedItem().toString();
+                if (select.equals(Constants.DEFAULT_MULTIPLE_RULESET)) {
                     findViewById(R.id.allow_multiple_winners_row).setVisibility(View.GONE);
                     findViewById(R.id.double_edge_questions_row).setVisibility(View.GONE);
                     findViewById(R.id.final_wager_question_row).setVisibility(View.GONE);
@@ -154,7 +157,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                     findViewById(R.id.double_edge_questions_row).setVisibility(View.VISIBLE);
                     findViewById(R.id.final_wager_question_row).setVisibility(View.VISIBLE);
                 }
-                loadPreviousRules(position);
+                loadPreviousRules(select);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -260,7 +263,8 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             //single player
             final Intent startGameIntent = new Intent(this,
                     GamePlayActivity.class);
-            startGameIntent.putExtra(Constants.GAME_MODE,true);
+            startGameIntent.putExtra(Constants.GAME_MODE, true);
+            startGameIntent.putExtra(Constants.RULES, Constants.DEFAULT_SINGLE_RULESET);
             startActivity(startGameIntent);
             finish();
             return true;
@@ -273,7 +277,9 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         }
         runOnUiThread(new Runnable() {
             @Override public void run() {
-                startActivity(wifiDirectApp.getLaunchActivityIntent(ManageGameplayActivity.class, null));
+                Intent intent = wifiDirectApp.getLaunchActivityIntent(ManageGameplayActivity.class, null);
+                intent.putExtra(Constants.RULES, r.getRuleSetName());
+                startActivity(intent);
                 ConnectionService.sendMessage(MSG_SEND_RULES_ACTIVITY, gson.toJson(r));
                 finish();
             }
@@ -324,8 +330,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         String cardTypes = gson.toJson(selectedCardTypes);
 
         Spinner ruleSetSpinner = (Spinner) findViewById(R.id.ruleset_spinner);
-        int rulePosition = ruleSetSpinner.getSelectedItemPosition();
-        Rules rule = dataSource.getAllRules().get(rulePosition);
+        Rules rule = dataSource.getRuleSetByName(ruleSetSpinner.getSelectedItem().toString());
 
         if (rule.getTimeLimit() != gameMinutesInMilli + gameSecondsInMilli) {
             rule.setTimeLimit(gameMinutesInMilli + gameSecondsInMilli);
@@ -340,8 +345,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             rule.setCardTypes(cardTypes);
         }
 
-        //TODO change to update this
-        rule.setDeckId((int) deck.getId());
+        rule.setDeckId(deck.getId());
         if (rule.getRuleSetName().equals("Default")) {
             rule.setDoubleEdgeSword(null);
             rule.setLastCardWager(null);
@@ -354,42 +358,12 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             rule.setLastCardWager(finalWager.isChecked());
             rule.setMultipleWinners(multiWinners.isChecked());
         }
-
         dataSource.updateRules(rule);
         return rule;
     }
 
-    public boolean loadPreviousRules(int ruleIndex){
-        // ******************************************************************
-        // TODO -> Remove code below when rulesets are created with the db
-//        if (dataSource.getAllRules().size() > 2) {
-//            for (Rules rule : dataSource.getAllRules()) {
-//                dataSource.deleteRule(rule);
-//            }
-//        }
-//        if (dataSource.getAllRules().size() < 1) {
-//            // Default Rule
-//            dataSource.createRule(deck.getCards().size(), 5 * 60000, 15000,
-//                    gson.toJson(new ArrayList<>(Arrays.asList(
-//                            CARD_TYPES.TRUE_FALSE,
-//                            CARD_TYPES.MULTIPLE_CHOICE,
-//                            CARD_TYPES.FREE_RESPONSE,
-//                            CARD_TYPES.VERBAL_RESPONSE))),
-//                    1, "Default", null, null, null);
-//            // Double Down Rule
-//            dataSource.createRule(deck.getCards().size(), 5 * 60000, 15000,
-//                    gson.toJson(new ArrayList<>(Arrays.asList(
-//                            CARD_TYPES.TRUE_FALSE,
-//                            CARD_TYPES.MULTIPLE_CHOICE,
-//                            CARD_TYPES.FREE_RESPONSE,
-//                            CARD_TYPES.VERBAL_RESPONSE))),
-//                    1, "Double Down", true, true, true);
-            // Reset Ruleset Spinner
-//            initializeRulesetSpinner();
-//        }
-        // ******************************************************************
-
-        Rules rule = dataSource.getAllRules().get(ruleIndex);
+    public boolean loadPreviousRules(String ruleSetName){
+        Rules rule = dataSource.getRuleSetByName(ruleSetName);
 
         Calendar gameCal = Calendar.getInstance();
         gameCal.setTimeInMillis(rule.getTimeLimit());
@@ -421,7 +395,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                 cardTypeSpinner.selectItem(cardTypeOptions.indexOf(type), true);
         }
 
-        if (ruleIndex > 0) {
+        if (ruleSetName.equals(Constants.DOUBLE_DOWN_RULESET)) {
             CheckBox multiWinners = (CheckBox) findViewById(R.id.allow_multiple_winners);
             CheckBox doubleEdge = (CheckBox) findViewById(R.id.include_double_edge_questions);
             CheckBox finalWager = (CheckBox) findViewById(R.id.include_final_wager_question);

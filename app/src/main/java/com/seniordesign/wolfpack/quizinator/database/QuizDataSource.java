@@ -262,6 +262,20 @@ public class QuizDataSource {
         return decks;
     }
 
+    public Deck getFirstDeck() {
+        Deck deck = new Deck();
+        Cursor cursor = database.query(QuizSQLiteHelper.TABLE_DECKS,
+                deckAllColumns, null, null, null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            deck = cursorToDeck(cursor);
+            deck.setCards(getAllCardsInDeck(deck.getId()));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return deck;
+    }
+
     public Deck getDeckWithId(long id) {
         return getFilteredDeck(id, null, true);
     }
@@ -525,9 +539,8 @@ public class QuizDataSource {
     }
 
     public int updateRules(Rules r){
-        //TODO check ruleset name and branch off from there maybe?
         ContentValues cv = new ContentValues();
-        cv.put(QuizSQLiteHelper.RULES_COLUMN_ID, r.getId());
+//        cv.put(QuizSQLiteHelper.RULES_COLUMN_ID, r.getId());
         cv.put(QuizSQLiteHelper.RULES_COLUMN_TIMELIMIT, r.getTimeLimit());
         cv.put(QuizSQLiteHelper.RULES_COLUMN_CARDDISPLAYTIME, r.getCardDisplayTime());
         cv.put(QuizSQLiteHelper.RULES_COLUMN_MAXCARDCOUNT, r.getMaxCardCount());
@@ -577,6 +590,56 @@ public class QuizDataSource {
         // make sure to close the cursor
         cursor.close();
         return ruleSetNames;
+    }
+
+    /*
+     * This method will skip the first RuleSet because that one will be
+     * meant for Singleplayer only. This will help us keep (save the values
+     * of) the default RuleSets for Singleplayer and Multiplayer separate.
+     */
+    public List<String> getMultiplayerRulesetsNames(){
+        List<String> ruleSetNames = new ArrayList<>();
+        Cursor cursor = database.query(QuizSQLiteHelper.TABLE_RULESETS,
+                rulesAllColumns, null, null, null, null, null);
+        cursor.moveToFirst();
+        cursor.moveToNext();
+        while (!cursor.isAfterLast()) {
+            Rules rule = cursorToRule(cursor);
+            ruleSetNames.add(rule.getRuleSetName());
+            cursor.moveToNext();
+        }
+        // make sure to close the cursor
+        cursor.close();
+        return ruleSetNames;
+    }
+
+    public Deck getDeckFromRuleSetName(String ruleSetName) {
+        Rules rule = new Rules();
+        String whereClause = QuizSQLiteHelper.RULES_COLUMN_RULESET_NAME + " = \'" + ruleSetName + "\'";
+        Cursor cursor = database.query(QuizSQLiteHelper.TABLE_RULESETS,
+                rulesAllColumns, whereClause, null, null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            rule = cursorToRule(cursor);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        Deck deck = getDeckWithId(rule.getDeckId());
+        return deck == null ? getFirstDeck() : deck;
+    }
+
+    public Rules getRuleSetByName(String ruleSetName) {
+        Rules rule = null;
+        String whereClause = QuizSQLiteHelper.RULES_COLUMN_RULESET_NAME + " = '" + ruleSetName + "\'";
+        Cursor cursor = database.query(QuizSQLiteHelper.TABLE_RULESETS,
+                rulesAllColumns, whereClause, null, null, null, null);
+        cursor.moveToFirst();
+        if (!cursor.isAfterLast()) {
+            rule = cursorToRule(cursor);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return rule;
     }
 
     private Rules cursorToRule(Cursor cursor) {

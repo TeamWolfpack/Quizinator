@@ -297,25 +297,35 @@ class DBDefaultTableSetup {
         db.execSQL(query);
     }
 
-    static void setDefaultRuleSet(SQLiteDatabase db) {
+    public static void setDefaultRuleSet(SQLiteDatabase db) {
         String cardTypes = new Gson().toJson(Constants.CARD_TYPES.getAllCardTypes());
         String query = ("insert into " + QuizSQLiteHelper.TABLE_RULESETS) +
                 " SELECT \'1\' AS \'" + QuizSQLiteHelper.RULES_COLUMN_ID + "\', " +
-                    "\'60000\' AS \'" + QuizSQLiteHelper.RULES_COLUMN_TIMELIMIT + "\', " +
-                    "\'600000\' AS \'" + QuizSQLiteHelper.RULES_COLUMN_CARDDISPLAYTIME + "\' " +
-                    "\'15\' AS \'" + QuizSQLiteHelper.RULES_COLUMN_MAXCARDCOUNT + "\' " +
-                    "\'" + cardTypes + "\' AS \'" + QuizSQLiteHelper.RULES_COLUMN_CARDTYPES + "\' " +
-                    "\'1\' AS \'" + QuizSQLiteHelper.RULES_COLUMN_DECK_ID + "\' " +
-                    "\'" + Constants.DEFAULT_RULESET + "\' AS \'" + QuizSQLiteHelper.RULES_COLUMN_RULESET_NAME + "\' " +
-                    "\'null\' AS \'" + QuizSQLiteHelper.RULES_COLUMN_DOUBLE_EDGE_SWORD + "\' " +
-                    "\'null\' AS \'" + QuizSQLiteHelper.RULES_COLUMN_LAST_CARD_WAGER + "\' " +
+                    "\'600000\' AS \'" + QuizSQLiteHelper.RULES_COLUMN_TIMELIMIT + "\', " +
+                    "\'60000\' AS \'" + QuizSQLiteHelper.RULES_COLUMN_CARDDISPLAYTIME + "\', " +
+                    "\'15\' AS \'" + QuizSQLiteHelper.RULES_COLUMN_MAXCARDCOUNT + "\', " +
+                    "\'" + cardTypes + "\' AS \'" + QuizSQLiteHelper.RULES_COLUMN_CARDTYPES + "\', " +
+                    "\'1\' AS \'" + QuizSQLiteHelper.RULES_COLUMN_DECK_ID + "\', " +
+                    "\'" + Constants.DEFAULT_SINGLE_RULESET + "\' AS \'" + QuizSQLiteHelper.RULES_COLUMN_RULESET_NAME + "\', " +
+                    "\'null\' AS \'" + QuizSQLiteHelper.RULES_COLUMN_DOUBLE_EDGE_SWORD + "\', " +
+                    "\'null\' AS \'" + QuizSQLiteHelper.RULES_COLUMN_LAST_CARD_WAGER + "\', " +
                     "\'null\' AS \'" + QuizSQLiteHelper.RULES_COLUMN_MULTIPLE_WINNERS + "\' " +
                 " UNION ALL SELECT \'2\', " +
-                    "\'60000\', " +
                     "\'600000\', " +
+                    "\'60000\', " +
                     "\'15\', " +
                     "\'" + cardTypes + "\', " +
-                    "'1' \', " +
+                    "\'1\', " +
+                    "\'" + Constants.DEFAULT_MULTIPLE_RULESET + "\', " +
+                    "\'" + null + "\', " +
+                    "\'" + null + "\', " +
+                    "\'" + null + "\' " +
+                " UNION ALL SELECT \'3\', " +
+                    "\'600000\', " +
+                    "\'60000\', " +
+                    "\'15\', " +
+                    "\'" + cardTypes + "\', " +
+                    "\'1\', " +
                     "\'" + Constants.DOUBLE_DOWN_RULESET + "\', " +
                     "\'" + true + "\', " +
                     "\'" + true + "\', " +

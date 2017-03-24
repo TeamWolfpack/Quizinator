@@ -97,7 +97,10 @@ public class ManageGameplayActivity extends AppCompatActivity {
 
         dataSource = new QuizDataSource(this);
         dataSource.open();
-        rules = dataSource.getAllRules().get(dataSource.getAllRules().size()-1);
+//        rules = dataSource.getAllRules().get(dataSource.getAllRules().size()-1); //TODO need to change
+//        rules = wifiDirectApp.mGameplayActivity.properties.getRules();
+        String ruleSetName = getIntent().getStringExtra(Constants.RULES);
+        rules = dataSource.getRuleSetByName(ruleSetName);
 
         Type listType = new TypeToken<ArrayList<Constants.CARD_TYPES>>(){}.getType();
         List<Constants.CARD_TYPES> cardTypeList = new Gson().fromJson(rules.getCardTypes(), listType);

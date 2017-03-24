@@ -33,7 +33,8 @@ public final class Constants {
     public static final String ALL_CARD_TYPES = "All Types";
     public static final String NO_CARD_TYPES = "None Selected";
 
-    public static final String DEFAULT_RULESET = "Default";
+    public static final String DEFAULT_SINGLE_RULESET = "Default Single";
+    public static final String DEFAULT_MULTIPLE_RULESET = "Default";
     public static final String DOUBLE_DOWN_RULESET = "Double Down";
 
     public static final String MAIN_MENU = "Main Menu";
