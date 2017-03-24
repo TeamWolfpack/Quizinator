@@ -72,6 +72,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             deck = dataSource.getDeckWithId(dataSource.getAllRules()
                     .get(dataSource.getAllRules().size() - 1)
                     .getDeckId()); //TODO is this just getting the last rules in the database or the last rules used
+            //TODO check to make sure deck still exists
         } else if (dataSource.getAllDecks().size()>0){
             deck = dataSource.getAllDecks().get(0);
         }
@@ -476,14 +477,5 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if(wifiDirectApp.mIsServer){
-            ConnectionService.sendMessage(MSG_DISCONNECT_FROM_ALL_PEERS, "");
-            wifiDirectApp.mP2pMan.removeGroup(wifiDirectApp.mP2pChannel, null);
-        }
-        finish();
     }
 }
