@@ -554,20 +554,15 @@ public class ManageGameplayActivity extends AppCompatActivity {
         }
     }
 
-    public void receiveWager(final Wager wager){
+    public void receiveWager(Wager wager){
         System.out.println("ReceivedWager");
         if(wagers==null)
             wagers = new ArrayList<Wager>();
         wagers.add(wager);
         ListView wagersList = (ListView) wagerDialog.findViewById(R.id.wager_player_dialog_list);
         if(wagersList!=null){
-            final WagerPlayerAdapter playerAdapter = (WagerPlayerAdapter) wagersList.getAdapter();
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    playerAdapter.addItem(wager);
-                }
-            });
+            WagerPlayerAdapter playerAdapter = (WagerPlayerAdapter) wagersList.getAdapter();
+            playerAdapter.addItem(wager);
         }
         if(wagers.size() >= wifiDirectApp.getConnectedPeers().size()){
             receivedWagers = true;
