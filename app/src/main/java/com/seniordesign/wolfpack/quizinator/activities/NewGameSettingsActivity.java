@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +54,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     private QuizDataSource dataSource;
 
     private Deck deck;
+    Boolean isMultiplayer;
 
     WifiDirectApp wifiDirectApp;
 
@@ -64,11 +66,25 @@ public class NewGameSettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_game_settings);
         setTitle(Constants.GAME_SETTINGS);
         wifiDirectApp = (WifiDirectApp)getApplication();
+        isMultiplayer = getIntent().getBooleanExtra(Constants.MULTIPLAYER, true);
+        String defaultRuleSet;
         initializeDB();
-        initializeRulesetSpinner();
+
+        TableRow ruleSetRow = (TableRow) findViewById(R.id.ruleset_row);
+        if (isMultiplayer) {
+            initializeRulesetSpinner();
+            defaultRuleSet = Constants.DEFAULT_MULTIPLE_RULESET;
+            ruleSetRow.setVisibility(View.VISIBLE);
+        } else {
+            defaultRuleSet = Constants.DEFAULT_SINGLE_RULESET;
+            ruleSetRow.setVisibility(View.GONE);
+        }
+
+//        defaultRuleSet = isMultiplayer ? Constants.DEFAULT_MULTIPLE_RULESET
+//                                        : Constants.DEFAULT_SINGLE_RULESET;
 
         if (dataSource.getAllRules().size() > 0) {
-            deck = dataSource.getDeckFromRuleSetName(Constants.DEFAULT_MULTIPLE_RULESET);
+            deck = dataSource.getDeckFromRuleSetName(defaultRuleSet);
             //TODO check to make sure deck still exists...
                 // this section might need to be looked at and redone
         } else if (dataSource.getAllDecks().size()>0){
@@ -87,7 +103,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
         initializeTextFieldListeners();
 
-        loadPreviousRules(Constants.DEFAULT_MULTIPLE_RULESET);
+        loadPreviousRules(defaultRuleSet);
     }
 
     private void initializeTextFieldListeners(){
@@ -325,8 +341,13 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
         String cardTypes = gson.toJson(selectedCardTypes);
 
-        Spinner ruleSetSpinner = (Spinner) findViewById(R.id.ruleset_spinner);
-        Rules rule = dataSource.getRuleSetByName(ruleSetSpinner.getSelectedItem().toString());
+        Rules rule = new Rules();
+        if(isMultiplayer) {
+            Spinner ruleSetSpinner = (Spinner) findViewById(R.id.ruleset_spinner);
+            rule = dataSource.getRuleSetByName(ruleSetSpinner.getSelectedItem().toString());
+        } else {
+            rule = dataSource.getRuleSetByName(Constants.DEFAULT_SINGLE_RULESET);
+        }
 
         if (rule.getTimeLimit() != gameMinutesInMilli + gameSecondsInMilli) {
             rule.setTimeLimit(gameMinutesInMilli + gameSecondsInMilli);

@@ -96,7 +96,9 @@ public class MainMenuActivity extends AppCompatActivity
     }
 
     public void showGameSettings(View v){
-        startActivity(new Intent(this, NewGameSettingsActivity.class));
+        Intent intent = new Intent(this, NewGameSettingsActivity.class);
+        intent.putExtra(Constants.MULTIPLAYER, false);
+        startActivity(intent);
     }
 
     public void initiateHostGame(View v) {

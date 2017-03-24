@@ -335,6 +335,8 @@ public class HostGameActivity
         }
         runOnUiThread(new Runnable() {
             @Override public void run() {
+//                Intent intent = wifiDirectApp.getLaunchActivityIntent(NewGameSettingsActivity.class, null);
+//                intent.putExtra(Constants.MULTIPLAYER, true);
                 startActivity(wifiDirectApp.getLaunchActivityIntent(NewGameSettingsActivity.class, null));
             }
         });
