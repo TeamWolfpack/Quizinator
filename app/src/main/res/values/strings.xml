@@ -24,6 +24,7 @@
     <string name="cards">Cards</string>
 
     <string name="game_over">Game Over</string>
+    <string name="results">Results</string>
     <string name="main_menu">Main Menu</string>
 
     <string name="enabling_wifi">Enabling Wifi...</string>
@@ -55,8 +56,10 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="send_card">Send Card</string>
+    <string name="double_edge">High Risk!</string>
     <string name="end_game">End Game</string>
     <string name="question">Question</string>
+    <string name="double_edge_notifier">High Risk!</string>
 
     <string name="deck_name">Deck Name</string>
     <string name="deck_size">Deck Size</string>
@@ -70,6 +73,7 @@
     <string name="cancel">Cancel</string>
     <string name="Delete">Delete</string>
     <string name="select_deck">Select Deck</string>
+    <string name="select_ruleset">Select Ruleset</string>
 
     <string name="type">Type</string>
     <string name="points">Points</string>
@@ -108,4 +112,14 @@
     <string name="response_time">Response Time</string>
     <string name="solo_play_card_count_warning">*Free and Verbal Response cards can\'t be used in Solo Play</string>
 
+    <string name="create_wager">Set Your Wager</string>
+    <string name="note">Note:</string>
+    <string name="wager_text_min">A blank wager is zero points</string>
+    <string name="wager_text_max">A wager higher than your score wagers all your points</string>
+    <string name="accept">Accept</string>
+    <string name="wager">Wager:</string>
+    <string name="player_wagers">Wagers:</string>
+    <string name="double_edge_sword_questions">Double Edge Sword Questions</string>
+    <string name="wager_final_question">Wager Final Question</string>
+    <string name="allow_multiple_winners">Allow Multiple Winners</string>
 </resources>

@@ -1,5 +1,9 @@
 package com.seniordesign.wolfpack.quizinator;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public final class Constants {
 
     public static final String NAQT_RULES_URL = "https://www.naqt.com/rules.html";
@@ -20,10 +24,18 @@ public final class Constants {
         public String toString(){
             return typeStr;
         }
+
+        public static List<CARD_TYPES> getAllCardTypes(){
+           return new ArrayList<>(Arrays.asList(TRUE_FALSE, MULTIPLE_CHOICE, FREE_RESPONSE, VERBAL_RESPONSE));
+        }
     }
 
     public static final String ALL_CARD_TYPES = "All Types";
     public static final String NO_CARD_TYPES = "None Selected";
+
+    public static final String DEFAULT_SINGLE_RULESET = "Default Single";
+    public static final String DEFAULT_MULTIPLE_RULESET = "Default";
+    public static final String DOUBLE_DOWN_RULESET = "Double Down";
 
     public static final String MAIN_MENU = "Main Menu";
     public static final String HOST_GAME = "Host Game";
@@ -35,6 +47,7 @@ public final class Constants {
     public static final String RULES = "Rules";
     public static final String GAME_MODE = "GameMode";
     public static final String MULTIPLAYER = "Multiplayer";
+    public static final String END_OF_GAMEPLAY = "Game Over";
 
     public static final String CARD_TYPE_FILTER = "Card Type Filter";
     public static final String MODERATOR_NEEDED_FILTER = "Moderator Needed Filter";
@@ -47,6 +60,11 @@ public final class Constants {
 
     public static final String ACTIVE_PLAYERS = "Active Players";
     public static final String PLAYERS_RESPONSE = "Select a Winner";
+
+    public static final String FINAL_QUESTION = "Final Question";
+    public static final String ACCEPT = "Accept";
+    public static final String PLAYER_WAGERS = "Players' Wagers";
+    public static final String SEND_CARD = "Send Card";
 
     public static final String UPDATED_HIGH_SCORE = "Updated High Scores";
     public static final String NO_HIGH_SCORE = "No High Scores";

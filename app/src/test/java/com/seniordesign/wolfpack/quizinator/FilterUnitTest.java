@@ -1,6 +1,6 @@
 package com.seniordesign.wolfpack.quizinator;
 
-import com.seniordesign.wolfpack.quizinator.Filters.NumberFilter;
+import com.seniordesign.wolfpack.quizinator.filters.NumberFilter;
 
 import org.junit.Test;
 

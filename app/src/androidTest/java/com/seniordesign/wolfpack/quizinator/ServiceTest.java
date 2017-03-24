@@ -7,12 +7,13 @@ import android.support.test.rule.ServiceTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.google.gson.Gson;
-import com.seniordesign.wolfpack.quizinator.Messages.Answer;
-import com.seniordesign.wolfpack.quizinator.Messages.Confirmation;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionManager;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.ConnectionService;
-import com.seniordesign.wolfpack.quizinator.Messages.QuizMessage;
-import com.seniordesign.wolfpack.quizinator.WifiDirect.WifiDirectApp;
+import com.seniordesign.wolfpack.quizinator.messages.Answer;
+import com.seniordesign.wolfpack.quizinator.messages.Confirmation;
+import com.seniordesign.wolfpack.quizinator.wifiDirect.ConnectionManager;
+import com.seniordesign.wolfpack.quizinator.wifiDirect.ConnectionService;
+import com.seniordesign.wolfpack.quizinator.messages.QuizMessage;
+import com.seniordesign.wolfpack.quizinator.wifiDirect.MessageHandler;
+import com.seniordesign.wolfpack.quizinator.wifiDirect.WifiDirectApp;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -23,7 +24,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
-import static com.seniordesign.wolfpack.quizinator.WifiDirect.MessageCodes.*;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.*;
 import static org.junit.Assert.*;
 
 @MediumTest
@@ -53,7 +54,7 @@ public class ServiceTest {
         String message1 = gson.toJson(new QuizMessage(
                 MSG_SEND_ANSWER_ACTIVITY, answer));
 
-        List<QuizMessage> messages = service.parseInData(message1);
+        List<QuizMessage> messages = ((MessageHandler)service.getHandler()).parseInData(message1);
 
         assertTrue("Only one message parsed", messages.size() == 1);
 
@@ -70,7 +71,7 @@ public class ServiceTest {
         String message2 = gson.toJson(new QuizMessage(
                 MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation));
 
-        List<QuizMessage> messages = service.parseInData(message1 + message2);
+        List<QuizMessage> messages = ((MessageHandler)service.getHandler()).parseInData(message1 + message2);
 
         assertTrue("Both messages are parsed", messages.size() == 2);
 
@@ -91,7 +92,7 @@ public class ServiceTest {
         String message3 = gson.toJson(new QuizMessage(
                 MSG_END_OF_GAME_ACTIVITY, endGame));
 
-        List<QuizMessage> messages = service.parseInData(message1 + message2 + message3);
+        List<QuizMessage> messages = ((MessageHandler)service.getHandler()).parseInData(message1 + message2 + message3);
 
         assertTrue("Both messages are parsed", messages.size() == 3);
 
