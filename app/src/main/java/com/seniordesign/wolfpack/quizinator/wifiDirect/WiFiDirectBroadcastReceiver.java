@@ -65,9 +65,6 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver
                             ConnectionService.getInstance(),
                             ConnectionService.getInstance().mWorkHandler.getLooper(),
                             null);
-            AppPreferences.setStringToPref(wifiDirectApp,
-                    AppPreferences.PREF_NAME,
-                    AppPreferences.P2P_ENABLED, "1");
             return true;
         } else {
             wifiDirectApp.mThisDevice = null;
@@ -77,10 +74,6 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver
                 wifiDirectApp.mHomeActivity.updateThisDevice(null);
                 wifiDirectApp.mHomeActivity.resetData();
             }
-            AppPreferences.setStringToPref(wifiDirectApp,
-                    AppPreferences.PREF_NAME,
-                    AppPreferences.P2P_ENABLED,
-                    "0");
             return false;
         }
     }

@@ -79,20 +79,6 @@ public class WifiDirectApp extends Application {
     }
 
     /**
-     * bcast listener always gets enable/disable intent
-     * and persists to shared pref.
-     *
-     * @return true if P2P is enabled on device
-     */
-    public boolean isP2pEnabled() {
-        String state =
-                AppPreferences.getStringFromPref(this,
-                        AppPreferences.PREF_NAME, AppPreferences.P2P_ENABLED);
-        Log.d(TAG, "isP2pEnabled: " + (state != null && "1".equals(state.trim())));
-        return state != null && "1".equals(state.trim());
-    }
-
-    /**
      * Determines if the instance of the WifiDirectApp is currently
      * a host or not.
      * @return true if device is host

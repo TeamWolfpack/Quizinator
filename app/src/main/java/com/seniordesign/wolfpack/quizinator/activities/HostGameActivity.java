@@ -130,7 +130,8 @@ public class HostGameActivity
 
     public void discoverPeers(){
         Log.d(TAG, "discoverPeers");
-        if(!wifiDirectApp.isP2pEnabled()){
+        //If channel exists then minimum p2p requirements met.
+        if(wifiDirectApp.mP2pChannel == null){
             Toast.makeText(this, R.string.p2p_off_warning, Toast.LENGTH_LONG).show();
             return;
         }
