@@ -390,10 +390,6 @@ public class ManageGameplayActivity extends AppCompatActivity {
                         confirmation = gson.toJson(new Confirmation(device.deviceAddress, false));
                         ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
                     }
-                    else if(!currentCard.isDoubleEdge()){
-                        confirmation = gson.toJson(new Confirmation(device.deviceAddress, false));
-                        ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
-                    }
                 }
             }
         }
