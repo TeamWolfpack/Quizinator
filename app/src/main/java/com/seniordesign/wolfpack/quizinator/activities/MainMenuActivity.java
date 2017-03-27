@@ -22,11 +22,18 @@ import android.widget.Toast;
 import com.activeandroid.ActiveAndroid;
 import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.R;
+import com.seniordesign.wolfpack.quizinator.database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.views.CardIcon;
 import com.seniordesign.wolfpack.quizinator.wifiDirect.ConnectionService;
 
+import javax.sql.DataSource;
+
+import static com.seniordesign.wolfpack.quizinator.Constants.NO_DECK_WARNING;
+
 public class MainMenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
+
+    private QuizDataSource dataSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +55,9 @@ public class MainMenuActivity extends AppCompatActivity
         // If service not started yet, start it.
         Intent serviceIntent = new Intent(this, ConnectionService.class);
         startService(serviceIntent);  // start the connection service
+
+        //Init data source
+        dataSource = new QuizDataSource(this);
 
         //Check if wifiDirect is supported
         if(!isWifiDirectSupported(this)){
@@ -96,12 +106,20 @@ public class MainMenuActivity extends AppCompatActivity
     }
 
     public void showGameSettings(View v){
+        if (dataSource.getAllDecks().isEmpty()) {
+            Toast.makeText(this, NO_DECK_WARNING, Toast.LENGTH_SHORT).show();
+            return;
+        }
         Intent intent = new Intent(this, NewGameSettingsActivity.class);
         intent.putExtra(Constants.MULTIPLAYER, false);
         startActivity(intent);
     }
 
     public void initiateHostGame(View v) {
+        if (dataSource.getAllDecks().isEmpty()) {
+            Toast.makeText(this, NO_DECK_WARNING, Toast.LENGTH_SHORT).show();
+            return;
+        }
         if(isWifiDirectSupported(this)) {
             enableWifi();
             final Intent intent = new Intent(this, HostGameActivity.class);
@@ -140,5 +158,17 @@ public class MainMenuActivity extends AppCompatActivity
             wifi.setWifiEnabled(true);
             Toast.makeText(this, R.string.enabling_wifi, Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        dataSource.open();
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        dataSource.close();
     }
 }

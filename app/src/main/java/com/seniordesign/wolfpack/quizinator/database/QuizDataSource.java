@@ -283,6 +283,10 @@ public class QuizDataSource {
     public Deck getFilteredDeck(long id, List<Constants.CARD_TYPES> cardTypes, boolean moderatorNeeded) {
         Cursor cursor = database.query(QuizSQLiteHelper.TABLE_DECKS,
                 deckAllColumns, QuizSQLiteHelper.DECK_COLUMN_ID + " = " + id, null, null, null, null);
+
+        if (cursor == null || cursor.getCount() < 1)
+            return null;
+
         cursor.moveToFirst();
         Deck deck = cursorToDeck(cursor);
         deck.setCards(getFilteredCardsInDeck(id, cardTypes, moderatorNeeded));

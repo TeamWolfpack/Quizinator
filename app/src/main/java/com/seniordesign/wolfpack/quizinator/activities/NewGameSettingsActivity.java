@@ -85,8 +85,6 @@ public class NewGameSettingsActivity extends AppCompatActivity {
 
         if (dataSource.getAllRules().size() > 0) {
             deck = dataSource.getDeckFromRuleSetName(defaultRuleSet);
-            //TODO check to make sure deck still exists...
-                // this section might need to be looked at and redone
         } else if (dataSource.getAllDecks().size()>0){
             deck = dataSource.getAllDecks().get(0);
         }

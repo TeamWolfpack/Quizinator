@@ -42,23 +42,23 @@ public class SinglePlayerHandler implements GamePlayHandler {
 
     @Override
     public boolean initializeDB(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
-        int positiveDBConnections = 0;
         properties.setDataSource(new QuizDataSource(gamePlayActivity));
-        if (properties.getDataSource().open()) {
-            List<Rules> ruleList = properties.getDataSource().getAllRules();
-            properties.setRules(ruleList.get(ruleList.size() - 1)); //TODO need to change this to get the correct ruleset
+        if (!properties.getDataSource().open())
+            return false;
 
-            //Filter and Shuffle deck
-            Type listType = new TypeToken<List<Constants.CARD_TYPES>>(){}.getType();
-            List<Constants.CARD_TYPES> cardTypeList = new Gson().fromJson(properties.getRules().getCardTypes(), listType);
-            Deck deck = properties.getDataSource()
-                    .getFilteredDeck(properties.getRules().getDeckId(), cardTypeList, false);
-            List<Card> cards = deck.getCards();
-            Collections.shuffle(cards);
-            deck.setCards(cards);
-            properties.setDeck(deck);
-        }
-        return (positiveDBConnections == 3);
+        List<Rules> ruleList = properties.getDataSource().getAllRules();
+        properties.setRules(ruleList.get(0));
+
+        //Filter and Shuffle deck
+        Type listType = new TypeToken<List<Constants.CARD_TYPES>>(){}.getType();
+        List<Constants.CARD_TYPES> cardTypeList = new Gson().fromJson(properties.getRules().getCardTypes(), listType);
+        Deck deck = properties.getDataSource()
+                .getFilteredDeck(properties.getRules().getDeckId(), cardTypeList, false);
+        List<Card> cards = deck.getCards();
+        Collections.shuffle(cards);
+        deck.setCards(cards);
+        properties.setDeck(deck);
+        return true;
     }
 
     @Override
@@ -90,8 +90,6 @@ public class SinglePlayerHandler implements GamePlayHandler {
     @Override
     public boolean handleCleanup(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
         properties.getDataSource().close();
-        properties.getDataSource().close();
-        properties.getDataSource().close();
 
         properties.getGamePlayTimerStatic().cancel();
         properties.getGamePlayTimerRunning().cancel();
@@ -106,7 +104,6 @@ public class SinglePlayerHandler implements GamePlayHandler {
 
     @Override
     public boolean handleResume(GamePlayActivity gamePlayActivity, GamePlayProperties properties) {
-        properties.getDataSource().open();
         properties.getDataSource().open();
         return true;
     }

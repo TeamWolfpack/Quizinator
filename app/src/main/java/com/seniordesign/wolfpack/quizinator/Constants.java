@@ -80,4 +80,6 @@ public final class Constants {
 
     public static final String STRING_0 = "0";
     public static final String STRING_00 = "00";
+
+    public static final String NO_DECK_WARNING = "Need at least one Deck before starting";
 }
