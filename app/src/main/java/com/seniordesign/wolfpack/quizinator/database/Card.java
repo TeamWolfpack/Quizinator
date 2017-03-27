@@ -5,6 +5,8 @@ import com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Card implements Shareable{
 
@@ -24,8 +26,15 @@ public class Card implements Shareable{
                 " | " + points;
     }
 
-    public String toJson(){
-        return (new Gson()).toJson(this);
+    public boolean toJsonFile(String filePath){
+        try {
+            FileWriter fw = new FileWriter(filePath + "/" + id);
+            fw.write((new Gson()).toJson(this));
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public Card fromJson(String jsonCard){

@@ -5,6 +5,8 @@ import com.seniordesign.wolfpack.quizinator.Constants;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,8 +31,15 @@ public class Deck implements Shareable{
 
     }
 
-    public String toJson(){
-        return (new Gson()).toJson(this);
+    public boolean toJsonFile(String filePath){
+        try {
+            FileWriter fw = new FileWriter(filePath + "/" + id);
+            fw.write((new Gson()).toJson(this));
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public Deck fromJson(String jsonCard){
