@@ -1,8 +1,12 @@
 package com.seniordesign.wolfpack.quizinator.database;
 
+import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES;
 
-public class Card{
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+
+public class Card implements Shareable{
 
     private long id;
     private int cardType;
@@ -18,6 +22,22 @@ public class Card{
     public String toString(){
         return CARD_TYPES.values()[cardType].toString() + " | " + question +
                 " | " + points;
+    }
+
+    public String toJson(){
+        return (new Gson()).toJson(this);
+    }
+
+    public Card fromJson(String jsonCard){
+        return (new Gson()).fromJson(jsonCard, Card.class);
+    }
+
+    public Card fromJsonFile(String filePath){
+        try {
+            return (new Gson()).fromJson(new FileReader(filePath), Card.class);
+        } catch (FileNotFoundException e) {
+            return null;
+        }
     }
 
     public long getId() {
