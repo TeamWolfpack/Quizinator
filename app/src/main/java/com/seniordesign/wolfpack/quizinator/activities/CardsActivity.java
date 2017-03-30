@@ -1,8 +1,10 @@
 package com.seniordesign.wolfpack.quizinator.activities;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,13 +19,16 @@ import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.seniordesign.wolfpack.quizinator.Util;
 import com.seniordesign.wolfpack.quizinator.adapters.CardAdapter;
 import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES;
 import com.seniordesign.wolfpack.quizinator.database.Card;
+import com.seniordesign.wolfpack.quizinator.database.Deck;
 import com.seniordesign.wolfpack.quizinator.database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,6 +53,7 @@ public class CardsActivity extends AppCompatActivity {
     private QuizDataSource dataSource;
 
     private static final String TAG = "ACT_CA";
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -116,6 +122,54 @@ public class CardsActivity extends AppCompatActivity {
                 createEditCardDialog(values.get(position), false);
             }
         });
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+            /**
+             * @return true to prevent onItemClick from being called
+             */
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                createSharingDialog(position).show();
+                return true;
+            }
+        });
+    }
+
+    private android.support.v7.app.AlertDialog createSharingDialog(final int position){
+        View innerDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_sharing, null);
+        final EditText fileNameTextView = (EditText) innerDialogView.findViewById(R.id.dialog_file_name);
+        TextView fileExtensionTextView = (TextView) innerDialogView.findViewById(R.id.dialog_file_extension);
+
+        final Card selectedDeck =  dataSource.getAllCards().get(position);
+        final String selectedDeckFileName = String.valueOf(selectedDeck.getId());
+        final String fileExtension = ".json.card.quizinator";
+
+        fileNameTextView.setText(selectedDeckFileName);
+        fileExtensionTextView.setText(fileExtension);
+
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+        builder.setView(innerDialogView);
+        builder.setTitle("Share");
+        builder.setPositiveButton("Share", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //TODO -> send file using Android sharing services
+            }
+        });
+        builder.setNeutralButton("Save", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(!Util.isExternalStorageWritable() && !Util.isExternalStorageReadable())
+                    return;
+                File dir = new File(Environment.getExternalStorageDirectory().getPath(), "Quizinator"); //stores to /storage/emulated/0
+                if(!dir.exists())
+                    dir.mkdirs();
+                if(fileNameTextView.getText().toString().isEmpty())
+                    selectedDeck.toJsonFile(dir, selectedDeckFileName + fileExtension);
+                else
+                    selectedDeck.toJsonFile(dir, fileNameTextView.getText().toString() + fileExtension);
+            }
+        });
+        return builder.create();
     }
 
     private void createEditCardDialog(final Card card, final boolean isNew){

@@ -20,6 +20,12 @@
     <uses-permission
         android:name="android.permission.INTERACT_ACROSS_USERS_FULL"
         android:required="true" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:required="true"/>
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:required="true"/>
 
     <!-- Market filtering -->
     <uses-feature
@@ -34,16 +40,23 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".activities.DecksActivity" />
-        <activity android:name=".activities.EndOfGameplayActivity" />
-        <activity android:name=".activities.NewGameSettingsActivity" />
-        <activity android:name=".activities.HostGameActivity"
+        <activity
+            android:name=".activities.DecksActivity" />
+        <activity
+            android:name=".activities.EndOfGameplayActivity" />
+        <activity
+            android:name=".activities.NewGameSettingsActivity" />
+        <activity
+            android:name=".activities.HostGameActivity"
             android:configChanges="orientation|screenSize" />
-        <activity android:name=".activities.CardsActivity"
+        <activity
+            android:name=".activities.CardsActivity"
             android:configChanges="orientation|screenSize" />
-        <activity android:name=".activities.EditDeckActivity"
+        <activity
+            android:name=".activities.EditDeckActivity"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".activities.ManageGameplayActivity"
+        <activity
+            android:name=".activities.ManageGameplayActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

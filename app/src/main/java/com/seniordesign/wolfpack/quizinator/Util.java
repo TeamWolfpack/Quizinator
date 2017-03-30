@@ -1,6 +1,7 @@
 package com.seniordesign.wolfpack.quizinator;
 
 import android.graphics.Color;
+import android.os.Environment;
 
 import com.seniordesign.wolfpack.quizinator.database.Card;
 import com.seniordesign.wolfpack.quizinator.views.CardIcon;
@@ -80,5 +81,24 @@ public class Util {
      */
     public static void setCardIconToVR(CardIcon cardIcon, int iconSize){
         cardIcon.setIcon("VR", Color.argb(255, 255, 0, 250), iconSize);
+    }
+
+    /* Checks if external storage is available for read and write */
+    public static boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    /* Checks if external storage is available to at least read */
+    public static boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            return true;
+        }
+        return false;
     }
 }

@@ -3,16 +3,19 @@ package com.seniordesign.wolfpack.quizinator.activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.preference.DialogPreference;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.seniordesign.wolfpack.quizinator.Util;
 import com.seniordesign.wolfpack.quizinator.adapters.DeckAdapter;
 import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.database.Card;
@@ -20,6 +23,7 @@ import com.seniordesign.wolfpack.quizinator.database.Deck;
 import com.seniordesign.wolfpack.quizinator.database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +33,8 @@ public class DecksActivity extends AppCompatActivity
             AdapterView.OnItemLongClickListener {
 
     QuizDataSource dataSource;
+
+    private static final String TAG = "ACT_DA";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +66,7 @@ public class DecksActivity extends AppCompatActivity
         Intent intent = new Intent(this, EditDeckActivity.class);
         Gson gson = new Gson();
         String jsonDeck = gson.toJson(dataSource.getAllDecks().get(position));
-        intent.putExtra("Deck",jsonDeck);
+        intent.putExtra("Deck", jsonDeck);
         startActivity(intent);
     }
 
@@ -69,13 +75,23 @@ public class DecksActivity extends AppCompatActivity
      */
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        createSharingDialog(this).show();
+        createSharingDialog(position).show();
         return true;
     }
 
-    private AlertDialog createSharingDialog(Context context){
-        View innerDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_sharing, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+    private AlertDialog createSharingDialog(final int position){
+        View innerDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_sharing, null);
+        final EditText fileNameTextView = (EditText) innerDialogView.findViewById(R.id.dialog_file_name);
+        TextView fileExtensionTextView = (TextView) innerDialogView.findViewById(R.id.dialog_file_extension);
+
+        final Deck selectedDeck =  dataSource.getAllDecks().get(position);
+        final String selectedDeckFileName = selectedDeck.getDeckName();
+        final String fileExtension = ".json.deck.quizinator";
+
+        fileNameTextView.setText(selectedDeckFileName);
+        fileExtensionTextView.setText(fileExtension);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setView(innerDialogView);
             builder.setTitle("Share");
             builder.setPositiveButton("Share", new DialogInterface.OnClickListener() {
@@ -87,16 +103,19 @@ public class DecksActivity extends AppCompatActivity
             builder.setNeutralButton("Save", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    //TODO -> save deck/card to device
+                    if(!Util.isExternalStorageWritable() && !Util.isExternalStorageReadable())
+                        return;
+                    File dir = new File(Environment.getExternalStorageDirectory().getPath(), "Quizinator"); //stores to /storage/emulated/0
+                    if(!dir.exists())
+                        dir.mkdirs();
+                    if(fileNameTextView.getText().toString().isEmpty())
+                        selectedDeck.toJsonFile(dir, selectedDeckFileName + fileExtension);
+                    else
+                        selectedDeck.toJsonFile(dir, fileNameTextView.getText().toString() + fileExtension);
                 }
             });
         return builder.create();
     }
-
-//    LayoutInflater li = LayoutInflater.from(this);
-//    final View promptsView = li.inflate(R.layout.fragment_edit_card, null);
-//    android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
-//    alertDialogBuilder.setView(promptsView);
 
     public void newDeckClick(View view){
         Intent intent = new Intent(this, EditDeckActivity.class);
