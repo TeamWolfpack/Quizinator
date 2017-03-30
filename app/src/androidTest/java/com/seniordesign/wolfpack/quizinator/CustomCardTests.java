@@ -64,7 +64,7 @@ public class CustomCardTests {
 
         onData(anything())
                 .inAdapterView(withId(R.id.list_of_cards))
-                .atPosition(10)
+                .atPosition(25)
                 .perform(click());
         onView(withText(Constants.DELETE)).perform(click());
         onView(withText(Constants.DELETE)).perform(click());

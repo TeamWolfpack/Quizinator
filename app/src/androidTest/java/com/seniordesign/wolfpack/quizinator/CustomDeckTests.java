@@ -139,7 +139,7 @@ public class CustomDeckTests {
         //Make sure the card is removed from the deck
         List<Deck> decks = dataSource.getAllDecks();
         Deck deck = dataSource.getDeckWithId(decks.size());
-        assertTrue("Deck size (" + deck.getCards() + ") is empty", deck.getCards().isEmpty());
+        assertTrue("Deck size (" + deck.getCards() + ") is empty", deck.getCards() == null || deck.getCards().isEmpty());
 
         dataSource.deleteDeck(deck);
         dataSource.close();

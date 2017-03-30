@@ -55,11 +55,15 @@ public class RuleIntegration {
     public void validateUpdatingRuleOnGameStart() {
         QuizDataSource dataSource = new QuizDataSource(mActivityRule.getActivity());
         dataSource.open();
-        dataSource.createRule(5, 90000, 9000, getCardTypeString(), 1);
+        Rules oldRule = dataSource.getAllRules().get(0);
+        oldRule.setMaxCardCount(5);
+        oldRule.setTimeLimit(90000);
+        oldRule.setCardDisplayTime(9000);
+        dataSource.updateRules(oldRule);
         mActivityRule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mActivityRule.getActivity().loadPreviousRules();
+                mActivityRule.getActivity().loadPreviousRules("Default");
             }
         });
 
@@ -96,12 +100,16 @@ public class RuleIntegration {
         QuizDataSource dataSource = new QuizDataSource(mActivityRule.getActivity());
         dataSource.open();
 
-        dataSource.createDeck("Test", "", "", true, "", new ArrayList<Card>());
-        dataSource.createRule(5, 603000, 9000, getCardTypeString(), 1);
+        Rules rule = dataSource.getAllRules().get(0);
+        rule.setMaxCardCount(5);
+        rule.setTimeLimit(63000);
+        rule.setCardDisplayTime(9000);
+        rule.setCardTypes(getCardTypeString());
+        dataSource.updateRules(rule);
         mActivityRule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mActivityRule.getActivity().loadPreviousRules();
+                mActivityRule.getActivity().loadPreviousRules("Default");
             }
         });
 
@@ -119,11 +127,16 @@ public class RuleIntegration {
         onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(Constants.CARD_TYPES.TRUE_FALSE.toString()))));
         onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(Constants.CARD_TYPES.MULTIPLE_CHOICE.toString()))));
 
-        dataSource.createRule(5, 90000, 10000, getCardTypeString(), 1);
+        rule = dataSource.getAllRules().get(0);
+        rule.setMaxCardCount(5);
+        rule.setTimeLimit(90000);
+        rule.setCardDisplayTime(10000);
+        rule.setCardTypes(getCardTypeString());
+        dataSource.updateRules(rule);
         mActivityRule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mActivityRule.getActivity().loadPreviousRules();
+                mActivityRule.getActivity().loadPreviousRules("Default");
             }
         });
 
@@ -134,12 +147,6 @@ public class RuleIntegration {
         onView(withId(R.id.card_count)).check(matches(withText(containsString("5"))));
         onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(Constants.CARD_TYPES.TRUE_FALSE.toString()))));
         onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(Constants.CARD_TYPES.MULTIPLE_CHOICE.toString()))));
-
-        for (Rules rule: dataSource.getAllRules()) {
-            dataSource.deleteRule(rule);
-        }
-
-        dataSource.close();
         dataSource.close();
     }
 
@@ -147,11 +154,16 @@ public class RuleIntegration {
     public void validateCardLimit() {
         QuizDataSource dataSource = new QuizDataSource(mActivityRule.getActivity());
         dataSource.open();
-        dataSource.createRule(1, 60000, 5000, getCardTypeString(), 1);
+
+        Rules rule = dataSource.getAllRules().get(0);
+        rule.setMaxCardCount(1);
+        rule.setTimeLimit(60000);
+        rule.setCardDisplayTime(5000);
+        dataSource.updateRules(rule);
         mActivityRule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mActivityRule.getActivity().loadPreviousRules();
+                mActivityRule.getActivity().loadPreviousRules("Default");
             }
         });
         dataSource.close();

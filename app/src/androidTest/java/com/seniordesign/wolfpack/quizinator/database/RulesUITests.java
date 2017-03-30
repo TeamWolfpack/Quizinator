@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
@@ -51,12 +52,11 @@ public class RulesUITests {
     public void normalFlow_RulesDataSource() throws Exception{
         assertEquals(true, dao.open());
         assertEquals(true, dao.getDatabase().isOpen());
-        sql.onUpgrade(dao.getDatabase(), 0, 1);
-        Rules r = dao.createRule(4, 350000, 350000, "['TF', 'MC']", 1);
-        assertEquals(1, dao.getAllRules().size());
-        assertEquals(6, dao.getRulesAllColumns().length);
-        assertEquals(true, dao.deleteRule(r));
-        assertEquals(true, dao.close());
+        Rules r = dao.createRule(4, 350000, 350000, "['TF', 'MC', 'FR', 'VR']", 1, "NormalFlow", null, null, null);
+        assertEquals(4, dao.getAllRules().size());
+        assertEquals(10, dao.getRulesAllColumns().length);
+        assertTrue(dao.deleteRule(r));
+        assertTrue(dao.close());
     }
 
     /*
@@ -66,18 +66,17 @@ public class RulesUITests {
     public void normalFlow_UpdateRule() throws Exception{
         assertEquals(true, dao.open());
         assertEquals(true, dao.getDatabase().isOpen());
-        sql.onUpgrade(dao.getDatabase(), 0, 1);
-        Rules r = dao.createRule(4, 350000, 350000, "['TF', 'MC']", 1);
-        assertEquals(1, dao.getAllRules().size());
-        assertEquals(6, dao.getRulesAllColumns().length);
+        Rules r = dao.createRule(4, 350000, 350000, "['TF', 'MC', 'FR', 'VR']", 1, "NormalFlow", null, null, null);
+        assertEquals(4, dao.getAllRules().size());
+        assertEquals(10, dao.getRulesAllColumns().length);
 
         r.setMaxCardCount(5);
         r.setTimeLimit(90000);
         r.setCardDisplayTime(10000);
         dao.updateRules(r);
-        assertEquals(1, dao.getAllRules().size());
+        assertEquals(4, dao.getAllRules().size());
 
-        assertEquals(true, dao.deleteRule(r));
-        assertEquals(true, dao.close());
+        assertTrue(dao.deleteRule(r));
+        assertTrue(dao.close());
     }
 }
