@@ -80,9 +80,6 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             ruleSetRow.setVisibility(View.GONE);
         }
 
-//        defaultRuleSet = isMultiplayer ? Constants.DEFAULT_MULTIPLE_RULESET
-//                                        : Constants.DEFAULT_SINGLE_RULESET;
-
         if (dataSource.getAllRules().size() > 0) {
             deck = dataSource.getDeckFromRuleSetName(defaultRuleSet);
         } else if (dataSource.getAllDecks().size()>0){
@@ -179,6 +176,10 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     private void initializeCardSpinner(final BaseMultiSelectSpinner.MultiSpinnerListener multiSpinnerListener){
         cardTypeSpinner = (MultiSelectSpinner) findViewById(R.id.card_type_spinner);
         cardTypeOptions = formatCardTypes(deck);
+        if(!isMultiplayer){
+            cardTypeOptions.remove(CARD_TYPES.FREE_RESPONSE);
+            cardTypeOptions.remove(CARD_TYPES.VERBAL_RESPONSE);
+        }
         selectedCardTypes = new ArrayList<>(cardTypeOptions);
         ArrayAdapter<CARD_TYPES> cardTypeAdapter = new ArrayAdapter<>(NewGameSettingsActivity.this,
                 android.R.layout.simple_list_item_multiple_choice, cardTypeOptions);
@@ -225,6 +226,10 @@ public class NewGameSettingsActivity extends AppCompatActivity {
                 Log.d(TAG, "Deck ID is " + deck.getId());
                 // update the card type spinner with any new card types
                 cardTypeOptions = formatCardTypes(deck);
+                if(!isMultiplayer){
+                    cardTypeOptions.remove(CARD_TYPES.FREE_RESPONSE);
+                    cardTypeOptions.remove(CARD_TYPES.VERBAL_RESPONSE);
+                }
                 ArrayAdapter<CARD_TYPES> cardTypeAdapter = new ArrayAdapter<>(NewGameSettingsActivity.this,
                         android.R.layout.simple_list_item_multiple_choice, cardTypeOptions);
                 cardTypeSpinner
