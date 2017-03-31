@@ -22,12 +22,14 @@ import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
 
 public class RuleIntegration {
 
@@ -169,6 +171,39 @@ public class RuleIntegration {
         onView(withId(R.id.new_game)).perform(click());
         //Wait for game to end
         onView(withId(R.id.endOfGameScoreText)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void validateRuleSwitching() {
+        onView(withId(R.id.ruleset_spinner)).perform(click());
+        onView(withText("Double Down")).perform(click());
+
+        onView(withId(R.id.allow_multiple_winners)).check(matches(isChecked()));
+        onView(withId(R.id.include_double_edge_questions)).check(matches(isChecked()));
+        onView(withId(R.id.include_final_wager_question)).check(matches(isChecked()));
+        onView(withId(R.id.allow_multiple_winners)).check(matches(isDisplayed()));
+        onView(withId(R.id.include_double_edge_questions)).check(matches(isDisplayed()));
+        onView(withId(R.id.include_final_wager_question)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void validateRuleSwitching_EndWithDefault() {
+        onView(withId(R.id.ruleset_spinner)).perform(click());
+        onView(withText("Double Down")).perform(click());
+
+        onView(withId(R.id.allow_multiple_winners)).check(matches(isChecked()));
+        onView(withId(R.id.include_double_edge_questions)).check(matches(isChecked()));
+        onView(withId(R.id.include_final_wager_question)).check(matches(isChecked()));
+        onView(withId(R.id.allow_multiple_winners)).check(matches(isDisplayed()));
+        onView(withId(R.id.include_double_edge_questions)).check(matches(isDisplayed()));
+        onView(withId(R.id.include_final_wager_question)).check(matches(isDisplayed()));
+
+        onView(withId(R.id.ruleset_spinner)).perform(click());
+        onView(withText("Default")).perform(click());
+
+        onView(withId(R.id.allow_multiple_winners)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.include_double_edge_questions)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.include_final_wager_question)).check(matches(not(isDisplayed())));
     }
 
     private String getCardTypeString() {
