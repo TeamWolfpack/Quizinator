@@ -20,35 +20,30 @@
         <item
             android:title="@string/nav_bar_help">
 
-            <group>
-
-                <item
-                    android:id="@+id/help_singleplayer"
-                    android:title="@string/nav_bar_help_singleplayer"
-                    />
-                <item
-                    android:title="@string/nav_bar_help_multi"
-                    >
-                    <group>
-                        <item
-                            android:id="@+id/help_multi_host"
-                            android:title="@string/nav_bar_help_multi_host"
-                            />
-                        <item
-                            android:id="@+id/help_multi_player"
-                            android:title="@string/nav_bar_help_multi_player"
-                            />
-                    </group>
-                    </item>
-                <item
-                    android:id="@+id/help_custom"
-                    android:title="@string/nav_bar_help_custom"
-                    />
-                <item
-                    android:id="@+id/help_rules"
-                    android:title="@string/nav_bar_help_rules"
-                    />
-            </group>
+            <menu>
+                <group>
+                    <item
+                        android:id="@+id/help_singleplayer"
+                        android:title="@string/nav_bar_help_singleplayer"
+                        />
+                    <item
+                        android:id="@+id/help_multi_host"
+                        android:title="@string/nav_bar_help_multi_host"
+                        />
+                    <item
+                        android:id="@+id/help_multi_player"
+                        android:title="@string/nav_bar_help_multi_player"
+                        />
+                    <item
+                        android:id="@+id/help_custom"
+                        android:title="@string/nav_bar_help_custom"
+                        />
+                    <item
+                        android:id="@+id/help_rules"
+                        android:title="@string/nav_bar_help_rules"
+                        />
+                </group>
+            </menu>
         </item>
     </group>
 
