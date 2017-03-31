@@ -100,6 +100,31 @@ public class MainMenuActivity extends AppCompatActivity
         else if(id == R.id.nav_show_cards){
             startActivity(new Intent(this, CardsActivity.class));
         }
+        else if (id == R.id.help_singleplayer) {
+            Uri uriUrl = Uri.parse(Constants.HELP_SINGLEPLAYER);
+            Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+            startActivity(launchBrowser);
+        }
+        else if (id == R.id.help_multi_host) {
+            Uri uriUrl = Uri.parse(Constants.HELP_MULTI_HOST);
+            Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+            startActivity(launchBrowser);
+        }
+        else if (id == R.id.help_multi_player) {
+            Uri uriUrl = Uri.parse(Constants.HELP_MULTI_PLAYER);
+            Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+            startActivity(launchBrowser);
+        }
+        else if (id == R.id.help_custom) {
+            Uri uriUrl = Uri.parse(Constants.HELP_CUSTOM);
+            Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+            startActivity(launchBrowser);
+        }
+        else if (id == R.id.help_rules) {
+            Uri uriUrl = Uri.parse(Constants.HELP_RULES);
+            Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+            startActivity(launchBrowser);
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

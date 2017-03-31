@@ -7,6 +7,11 @@ import java.util.List;
 public final class Constants {
 
     public static final String NAQT_RULES_URL = "https://www.naqt.com/rules.html";
+    public static final String HELP_SINGLEPLAYER = "https://youtu.be/FbXONr6h9oY";
+    public static final String HELP_MULTI_HOST = "https://youtu.be/zGIkaLsUCIc";
+    public static final String HELP_MULTI_PLAYER = "https://youtu.be/p-V12KBi6Zs";
+    public static final String HELP_CUSTOM = "https://youtu.be/k4tVptQPOLs";
+    public static final String HELP_RULES = "https://youtu.be/NG-r5ds-GVM";
 
     public enum CARD_TYPES {
         TRUE_FALSE("True/False"),
