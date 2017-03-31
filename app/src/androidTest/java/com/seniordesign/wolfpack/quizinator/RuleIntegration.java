@@ -6,6 +6,7 @@ import android.view.WindowManager;
 import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.activities.NewGameSettingsActivity;
 import com.seniordesign.wolfpack.quizinator.database.Card;
+import com.seniordesign.wolfpack.quizinator.database.HighScores;
 import com.seniordesign.wolfpack.quizinator.database.Rules;
 import com.seniordesign.wolfpack.quizinator.database.QuizDataSource;
 
@@ -55,10 +56,11 @@ public class RuleIntegration {
     public void validateUpdatingRuleOnGameStart() {
         QuizDataSource dataSource = new QuizDataSource(mActivityRule.getActivity());
         dataSource.open();
-        Rules oldRule = dataSource.getAllRules().get(0);
+        Rules oldRule = dataSource.getAllRules().get(1);
         oldRule.setMaxCardCount(5);
         oldRule.setTimeLimit(90000);
         oldRule.setCardDisplayTime(9000);
+        oldRule.setCardTypes(getCardTypeString());
         dataSource.updateRules(oldRule);
         mActivityRule.getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -86,11 +88,11 @@ public class RuleIntegration {
             e.printStackTrace();
         }
 
-        Rules rule = dataSource.getAllRules().get(dataSource.getAllRules().size() - 1);
+        Rules rule = dataSource.getAllRules().get(1);
         assertTrue("Game time is " + rule.getTimeLimit(), rule.getTimeLimit() == 150000);
         assertTrue(rule.getCardDisplayTime() == 30000);
         assertTrue(rule.getMaxCardCount() == 1);
-        assertTrue(rule.getCardTypes().equals(getCardTypeString()));
+        assertTrue(rule.getCardTypes(), rule.getCardTypes().equals(getCardTypeString()));
 
         dataSource.close();
     }
@@ -100,7 +102,7 @@ public class RuleIntegration {
         QuizDataSource dataSource = new QuizDataSource(mActivityRule.getActivity());
         dataSource.open();
 
-        Rules rule = dataSource.getAllRules().get(0);
+        Rules rule = dataSource.getAllRules().get(1);
         rule.setMaxCardCount(5);
         rule.setTimeLimit(63000);
         rule.setCardDisplayTime(9000);
@@ -124,10 +126,8 @@ public class RuleIntegration {
         onView(withId(R.id.card_minutes)).check(matches(withText(containsString("0"))));
         onView(withId(R.id.card_seconds)).check(matches(withText(containsString("09"))));
         onView(withId(R.id.card_count)).check(matches(withText(containsString("5"))));
-        onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(Constants.CARD_TYPES.TRUE_FALSE.toString()))));
-        onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(Constants.CARD_TYPES.MULTIPLE_CHOICE.toString()))));
 
-        rule = dataSource.getAllRules().get(0);
+        rule = dataSource.getAllRules().get(1);
         rule.setMaxCardCount(5);
         rule.setTimeLimit(90000);
         rule.setCardDisplayTime(10000);
@@ -145,8 +145,6 @@ public class RuleIntegration {
         onView(withId(R.id.card_minutes)).check(matches(withText(containsString("0"))));
         onView(withId(R.id.card_seconds)).check(matches(withText(containsString("10"))));
         onView(withId(R.id.card_count)).check(matches(withText(containsString("5"))));
-        onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(Constants.CARD_TYPES.TRUE_FALSE.toString()))));
-        onView(withId(R.id.card_type_spinner)).check(matches(withSpinnerText(containsString(Constants.CARD_TYPES.MULTIPLE_CHOICE.toString()))));
         dataSource.close();
     }
 
@@ -169,14 +167,11 @@ public class RuleIntegration {
         dataSource.close();
 
         onView(withId(R.id.new_game)).perform(click());
-
+        //Wait for game to end
         onView(withId(R.id.endOfGameScoreText)).check(matches(isDisplayed()));
     }
 
     private String getCardTypeString() {
-        List<Constants.CARD_TYPES> types = new ArrayList<>();
-        types.add(Constants.CARD_TYPES.TRUE_FALSE);
-        types.add(Constants.CARD_TYPES.MULTIPLE_CHOICE);
-        return gson.toJson(types);
+        return "[\"TRUE_FALSE\",\"MULTIPLE_CHOICE\"]";
     }
 }
