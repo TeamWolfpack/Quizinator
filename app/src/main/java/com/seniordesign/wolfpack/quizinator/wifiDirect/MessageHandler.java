@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_ANSWER_CONFIRMATION_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_ANSWER_CONFIRMATION_HANDSHAKE_ACTIVITY;
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_BROKEN_CONN;
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_DISCONNECT_FROM_ALL_PEERS;
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_END_OF_GAME_ACTIVITY;
@@ -98,6 +99,9 @@ public class MessageHandler extends Handler {
                 break;
             case MSG_ANSWER_CONFIRMATION_ACTIVITY:
                 pushConfirmationOut((String) msg.obj);
+                break;
+            case MSG_ANSWER_CONFIRMATION_HANDSHAKE_ACTIVITY:
+                mConnMan.pushOutData(createQuizMessage(MSG_ANSWER_CONFIRMATION_HANDSHAKE_ACTIVITY, (String) msg.obj));
                 break;
             case MSG_END_OF_GAME_ACTIVITY:
                 mConnMan.pushOutData(createQuizMessage(MSG_END_OF_GAME_ACTIVITY, (String) msg.obj));
@@ -193,6 +197,9 @@ public class MessageHandler extends Handler {
                 case MSG_ANSWER_CONFIRMATION_ACTIVITY:
                     wifiDirectApp.mGameplayActivity.answerConfirmed(
                             Boolean.parseBoolean(message));
+                    break;
+                case MSG_ANSWER_CONFIRMATION_HANDSHAKE_ACTIVITY:
+                    //wifiDirectApp.mManageActivity.confirmHandshake(message);
                     break;
                 case MSG_END_OF_GAME_ACTIVITY:
                     wifiDirectApp.mGameplayActivity.endGamePlay(

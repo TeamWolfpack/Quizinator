@@ -38,6 +38,7 @@ import com.seniordesign.wolfpack.quizinator.wifiDirect.WifiDirectApp;
 import java.util.Arrays;
 import java.util.Collections;
 
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_ANSWER_CONFIRMATION_HANDSHAKE_ACTIVITY;
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_SEND_WAGER_CONFIRMATION_ACTIVITY;
 
 public class GamePlayActivity extends AppCompatActivity {
@@ -293,7 +294,11 @@ public class GamePlayActivity extends AppCompatActivity {
                 ((TextView) findViewById(R.id.scoreText)).setText("Score: " + properties.getScore());
             }
         });
-
+        if (gamePlayHandler instanceof MultiplayerHandler) {
+            ConnectionService.sendMessage(
+                    MSG_ANSWER_CONFIRMATION_HANDSHAKE_ACTIVITY,
+                    properties.getWifiDirectApp().mMyAddress);
+        }
         quickCorrectAnswerConfirmation(correct);
     }
 
