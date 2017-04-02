@@ -236,8 +236,6 @@ public class ManageGameplayActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int i) {
                             dialog.cancel();
                             noPlayerAnsweredCorrectly();
-                            sendCard(null);
-                            clientsResponded = 0;
                         }
                     });
         }
@@ -344,6 +342,11 @@ public class ManageGameplayActivity extends AppCompatActivity {
         if (selectedAnswers != null) {
             answers.removeAll(selectedAnswers);
         }
+        if (answers.isEmpty()) {
+            handshakesComplete();
+            return;
+        }
+
         for (Answer answer : answers) {
             if (!currentCard.isDoubleEdge() || !answer.getAnswer().isEmpty()) {
                 sendConfirmationMessage(answer.getAddress(), false);
@@ -387,8 +390,13 @@ public class ManageGameplayActivity extends AppCompatActivity {
         return fastestCorrectAnswer == null ? -1 : fastestCorrectAnswer.getTimeTaken();
     }
 
-    public void confirmHandshake(String id) {
+    public void handshakesComplete() {
+        sendCard(null);
+        clientsResponded = 0;
+    }
 
+    public boolean allConfirmationsSent() {
+        return answers.isEmpty();
     }
 
     private void handlePlayerDialog(View dialogView, boolean mustPickWinner) {
@@ -432,8 +440,6 @@ public class ManageGameplayActivity extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         Answer answer = (Answer) playersDialogList.getAdapter().getItem(i);
                         selectAndRespondToSelectedAnswer(answer);
-                        sendCard(null);
-                        clientsResponded = 0;
                     }
                 });
             }
@@ -443,8 +449,6 @@ public class ManageGameplayActivity extends AppCompatActivity {
     public int checkClientCount() {
         if (clientsResponded >= wifiDirectApp.getConnectedPeers().size()) {
             autoSelectAnswers();
-            sendCard(null);
-            clientsResponded = 0;
         }
         return wifiDirectApp.getConnectedPeers().size();
     }
