@@ -6,6 +6,8 @@ import android.os.Environment;
 import com.seniordesign.wolfpack.quizinator.database.Card;
 import com.seniordesign.wolfpack.quizinator.views.CardIcon;
 
+import java.io.File;
+
 import static com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES.FREE_RESPONSE;
 import static com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES.MULTIPLE_CHOICE;
 import static com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES.TRUE_FALSE;
@@ -83,7 +85,9 @@ public class Util {
         cardIcon.setIcon("VR", Color.argb(255, 255, 0, 250), iconSize);
     }
 
-    /* Checks if external storage is available for read and write */
+    /**
+     *  Checks if external storage is available for read and write
+     */
     public static boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(state)) {
@@ -92,7 +96,9 @@ public class Util {
         return false;
     }
 
-    /* Checks if external storage is available to at least read */
+    /**
+     *  Checks if external storage is available to at least read
+     */
     public static boolean isExternalStorageReadable() {
         String state = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(state) ||
@@ -100,5 +106,14 @@ public class Util {
             return true;
         }
         return false;
+    }
+
+    public static File defaultDirectory(){
+        File dir = new File(
+                Environment.getExternalStorageDirectory().getPath(),
+                "Quizinator"); //stores to /storage/emulated/0
+        if(!dir.exists())
+            dir.mkdirs();
+        return dir;
     }
 }

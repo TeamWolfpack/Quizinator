@@ -50,6 +50,11 @@ public class Deck implements Shareable{
 
     public Deck fromJsonFile(String filePath){
         try {
+//            if (filePath.indexOf(".") > 0){
+//                filePath = filePath.substring(0, filePath.lastIndexOf("."));//remove .quizinator
+//                filePath = filePath.substring(0, filePath.lastIndexOf("."));//remove .deck
+//            }
+//            System.out.println(filePath);
             return (new Gson()).fromJson(new FileReader(filePath), Deck.class);
         } catch (FileNotFoundException e) {
             return null;

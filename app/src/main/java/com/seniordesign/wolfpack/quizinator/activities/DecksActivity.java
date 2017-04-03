@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,6 +15,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.github.angads25.filepicker.controller.DialogSelectionListener;
+import com.github.angads25.filepicker.model.DialogConfigs;
+import com.github.angads25.filepicker.model.DialogProperties;
+import com.github.angads25.filepicker.view.FilePickerDialog;
 import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Util;
 import com.seniordesign.wolfpack.quizinator.adapters.DeckAdapter;
@@ -41,11 +46,8 @@ public class DecksActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_decks);
         setTitle(Constants.DECKS);
-
         initializeDB();
-
-        List<Deck> decks = dataSource.getAllDecks();
-        fillListOfDecks(decks);
+        fillListOfDecks(dataSource.getAllDecks());
     }
 
     private boolean initializeDB(){
@@ -105,13 +107,10 @@ public class DecksActivity extends AppCompatActivity
                 public void onClick(DialogInterface dialog, int which) {
                     if(!Util.isExternalStorageWritable() && !Util.isExternalStorageReadable())
                         return;
-                    File dir = new File(Environment.getExternalStorageDirectory().getPath(), "Quizinator"); //stores to /storage/emulated/0
-                    if(!dir.exists())
-                        dir.mkdirs();
                     if(fileNameTextView.getText().toString().isEmpty())
-                        selectedDeck.toJsonFile(dir, selectedDeckFileName + fileExtension);
+                        selectedDeck.toJsonFile(Util.defaultDirectory(), selectedDeckFileName + fileExtension);
                     else
-                        selectedDeck.toJsonFile(dir, fileNameTextView.getText().toString() + fileExtension);
+                        selectedDeck.toJsonFile(Util.defaultDirectory(), fileNameTextView.getText().toString() + fileExtension);
                 }
             });
         return builder.create();
@@ -121,19 +120,42 @@ public class DecksActivity extends AppCompatActivity
         Intent intent = new Intent(this, EditDeckActivity.class);
         Gson gson = new Gson();
         Deck deck = new Deck();
-        deck.setDeckName("New Deck");
-        deck.setDuplicateCards(true);
-        deck.setCards(new ArrayList<Card>());
+            deck.setDeckName("New Deck");
+            deck.setDuplicateCards(true);
+            deck.setCards(new ArrayList<Card>());
         String jsonDeck = gson.toJson(deck);
         intent.putExtra("Deck",jsonDeck);
         startActivity(intent);
     }
 
+    public void importDeckClick(View view){
+        DialogProperties properties = new DialogProperties();
+            properties.selection_mode = DialogConfigs.SINGLE_MODE;
+            properties.selection_type = DialogConfigs.FILE_SELECT;
+            properties.root = Util.defaultDirectory();
+            properties.error_dir = new File(DialogConfigs.DEFAULT_DIR);
+            properties.offset = new File(DialogConfigs.DEFAULT_DIR);
+            properties.extensions = new String[]{"deck.quizinator"};
+        FilePickerDialog dialog = new FilePickerDialog(DecksActivity.this, properties);
+            dialog.setTitle("Select a Deck");
+        dialog.setDialogSelectionListener(new DialogSelectionListener() {
+            @Override
+            public void onSelectedFilePaths(String[] files) {
+                //files is the array of the paths of files selected by the Application User.
+                Deck newDeck = (new Deck()).fromJsonFile(files[0]);
+                dataSource.createDeck(newDeck);
+                fillListOfDecks(dataSource.getAllDecks());
+//                ListView listView = (ListView)findViewById(R.id.list_of_decks);
+//                ((DeckAdapter)listView.getAdapter()).notifyDataSetChanged();
+            }
+        });
+        dialog.show();
+    }
+
     protected void onResume() {
         super.onResume();
         dataSource.open();
-        List<Deck> decks = dataSource.getAllDecks();
-        fillListOfDecks(decks);
+        fillListOfDecks(dataSource.getAllDecks());
     }
 
     @Override
