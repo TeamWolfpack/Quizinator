@@ -8,5 +8,5 @@ import java.io.File;
 interface Shareable<T> {
     boolean toJsonFile(File dir, String fileName);
     T fromJson(String json);
-    T fromJsonFile(String filePath);
+    T fromJsonFilePath(String filePath);
 }

@@ -43,7 +43,7 @@ public class Card implements Shareable{
         return (new Gson()).fromJson(jsonCard, Card.class);
     }
 
-    public Card fromJsonFile(String filePath){
+    public Card fromJsonFilePath(String filePath){
         try {
             return (new Gson()).fromJson(new FileReader(filePath), Card.class);
         } catch (FileNotFoundException e) {

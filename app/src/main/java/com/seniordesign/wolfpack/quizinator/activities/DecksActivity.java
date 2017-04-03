@@ -1,13 +1,10 @@
 package com.seniordesign.wolfpack.quizinator.activities;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -142,12 +139,9 @@ public class DecksActivity extends AppCompatActivity
             @Override
             public void onSelectedFilePaths(String[] files) {
                 //files is the array of the paths of files selected by the Application User.
-                Deck newDeck = (new Deck()).fromJsonFile(files[0]);
-//                dataSource.createDeck(newDeck);
+                Deck newDeck = (new Deck()).fromJsonFilePath(files[0]);
                 dataSource.importDeck(newDeck);
                 fillListOfDecks(dataSource.getAllDecks());
-//                ListView listView = (ListView)findViewById(R.id.list_of_decks);
-//                ((DeckAdapter)listView.getAdapter()).notifyDataSetChanged();
             }
         });
         dialog.show();
