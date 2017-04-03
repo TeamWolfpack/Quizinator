@@ -238,7 +238,7 @@ public class QuizDataSource {
             card.setId(createCard(card).getId());
             createCardDeckRelation(card.getId(), deck.getId());
         }
-        return deck;
+        return createDeck(deck);
     }
 
     public int deleteDeck(Deck deck) {
