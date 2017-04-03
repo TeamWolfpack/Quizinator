@@ -37,16 +37,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingRight="@dimen/array_adapter_padding"
-        android:paddingLeft="@dimen/array_adapter_padding">
+        android:paddingLeft="@dimen/array_adapter_padding"
+        android:paddingBottom="@dimen/array_adapter_padding">
 
         <com.seniordesign.wolfpack.quizinator.views.CardIcon
             android:id="@+id/array_adapter_deck_MC_icon"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:padding="@dimen/card_icon_padding"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:padding="@dimen/card_count_padding"
             android:text="@string/MC_count"
             android:textSize="16sp"
             android:textColor="#000000"
@@ -55,11 +58,13 @@
         <com.seniordesign.wolfpack.quizinator.views.CardIcon
             android:id="@+id/array_adapter_deck_TF_icon"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:padding="@dimen/card_icon_padding"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:padding="@dimen/card_count_padding"
             android:text="@string/TF_count"
             android:textSize="16sp"
             android:textColor="#000000"
@@ -68,11 +73,13 @@
         <com.seniordesign.wolfpack.quizinator.views.CardIcon
             android:id="@+id/array_adapter_deck_FR_icon"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:padding="@dimen/card_icon_padding"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:padding="@dimen/card_count_padding"
             android:text="@string/FR_count"
             android:textSize="16sp"
             android:textColor="#000000"
@@ -81,11 +88,13 @@
         <com.seniordesign.wolfpack.quizinator.views.CardIcon
             android:id="@+id/array_adapter_deck_VR_icon"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:padding="@dimen/card_icon_padding"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:padding="@dimen/card_count_padding"
             android:text="@string/VR_count"
             android:textSize="16sp"
             android:textColor="#000000"

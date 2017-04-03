@@ -11,6 +11,8 @@
 
     <dimen name="spinner_padding">4dp</dimen>
     <dimen name="array_adapter_padding">3dp</dimen>
+    <dimen name="card_count_padding">3dp</dimen>
+    <dimen name="card_icon_padding">5dp</dimen>
 
     <!-- Material Design guidelines -->
     <dimen name="md_text_size_headline">24sp</dimen>
