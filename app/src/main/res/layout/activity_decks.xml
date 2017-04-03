@@ -28,5 +28,15 @@
         android:layout_marginEnd="@dimen/fab_margin"
         android:onClick="newDeckClick" />
 
-
+    <android.support.design.widget.FloatingActionButton
+        app:srcCompat="@drawable/ic_file_download_black_24dp"
+        android:id="@+id/import_deck_button"
+        android:layout_above="@+id/new_deck_button"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:onClick="newDeckClick" />
 </RelativeLayout>
