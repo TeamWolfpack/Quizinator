@@ -61,7 +61,9 @@ public class HostGameActivity
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    getPeerListFragment().setConnected(false);
+                    PeerListFragment fragment = getPeerListFragment();
+                    if(fragment != null)
+                        getPeerListFragment().setConnected(false);
                 }
             });
         }
