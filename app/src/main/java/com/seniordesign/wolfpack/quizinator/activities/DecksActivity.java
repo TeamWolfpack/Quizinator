@@ -143,7 +143,8 @@ public class DecksActivity extends AppCompatActivity
             public void onSelectedFilePaths(String[] files) {
                 //files is the array of the paths of files selected by the Application User.
                 Deck newDeck = (new Deck()).fromJsonFile(files[0]);
-                dataSource.createDeck(newDeck);
+//                dataSource.createDeck(newDeck);
+                dataSource.importDeck(newDeck);
                 fillListOfDecks(dataSource.getAllDecks());
 //                ListView listView = (ListView)findViewById(R.id.list_of_decks);
 //                ((DeckAdapter)listView.getAdapter()).notifyDataSetChanged();

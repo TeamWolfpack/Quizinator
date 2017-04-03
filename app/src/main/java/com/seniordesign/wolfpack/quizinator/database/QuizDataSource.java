@@ -102,9 +102,7 @@ public class QuizDataSource {
         values.put(QuizSQLiteHelper.CARD_COLUMN_QUESTION, question);
         values.put(QuizSQLiteHelper.CARD_COLUMN_CORRECTANSWER, correctAnswer);
 
-        //TODO need to make sure that depending on card type, the correct number of possible answers is inputted... can be done here or in code calling this method
-        Gson gson = new Gson();
-        String stringPossibleAnswers = gson.toJson(possibleCorrectAnswers);
+        String stringPossibleAnswers = (new Gson()).toJson(possibleCorrectAnswers);
         values.put(QuizSQLiteHelper.CARD_COLUMN_POSSIBLEANSWERS, stringPossibleAnswers);
 
         values.put(QuizSQLiteHelper.CARD_COLUMN_POINTS, points);
@@ -149,8 +147,6 @@ public class QuizDataSource {
         return cards;
     }
 
-
-
     // TODO will update later as more filtering options are created
     // TODO can also replace getAllCards just by passing in nulls but can be looked into later
     public List<Card> filterCards(List<Constants.CARD_TYPES> cardTypes) {
@@ -175,11 +171,8 @@ public class QuizDataSource {
         card.setQuestion(cursor.getString(2));
         card.setCorrectAnswer(cursor.getString(3));
 
-        //TODO make sure this works and we can convert back into String Array
-        String[] answers;
-        Gson gson = new Gson();
         String json = cursor.getString(4);
-        answers = gson.fromJson(json, String[].class);
+        String[] answers = (new Gson()).fromJson(json, String[].class);
         card.setPossibleAnswers(answers);
 
         card.setPoints(cursor.getInt(5));
@@ -237,6 +230,15 @@ public class QuizDataSource {
     public Deck createDeck(Deck deck) {
         return createDeck(deck.getDeckName(), deck.getCategory(), deck.getSubject(),
                 deck.isDuplicateCards(), deck.getOwner(), deck.getCards());
+    }
+
+    public Deck importDeck(Deck deck) {
+        for (Card card : deck.getCards()) {
+            //TODO check if card exists
+            card.setId(createCard(card).getId());
+            createCardDeckRelation(card.getId(), deck.getId());
+        }
+        return deck;
     }
 
     public int deleteDeck(Deck deck) {
