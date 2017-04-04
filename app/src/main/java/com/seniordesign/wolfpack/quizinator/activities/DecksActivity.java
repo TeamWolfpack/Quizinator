@@ -2,6 +2,8 @@ package com.seniordesign.wolfpack.quizinator.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.angads25.filepicker.controller.DialogSelectionListener;
 import com.github.angads25.filepicker.model.DialogConfigs;
@@ -34,7 +37,8 @@ public class DecksActivity extends AppCompatActivity
             AdapterView.OnItemClickListener,
             AdapterView.OnItemLongClickListener {
 
-    QuizDataSource dataSource;
+    private QuizDataSource dataSource;
+    private FilePickerDialog dialog;
 
     private static final String TAG = "ACT_DA";
 
@@ -45,6 +49,25 @@ public class DecksActivity extends AppCompatActivity
         setTitle(Constants.DECKS);
         initializeDB();
         fillListOfDecks(dataSource.getAllDecks());
+    }
+
+    //Add this method to show Dialog when the required permission has been granted to the app.
+    @Override
+    public void onRequestPermissionsResult(int requestCode,@NonNull String permissions[],@NonNull int[] grantResults) {
+        switch (requestCode) {
+            case FilePickerDialog.EXTERNAL_READ_PERMISSION_GRANT: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if(dialog != null)
+                    {   //Show dialog if the read permission has been granted.
+                        dialog.show();
+                    }
+                }
+                else {
+                    //Permission has not been granted. Notify the user.
+                    Toast.makeText(DecksActivity.this, "Permission is required for getting list of Decks", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
     }
 
     private boolean initializeDB(){
@@ -130,7 +153,7 @@ public class DecksActivity extends AppCompatActivity
             properties.error_dir = new File(DialogConfigs.DEFAULT_DIR);
             properties.offset = new File(DialogConfigs.DEFAULT_DIR);
             properties.extensions = new String[]{"deck.quizinator"};
-        FilePickerDialog dialog = new FilePickerDialog(DecksActivity.this, properties);
+        dialog = new FilePickerDialog(DecksActivity.this, properties);
             dialog.setTitle("Select a Deck");
         dialog.setDialogSelectionListener(new DialogSelectionListener() {
             @Override

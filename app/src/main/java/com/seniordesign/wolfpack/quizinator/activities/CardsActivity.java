@@ -2,8 +2,10 @@ package com.seniordesign.wolfpack.quizinator.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.angads25.filepicker.controller.DialogSelectionListener;
 import com.github.angads25.filepicker.model.DialogConfigs;
@@ -53,6 +56,7 @@ public class CardsActivity extends AppCompatActivity {
             ));
 
     private QuizDataSource dataSource;
+    private FilePickerDialog dialog;
 
     private static final String TAG = "ACT_CA";
 
@@ -68,6 +72,25 @@ public class CardsActivity extends AppCompatActivity {
 
         initializeCardTypeSpinner();
         initializeListOfCards(dataSource.filterCards(cardTypes));
+    }
+
+    //Add this method to show Dialog when the required permission has been granted to the app.
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case FilePickerDialog.EXTERNAL_READ_PERMISSION_GRANT: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if(dialog != null)
+                    {   //Show dialog if the read permission has been granted.
+                        dialog.show();
+                    }
+                }
+                else {
+                    //Permission has not been granted. Notify the user.
+                    Toast.makeText(CardsActivity.this, "Permission is required for getting list of Decks", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
     }
 
     private Boolean initializeCardTypeSpinner(){
@@ -418,7 +441,7 @@ public class CardsActivity extends AppCompatActivity {
             properties.error_dir = new File(DialogConfigs.DEFAULT_DIR);
             properties.offset = new File(DialogConfigs.DEFAULT_DIR);
             properties.extensions = new String[]{"card.quizinator"};
-        FilePickerDialog dialog = new FilePickerDialog(CardsActivity.this, properties);
+        dialog = new FilePickerDialog(CardsActivity.this, properties);
             dialog.setTitle("Select a Card");
         dialog.setDialogSelectionListener(new DialogSelectionListener() {
             @Override
