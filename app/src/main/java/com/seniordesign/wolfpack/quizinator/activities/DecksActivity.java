@@ -53,18 +53,17 @@ public class DecksActivity extends AppCompatActivity
     }
 
     private void fillListOfDecks(List<Deck> values){
-        final ListView listView = (ListView)findViewById(R.id.list_of_decks);
         DeckAdapter adapter = new DeckAdapter(this,
                 android.R.layout.simple_list_item_1, values);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(this);
-        listView.setOnItemLongClickListener(this);
+        final ListView listView = (ListView)findViewById(R.id.list_of_decks);
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener(this);
+            listView.setOnItemLongClickListener(this);
     }
 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id){
         Intent intent = new Intent(this, EditDeckActivity.class);
-        Gson gson = new Gson();
-        String jsonDeck = gson.toJson(dataSource.getAllDecks().get(position));
+        String jsonDeck = (new Gson()).toJson(dataSource.getAllDecks().get(position));
         intent.putExtra("Deck", jsonDeck);
         startActivity(intent);
     }
@@ -115,13 +114,11 @@ public class DecksActivity extends AppCompatActivity
 
     public void newDeckClick(View view){
         Intent intent = new Intent(this, EditDeckActivity.class);
-        Gson gson = new Gson();
         Deck deck = new Deck();
             deck.setDeckName("New Deck");
             deck.setDuplicateCards(true);
             deck.setCards(new ArrayList<Card>());
-        String jsonDeck = gson.toJson(deck);
-        intent.putExtra("Deck",jsonDeck);
+        intent.putExtra("Deck", (new Gson()).toJson(deck));
         startActivity(intent);
     }
 
@@ -140,7 +137,8 @@ public class DecksActivity extends AppCompatActivity
             public void onSelectedFilePaths(String[] files) {
                 //files is the array of the paths of files selected by the Application User.
                 Deck newDeck = (new Deck()).fromJsonFilePath(files[0]);
-                dataSource.importDeck(newDeck);
+                if(newDeck != null)
+                    dataSource.importDeck(newDeck);
                 fillListOfDecks(dataSource.getAllDecks());
             }
         });

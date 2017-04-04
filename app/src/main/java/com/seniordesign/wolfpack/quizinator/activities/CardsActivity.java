@@ -1,7 +1,6 @@
 package com.seniordesign.wolfpack.quizinator.activities;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Environment;
@@ -19,12 +18,15 @@ import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.github.angads25.filepicker.controller.DialogSelectionListener;
+import com.github.angads25.filepicker.model.DialogConfigs;
+import com.github.angads25.filepicker.model.DialogProperties;
+import com.github.angads25.filepicker.view.FilePickerDialog;
 import com.seniordesign.wolfpack.quizinator.Util;
 import com.seniordesign.wolfpack.quizinator.adapters.CardAdapter;
 import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES;
 import com.seniordesign.wolfpack.quizinator.database.Card;
-import com.seniordesign.wolfpack.quizinator.database.Deck;
 import com.seniordesign.wolfpack.quizinator.database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
 
@@ -53,12 +55,6 @@ public class CardsActivity extends AppCompatActivity {
     private QuizDataSource dataSource;
 
     private static final String TAG = "ACT_CA";
-
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    //private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -412,5 +408,28 @@ public class CardsActivity extends AppCompatActivity {
     public void newCardClick(View view){
         Card card = dataSource.createCard(new Card());
         createEditCardDialog(card, true);
+    }
+
+    public void importCardClick(View view){
+        DialogProperties properties = new DialogProperties();
+            properties.selection_mode = DialogConfigs.SINGLE_MODE;
+            properties.selection_type = DialogConfigs.FILE_SELECT;
+            properties.root = Util.defaultDirectory();
+            properties.error_dir = new File(DialogConfigs.DEFAULT_DIR);
+            properties.offset = new File(DialogConfigs.DEFAULT_DIR);
+            properties.extensions = new String[]{"card.quizinator"};
+        FilePickerDialog dialog = new FilePickerDialog(CardsActivity.this, properties);
+            dialog.setTitle("Select a Card");
+        dialog.setDialogSelectionListener(new DialogSelectionListener() {
+            @Override
+            public void onSelectedFilePaths(String[] files) {
+                //files is the array of the paths of files selected by the Application User.
+                Card newCard = (new Card()).fromJsonFilePath(files[0]);
+                if(newCard != null)
+                    dataSource.createCard(newCard);
+                initializeListOfCards(dataSource.filterCards(cardTypes));
+            }
+        });
+        dialog.show();
     }
 }
