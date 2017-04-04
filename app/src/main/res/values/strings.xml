@@ -87,6 +87,12 @@
     <string name="nav_bar_check_p2p_compliance">Check P2P Compatibility</string>
     <string name="nav_bar_edit_decks">Edit Decks</string>
     <string name="nav_bar_edit_cards">Edit Cards</string>
+    <string name="nav_bar_help">Help</string>
+    <string name="nav_bar_help_singleplayer">Singleplayer</string>
+    <string name="nav_bar_help_multi_host">Multiplayer: Host</string>
+    <string name="nav_bar_help_multi_player">Multiplayer: Player</string>
+    <string name="nav_bar_help_custom">Decks and Cards</string>
+    <string name="nav_bar_help_rules">Advanced Rules</string>
     <string name="next_card">Next Card</string>
     <string name="shuffle">Shuffle</string>
     <string name="score_label">Score:</string>
