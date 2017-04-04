@@ -1,6 +1,7 @@
 package com.seniordesign.wolfpack.quizinator.wifiDirect;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -53,6 +54,7 @@ public class MessageHandler extends Handler {
     //Must lock with synchronize block when iterating it
     //http://stackoverflow.com/a/9468307
     private List<String> scoreHandshakes;
+    private CountDownTimer handshakeTimeout;
 
     MessageHandler(Looper looper, ConnectionManager connMan) {
         super(looper);
@@ -144,6 +146,30 @@ public class MessageHandler extends Handler {
                         String.valueOf(confirmation.getConfirmation())),
                 confirmation.getClientAddress());
         scoreHandshakes.add(confirmation.getClientAddress());
+        resetHandshakeTimout();
+    }
+
+    private void resetHandshakeTimout() {
+        if (handshakeTimeout != null)
+            handshakeTimeout.cancel();
+
+        handshakeTimeout = new CountDownTimer(15000, 1000) {
+            @Override
+            public void onTick(long l) {
+                if (handshakesAreDone())
+                    cancel();
+            }
+
+            @Override
+            public void onFinish() {
+                Log.d(TAG, "Handshake Timeout");
+                if (!handshakesAreDone()) {
+                    return;
+                }
+                scoreHandshakes.clear();
+                wifiDirectApp.mManageActivity.handshakesComplete();
+            }
+        }.start();
     }
 
     /**
@@ -190,7 +216,7 @@ public class MessageHandler extends Handler {
                             Boolean.parseBoolean(message));
                     break;
                 case MSG_ANSWER_CONFIRMATION_HANDSHAKE_ACTIVITY:
-                    if (handshakesAreDone(message)) {
+                    if (scoreHandshakes.remove(message) && handshakesAreDone()) {
                         wifiDirectApp.mManageActivity.handshakesComplete();
                     }
                     break;
@@ -234,8 +260,9 @@ public class MessageHandler extends Handler {
         return messages;
     }
 
-    private boolean handshakesAreDone(String address) {
-        scoreHandshakes.remove(address);
-        return scoreHandshakes.isEmpty() && wifiDirectApp.mManageActivity.allConfirmationsSent();
+    private boolean handshakesAreDone() {
+        if (wifiDirectApp.mManageActivity != null)
+            return scoreHandshakes.isEmpty() && wifiDirectApp.mManageActivity.allConfirmationsSent();
+        return scoreHandshakes.isEmpty();
     }
 }

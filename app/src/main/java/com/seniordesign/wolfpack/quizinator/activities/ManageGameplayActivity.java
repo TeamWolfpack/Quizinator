@@ -282,13 +282,11 @@ public class ManageGameplayActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         dataSource.open();
-        dataSource.open();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        dataSource.close();
         dataSource.close();
     }
 
