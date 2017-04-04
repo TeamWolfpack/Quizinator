@@ -173,7 +173,6 @@ public class ManageGameplayActivity extends AppCompatActivity {
     public void endGame(View v) {
         if (v == null) {
             gameplayTimerRunning.cancel();
-            autoSelectAnswers();
             String json = gson.toJson(rules.getTimeLimit() - gameplayTimerRemaining);
             ConnectionService.sendMessage(MSG_END_OF_GAME_ACTIVITY, json);
             startActivity(new Intent(ManageGameplayActivity.this, MainMenuActivity.class));
