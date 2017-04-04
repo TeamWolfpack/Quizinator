@@ -261,8 +261,8 @@ public class MessageHandler extends Handler {
     }
 
     private boolean handshakesAreDone() {
-        if (wifiDirectApp.mManageActivity != null)
-            return scoreHandshakes.isEmpty() && wifiDirectApp.mManageActivity.allConfirmationsSent();
-        return scoreHandshakes.isEmpty();
+        return scoreHandshakes.isEmpty() &&
+                    (wifiDirectApp.mManageActivity == null ||
+                            wifiDirectApp.mManageActivity.allConfirmationsSent());
     }
 }
