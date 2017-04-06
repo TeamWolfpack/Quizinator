@@ -241,6 +241,10 @@ public class QuizDataSource {
         long id = deck.getId();
         System.out.println("Deleted item: " + deck.toString());
         deleteCardDeckRelationByDeckId(id);
+        for(HighScores hs : getAllHighScores()){
+            if (hs.getDeckID() == deck.getId());
+            deleteHighScore(hs);
+        }
         return database.delete(QuizSQLiteHelper.TABLE_DECKS,
                 QuizSQLiteHelper.DECK_COLUMN_ID + " = " + id, null);
     }
