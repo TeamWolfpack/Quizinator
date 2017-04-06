@@ -2,6 +2,8 @@ package com.seniordesign.wolfpack.quizinator.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.angads25.filepicker.controller.DialogSelectionListener;
 import com.github.angads25.filepicker.model.DialogConfigs;
@@ -34,7 +37,8 @@ public class DecksActivity extends AppCompatActivity
             AdapterView.OnItemClickListener,
             AdapterView.OnItemLongClickListener {
 
-    QuizDataSource dataSource;
+    private QuizDataSource dataSource;
+    private FilePickerDialog dialog;
 
     private static final String TAG = "ACT_DA";
 
@@ -47,24 +51,42 @@ public class DecksActivity extends AppCompatActivity
         fillListOfDecks(dataSource.getAllDecks());
     }
 
+    //Add this method to show Dialog when the required permission has been granted to the app.
+    @Override
+    public void onRequestPermissionsResult(int requestCode,@NonNull String permissions[],@NonNull int[] grantResults) {
+        switch (requestCode) {
+            case FilePickerDialog.EXTERNAL_READ_PERMISSION_GRANT: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if(dialog != null)
+                    {   //Show dialog if the read permission has been granted.
+                        dialog.show();
+                    }
+                }
+                else {
+                    //Permission has not been granted. Notify the user.
+                    Toast.makeText(DecksActivity.this, "Permission is required for getting list of Decks", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
     private boolean initializeDB(){
         dataSource = new QuizDataSource(this);
         return dataSource.open();
     }
 
     private void fillListOfDecks(List<Deck> values){
-        final ListView listView = (ListView)findViewById(R.id.list_of_decks);
         DeckAdapter adapter = new DeckAdapter(this,
                 android.R.layout.simple_list_item_1, values);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(this);
-        listView.setOnItemLongClickListener(this);
+        final ListView listView = (ListView)findViewById(R.id.list_of_decks);
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener(this);
+            listView.setOnItemLongClickListener(this);
     }
 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id){
         Intent intent = new Intent(this, EditDeckActivity.class);
-        Gson gson = new Gson();
-        String jsonDeck = gson.toJson(dataSource.getAllDecks().get(position));
+        String jsonDeck = (new Gson()).toJson(dataSource.getAllDecks().get(position));
         intent.putExtra("Deck", jsonDeck);
         startActivity(intent);
     }
@@ -115,13 +137,11 @@ public class DecksActivity extends AppCompatActivity
 
     public void newDeckClick(View view){
         Intent intent = new Intent(this, EditDeckActivity.class);
-        Gson gson = new Gson();
         Deck deck = new Deck();
             deck.setDeckName("New Deck");
             deck.setDuplicateCards(true);
             deck.setCards(new ArrayList<Card>());
-        String jsonDeck = gson.toJson(deck);
-        intent.putExtra("Deck",jsonDeck);
+        intent.putExtra("Deck", (new Gson()).toJson(deck));
         startActivity(intent);
     }
 
@@ -133,14 +153,15 @@ public class DecksActivity extends AppCompatActivity
             properties.error_dir = new File(DialogConfigs.DEFAULT_DIR);
             properties.offset = new File(DialogConfigs.DEFAULT_DIR);
             properties.extensions = new String[]{"deck.quizinator"};
-        FilePickerDialog dialog = new FilePickerDialog(DecksActivity.this, properties);
+        dialog = new FilePickerDialog(DecksActivity.this, properties);
             dialog.setTitle("Select a Deck");
         dialog.setDialogSelectionListener(new DialogSelectionListener() {
             @Override
             public void onSelectedFilePaths(String[] files) {
                 //files is the array of the paths of files selected by the Application User.
                 Deck newDeck = (new Deck()).fromJsonFilePath(files[0]);
-                dataSource.importDeck(newDeck);
+                if(newDeck != null)
+                    dataSource.importDeck(newDeck);
                 fillListOfDecks(dataSource.getAllDecks());
             }
         });
