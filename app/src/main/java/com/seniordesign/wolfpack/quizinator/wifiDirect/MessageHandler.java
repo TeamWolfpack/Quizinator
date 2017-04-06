@@ -1,6 +1,7 @@
 package com.seniordesign.wolfpack.quizinator.wifiDirect;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -16,9 +17,11 @@ import com.seniordesign.wolfpack.quizinator.messages.Wager;
 
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_ANSWER_CONFIRMATION_ACTIVITY;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_ANSWER_CONFIRMATION_HANDSHAKE_ACTIVITY;
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_BROKEN_CONN;
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_DISCONNECT_FROM_ALL_PEERS;
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_END_OF_GAME_ACTIVITY;
@@ -47,12 +50,17 @@ public class MessageHandler extends Handler {
     private ConnectionManager mConnMan;
     private WifiDirectApp wifiDirectApp;
 
-//    private MainMenuActivity mActivity;
+    //Synchronized List
+    //Must lock with synchronize block when iterating it
+    //http://stackoverflow.com/a/9468307
+    private List<String> scoreHandshakes;
+    private CountDownTimer handshakeTimeout;
 
     MessageHandler(Looper looper, ConnectionManager connMan) {
         super(looper);
         mConnMan = connMan;
         wifiDirectApp = WifiDirectApp.getInstance();
+        scoreHandshakes = Collections.synchronizedList(new ArrayList<String>());
     }
 
     @Override
@@ -61,9 +69,6 @@ public class MessageHandler extends Handler {
         switch (msg.what) {
             case MSG_NULL:
                 break;
-//            case MSG_REGISTER_ACTIVITY:
-//                onActivityRegister((MainMenuActivity) msg.obj, msg.arg1);
-//                break;
             case MSG_STARTSERVER:
                 if (mConnMan.startServerSelector() >= 0)
                     sendMessageToUpDatePeerListFragment();
@@ -88,6 +93,7 @@ public class MessageHandler extends Handler {
                 mConnMan.pushOutData(createQuizMessage(MSG_SEND_RULES_ACTIVITY, (String) msg.obj));
                 break;
             case MSG_SEND_CARD_ACTIVITY:
+                scoreHandshakes.clear();
                 mConnMan.pushOutData(createQuizMessage(MSG_SEND_CARD_ACTIVITY, (String) msg.obj));
                 break;
             case MSG_PLAYER_READY_ACTIVITY:
@@ -98,6 +104,9 @@ public class MessageHandler extends Handler {
                 break;
             case MSG_ANSWER_CONFIRMATION_ACTIVITY:
                 pushConfirmationOut((String) msg.obj);
+                break;
+            case MSG_ANSWER_CONFIRMATION_HANDSHAKE_ACTIVITY:
+                mConnMan.pushOutData(createQuizMessage(MSG_ANSWER_CONFIRMATION_HANDSHAKE_ACTIVITY, (String) msg.obj));
                 break;
             case MSG_END_OF_GAME_ACTIVITY:
                 mConnMan.pushOutData(createQuizMessage(MSG_END_OF_GAME_ACTIVITY, (String) msg.obj));
@@ -122,19 +131,6 @@ public class MessageHandler extends Handler {
         }
     }
 
-//    /**
-//     * Register the activity that uses this service.
-//     */
-//    private void onActivityRegister(MainMenuActivity activity,
-//                                    int register) {
-//        Log.d(TAG, "onActivityRegister: activity register " +
-//                "itself to service : " + register);
-//        if (register == 1)
-//            mActivity = activity;
-//        else
-//            mActivity = null;
-//    }
-
     private void sendMessageToUpDatePeerListFragment() {
         if (wifiDirectApp.mHomeActivity != null)
             wifiDirectApp.mHomeActivity.onConnectionInfoAvailable(wifiDirectApp.mP2pInfo);
@@ -149,6 +145,31 @@ public class MessageHandler extends Handler {
                         MSG_ANSWER_CONFIRMATION_ACTIVITY,
                         String.valueOf(confirmation.getConfirmation())),
                 confirmation.getClientAddress());
+        scoreHandshakes.add(confirmation.getClientAddress());
+        resetHandshakeTimout();
+    }
+
+    private void resetHandshakeTimout() {
+        if (handshakeTimeout != null)
+            handshakeTimeout.cancel();
+
+        handshakeTimeout = new CountDownTimer(15000, 1000) {
+            @Override
+            public void onTick(long l) {
+                if (handshakesAreDone())
+                    cancel();
+            }
+
+            @Override
+            public void onFinish() {
+                Log.d(TAG, "Handshake Timeout");
+                if (!handshakesAreDone()) {
+                    return;
+                }
+                scoreHandshakes.clear();
+                wifiDirectApp.mManageActivity.handshakesComplete();
+            }
+        }.start();
     }
 
     /**
@@ -194,6 +215,11 @@ public class MessageHandler extends Handler {
                     wifiDirectApp.mGameplayActivity.answerConfirmed(
                             Boolean.parseBoolean(message));
                     break;
+                case MSG_ANSWER_CONFIRMATION_HANDSHAKE_ACTIVITY:
+                    if (scoreHandshakes.remove(message) && handshakesAreDone()) {
+                        wifiDirectApp.mManageActivity.handshakesComplete();
+                    }
+                    break;
                 case MSG_END_OF_GAME_ACTIVITY:
                     wifiDirectApp.mGameplayActivity.endGamePlay(
                             Long.parseLong(message));
@@ -232,5 +258,11 @@ public class MessageHandler extends Handler {
             messages.add(gson.fromJson(chunk, QuizMessage.class));
         }
         return messages;
+    }
+
+    private boolean handshakesAreDone() {
+        return scoreHandshakes.isEmpty() &&
+                    (wifiDirectApp.mManageActivity == null ||
+                            wifiDirectApp.mManageActivity.allConfirmationsSent());
     }
 }
