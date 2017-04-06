@@ -6,7 +6,7 @@ package com.seniordesign.wolfpack.quizinator.database;
  */
 public class HighScores {
 
-    private String deckName;
+    private long deckID;
     private long bestTime;
     private int bestScore;
     private long id;
@@ -16,7 +16,7 @@ public class HighScores {
      */
     @Override
     public String toString(){
-        return "Rules id(" + id + "), deckName(" + deckName +
+        return "Rules id(" + id + "), deckID(" + deckID +
                 "), bestTime(" + bestTime + "), bestScore(" +
                 bestScore + ").";
     }
@@ -59,15 +59,15 @@ public class HighScores {
     /*
      * @author kuczynskij (10/4/2016)
      */
-    public String getDeckName() {
-        return deckName;
+    public long getDeckID() {
+        return deckID;
     }
 
     /*
      * @author kuczynskij (10/4/2016)
      */
-    public void setDeckName(String deckName) {
-        this.deckName = deckName;
+    public void setDeckID(long deckID) {
+        this.deckID = deckID;
     }
 
     /*

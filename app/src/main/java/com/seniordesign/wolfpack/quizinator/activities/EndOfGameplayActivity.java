@@ -11,9 +11,6 @@ import com.seniordesign.wolfpack.quizinator.database.GamePlayStats;
 import com.seniordesign.wolfpack.quizinator.database.HighScores;
 import com.seniordesign.wolfpack.quizinator.database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
-import com.seniordesign.wolfpack.quizinator.wifiDirect.ConnectionService;
-
-import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_DISCONNECT_FROM_ALL_PEERS;
 
 public class EndOfGameplayActivity extends AppCompatActivity {
 
@@ -34,6 +31,7 @@ public class EndOfGameplayActivity extends AppCompatActivity {
             gamePlayStats.setScore(0);
             gamePlayStats.setTimeElapsed(0);
             gamePlayStats.setTotalCardsCompleted(0);
+            gamePlayStats.setDeckID(-1);
         }
 
         ((TextView)findViewById(R.id.endOfGameScoreText)).setText(
@@ -50,11 +48,26 @@ public class EndOfGameplayActivity extends AppCompatActivity {
 
         HighScores highScores = new HighScores();
         if (highScoresDataSource.getAllHighScores().size() > 0) {
-            highScores = highScoresDataSource.getAllHighScores().get(0);
+            for(HighScores hs : highScoresDataSource.getAllHighScores()){
+                System.out.println("POPOP: "+ hs.getDeckID()+" : "+gamePlayStats.getDeckID());
+                if(hs.getDeckID() == gamePlayStats.getDeckID()){
+                    System.out.println("PPOOOOPP");
+                    highScores = hs;
+                    break;
+                }
+            }
         } else {
             highScores.setBestScore(0);
             highScores.setBestTime(0);
-            highScores.setDeckName("");
+            highScores.setDeckID(-1);
+        }
+        if(highScores.getDeckID()==-1){
+            findViewById(R.id.end_of_gameplay_row_hs_hs).setVisibility(View.INVISIBLE);
+            findViewById(R.id.end_of_gameplay_row_hs_time).setVisibility(View.INVISIBLE);
+        }
+        else{
+            findViewById(R.id.end_of_gameplay_row_hs_hs).setVisibility(View.VISIBLE);
+            findViewById(R.id.end_of_gameplay_row_hs_time).setVisibility(View.VISIBLE);
         }
         long highScoreSeconds = (highScores.getBestTime()/1000)%60;
         String formattedHighScoreSeconds = highScoreSeconds < 10 ? "0" + highScoreSeconds : "" + highScoreSeconds;

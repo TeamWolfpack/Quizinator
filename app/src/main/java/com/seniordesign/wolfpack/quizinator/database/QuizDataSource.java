@@ -10,9 +10,7 @@ import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Constants;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class QuizDataSource {
 
@@ -47,7 +45,7 @@ public class QuizDataSource {
 
     private String[] highScoresAllColumns = {
             QuizSQLiteHelper.HIGHSCORES_COLUMN_ID,
-            QuizSQLiteHelper.HIGHSCORES_COLUMN_DECKNAME,
+            QuizSQLiteHelper.HIGHSCORES_COLUMN_DECKID,
             QuizSQLiteHelper.HIGHSCORES_COLUMN_BESTTIME,
             QuizSQLiteHelper.HIGHSCORES_COLUMN_BESTSCORE
     };
@@ -439,9 +437,9 @@ public class QuizDataSource {
     /************************ CARDDECKRELATION METHODS END *******************************/
 
     /************************ HIGHSCORE METHODS START *******************************/
-    public HighScores createHighScore(String deckName, long time, int bestScore) {
+    public HighScores createHighScore(long deckName, long time, int bestScore) {
         ContentValues values = new ContentValues();
-        values.put(QuizSQLiteHelper.HIGHSCORES_COLUMN_DECKNAME, deckName);
+        values.put(QuizSQLiteHelper.HIGHSCORES_COLUMN_DECKID, deckName);
         values.put(QuizSQLiteHelper.HIGHSCORES_COLUMN_BESTTIME, time);
         values.put(QuizSQLiteHelper.HIGHSCORES_COLUMN_BESTSCORE, bestScore);
         long insertId = database.insert(QuizSQLiteHelper.TABLE_HIGHSCORES,
@@ -456,13 +454,13 @@ public class QuizDataSource {
     }
 
     public HighScores createHighScore(HighScores highScores) {
-        return createHighScore(highScores.getDeckName(), highScores.getBestTime(), highScores.getBestScore());
+        return createHighScore(highScores.getDeckID(), highScores.getBestTime(), highScores.getBestScore());
     }
 
     public int updateHighScore(HighScores hs) {
         ContentValues cv = new ContentValues();
         cv.put(QuizSQLiteHelper.HIGHSCORES_COLUMN_ID, hs.getId());
-        cv.put(QuizSQLiteHelper.HIGHSCORES_COLUMN_DECKNAME, hs.getDeckName());
+        cv.put(QuizSQLiteHelper.HIGHSCORES_COLUMN_DECKID, hs.getDeckID());
         cv.put(QuizSQLiteHelper.HIGHSCORES_COLUMN_BESTTIME, hs.getBestTime());
         cv.put(QuizSQLiteHelper.HIGHSCORES_COLUMN_BESTSCORE, hs.getBestScore());
         String where = QuizSQLiteHelper.HIGHSCORES_COLUMN_ID + " = " + hs.getId();
@@ -498,7 +496,7 @@ public class QuizDataSource {
     private HighScores cursorToHighScore(Cursor cursor) {
         HighScores scores = new HighScores();
         scores.setId(cursor.getLong(0));//id
-        scores.setDeckName(cursor.getString(1));//deck name
+        scores.setDeckID(cursor.getLong(1));//deck name
         scores.setBestTime(cursor.getLong(2));//best time
         scores.setBestScore(cursor.getInt(3));//best score
         return scores;
