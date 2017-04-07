@@ -3,7 +3,9 @@ package com.seniordesign.wolfpack.quizinator.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -118,21 +120,42 @@ public class DecksActivity extends AppCompatActivity
             builder.setPositiveButton("Share", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    //TODO -> send file using Android sharing services
+                    File deckFile = createDeckFile(fileNameTextView, selectedDeck, selectedDeckFileName, fileExtension);
+                    if(deckFile != null){
+                        shareDeckFile(deckFile);
+                    }
+                    //TODO -> set up receiving file with custom mime type
+                        //url -> http://stackoverflow.com/questions/1733195/android-intent-filter-for-a-particular-file-extension/2062112#2062112
                 }
             });
             builder.setNeutralButton("Save", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if(!Util.isExternalStorageWritable() && !Util.isExternalStorageReadable())
-                        return;
-                    if(fileNameTextView.getText().toString().isEmpty())
-                        selectedDeck.toJsonFile(Util.defaultDirectory(), selectedDeckFileName + fileExtension);
-                    else
-                        selectedDeck.toJsonFile(Util.defaultDirectory(), fileNameTextView.getText().toString() + fileExtension);
+                    createDeckFile(fileNameTextView, selectedDeck, selectedDeckFileName, fileExtension);
                 }
             });
         return builder.create();
+    }
+
+    private File createDeckFile(EditText fileNameTextView, Deck selectedDeck, String selectedDeckFileName, String fileExtension){
+        File file;
+        if(!Util.isExternalStorageWritable() && !Util.isExternalStorageReadable())
+            return null;
+        if(fileNameTextView.getText().toString().isEmpty())
+            file = selectedDeck.toJsonFile(Util.defaultDirectory(), selectedDeckFileName + fileExtension);
+        else
+            file = selectedDeck.toJsonFile(Util.defaultDirectory(), fileNameTextView.getText().toString() + fileExtension);
+        return file;
+    }
+
+    private void shareDeckFile(File deckFile){
+        Uri fileUri = FileProvider.getUriForFile(DecksActivity.this, "com.seniordesign.wolfpack.quizinator", deckFile);
+        Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+            shareIntent.setType("*/*");
+        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.sharing_send_to)));
+        //TODO -> make sure to remove temp file from file system
     }
 
     public void newDeckClick(View view){
