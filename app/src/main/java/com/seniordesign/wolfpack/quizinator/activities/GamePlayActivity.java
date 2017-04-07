@@ -344,13 +344,13 @@ public class GamePlayActivity extends AppCompatActivity {
         EditText wagerEditText = (EditText) wagerDialog.findViewById(R.id.wager_value);
         NumberFilter wagerFilter = new NumberFilter(0, properties.getScore(), false);
         wagerEditText.setOnFocusChangeListener(wagerFilter);
-
     }
 
     public void sendWager() {
         EditText wagerEditText = (EditText) wagerDialog.findViewById(R.id.wager_value);
         int wagerVal = 0;
-        wagerVal = Integer.parseInt(wagerEditText.getText().toString());
+        if (!wagerEditText.getText().toString().equals(""))
+            wagerVal = Integer.parseInt(wagerEditText.getText().toString());
         wagerVal = Math.min(wagerVal,properties.getScore());
         wagerVal = Math.max(wagerVal, 0);
         wager = new Wager(
