@@ -149,10 +149,12 @@ public class QuizDataSource {
 
     // TODO will update later as more filtering options are created
     // TODO can also replace getAllCards just by passing in nulls but can be looked into later
-    public List<Card> filterCards(List<Constants.CARD_TYPES> cardTypes) {
+    // TODO
+    public List<Card> filterCards(List<Constants.CARD_TYPES> cardTypes, String sortBy) {
         List<Card> cards = new ArrayList<>();
         Cursor cursor = database.query(QuizSQLiteHelper.TABLE_CARDS,
-                cardAllColumns, buildCardTypeWhereClause(null, cardTypes), null, null, null, null);
+                cardAllColumns, buildCardTypeWhereClause(null, cardTypes),
+                null, null, null, buildCardsOrderBy(sortBy));
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Card card = cursorToCard(cursor);
@@ -162,6 +164,23 @@ public class QuizDataSource {
         // make sure to close the cursor
         cursor.close();
         return cards;
+    }
+
+    public List<Card> filterCards(List<Constants.CARD_TYPES> cardTypes) {
+        return filterCards(cardTypes,  null);
+    }
+
+    private String buildCardsOrderBy(String column) {
+        if(column == null)
+            return null;
+        switch(column){
+            case("Question"):
+                return QuizSQLiteHelper.CARD_COLUMN_QUESTION + " ASC";
+            case("Points"):
+                return QuizSQLiteHelper.CARD_COLUMN_POINTS + " ASC";
+            default:
+                return null;
+        }
     }
 
     private Card cursorToCard(Cursor cursor) {

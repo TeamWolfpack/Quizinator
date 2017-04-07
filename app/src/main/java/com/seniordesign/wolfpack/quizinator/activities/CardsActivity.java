@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -46,6 +47,7 @@ import static com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES.*;
 public class CardsActivity extends AppCompatActivity {
 
     private MultiSelectSpinner cardTypeSpinner;
+    private Spinner sortBySpinner;
     private List<CARD_TYPES> selectedCardTypes;
     private List<CARD_TYPES> cardTypes = new ArrayList<>(
             Arrays.asList(
@@ -54,6 +56,7 @@ public class CardsActivity extends AppCompatActivity {
                     FREE_RESPONSE,
                     VERBAL_RESPONSE
             ));
+    private String sortBy;
 
     private QuizDataSource dataSource;
     private FilePickerDialog dialog;
@@ -71,7 +74,8 @@ public class CardsActivity extends AppCompatActivity {
         selectedCardTypes = new ArrayList<>();
 
         initializeCardTypeSpinner();
-        initializeListOfCards(dataSource.filterCards(cardTypes));
+        initializeSortBySpinner();
+        initializeListOfCards();
     }
 
     //Add this method to show Dialog when the required permission has been granted to the app.
@@ -118,10 +122,26 @@ public class CardsActivity extends AppCompatActivity {
                         for (int i = 0; i < selectedCardTypes.size(); i++) {
                             chosenTypes.add(selectedCardTypes.get(i));
                         }
-                        initializeListOfCards(dataSource.filterCards(chosenTypes));
+                        initializeListOfCards();
                     }
                 });
         return true;
+    }
+
+    private void initializeSortBySpinner() {
+        sortBySpinner = (Spinner) findViewById(R.id.card_sort_spinner);
+        sortBySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                sortBy = parent.getSelectedItem().toString();
+                initializeListOfCards();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Do Nothing
+            }
+        });
     }
 
     private boolean initializeDB() {
@@ -129,7 +149,8 @@ public class CardsActivity extends AppCompatActivity {
         return dataSource.open();
     }
 
-    private void initializeListOfCards(final List<Card> values) {
+    private void initializeListOfCards() {
+        final List<Card> values = dataSource.filterCards(cardTypes, sortBy);
         final ListView listView = (ListView) findViewById(R.id.list_of_cards);
         final CardAdapter adapter = new CardAdapter(this,
                 R.layout.array_adapter_list_of_cards, values);
@@ -152,6 +173,30 @@ public class CardsActivity extends AppCompatActivity {
             }
         });
     }
+//
+//    private void initializeListOfCards(final List<Card> values) {
+//        final ListView listView = (ListView) findViewById(R.id.list_of_cards);
+//        final CardAdapter adapter = new CardAdapter(this,
+//                R.layout.array_adapter_list_of_cards, values);
+//        listView.setAdapter(adapter);
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view,
+//                                    int position, long id) {
+//                createEditCardDialog(values.get(position), false);
+//            }
+//        });
+//        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+//            /**
+//             * @return true to prevent onItemClick from being called
+//             */
+//            @Override
+//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//                createSharingDialog(position).show();
+//                return true;
+//            }
+//        });
+//    }
 
     private android.support.v7.app.AlertDialog createSharingDialog(final int position){
         View innerDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_sharing, null);
@@ -208,7 +253,7 @@ public class CardsActivity extends AppCompatActivity {
             .setOnCancelListener(new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialog) {
-                    initializeListOfCards(dataSource.filterCards(cardTypes));
+                    initializeListOfCards();
                 }
             });
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -335,7 +380,7 @@ public class CardsActivity extends AppCompatActivity {
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
-                        initializeListOfCards(dataSource.filterCards(cardTypes));
+                        initializeListOfCards();
                     }
                 });
         AlertDialog alertDialog = alertDialogBuilder.create();
@@ -352,7 +397,7 @@ public class CardsActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_item, cardTypesAdapter);
         cardAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cardSpinner.setAdapter(cardAdapter);
-        cardSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        cardSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 card.setCardType(CARD_TYPES.values()[position]);
@@ -450,7 +495,7 @@ public class CardsActivity extends AppCompatActivity {
                 Card newCard = (new Card()).fromJsonFilePath(files[0]);
                 if(newCard != null)
                     dataSource.createCard(newCard);
-                initializeListOfCards(dataSource.filterCards(cardTypes));
+                initializeListOfCards();
             }
         });
         dialog.show();
