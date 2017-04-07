@@ -49,9 +49,7 @@ public class EndOfGameplayActivity extends AppCompatActivity {
         HighScores highScores = new HighScores();
         if (highScoresDataSource.getAllHighScores().size() > 0) {
             for(HighScores hs : highScoresDataSource.getAllHighScores()){
-                System.out.println("POPOP: "+ hs.getDeckID()+" : "+gamePlayStats.getDeckID());
                 if(hs.getDeckID() == gamePlayStats.getDeckID()){
-                    System.out.println("PPOOOOPP");
                     highScores = hs;
                     break;
                 }
