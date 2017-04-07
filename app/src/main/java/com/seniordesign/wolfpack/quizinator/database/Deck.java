@@ -32,16 +32,16 @@ public class Deck implements Shareable{
 
     }
 
-    public boolean toJsonFile(File dir, String fileName){
+    public File toJsonFile(File dir, String fileName){
         File file = new File(dir, fileName);
         try {
             FileWriter fw = new FileWriter(file);
             fw.write((new Gson()).toJson(this));
             fw.close();
         } catch (IOException e) {
-            return false;
+            return null;
         }
-        return true;
+        return file;
     }
 
     public Deck fromJson(String jsonCard){

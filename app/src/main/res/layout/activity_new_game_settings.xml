@@ -173,6 +173,7 @@
                 android:id="@+id/card_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxLength="5"
                 android:layout_marginStart="@dimen/spinner_padding"
                 android:layout_marginLeft="@dimen/spinner_padding"
                 android:layout_marginEnd="@dimen/spinner_padding"
