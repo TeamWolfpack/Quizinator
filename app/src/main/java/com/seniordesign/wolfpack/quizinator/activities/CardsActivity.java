@@ -150,7 +150,7 @@ public class CardsActivity extends AppCompatActivity {
     }
 
     private void initializeListOfCards() {
-        final List<Card> values = dataSource.filterCards(cardTypes, sortBy);
+        final List<Card> values = dataSource.filterCards(selectedCardTypes, sortBy);
         final ListView listView = (ListView) findViewById(R.id.list_of_cards);
         final CardAdapter adapter = new CardAdapter(this,
                 R.layout.array_adapter_list_of_cards, values);
