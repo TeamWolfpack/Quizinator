@@ -81,6 +81,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="number"
+                    android:maxLength="2"
                     android:text="@string/min"/>
                 <TextView
                     android:id="@+id/game_semicolon"
@@ -92,6 +93,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="number"
+                    android:maxLength="2"
                     android:text="@string/no_time"/>
             </LinearLayout>
         </TableRow>
