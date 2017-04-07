@@ -166,10 +166,6 @@ public class QuizDataSource {
         return cards;
     }
 
-    public List<Card> filterCards(List<Constants.CARD_TYPES> cardTypes) {
-        return filterCards(cardTypes,  null);
-    }
-
     private String buildCardsOrderBy(String column) {
         if(column == null)
             return null;

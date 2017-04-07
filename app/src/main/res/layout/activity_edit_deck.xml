@@ -50,7 +50,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:divider="@android:color/transparent"
-            android:dividerHeight="@dimen/array_adapter_padding"/>
+            android:dividerHeight="@dimen/array_adapter_padding"
+            android:paddingRight="1dp"/>
 
         <ListView
             android:id="@+id/cards_in_database"
@@ -58,7 +59,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:divider="@android:color/transparent"
-            android:dividerHeight="@dimen/array_adapter_padding"/>
+            android:dividerHeight="@dimen/array_adapter_padding"
+            android:paddingLeft="1dp"/>
     </LinearLayout>
 
     <RelativeLayout
