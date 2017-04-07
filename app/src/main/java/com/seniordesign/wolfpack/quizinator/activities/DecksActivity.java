@@ -9,6 +9,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -149,13 +150,23 @@ public class DecksActivity extends AppCompatActivity
     }
 
     private void shareDeckFile(File deckFile){
-        Uri fileUri = FileProvider.getUriForFile(DecksActivity.this, "com.seniordesign.wolfpack.quizinator", deckFile);
-        Intent shareIntent = new Intent();
-            shareIntent.setAction(Intent.ACTION_SEND);
-            shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
-            shareIntent.setType("*/*");
-        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.sharing_send_to)));
-        //TODO -> make sure to remove temp file from file system
+        Uri fileUri = null;
+        try {
+            fileUri = FileProvider.getUriForFile(DecksActivity.this, "com.seniordesign.wolfpack.quizinator", deckFile);
+        } catch (IllegalArgumentException e) {
+            Log.e(TAG, "The selected file can't be shared: " + deckFile.getName());
+        }
+        if(fileUri != null){
+            Intent shareIntent = new Intent();
+                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+                shareIntent.setType("*/*");
+            startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.sharing_send_to)));
+        }
+//        if(deckFile.exists()){
+//            deckFile.delete();
+//        }
     }
 
     public void newDeckClick(View view){
