@@ -74,6 +74,8 @@ public final class Constants {
     public static final String UPDATED_HIGH_SCORE = "Updated High Scores";
     public static final String NO_HIGH_SCORE = "No High Scores";
     public static final String NEW_HIGH_SCORE = "New High Score";
+    public static final String HIGH_SCORE_SCORE = "Score: ";
+    public static final String HIGH_SCORE_TIME = "Score: ";
 
     public static final String GAME_MINUTES_ERROR = "Game Minutes can't be empty";
     public static final String GAME_SECONDS_ERROR = "Game Seconds can't be empty";
@@ -87,4 +89,5 @@ public final class Constants {
     public static final String STRING_00 = "00";
 
     public static final String NO_DECK_WARNING = "Need at least one Deck before starting";
+    public static final String NO_HIGHSCORES_WARNING = "You do not have any high scores yet. Try playing a game first.";
 }

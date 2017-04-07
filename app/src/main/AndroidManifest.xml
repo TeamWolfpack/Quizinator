@@ -33,23 +33,26 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity android:name=".activities.DecksActivity" />
         <activity android:name=".activities.EndOfGameplayActivity" />
         <activity android:name=".activities.NewGameSettingsActivity" />
-        <activity android:name=".activities.HostGameActivity"
+        <activity
+            android:name=".activities.HostGameActivity"
             android:configChanges="orientation|screenSize" />
-        <activity android:name=".activities.CardsActivity"
+        <activity
+            android:name=".activities.CardsActivity"
             android:configChanges="orientation|screenSize" />
-        <activity android:name=".activities.EditDeckActivity"
-            android:configChanges="orientation|screenSize"/>
-        <activity android:name=".activities.ManageGameplayActivity"
+        <activity
+            android:name=".activities.EditDeckActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".activities.ManageGameplayActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.GamePlayActivity"
-            android:label="@string/app_name"
             android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.MainMenuActivity"
@@ -57,6 +60,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -70,10 +74,18 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".wifiDirect.ConnectionService"
+        <service
+            android:name=".wifiDirect.ConnectionService"
             android:enabled="true" />
 
-        <meta-data android:name="AA_DB_NAME" android:value="wumbo" />
-        <meta-data android:name="AA_DB_VERSION" android:value="1" />
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="wumbo" />
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="1" />
+
+        <activity android:name=".activities.HighscoresActivity"></activity>
     </application>
+
 </manifest>

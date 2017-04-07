@@ -4,10 +4,11 @@
     android:id="@+id/activity_highscores"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.seniordesign.wolfpack.quizinator.activities.HighscoresActivity">
-
+    <ListView
+        android:id="@+id/list_of_highscores"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="@dimen/array_adapter_padding"/>
 </RelativeLayout>

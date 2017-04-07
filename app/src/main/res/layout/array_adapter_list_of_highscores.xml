@@ -1,24 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/array_adapter_rounded_corners">
 
-    <com.seniordesign.wolfpack.quizinator.views.CardIcon
-        android:id="@+id/card_type_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:paddingRight="@dimen/array_adapter_padding"
+        android:paddingLeft="@dimen/array_adapter_padding"
+        android:text="@string/hs_score"
+        android:textSize="@dimen/md_text_size_headline"
+        android:id="@+id/array_adapter_hs_score" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingRight="@dimen/array_adapter_padding"
+            android:paddingLeft="@dimen/array_adapter_padding"
+            android:text="@string/hs_time"
+            android:textSize="@dimen/md_text_size_headline"
+            android:id="@+id/array_adapter_hs_time" />
+    </LinearLayout>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingRight="@dimen/array_adapter_padding"
         android:paddingLeft="@dimen/array_adapter_padding"
-        android:layout_weight="1"
-        android:maxLines="2"
-        android:ellipsize="end"
-        android:text="@string/question"
+        android:text="@string/hs_deck"
         android:textSize="@dimen/md_text_size_body"
-        android:id="@+id/array_adapter_card_question" />
+        android:id="@+id/array_adapter_hs_deck" />
 
 </LinearLayout>

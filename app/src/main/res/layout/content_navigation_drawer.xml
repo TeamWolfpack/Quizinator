@@ -56,5 +56,12 @@
             android:text="@string/host_game"
             android:onClick="initiateHostGame"
             />
+        <Button
+            android:id="@+id/highscoresButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/highscores"
+            android:onClick="initiateHighscores"
+            />
     </LinearLayout>
 </RelativeLayout>
