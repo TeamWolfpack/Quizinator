@@ -40,8 +40,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity
-            android:name=".activities.DecksActivity" />
+        <activity android:name=".activities.DecksActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.DECK_ACTION" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="file" />
+                <data android:host="*" />
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*\\.json.deck.quizinator" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activities.EndOfGameplayActivity" />
         <activity
@@ -51,7 +59,16 @@
             android:configChanges="orientation|screenSize" />
         <activity
             android:name=".activities.CardsActivity"
-            android:configChanges="orientation|screenSize" />
+            android:configChanges="orientation|screenSize" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="file" />
+                <data android:host="*" />
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*\\.json.card.quizinator" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activities.EditDeckActivity"
             android:configChanges="orientation|screenSize"/>

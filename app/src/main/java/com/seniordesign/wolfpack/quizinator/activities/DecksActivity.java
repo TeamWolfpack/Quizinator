@@ -51,6 +51,7 @@ public class DecksActivity extends AppCompatActivity
         setContentView(R.layout.activity_decks);
         setTitle(Constants.DECKS);
         initializeDB();
+        Log.d(TAG, getIntent() != null ? getIntent().getAction() : "NULL INTENT");
         fillListOfDecks(dataSource.getAllDecks());
     }
 
