@@ -479,10 +479,11 @@ public class CardsActivity extends AppCompatActivity {
     }
 
     public void importCardClick(View view){
+        File defaultPath = Util.defaultDirectory();
         DialogProperties properties = new DialogProperties();
             properties.selection_mode = DialogConfigs.SINGLE_MODE;
             properties.selection_type = DialogConfigs.FILE_SELECT;
-            properties.root = Util.defaultDirectory();
+            properties.root = defaultPath;
             properties.error_dir = new File(DialogConfigs.DEFAULT_DIR);
             properties.offset = new File(DialogConfigs.DEFAULT_DIR);
             properties.extensions = new String[]{"card.quizinator"};
