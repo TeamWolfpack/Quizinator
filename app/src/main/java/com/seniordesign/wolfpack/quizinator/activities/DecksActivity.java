@@ -44,6 +44,7 @@ public class DecksActivity extends AppCompatActivity
     private FilePickerDialog dialog;
 
     private static final String TAG = "ACT_DA";
+    private static final String VIEW_ACTION = "android.intent.action.VIEW";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +52,10 @@ public class DecksActivity extends AppCompatActivity
         setContentView(R.layout.activity_decks);
         setTitle(Constants.DECKS);
         initializeDB();
-
-        String action = getIntent() != null ? getIntent().getAction() : "NULL INTENT";
-        Log.d(TAG, "INTENT_FILTER: " + action);
+        if (getIntent() != null &&
+                getIntent().getAction() != null &&
+                getIntent().getAction().equals(VIEW_ACTION))
+            importDeck(getIntent().getData().getPath());
         fillListOfDecks(dataSource.getAllDecks());
     }
 
@@ -197,13 +199,17 @@ public class DecksActivity extends AppCompatActivity
             @Override
             public void onSelectedFilePaths(String[] files) {
                 //files is the array of the paths of files selected by the Application User.
-                Deck newDeck = (new Deck()).fromJsonFilePath(files[0]);
-                if(newDeck != null)
-                    dataSource.importDeck(newDeck);
-                fillListOfDecks(dataSource.getAllDecks());
+                importDeck(files[0]);
             }
         });
         dialog.show();
+    }
+
+    private void importDeck(String deckPath){
+        Deck newDeck = (new Deck()).fromJsonFilePath(deckPath);
+        if(newDeck != null)
+            dataSource.importDeck(newDeck);
+        fillListOfDecks(dataSource.getAllDecks());
     }
 
     protected void onResume() {
