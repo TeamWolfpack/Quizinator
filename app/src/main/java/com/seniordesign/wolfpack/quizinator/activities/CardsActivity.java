@@ -62,6 +62,7 @@ public class CardsActivity extends AppCompatActivity {
     private FilePickerDialog dialog;
 
     private static final String TAG = "ACT_CA";
+    private static final String VIEW_ACTION = "android.intent.action.VIEW";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,11 @@ public class CardsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cards);
         setTitle(Constants.CARDS);
         initializeDB();
+
+        if (getIntent() != null &&
+                getIntent().getAction() != null &&
+                getIntent().getAction().equals(VIEW_ACTION))
+            importCard(getIntent().getData().getPath());
 
         cardTypeSpinner = (MultiSelectSpinner) findViewById(R.id.card_type_spinner);
         selectedCardTypes = new ArrayList<>();
@@ -478,6 +484,13 @@ public class CardsActivity extends AppCompatActivity {
         createEditCardDialog(card, true);
     }
 
+    private void importCard(String cardPath){
+        Card newCard = (new Card()).fromJsonFilePath(cardPath);
+        if(newCard != null)
+            dataSource.createCard(newCard);
+        initializeListOfCards();
+    }
+
     public void importCardClick(View view){
         File defaultPath = Util.defaultDirectory();
         DialogProperties properties = new DialogProperties();
@@ -493,10 +506,7 @@ public class CardsActivity extends AppCompatActivity {
             @Override
             public void onSelectedFilePaths(String[] files) {
                 //files is the array of the paths of files selected by the Application User.
-                Card newCard = (new Card()).fromJsonFilePath(files[0]);
-                if(newCard != null)
-                    dataSource.createCard(newCard);
-                initializeListOfCards();
+                importCard(files[0]);
             }
         });
         dialog.show();
