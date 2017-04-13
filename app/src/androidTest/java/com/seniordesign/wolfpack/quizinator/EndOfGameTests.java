@@ -64,7 +64,6 @@ public class EndOfGameTests {
         onView(withId(R.id.endOfGameScoreText)).check(matches(isDisplayed()));
         onView(withId(R.id.endOfGameTimeText)).check(matches(isDisplayed()));
         onView(withId(R.id.endOfGameTotalCardsText)).check(matches(isDisplayed()));
-        onView(withId(R.id.endOfGameHighScoreText)).check(matches(isDisplayed()));
         onView(withId(R.id.goToMainMenu)).check(matches(isDisplayed()));
     }
 }
