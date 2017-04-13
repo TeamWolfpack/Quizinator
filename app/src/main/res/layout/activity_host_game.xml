@@ -8,30 +8,6 @@
     android:layout_height="match_parent"
     tools:context="com.seniordesign.wolfpack.quizinator.activities.HostGameActivity">
 
-    <!--<LinearLayout-->
-        <!--android:id="@+id/buttonsPanel"-->
-        <!--android:orientation="horizontal"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--&gt;-->
-
-        <!--<Button-->
-            <!--android:id="@+id/btn_disconnect_all"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="@string/btn_disconnect_all"-->
-            <!--android:onClick="onDisconnectAllButtonClicked" />-->
-
-        <!--<Button-->
-            <!--android:id="@+id/start_game_settings"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="@string/host_game_game_settings"-->
-            <!--android:onClick="onGameSettingsButtonClicked" />-->
-
-    <!--</LinearLayout>-->
-
     <fragment
         class="com.seniordesign.wolfpack.quizinator.fragments.PeerListFragment"
         android:id="@+id/frag_peer_list"

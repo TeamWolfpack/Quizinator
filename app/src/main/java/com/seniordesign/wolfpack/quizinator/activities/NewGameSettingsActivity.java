@@ -262,18 +262,19 @@ public class NewGameSettingsActivity extends AppCompatActivity {
     }
 
     @SuppressWarnings({"UnusedDeclaration"})
-    public boolean startGame(View v){
+    public void startGame(View v){
         if (selectedCardTypes.size() < 1) {
             Toast.makeText(this, "Must select card type", Toast.LENGTH_SHORT).show();
-            return false;
+//            return false; //TODO changing return to void
         }
 
         Rules r = updateRuleSet();
         if (r == null)
-            return false;
+//            return false;
 
         if(wifiDirectApp.isHost() == 15){
-            return startMultiplayerGamePlay(r);
+//            return startMultiplayerGamePlay(r);
+            startMultiplayerGamePlay(r);
         }else{
             //single player
             final Intent startGameIntent = new Intent(this,
@@ -282,7 +283,7 @@ public class NewGameSettingsActivity extends AppCompatActivity {
             startGameIntent.putExtra(Constants.RULES, Constants.DEFAULT_SINGLE_RULESET);
             startActivity(startGameIntent);
             finish();
-            return true;
+//            return true;
         }
     }
 

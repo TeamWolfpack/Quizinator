@@ -130,5 +130,8 @@
     <string name="wager_final_question">Wager Final Question</string>
     <string name="allow_multiple_winners">Allow Multiple Winners</string>
 
-    <string name="sharing_send_to">Send to…</string>>
+    <string name="sharing_send_to">Send to…</string>
+    <string name="initial_score">Score: 0</string>
+    <string name="initial_game_time">Game Time: 00:00</string>
+    <string name="initial_time_left">Time Left: 00.00</string>>
 </resources>

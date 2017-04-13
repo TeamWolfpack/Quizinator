@@ -22,7 +22,7 @@
             android:id="@+id/edit_card_card_type_spinner"
             android:layout_column="1"
             android:gravity="center"
-            android:padding="3dip"
+            android:padding="@dimen/spinner_padding"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             />
@@ -155,7 +155,8 @@
                 android:id="@+id/edit_card_true"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:paddingRight="20dp"
+                android:paddingRight="@dimen/radio_button_padding"
+                android:paddingLeft="0dp"
                 android:text="@string/capital_true"
                 android:layout_weight="1"
                 />
@@ -163,7 +164,8 @@
                 android:id="@+id/edit_card_false"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:paddingRight="20dp"
+                android:paddingRight="@dimen/radio_button_padding"
+                android:paddingLeft="0dp"
                 android:text="@string/capital_false"
                 android:layout_weight="1"
                 />
