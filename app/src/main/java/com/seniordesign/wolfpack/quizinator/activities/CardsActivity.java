@@ -47,7 +47,6 @@ import static com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES.*;
 public class CardsActivity extends AppCompatActivity {
 
     private MultiSelectSpinner cardTypeSpinner;
-    private Spinner sortBySpinner;
     private List<CARD_TYPES> selectedCardTypes;
     private List<CARD_TYPES> cardTypes = new ArrayList<>(
             Arrays.asList(
@@ -135,7 +134,7 @@ public class CardsActivity extends AppCompatActivity {
     }
 
     private void initializeSortBySpinner() {
-        sortBySpinner = (Spinner) findViewById(R.id.card_sort_spinner);
+        Spinner sortBySpinner = (Spinner) findViewById(R.id.card_sort_spinner);
         sortBySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
