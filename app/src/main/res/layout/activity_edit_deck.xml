@@ -75,7 +75,7 @@
                 android:dividerHeight="@dimen/array_adapter_padding"
                 android:paddingRight="@dimen/edit_deck_spacing"
                 android:paddingLeft="0dp"
-                android:paddingBottom="@dimen/edit_deck_list_bottom_padding"
+                android:paddingBottom="@dimen/listview_bottom_padding"
                 android:clipToPadding="false"/>
 
             <ListView
@@ -87,39 +87,9 @@
                 android:dividerHeight="@dimen/array_adapter_padding"
                 android:paddingRight="0dp"
                 android:paddingLeft="@dimen/edit_deck_spacing"
-                android:paddingBottom="@dimen/edit_deck_list_bottom_padding"
+                android:paddingBottom="@dimen/listview_bottom_padding"
                 android:clipToPadding="false"/>
-    </LinearLayout>
-<!--
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="75dp">
-
-        <android.support.design.widget.FloatingActionButton
-            app:srcCompat="@drawable/ic_check_white_24dp"
-            android:id="@+id/deck_save_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="@dimen/fab_margin"
-            android:onClick="onSaveClick"/>
-
-        <android.support.design.widget.FloatingActionButton
-            app:srcCompat="@drawable/ic_remove_btn_24dp"
-            android:id="@+id/deck_delete_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="@dimen/fab_margin"
-            android:onClick="onDeleteClick"/>
-    </RelativeLayout>
-    -->
+        </LinearLayout>
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton

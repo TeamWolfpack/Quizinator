@@ -37,7 +37,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:divider="@android:color/transparent"
-            android:dividerHeight="@dimen/array_adapter_padding"/>
+            android:dividerHeight="@dimen/array_adapter_padding"
+            android:paddingBottom="@dimen/listview_bottom_padding"
+            android:clipToPadding="false"/>
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton

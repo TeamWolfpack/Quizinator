@@ -14,14 +14,14 @@
         android:layout_height="wrap_content"
         android:text="@string/results"
         android:textStyle="bold"
-        android:textSize="32sp"
+        android:textSize="@dimen/md_text_size_headline"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
          />
 
     <TableLayout
         android:id="@+id/end_of_gameplay_table"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:layout_below="@id/endOfGameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
