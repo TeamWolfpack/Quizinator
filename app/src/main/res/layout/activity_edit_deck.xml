@@ -11,6 +11,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <io.apptik.widget.multiselectspinner.MultiSelectSpinner
+                android:id="@+id/card_type_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+            <Spinner
+                android:id="@+id/card_sort_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:spinnerMode="dropdown"
+                android:entries="@array/card_sort_list"/>
+
+        </LinearLayout>
+
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -21,7 +43,7 @@
                 android:layout_weight="0.5"
                 android:textAlignment="center"
                 android:text="@string/deck_name"
-                android:textSize="16sp"
+                android:textSize="@dimen/md_text_size_subheading"
                 android:textColor="#000000"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -32,7 +54,7 @@
                 android:layout_weight="0.5"
                 android:textAlignment="center"
                 android:text="@string/available_cards"
-                android:textSize="16sp"
+                android:textSize="@dimen/md_text_size_subheading"
                 android:textColor="#000000"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -40,12 +62,9 @@
 
 
         <LinearLayout
-            android:layout_weight="0.8"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
-            android:layout_height="0dp">
+            android:layout_height="wrap_content">
 
             <ListView
                 android:id="@+id/cards_in_deck"
@@ -55,6 +74,7 @@
                 android:divider="@android:color/transparent"
                 android:dividerHeight="@dimen/array_adapter_padding"
                 android:paddingRight="@dimen/edit_deck_spacing"
+                android:paddingLeft="0dp"
                 android:paddingBottom="@dimen/edit_deck_list_bottom_padding"
                 android:clipToPadding="false"/>
 
@@ -65,6 +85,7 @@
                 android:layout_height="match_parent"
                 android:divider="@android:color/transparent"
                 android:dividerHeight="@dimen/array_adapter_padding"
+                android:paddingRight="0dp"
                 android:paddingLeft="@dimen/edit_deck_spacing"
                 android:paddingBottom="@dimen/edit_deck_list_bottom_padding"
                 android:clipToPadding="false"/>
