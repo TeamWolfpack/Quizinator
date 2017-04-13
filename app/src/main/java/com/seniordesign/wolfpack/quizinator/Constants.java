@@ -75,7 +75,7 @@ public final class Constants {
     public static final String NO_HIGH_SCORE = "No High Scores";
     public static final String NEW_HIGH_SCORE = "New High Score";
     public static final String HIGH_SCORE_SCORE = "Score: ";
-    public static final String HIGH_SCORE_TIME = "Score: ";
+    public static final String HIGH_SCORE_TIME = "Time: ";
 
     public static final String GAME_MINUTES_ERROR = "Game Minutes can't be empty";
     public static final String GAME_SECONDS_ERROR = "Game Seconds can't be empty";
