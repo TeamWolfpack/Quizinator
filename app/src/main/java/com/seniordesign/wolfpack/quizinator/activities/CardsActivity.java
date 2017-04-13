@@ -178,30 +178,6 @@ public class CardsActivity extends AppCompatActivity {
             }
         });
     }
-//
-//    private void initializeListOfCards(final List<Card> values) {
-//        final ListView listView = (ListView) findViewById(R.id.list_of_cards);
-//        final CardAdapter adapter = new CardAdapter(this,
-//                R.layout.array_adapter_list_of_cards, values);
-//        listView.setAdapter(adapter);
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view,
-//                                    int position, long id) {
-//                createEditCardDialog(values.get(position), false);
-//            }
-//        });
-//        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
-//            /**
-//             * @return true to prevent onItemClick from being called
-//             */
-//            @Override
-//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-//                createSharingDialog(position).show();
-//                return true;
-//            }
-//        });
-//    }
 
     private android.support.v7.app.AlertDialog createSharingDialog(final int position){
         View innerDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_sharing, null);
