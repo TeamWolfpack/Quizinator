@@ -334,7 +334,7 @@ public class HostGameActivity
         if(!wifiDirectApp.mP2pConnected || wifiDirectApp.getConnectedPeers().size() < 1){
             Toast.makeText(this, "You are not connected to anyone",
                     Toast.LENGTH_SHORT).show();
-//            return false;
+            return;
         }
         runOnUiThread(new Runnable() {
             @Override public void run() {
@@ -343,7 +343,6 @@ public class HostGameActivity
                 startActivity(wifiDirectApp.getLaunchActivityIntent(NewGameSettingsActivity.class, null));
             }
         });
-//        return true;
     }
 
     public void onConnectButtonClicked(View v){
