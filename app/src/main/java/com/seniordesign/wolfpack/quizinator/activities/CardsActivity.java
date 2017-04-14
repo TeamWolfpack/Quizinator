@@ -2,12 +2,16 @@ package com.seniordesign.wolfpack.quizinator.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -31,6 +35,7 @@ import com.seniordesign.wolfpack.quizinator.adapters.CardAdapter;
 import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES;
 import com.seniordesign.wolfpack.quizinator.database.Card;
+import com.seniordesign.wolfpack.quizinator.database.Deck;
 import com.seniordesign.wolfpack.quizinator.database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
 
@@ -90,9 +95,7 @@ public class CardsActivity extends AppCompatActivity {
             case FilePickerDialog.EXTERNAL_READ_PERMISSION_GRANT: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if(dialog != null)
-                    {   //Show dialog if the read permission has been granted.
-                        dialog.show();
-                    }
+                        dialog.show(); //Show dialog if the read permission has been granted.
                 }
                 else {
                     //Permission has not been granted. Notify the user.
@@ -184,41 +187,61 @@ public class CardsActivity extends AppCompatActivity {
         final EditText fileNameTextView = (EditText) innerDialogView.findViewById(R.id.dialog_file_name);
         TextView fileExtensionTextView = (TextView) innerDialogView.findViewById(R.id.dialog_file_extension);
 
-        final Card selectedDeck =  dataSource.getAllCards().get(position);
-        final String selectedDeckFileName = String.valueOf(selectedDeck.getId());
+        final Card selectedCard =  dataSource.getAllCards().get(position);
+        final String selectedCardFileName = String.valueOf(selectedCard.getId());
         final String fileExtension = ".json.card.quizinator";
 
-        fileNameTextView.setText(selectedDeckFileName);
+        fileNameTextView.setText(selectedCardFileName);
         fileExtensionTextView.setText(fileExtension);
 
         android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-        builder.setView(innerDialogView);
-        builder.setTitle("Share");
-        builder.setPositiveButton("Share", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //TODO -> send file using Android sharing services
-            }
-        });
-        builder.setNeutralButton("Save", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if(!Util.isExternalStorageWritable() && !Util.isExternalStorageReadable())
-                    return;
-                File dir = new File(Environment.getExternalStorageDirectory().getPath(), "Quizinator"); //stores to /storage/emulated/0
-                if(!dir.exists())
-                    dir.mkdirs();
-                File file;
-                if(fileNameTextView.getText().toString().isEmpty())
-                    file = selectedDeck.toJsonFile(dir, selectedDeckFileName + fileExtension);
-                else
-                    file = selectedDeck.toJsonFile(dir, fileNameTextView.getText().toString() + fileExtension);
-                if (file != null) {
-                    Toast.makeText(CardsActivity.this, "File Saved!", Toast.LENGTH_SHORT).show();
+            builder.setView(innerDialogView);
+            builder.setTitle("Share");
+            builder.setPositiveButton("Share", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    File cardFile = createCardFile(fileNameTextView, selectedCard, selectedCardFileName, fileExtension);
+                    if(cardFile != null)
+                        shareCardFile(cardFile);
                 }
-            }
-        });
+            });
+            builder.setNeutralButton("Save", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    File cardFile = createCardFile(fileNameTextView, selectedCard, selectedCardFileName, fileExtension);
+                    if (cardFile != null)
+                        Toast.makeText(CardsActivity.this, "File Saved!", Toast.LENGTH_SHORT).show();
+                }
+            });
         return builder.create();
+    }
+
+    private File createCardFile(EditText fileNameTextView, Card selectedCard, String selectedCardFileName, String fileExtension){
+        File file;
+        if(!Util.isExternalStorageWritable() && !Util.isExternalStorageReadable())
+            return null;
+        if(fileNameTextView.getText().toString().isEmpty())
+            file = selectedCard.toJsonFile(Util.defaultDirectory(), selectedCardFileName + fileExtension);
+        else
+            file = selectedCard.toJsonFile(Util.defaultDirectory(), fileNameTextView.getText().toString() + fileExtension);
+        return file;
+    }
+
+    private void shareCardFile(File cardFile){
+        Uri fileUri = null;
+        try {
+            fileUri = FileProvider.getUriForFile(CardsActivity.this, "com.seniordesign.wolfpack.quizinator", cardFile);
+        } catch (IllegalArgumentException e) {
+            Log.e(TAG, "The selected file can't be shared: " + cardFile.getName());
+        }
+        if(fileUri != null){
+            Intent shareIntent = new Intent();
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+            shareIntent.setType("*/*");
+            startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.sharing_send_to)));
+        }
     }
 
     private void createEditCardDialog(final Card card, final boolean isNew){
@@ -463,13 +486,6 @@ public class CardsActivity extends AppCompatActivity {
         createEditCardDialog(card, true);
     }
 
-    private void importCard(String cardPath){
-        Card newCard = (new Card()).fromJsonFilePath(cardPath);
-        if(newCard != null)
-            dataSource.createCard(newCard);
-        initializeListOfCards();
-    }
-
     public void importCardClick(View view){
         File defaultPath = Util.defaultDirectory();
         DialogProperties properties = new DialogProperties();
@@ -489,5 +505,12 @@ public class CardsActivity extends AppCompatActivity {
             }
         });
         dialog.show();
+    }
+
+    private void importCard(String cardPath){
+        Card newCard = (new Card()).fromJsonFilePath(cardPath);
+        if(newCard != null)
+            dataSource.createCard(newCard);
+        initializeListOfCards();
     }
 }

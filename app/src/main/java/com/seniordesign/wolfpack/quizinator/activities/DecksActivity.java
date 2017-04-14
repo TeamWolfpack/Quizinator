@@ -66,9 +66,7 @@ public class DecksActivity extends AppCompatActivity
             case FilePickerDialog.EXTERNAL_READ_PERMISSION_GRANT: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if(dialog != null)
-                    {   //Show dialog if the read permission has been granted.
-                        dialog.show();
-                    }
+                        dialog.show(); //Show dialog if the read permission has been granted.
                 }
                 else {
                     //Permission has not been granted. Notify the user.
@@ -127,20 +125,16 @@ public class DecksActivity extends AppCompatActivity
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     File deckFile = createDeckFile(fileNameTextView, selectedDeck, selectedDeckFileName, fileExtension);
-                    if(deckFile != null){
+                    if(deckFile != null)
                         shareDeckFile(deckFile);
-                    }
-                    //TODO -> set up receiving file with custom mime type
-                        //url -> http://stackoverflow.com/questions/1733195/android-intent-filter-for-a-particular-file-extension/2062112#2062112
                 }
             });
             builder.setNeutralButton("Save", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     File file = createDeckFile(fileNameTextView, selectedDeck, selectedDeckFileName, fileExtension);
-                    if (file != null) {
+                    if (file != null)
                         Toast.makeText(DecksActivity.this, "File Saved!", Toast.LENGTH_SHORT).show();
-                    }
                 }
             });
         return builder.create();
@@ -172,9 +166,6 @@ public class DecksActivity extends AppCompatActivity
                 shareIntent.setType("*/*");
             startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.sharing_send_to)));
         }
-//        if(deckFile.exists()){
-//            deckFile.delete();
-//        }
     }
 
     public void newDeckClick(View view){
