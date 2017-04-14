@@ -51,7 +51,6 @@ public class SettingsUITests {
     public void normalFlow_SettingsDataSource() throws Exception{
         assertEquals(true, dao.open());
         assertEquals(true, dao.getDatabase().isOpen());
-        sql.onUpgrade(dao.getDatabase(), 0, 1);
         Settings s = dao.createSettings(3, "Jim");
         assertEquals(1, dao.getAllSettings().size());
         assertEquals(3, dao.getSettingsAllColumns().length);

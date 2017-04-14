@@ -42,15 +42,10 @@ public class CardUITests {
         dbHelper = new QuizSQLiteHelper(activity);
     }
 
-    /*
-     * @author  chuna (10/16/2016)
-     */
     @Test
     public void normalFlow_CardDataSource() throws Exception{
         assertEquals(true, dataSource.open());
         assertEquals(true, dataSource.getDatabase().isOpen());
-        dbHelper.onUpgrade(dataSource.getDatabase(), 0, 1);
-
         Card card = dataSource.createCard(Constants.CARD_TYPES.TRUE_FALSE.ordinal(), "Test TF Question", String.valueOf(true),
                 new String[]{String.valueOf(true), String.valueOf(false)}, 1, String.valueOf(false));
         assertEquals(26, dataSource.getAllCards().size());

@@ -38,7 +38,7 @@ class QuizSQLiteHelper extends SQLiteOpenHelper {
     //HighScore table contents
     static final String TABLE_HIGHSCORES = "highscores";
     static final String HIGHSCORES_COLUMN_ID = "_id";
-    static final String HIGHSCORES_COLUMN_DECKNAME = "_deckName";
+    static final String HIGHSCORES_COLUMN_DECKID = "_deckID";
     static final String HIGHSCORES_COLUMN_BESTTIME = "_bestTime";
     static final String HIGHSCORES_COLUMN_BESTSCORE = "_bestScore";
 
@@ -96,7 +96,7 @@ class QuizSQLiteHelper extends SQLiteOpenHelper {
     static final String HIGHSCORES_TABLE_CREATE = "create table if not exists "
             + TABLE_HIGHSCORES + "("
             + HIGHSCORES_COLUMN_ID + " integer primary key autoincrement, "
-            + HIGHSCORES_COLUMN_DECKNAME + " TEXT, "
+            + HIGHSCORES_COLUMN_DECKID + " INTEGER, "
             + HIGHSCORES_COLUMN_BESTTIME + " REAL, "
             + HIGHSCORES_COLUMN_BESTSCORE + " INTEGER"
             + ");";

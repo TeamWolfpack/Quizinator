@@ -96,14 +96,14 @@ public class GameSettingTests {
 
     @Test
     public void validateGameMinuteInput_LowerBound() {
-        onView(withId(R.id.game_minutes)).check(matches(withText("05")));
+        onView(withId(R.id.game_minutes)).check(matches(withText("10")));
         onView(withId(R.id.game_minutes)).perform(clearText(), typeText("-1"));
         onView(withId(R.id.game_minutes)).check(matches(withText("1")));
     }
 
     @Test
     public void validateGameMinuteInput_UpperBound() {
-        onView(withId(R.id.game_minutes)).check(matches(withText("05")));
+        onView(withId(R.id.game_minutes)).check(matches(withText("10")));
         onView(withId(R.id.game_minutes)).perform(clearText(), typeText("60"));
         onView(withId(R.id.game_minutes)).check(matches(withText("60")));
 
@@ -130,14 +130,14 @@ public class GameSettingTests {
 
     @Test
     public void validateCardMinuteInput_LowerBound() {
-        onView(withId(R.id.card_minutes)).check(matches(withText("00")));
+        onView(withId(R.id.card_minutes)).check(matches(withText("01")));
         onView(withId(R.id.card_minutes)).perform(clearText(), typeText("-1"));
         onView(withId(R.id.card_minutes)).check(matches(withText("1")));
     }
 
     @Test
     public void validateCardMinuteInput_UpperBound() {
-        onView(withId(R.id.card_minutes)).check(matches(withText("00")));
+        onView(withId(R.id.card_minutes)).check(matches(withText("01")));
         onView(withId(R.id.card_minutes)).perform(clearText(), typeText("60"));
         onView(withId(R.id.card_minutes)).check(matches(withText("60")));
 
@@ -147,7 +147,7 @@ public class GameSettingTests {
 
     @Test
     public void validateCardSecondInput_LowerBound() throws InterruptedException {
-        onView(withId(R.id.card_seconds)).check(matches(withText("15")));
+        onView(withId(R.id.card_seconds)).check(matches(withText("00")));
         onView(withId(R.id.card_seconds)).perform(clearText(), typeText("1"));
         onView(withId(R.id.card_seconds)).check(matches(withText("1")));
 
@@ -160,7 +160,7 @@ public class GameSettingTests {
 
     @Test
     public void validateCardSecondInput_UpperBound() {
-        onView(withId(R.id.card_seconds)).check(matches(withText("15")));
+        onView(withId(R.id.card_seconds)).check(matches(withText("00")));
         onView(withId(R.id.card_seconds)).perform(clearText(), typeText("60"));
         onView(withId(R.id.card_seconds)).check(matches(withText("60")));
 
@@ -271,10 +271,10 @@ public class GameSettingTests {
 
     @Test
     public void validateEditTexts() {
-        onView(withId(R.id.game_minutes)).check(matches(withText(containsString("05"))));
+        onView(withId(R.id.game_minutes)).check(matches(withText(containsString("10"))));
         onView(withId(R.id.game_seconds)).check(matches(withText(containsString("00"))));
-        onView(withId(R.id.card_minutes)).check(matches(withText(containsString("00"))));
-        onView(withId(R.id.card_seconds)).check(matches(withText(containsString("15"))));
+        onView(withId(R.id.card_minutes)).check(matches(withText(containsString("01"))));
+        onView(withId(R.id.card_seconds)).check(matches(withText(containsString("00"))));
         onView(withId(R.id.card_count)).check(matches(withText(containsString("15"))));
     }
 }

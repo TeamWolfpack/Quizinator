@@ -122,7 +122,7 @@ public class CustomDeckTests {
         closeSoftKeyboard();
         onData(anything())
                 .inAdapterView(withId(R.id.cards_in_database))
-                .atPosition(10) // atPosition is 0 indexed
+                .atPosition(25) // atPosition is 0 indexed
                 .perform(click());
         onView(withId(R.id.deck_save_button)).perform(click());
 
@@ -131,7 +131,7 @@ public class CustomDeckTests {
         cardsActivityRule.launchActivity(new Intent());
         onData(anything())
                 .inAdapterView(withId(R.id.list_of_cards))
-                .atPosition(10) // atPosition is 0 indexed
+                .atPosition(25) // atPosition is 0 indexed
                 .perform(click());
         onView(withText(Constants.DELETE)).perform(click());
         onView(withText(Constants.DELETE)).perform(click());
@@ -139,7 +139,7 @@ public class CustomDeckTests {
         //Make sure the card is removed from the deck
         List<Deck> decks = dataSource.getAllDecks();
         Deck deck = dataSource.getDeckWithId(decks.size());
-        assertTrue("Deck size (" + deck.getCards() + ") is empty", deck.getCards().isEmpty());
+        assertTrue("Deck size (" + deck.getCards() + ") is empty", deck.getCards() == null || deck.getCards().isEmpty());
 
         dataSource.deleteDeck(deck);
         dataSource.close();

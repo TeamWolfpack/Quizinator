@@ -7,6 +7,11 @@ import java.util.List;
 public final class Constants {
 
     public static final String NAQT_RULES_URL = "https://www.naqt.com/rules.html";
+    public static final String HELP_SINGLEPLAYER = "https://youtu.be/FbXONr6h9oY";
+    public static final String HELP_MULTI_HOST = "https://youtu.be/zGIkaLsUCIc";
+    public static final String HELP_MULTI_PLAYER = "https://youtu.be/p-V12KBi6Zs";
+    public static final String HELP_CUSTOM = "https://youtu.be/k4tVptQPOLs";
+    public static final String HELP_RULES = "https://youtu.be/NG-r5ds-GVM";
 
     public enum CARD_TYPES {
         TRUE_FALSE("True/False"),
@@ -69,6 +74,8 @@ public final class Constants {
     public static final String UPDATED_HIGH_SCORE = "Updated High Scores";
     public static final String NO_HIGH_SCORE = "No High Scores";
     public static final String NEW_HIGH_SCORE = "New High Score";
+    public static final String HIGH_SCORE_SCORE = "Score: ";
+    public static final String HIGH_SCORE_TIME = "Time: ";
 
     public static final String GAME_MINUTES_ERROR = "Game Minutes can't be empty";
     public static final String GAME_SECONDS_ERROR = "Game Seconds can't be empty";
@@ -82,4 +89,5 @@ public final class Constants {
     public static final String STRING_00 = "00";
 
     public static final String NO_DECK_WARNING = "Need at least one Deck before starting";
+    public static final String NO_HIGHSCORES_WARNING = "You do not have any high scores yet. Try playing a game first.";
 }

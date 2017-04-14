@@ -25,6 +25,7 @@ import com.seniordesign.wolfpack.quizinator.database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.wifiDirect.ConnectionService;
 
 import static com.seniordesign.wolfpack.quizinator.Constants.NO_DECK_WARNING;
+import static com.seniordesign.wolfpack.quizinator.Constants.NO_HIGHSCORES_WARNING;
 
 public class MainMenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -96,6 +97,31 @@ public class MainMenuActivity extends AppCompatActivity
         else if(id == R.id.nav_show_cards){
             startActivity(new Intent(this, CardsActivity.class));
         }
+        else if (id == R.id.help_singleplayer) {
+            Uri uriUrl = Uri.parse(Constants.HELP_SINGLEPLAYER);
+            Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+            startActivity(launchBrowser);
+        }
+        else if (id == R.id.help_multi_host) {
+            Uri uriUrl = Uri.parse(Constants.HELP_MULTI_HOST);
+            Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+            startActivity(launchBrowser);
+        }
+        else if (id == R.id.help_multi_player) {
+            Uri uriUrl = Uri.parse(Constants.HELP_MULTI_PLAYER);
+            Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+            startActivity(launchBrowser);
+        }
+        else if (id == R.id.help_custom) {
+            Uri uriUrl = Uri.parse(Constants.HELP_CUSTOM);
+            Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+            startActivity(launchBrowser);
+        }
+        else if (id == R.id.help_rules) {
+            Uri uriUrl = Uri.parse(Constants.HELP_RULES);
+            Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+            startActivity(launchBrowser);
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -135,6 +161,15 @@ public class MainMenuActivity extends AppCompatActivity
         }else{
             Toast.makeText(this, "Device is not compatible with P2P hardware and unable to join", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void initiateHighscores(View v) {
+        if (dataSource.getAllHighScores().isEmpty()) {
+            Toast.makeText(this, NO_HIGHSCORES_WARNING, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Intent intent = new Intent(this, HighscoresActivity.class);
+        startActivity(intent);
     }
 
     private boolean isWifiDirectSupported(Context ctx) {

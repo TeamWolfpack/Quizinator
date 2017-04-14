@@ -143,7 +143,7 @@ public class Deck implements Shareable{
 //    public Deck filter(Rules rules) {
 //        Deck filteredDeck = new Deck();
 //        filteredDeck.setId(id);
-//        filteredDeck.setDeckName(deckName);
+//        filteredDeck.setDeckID(deckName);
 //
 //        Type listType = new TypeToken<ArrayList<String>>(){}.getType();
 //        List<String> validCardTypes = new Gson().fromJson(rules.getCardTypes(), listType);

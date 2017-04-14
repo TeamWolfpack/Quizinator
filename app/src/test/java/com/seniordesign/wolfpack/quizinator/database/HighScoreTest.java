@@ -20,16 +20,16 @@ public class HighScoreTest {
      */
     @Before
     public void init(){
-        h1.setDeckName("Sample");
+        h1.setDeckID(0);
         h1.setBestTime(350000);//35 seconds-ish
         h1.setBestScore(650);
         h1.setId(1);
 
-        h2.setDeckName("");
+        h2.setDeckID(1);
         h2.setBestTime(350000);//35 seconds-ish
         h2.setBestScore(650);
 
-        h3.setDeckName("Sample");
+        h3.setDeckID(0);
         h3.setBestTime(350000);//35 seconds-ish
         h3.setBestScore(-1);
     }
@@ -41,7 +41,7 @@ public class HighScoreTest {
     public void normalFlow_HighScores() throws Exception{
         String s = "Rules id(1), deckName(Sample), bestTime(350000), " +
                 "bestScore(650).";
-        assertEquals("Sample", h1.getDeckName());
+        assertEquals("Sample", h1.getDeckID());
         assertEquals(350000, h1.getBestTime());
         assertEquals(650, h1.getBestScore());
         assertEquals(1, h1.getId());
