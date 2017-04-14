@@ -11,6 +11,7 @@ public class GamePlayStats implements Parcelable {
     private int score;
     private long timeElapsed;
     private int totalCardsCompleted;
+    private long deckID;
 
     public GamePlayStats(){
 
@@ -23,6 +24,7 @@ public class GamePlayStats implements Parcelable {
         score = in.readInt();
         timeElapsed = in.readLong();
         totalCardsCompleted = in.readInt();
+        deckID = in.readLong();
     }
 
     /*
@@ -58,6 +60,7 @@ public class GamePlayStats implements Parcelable {
         dest.writeInt(score);
         dest.writeLong(timeElapsed);
         dest.writeInt(totalCardsCompleted);
+        dest.writeLong(deckID);
     }
 
     /*
@@ -101,4 +104,8 @@ public class GamePlayStats implements Parcelable {
     public void setScore(int score) {
         this.score = score;
     }
+
+    public long getDeckID(){return deckID;}
+
+    public void setDeckID(long deckID){ this.deckID = deckID;}
 }

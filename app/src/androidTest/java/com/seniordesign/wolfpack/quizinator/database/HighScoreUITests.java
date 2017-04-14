@@ -49,7 +49,7 @@ public class HighScoreUITests {
     public void normalFlow_HighScoresDataSource() throws Exception{
         assertEquals(true, dao.open());
         assertEquals(true, dao.getDatabase().isOpen());
-        HighScores hs = dao.createHighScore("Sample", 350000, 650);
+        HighScores hs = dao.createHighScore(1, 350000, 650);
         assertTrue(dao.getAllHighScores().size() > 0);
         assertEquals(4, dao.getHighScoresAllColumns().length);
         assertEquals(true, dao.deleteHighScore(hs));

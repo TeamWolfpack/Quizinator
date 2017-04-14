@@ -148,6 +148,12 @@ public class GamePlayActivity extends AppCompatActivity {
         s.setScore(properties.getScore());
         s.setTimeElapsed(totalGameTime);
         s.setTotalCardsCompleted(properties.getCardsPlayed());
+        if(properties.getDeck()!=null){
+            s.setDeckID(properties.getDeck().getId());
+        }
+        else{
+            s.setDeckID(-1);
+        }
         checkGameStatsAgainstHighScoresDB(s);
         intent.putExtra("gameStats", s);
         startActivity(intent);
@@ -172,21 +178,38 @@ public class GamePlayActivity extends AppCompatActivity {
     }
 
     private String checkGameStatsAgainstHighScoresDB(GamePlayStats stats) {
+        if(properties.getDeck()==null){
+            return Constants.NO_HIGH_SCORE;//TODO maybe change this to a MULTIPLAYER_HIGH_SCORE
+        }
         if (properties.getDataSource().getAllHighScores().size() > 0) {
-            HighScores h = properties.getDataSource().getAllHighScores().get(0);
-            if (properties.getScore() >= h.getBestScore()) {
+            HighScores h = null;
+            for(HighScores hs : properties.getDataSource().getAllHighScores()){
+                if(hs.getDeckID() == properties.getDeck().getId()){
+                    h = hs;
+                    break;
+                }
+            }
+            if(h == null){
+                properties.getDataSource().createHighScore(
+                        properties.getDeck().getId(),
+                        stats.getTimeElapsed(), properties.getScore());
+                return Constants.NEW_HIGH_SCORE;
+            }
+            else if (properties.getScore() >= h.getBestScore()) {
                 if (properties.getScore() > h.getBestScore() || stats.getTimeElapsed() < h.getBestTime()) {
                     h.setBestTime(stats.getTimeElapsed());
                 }
                 h.setBestScore(properties.getScore());
-                h.setDeckName("Multiplayer game"); //TODO we need to look into this and change this... old code that is pointless/wrong
+                h.setDeckID(properties.getDeck().getId());
                 properties.getDataSource().deleteHighScore(h);
-                properties.getDataSource().createHighScore(h.getDeckName(), h.getBestTime(), h.getBestScore());
+                properties.getDataSource().createHighScore(h.getDeckID(), h.getBestTime(), h.getBestScore());
                 return Constants.UPDATED_HIGH_SCORE;
             }
             return Constants.NO_HIGH_SCORE;
         } else {
-            properties.getDataSource().createHighScore("Multiplayer game",
+
+            properties.getDataSource().createHighScore(
+                    properties.getDeck().getId(),
                     stats.getTimeElapsed(), properties.getScore());
             return Constants.NEW_HIGH_SCORE;
         }

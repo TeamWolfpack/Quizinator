@@ -29,6 +29,7 @@ import com.seniordesign.wolfpack.quizinator.wifiDirect.ConnectionService;
 import javax.sql.DataSource;
 
 import static com.seniordesign.wolfpack.quizinator.Constants.NO_DECK_WARNING;
+import static com.seniordesign.wolfpack.quizinator.Constants.NO_HIGHSCORES_WARNING;
 
 public class MainMenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -164,6 +165,15 @@ public class MainMenuActivity extends AppCompatActivity
         }else{
             Toast.makeText(this, "Device is not compatible with P2P hardware and unable to join", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void initiateHighscores(View v) {
+        if (dataSource.getAllHighScores().isEmpty()) {
+            Toast.makeText(this, NO_HIGHSCORES_WARNING, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Intent intent = new Intent(this, HighscoresActivity.class);
+        startActivity(intent);
     }
 
     private boolean isWifiDirectSupported(Context ctx) {

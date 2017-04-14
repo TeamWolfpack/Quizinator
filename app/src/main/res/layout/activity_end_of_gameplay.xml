@@ -67,6 +67,7 @@
         </TableRow>
 
         <TableRow
+            android:id="@+id/end_of_gameplay_row_hs_cards"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:gravity="center_vertical"
@@ -85,6 +86,7 @@
         </TableRow>
 
         <TableRow
+            android:id="@+id/end_of_gameplay_row_hs_hs"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:gravity="center_vertical"
@@ -103,6 +105,7 @@
         </TableRow>
 
         <TableRow
+            android:id="@+id/end_of_gameplay_row_hs_time"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:gravity="center_vertical" >

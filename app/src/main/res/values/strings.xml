@@ -21,6 +21,7 @@
     <string name="solo_game">Solo Game</string>
     <string name="join_game">Join Game</string>
     <string name="host_game">Host Game</string>
+    <string name="highscores">High Scores</string>
     <string name="cards">Cards</string>
 
     <string name="game_over">Game Over</string>
@@ -60,6 +61,10 @@
     <string name="end_game">End Game</string>
     <string name="question">Question</string>
     <string name="double_edge_notifier">High Risk!</string>
+
+    <string name="hs_score">Score:</string>
+    <string name="hs_time">Time</string>
+    <string name="hs_deck">Deck</string>
 
     <string name="deck_name">Deck Name</string>
     <string name="deck_size">Deck Size</string>
