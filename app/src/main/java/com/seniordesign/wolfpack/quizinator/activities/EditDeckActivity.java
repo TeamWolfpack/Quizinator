@@ -69,7 +69,7 @@ public class EditDeckActivity extends AppCompatActivity  implements AdapterView.
         initializeSortBySpinner();
 
         //TODO possibly get rid of in future
-//        cardsAvailable = dataSource.getAllCards();
+        cardsAvailable = dataSource.filterCards(selectedCardTypes, sortBy);
         populateMenus(deck);
     }
 
@@ -103,6 +103,7 @@ public class EditDeckActivity extends AppCompatActivity  implements AdapterView.
                         for (int i = 0; i < selectedCardTypes.size(); i++) {
                             chosenTypes.add(selectedCardTypes.get(i));
                         }
+                        cardsAvailable = dataSource.filterCards(selectedCardTypes, sortBy);
                         populateMenus(deck);
                     }
                 });
@@ -115,6 +116,7 @@ public class EditDeckActivity extends AppCompatActivity  implements AdapterView.
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 sortBy = parent.getSelectedItem().toString();
+                cardsAvailable = dataSource.filterCards(selectedCardTypes, sortBy);
                 populateMenus(deck);
             }
 
@@ -135,8 +137,7 @@ public class EditDeckActivity extends AppCompatActivity  implements AdapterView.
         deckCardList.setOnItemClickListener(this);
         final ListView totalCardList = (ListView)findViewById(R.id.cards_in_database);
         totalCardAdapter = new CardAdapter(this,
-                android.R.layout.simple_list_item_1,
-                dataSource.filterCards(selectedCardTypes, sortBy));
+                android.R.layout.simple_list_item_1, cardsAvailable);
         totalCardList.setAdapter(totalCardAdapter);
         totalCardList.setOnItemClickListener(this);
     }

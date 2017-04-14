@@ -52,7 +52,7 @@ public class RulesUITests {
         assertEquals(true, dao.open());
         assertEquals(true, dao.getDatabase().isOpen());
         sql.onUpgrade(dao.getDatabase(), 0, 1);
-        Rules r = dao.createRule(4, 350000, 350000, "['TF', 'MC']", 1);
+        Rules r = dao.createRule(4, 3500000L, 350000L, "['TF', 'MC']", 1, "Test", false, false, false);
         assertEquals(1, dao.getAllRules().size());
         assertEquals(6, dao.getRulesAllColumns().length);
         assertEquals(true, dao.deleteRule(r));
@@ -61,13 +61,14 @@ public class RulesUITests {
 
     /*
      * @author kuczynskij (10/12/2016)
+     * TODO may not work anymore after the changes, need to adjust tests
      */
     @Test
     public void normalFlow_UpdateRule() throws Exception{
         assertEquals(true, dao.open());
         assertEquals(true, dao.getDatabase().isOpen());
         sql.onUpgrade(dao.getDatabase(), 0, 1);
-        Rules r = dao.createRule(4, 350000, 350000, "['TF', 'MC']", 1);
+        Rules r = dao.createRule(4, 3500000L, 350000L, "['TF', 'MC']", 1, "Test", false, false, false);
         assertEquals(1, dao.getAllRules().size());
         assertEquals(6, dao.getRulesAllColumns().length);
 
