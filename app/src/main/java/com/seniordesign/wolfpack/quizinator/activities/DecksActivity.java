@@ -1,5 +1,6 @@
 package com.seniordesign.wolfpack.quizinator.activities;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -107,7 +108,7 @@ public class DecksActivity extends AppCompatActivity
     }
 
     private AlertDialog createSharingDialog(final int position){
-        View innerDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_sharing, null);
+        @SuppressLint("InflateParams") View innerDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_sharing, null);
         final EditText fileNameTextView = (EditText) innerDialogView.findViewById(R.id.dialog_file_name);
         TextView fileExtensionTextView = (TextView) innerDialogView.findViewById(R.id.dialog_file_extension);
 
