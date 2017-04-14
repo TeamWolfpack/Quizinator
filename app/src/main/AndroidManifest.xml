@@ -113,8 +113,5 @@
 
         <service android:name=".wifiDirect.ConnectionService"
             android:enabled="true" />
-
-        <meta-data android:name="AA_DB_NAME" android:value="wumbo" />
-        <meta-data android:name="AA_DB_VERSION" android:value="1" />
     </application>
 </manifest>
