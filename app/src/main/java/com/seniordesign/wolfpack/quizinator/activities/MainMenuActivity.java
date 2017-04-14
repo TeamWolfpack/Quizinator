@@ -19,14 +19,10 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.activeandroid.ActiveAndroid;
 import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.database.QuizDataSource;
-import com.seniordesign.wolfpack.quizinator.views.CardIcon;
 import com.seniordesign.wolfpack.quizinator.wifiDirect.ConnectionService;
-
-import javax.sql.DataSource;
 
 import static com.seniordesign.wolfpack.quizinator.Constants.NO_DECK_WARNING;
 import static com.seniordesign.wolfpack.quizinator.Constants.NO_HIGHSCORES_WARNING;

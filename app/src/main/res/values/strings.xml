@@ -28,7 +28,7 @@
     <string name="results">Results</string>
     <string name="main_menu">Main Menu</string>
 
-    <string name="enabling_wifi">Enabling Wifi...</string>
+    <string name="enabling_wifi">Enabling Wifi…</string>
     <string name="p2p_off_warning">P2P is disabled</string>
     <string name="yes">yes</string>
     <string name="no">no</string>
@@ -47,6 +47,13 @@
         <item>True/False</item>
         <item>Multiple Choice</item>
         <item>Both</item>
+    </string-array>
+
+
+    <string-array name="card_sort_list">
+        <item>Sort by…</item>
+        <item>Question</item>
+        <item>Points</item>
     </string-array>
 
     <string name="wifi_direct_disabled">WiFi Direct Disabled, please re-enable.</string>
@@ -133,4 +140,9 @@
     <string name="double_edge_sword_questions">Double Edge Sword Questions</string>
     <string name="wager_final_question">Wager Final Question</string>
     <string name="allow_multiple_winners">Allow Multiple Winners</string>
+
+    <string name="sharing_send_to">Send to…</string>
+    <string name="initial_score">Score: 0</string>
+    <string name="initial_game_time">Game Time: 00:00</string>
+    <string name="initial_time_left">Time Left: 00.00</string>>
 </resources>

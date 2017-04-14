@@ -1,7 +1,13 @@
 package com.seniordesign.wolfpack.quizinator.database;
 
+import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Constants;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,7 +16,7 @@ import java.util.Random;
 /**
  * @creation 10/4/2016.
  */
-public class Deck {
+public class Deck implements Shareable{
 
     private long id;
     private String deckName;
@@ -24,6 +30,30 @@ public class Deck {
 
     public Deck(){
 
+    }
+
+    public File toJsonFile(File dir, String fileName){
+        File file = new File(dir, fileName);
+        try {
+            FileWriter fw = new FileWriter(file);
+            fw.write((new Gson()).toJson(this));
+            fw.close();
+        } catch (IOException e) {
+            return null;
+        }
+        return file;
+    }
+
+    public Deck fromJson(String jsonCard){
+        return (new Gson()).fromJson(jsonCard, Deck.class);
+    }
+
+    public Deck fromJsonFilePath(String filePath){
+        try {
+            return (new Gson()).fromJson(new FileReader(filePath), Deck.class);
+        } catch (FileNotFoundException e) {
+            return null;
+        }
     }
 
     public boolean addCard(Card card){

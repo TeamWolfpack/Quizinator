@@ -26,9 +26,10 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:textColor="@android:color/white"
-                android:paddingRight="10dp"
-                android:textSize="20dp"
-                android:text="Score: 0"
+                android:paddingRight="@dimen/gameplay_stats_padding"
+                android:paddingLeft="0dp"
+                android:textSize="@dimen/gameplay_stats_font"
+                android:text="@string/initial_score"
                 />
             <TextView
                 android:layout_alignParentRight="true"
@@ -39,9 +40,10 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:textColor="@android:color/white"
-                android:paddingRight="10dp"
-                android:textSize="20dp"
-                android:text="Game Time: 00:00"
+                android:paddingRight="@dimen/gameplay_stats_padding"
+                android:paddingLeft="0dp"
+                android:textSize="@dimen/gameplay_stats_font"
+                android:text="@string/initial_game_time"
                 />
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
@@ -62,7 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_weight="2"
                 android:layout_height="0dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="@dimen/activity_vertical_margin_half">
 
                 <com.seniordesign.wolfpack.quizinator.views.CardIcon
                     android:id="@+id/questionCardTypeIcon"
@@ -89,9 +91,9 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/background_dark"
                 android:textColor="@android:color/white"
-                android:textSize="20dp"
-                android:layout_marginBottom="10dp"
-                android:text="Time Left : 00.00"/>
+                android:textSize="@dimen/gameplay_stats_font"
+                android:layout_marginBottom="@dimen/gameplay_stats_padding"
+                android:text="@string/initial_time_left"/>
             <FrameLayout
                 android:id="@+id/answerArea"
                 android:layout_width="match_parent"
@@ -106,7 +108,7 @@
         app:srcCompat="@drawable/ic_redo_white_24dp"
         android:id="@+id/double_edge_notifier"
         android:visibility="invisible"
-        android:textSize="18dp"
+        android:textSize="@dimen/md_text_size_subheading"
         android:textColor="@color/colorAccent"
         android:textStyle="bold"
         android:layout_width="wrap_content"

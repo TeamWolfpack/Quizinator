@@ -28,16 +28,17 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:textColor="@android:color/white"
-                android:paddingRight="10dp"
-                android:textSize="20dp"
-                android:text="Game Time: 00:00" />
+                android:paddingRight="@dimen/gameplay_stats_padding"
+                android:paddingLeft="0dp"
+                android:textSize="@dimen/gameplay_stats_font"
+                android:text="@string/initial_game_time" />
 
             <ImageButton
                 app:srcCompat="@drawable/end_circle"
                 android:id="@+id/end_game_option"
                 android:layout_toLeftOf="@id/gamePlayTimeHostText"
                 android:layout_toStartOf="@id/gamePlayTimeHostText"
-                android:padding="5dp"
+                android:padding="@dimen/icon_padding"
                 android:scaleType="fitCenter"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/end_game"
@@ -51,7 +52,7 @@
                 android:id="@+id/players_button"
                 android:layout_toLeftOf="@id/end_game_option"
                 android:layout_toStartOf="@id/end_game_option"
-                android:padding="5dp"
+                android:padding="@dimen/icon_padding"
                 android:scaleType="fitCenter"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/end_game"

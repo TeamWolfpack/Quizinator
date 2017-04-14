@@ -52,7 +52,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
     compile 'com.google.android.gms:play-services-appindexing:9.8.0'
-    //add support for active android
-    //database ORM
-    compile files('libs/activeandroid-3.0.jar')
+    // import FilePicker
+    // @url -> https://android-arsenal.com/details/1/3950
+    compile 'com.github.angads25:filepicker:1.1.0'
+
 }

@@ -320,8 +320,10 @@ public class ManageGameplayActivity extends AppCompatActivity {
         gameplayTimerStatic = new CountDownTimer(time, 10) {
             @Override
             public void onTick(long millisUntilFinished) {
+                long minutes = millisUntilFinished / 60000;
+                long seconds = millisUntilFinished / 1000 % 60;
                 ((TextView) findViewById(R.id.gamePlayTimeHostText)).setText(
-                        "Game Time: " + millisUntilFinished / 60000 + ":" + millisUntilFinished / 1000 % 60
+                        "Game Time: " + minutes + ":" + (seconds < 10 ? "0" + seconds : seconds)
                 );
                 gameplayTimerRemaining = millisUntilFinished;
             }

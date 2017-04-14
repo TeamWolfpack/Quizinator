@@ -22,7 +22,7 @@
             android:id="@+id/edit_card_card_type_spinner"
             android:layout_column="1"
             android:gravity="center"
-            android:padding="3dip"
+            android:padding="@dimen/spinner_padding"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             />
@@ -34,14 +34,14 @@
         <TextView
             android:layout_column="0"
             android:text="@string/points"
-            android:padding="3dip"
+            android:padding="@dimen/md_text_view_padding"
             android:gravity="end"
             android:layout_width="wrap_content" />
         <EditText
             android:id="@+id/edit_card_points_value"
             android:layout_column="1"
             android:gravity="start"
-            android:padding="3dip"
+            android:padding="@dimen/md_text_view_padding"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:inputType="number"
@@ -54,14 +54,14 @@
         <TextView
             android:layout_column="0"
             android:text="@string/question"
-            android:padding="3dip"
+            android:padding="@dimen/md_text_view_padding"
             android:gravity="end"
             android:layout_width="wrap_content"/>
         <EditText
             android:id="@+id/edit_card_question_value"
             android:layout_column="1"
             android:gravity="start"
-            android:padding="3dip"
+            android:padding="@dimen/md_text_view_padding"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:inputType="text"/>
@@ -74,14 +74,14 @@
         <TextView
             android:layout_column="0"
             android:text="@string/answer"
-            android:padding="3dip"
+            android:padding="@dimen/md_text_view_padding"
             android:gravity="end"
             android:layout_width="wrap_content" />
         <EditText
             android:id="@+id/edit_card_answer_field_1"
             android:layout_column="1"
             android:gravity="start"
-            android:padding="3dip"
+            android:padding="@dimen/md_text_view_padding"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:inputType="text"/>
@@ -94,13 +94,13 @@
         <TextView
             android:layout_column="0"
             android:text="@string/wrong_answer"
-            android:padding="3dip"
+            android:padding="@dimen/md_text_view_padding"
             android:gravity="end"
             android:layout_width="wrap_content" />
         <EditText
             android:id="@+id/edit_card_answer_field_2"
             android:gravity="start"
-            android:padding="3dip"
+            android:padding="@dimen/md_text_view_padding"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_column="1"
@@ -114,7 +114,7 @@
         <EditText
             android:id="@+id/edit_card_answer_field_3"
             android:gravity="start"
-            android:padding="3dip"
+            android:padding="@dimen/md_text_view_padding"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_column="1"
@@ -128,7 +128,7 @@
         <EditText
             android:id="@+id/edit_card_answer_field_4"
             android:gravity="start"
-            android:padding="3dip"
+            android:padding="@dimen/md_text_view_padding"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_column="1"
@@ -141,7 +141,7 @@
         android:id="@+id/answer_row_3">
         <TextView
             android:layout_column="0"
-            android:padding="3dip"
+            android:padding="@dimen/md_text_view_padding"
             android:gravity="end"
             android:layout_width="wrap_content" />
         <RadioGroup
@@ -155,7 +155,8 @@
                 android:id="@+id/edit_card_true"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:paddingRight="20dp"
+                android:paddingRight="@dimen/radio_button_padding"
+                android:paddingLeft="0dp"
                 android:text="@string/capital_true"
                 android:layout_weight="1"
                 />
@@ -163,7 +164,8 @@
                 android:id="@+id/edit_card_false"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:paddingRight="20dp"
+                android:paddingRight="@dimen/radio_button_padding"
+                android:paddingLeft="0dp"
                 android:text="@string/capital_false"
                 android:layout_weight="1"
                 />

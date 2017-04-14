@@ -20,6 +20,12 @@
     <uses-permission
         android:name="android.permission.INTERACT_ACROSS_USERS_FULL"
         android:required="true" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:required="true"/>
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:required="true"/>
 
     <!-- Market filtering -->
     <uses-feature
@@ -33,15 +39,36 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.DecksActivity" />
-        <activity android:name=".activities.EndOfGameplayActivity" />
-        <activity android:name=".activities.NewGameSettingsActivity" />
+
+        <activity android:name=".activities.DecksActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="file" />
+                <data android:host="*" />
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*\\.json.deck.quizinator" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.EndOfGameplayActivity" />
+        <activity
+            android:name=".activities.NewGameSettingsActivity" />
         <activity
             android:name=".activities.HostGameActivity"
             android:configChanges="orientation|screenSize" />
         <activity
             android:name=".activities.CardsActivity"
-            android:configChanges="orientation|screenSize" />
+            android:configChanges="orientation|screenSize" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="file" />
+                <data android:host="*" />
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*\\.json.card.quizinator" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activities.EditDeckActivity"
             android:configChanges="orientation|screenSize" />
@@ -51,8 +78,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.GamePlayActivity"
-            android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.MainMenuActivity"
@@ -60,7 +87,6 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -74,18 +100,19 @@
             </intent-filter>
         </receiver>
 
-        <service
-            android:name=".wifiDirect.ConnectionService"
-            android:enabled="true" />
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.seniordesign.wolfpack.quizinator"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
 
-        <meta-data
-            android:name="AA_DB_NAME"
-            android:value="wumbo" />
-        <meta-data
-            android:name="AA_DB_VERSION"
-            android:value="1" />
+        <service android:name=".wifiDirect.ConnectionService"
+            android:enabled="true" />
 
         <activity android:name=".activities.HighscoresActivity"></activity>
     </application>
-
 </manifest>

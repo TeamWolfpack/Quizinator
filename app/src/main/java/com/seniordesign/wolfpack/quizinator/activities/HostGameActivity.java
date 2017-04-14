@@ -61,7 +61,9 @@ public class HostGameActivity
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    getPeerListFragment().setConnected(false);
+                    PeerListFragment fragment = getPeerListFragment();
+                    if(fragment != null)
+                        getPeerListFragment().setConnected(false);
                 }
             });
         }
@@ -325,14 +327,14 @@ public class HostGameActivity
     }
 
     /**
-     * Button handler for the layout.
+     * Button handler for the layout. //TODO removed return boolean false true to be void
      */
-    public boolean onGameSettingsButtonClicked(View v){
+    public void onGameSettingsButtonClicked(View v){
         Log.d(TAG, "startGameSettingsActivity: view(" + v.toString() + ")");
         if(!wifiDirectApp.mP2pConnected || wifiDirectApp.getConnectedPeers().size() < 1){
             Toast.makeText(this, "You are not connected to anyone",
                     Toast.LENGTH_SHORT).show();
-            return false;
+            return;
         }
         runOnUiThread(new Runnable() {
             @Override public void run() {
@@ -341,7 +343,6 @@ public class HostGameActivity
                 startActivity(wifiDirectApp.getLaunchActivityIntent(NewGameSettingsActivity.class, null));
             }
         });
-        return true;
     }
 
     public void onConnectButtonClicked(View v){

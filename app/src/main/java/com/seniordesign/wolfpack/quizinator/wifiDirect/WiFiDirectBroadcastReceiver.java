@@ -60,6 +60,9 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver
         Log.d(TAG, "deviceWifiStateChangedAction");
         WifiDirectApp wifiDirectApp = WifiDirectApp.getInstance();
         if (state == WifiP2pManager.WIFI_P2P_STATE_ENABLED) {
+            if (ConnectionService.getInstance().mWorkHandler == null) {
+                return false;
+            }
             wifiDirectApp.mP2pChannel =
                     wifiDirectApp.mP2pMan.initialize(
                             ConnectionService.getInstance(),

@@ -16,7 +16,6 @@ import com.seniordesign.wolfpack.quizinator.views.CardIcon;
 
 import java.util.List;
 
-
 public class DeckAdapter extends ArrayAdapter<Deck> {
 
     public DeckAdapter(Context context, int resource) {
@@ -78,11 +77,10 @@ public class DeckAdapter extends ArrayAdapter<Deck> {
 
             name.setText(deck.getDeckName());
             size.setText(""+deck.getCards().size()+" Cards");
-            mcCountView.setText(""+mcCount);
-            tfCountView.setText(""+tfCount);
-            frCountView.setText(""+frCount);
-            vrCountView.setText(""+vrCount);
-            System.out.println(deck.getDeckName());
+            mcCountView.setText(String.valueOf(mcCount));
+            tfCountView.setText(String.valueOf(tfCount));
+            frCountView.setText(String.valueOf(frCount));
+            vrCountView.setText(String.valueOf(vrCount));
         }
 
         return v;

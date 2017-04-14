@@ -2,12 +2,16 @@ package com.seniordesign.wolfpack.quizinator.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -16,7 +20,13 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.github.angads25.filepicker.controller.DialogSelectionListener;
+import com.github.angads25.filepicker.model.DialogConfigs;
+import com.github.angads25.filepicker.model.DialogProperties;
+import com.github.angads25.filepicker.view.FilePickerDialog;
+import com.seniordesign.wolfpack.quizinator.Util;
 import com.seniordesign.wolfpack.quizinator.adapters.CardAdapter;
 import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.Constants.CARD_TYPES;
@@ -24,6 +34,7 @@ import com.seniordesign.wolfpack.quizinator.database.Card;
 import com.seniordesign.wolfpack.quizinator.database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,15 +55,13 @@ public class CardsActivity extends AppCompatActivity {
                     FREE_RESPONSE,
                     VERBAL_RESPONSE
             ));
+    private String sortBy;
 
     private QuizDataSource dataSource;
+    private FilePickerDialog dialog;
 
     private static final String TAG = "ACT_CA";
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    //private GoogleApiClient client;
+    private static final String VIEW_ACTION = "android.intent.action.VIEW";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +70,36 @@ public class CardsActivity extends AppCompatActivity {
         setTitle(Constants.CARDS);
         initializeDB();
 
+        if (getIntent() != null &&
+                getIntent().getAction() != null &&
+                getIntent().getAction().equals(VIEW_ACTION))
+            importCard(getIntent().getData().getPath());
+
         cardTypeSpinner = (MultiSelectSpinner) findViewById(R.id.card_type_spinner);
         selectedCardTypes = new ArrayList<>();
 
         initializeCardTypeSpinner();
-        initializeListOfCards(dataSource.filterCards(cardTypes));
+        initializeSortBySpinner();
+        initializeListOfCards();
+    }
+
+    //Add this method to show Dialog when the required permission has been granted to the app.
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case FilePickerDialog.EXTERNAL_READ_PERMISSION_GRANT: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if(dialog != null)
+                    {   //Show dialog if the read permission has been granted.
+                        dialog.show();
+                    }
+                }
+                else {
+                    //Permission has not been granted. Notify the user.
+                    Toast.makeText(CardsActivity.this, "Permission is required for getting list of Decks", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
     }
 
     private Boolean initializeCardTypeSpinner(){
@@ -93,10 +127,26 @@ public class CardsActivity extends AppCompatActivity {
                         for (int i = 0; i < selectedCardTypes.size(); i++) {
                             chosenTypes.add(selectedCardTypes.get(i));
                         }
-                        initializeListOfCards(dataSource.filterCards(chosenTypes));
+                        initializeListOfCards();
                     }
                 });
         return true;
+    }
+
+    private void initializeSortBySpinner() {
+        Spinner sortBySpinner = (Spinner) findViewById(R.id.card_sort_spinner);
+        sortBySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                sortBy = parent.getSelectedItem().toString();
+                initializeListOfCards();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Do Nothing
+            }
+        });
     }
 
     private boolean initializeDB() {
@@ -104,7 +154,8 @@ public class CardsActivity extends AppCompatActivity {
         return dataSource.open();
     }
 
-    private void initializeListOfCards(final List<Card> values) {
+    private void initializeListOfCards() {
+        final List<Card> values = dataSource.filterCards(selectedCardTypes, sortBy);
         final ListView listView = (ListView) findViewById(R.id.list_of_cards);
         final CardAdapter adapter = new CardAdapter(this,
                 R.layout.array_adapter_list_of_cards, values);
@@ -116,6 +167,58 @@ public class CardsActivity extends AppCompatActivity {
                 createEditCardDialog(values.get(position), false);
             }
         });
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+            /**
+             * @return true to prevent onItemClick from being called
+             */
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                createSharingDialog(position).show();
+                return true;
+            }
+        });
+    }
+
+    private android.support.v7.app.AlertDialog createSharingDialog(final int position){
+        View innerDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_sharing, null);
+        final EditText fileNameTextView = (EditText) innerDialogView.findViewById(R.id.dialog_file_name);
+        TextView fileExtensionTextView = (TextView) innerDialogView.findViewById(R.id.dialog_file_extension);
+
+        final Card selectedDeck =  dataSource.getAllCards().get(position);
+        final String selectedDeckFileName = String.valueOf(selectedDeck.getId());
+        final String fileExtension = ".json.card.quizinator";
+
+        fileNameTextView.setText(selectedDeckFileName);
+        fileExtensionTextView.setText(fileExtension);
+
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+        builder.setView(innerDialogView);
+        builder.setTitle("Share");
+        builder.setPositiveButton("Share", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //TODO -> send file using Android sharing services
+            }
+        });
+        builder.setNeutralButton("Save", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(!Util.isExternalStorageWritable() && !Util.isExternalStorageReadable())
+                    return;
+                File dir = new File(Environment.getExternalStorageDirectory().getPath(), "Quizinator"); //stores to /storage/emulated/0
+                if(!dir.exists())
+                    dir.mkdirs();
+                File file;
+                if(fileNameTextView.getText().toString().isEmpty())
+                    file = selectedDeck.toJsonFile(dir, selectedDeckFileName + fileExtension);
+                else
+                    file = selectedDeck.toJsonFile(dir, fileNameTextView.getText().toString() + fileExtension);
+                if (file != null) {
+                    Toast.makeText(CardsActivity.this, "File Saved!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        return builder.create();
     }
 
     private void createEditCardDialog(final Card card, final boolean isNew){
@@ -135,7 +238,7 @@ public class CardsActivity extends AppCompatActivity {
             .setOnCancelListener(new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialog) {
-                    initializeListOfCards(dataSource.filterCards(cardTypes));
+                    initializeListOfCards();
                 }
             });
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -262,7 +365,7 @@ public class CardsActivity extends AppCompatActivity {
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
-                        initializeListOfCards(dataSource.filterCards(cardTypes));
+                        initializeListOfCards();
                     }
                 });
         AlertDialog alertDialog = alertDialogBuilder.create();
@@ -279,7 +382,7 @@ public class CardsActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_item, cardTypesAdapter);
         cardAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cardSpinner.setAdapter(cardAdapter);
-        cardSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        cardSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 card.setCardType(CARD_TYPES.values()[position]);
@@ -358,5 +461,33 @@ public class CardsActivity extends AppCompatActivity {
     public void newCardClick(View view){
         Card card = dataSource.createCard(new Card());
         createEditCardDialog(card, true);
+    }
+
+    private void importCard(String cardPath){
+        Card newCard = (new Card()).fromJsonFilePath(cardPath);
+        if(newCard != null)
+            dataSource.createCard(newCard);
+        initializeListOfCards();
+    }
+
+    public void importCardClick(View view){
+        File defaultPath = Util.defaultDirectory();
+        DialogProperties properties = new DialogProperties();
+            properties.selection_mode = DialogConfigs.SINGLE_MODE;
+            properties.selection_type = DialogConfigs.FILE_SELECT;
+            properties.root = defaultPath;
+            properties.error_dir = new File(DialogConfigs.DEFAULT_DIR);
+            properties.offset = new File(DialogConfigs.DEFAULT_DIR);
+            properties.extensions = new String[]{"card.quizinator"};
+        dialog = new FilePickerDialog(CardsActivity.this, properties);
+            dialog.setTitle("Select a Card");
+        dialog.setDialogSelectionListener(new DialogSelectionListener() {
+            @Override
+            public void onSelectedFilePaths(String[] files) {
+                //files is the array of the paths of files selected by the Application User.
+                importCard(files[0]);
+            }
+        });
+        dialog.show();
     }
 }
