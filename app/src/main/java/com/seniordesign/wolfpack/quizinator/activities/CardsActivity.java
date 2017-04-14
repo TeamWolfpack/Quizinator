@@ -208,10 +208,14 @@ public class CardsActivity extends AppCompatActivity {
                 File dir = new File(Environment.getExternalStorageDirectory().getPath(), "Quizinator"); //stores to /storage/emulated/0
                 if(!dir.exists())
                     dir.mkdirs();
+                File file;
                 if(fileNameTextView.getText().toString().isEmpty())
-                    selectedDeck.toJsonFile(dir, selectedDeckFileName + fileExtension);
+                    file = selectedDeck.toJsonFile(dir, selectedDeckFileName + fileExtension);
                 else
-                    selectedDeck.toJsonFile(dir, fileNameTextView.getText().toString() + fileExtension);
+                    file = selectedDeck.toJsonFile(dir, fileNameTextView.getText().toString() + fileExtension);
+                if (file != null) {
+                    Toast.makeText(CardsActivity.this, "File Saved!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         return builder.create();

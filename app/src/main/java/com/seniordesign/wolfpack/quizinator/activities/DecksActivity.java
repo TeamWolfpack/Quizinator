@@ -137,7 +137,10 @@ public class DecksActivity extends AppCompatActivity
             builder.setNeutralButton("Save", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    createDeckFile(fileNameTextView, selectedDeck, selectedDeckFileName, fileExtension);
+                    File file = createDeckFile(fileNameTextView, selectedDeck, selectedDeckFileName, fileExtension);
+                    if (file != null) {
+                        Toast.makeText(DecksActivity.this, "File Saved!", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         return builder.create();
