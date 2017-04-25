@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -129,7 +130,7 @@ public class MessageHandler extends Handler {
                 mConnMan.pushOutData(createQuizMessage(MSG_DISCONNECT_FROM_ALL_PEERS, (String) msg.obj));
                 break;
             case MSG_PEER_HAS_LEFT:
-
+                mConnMan.pushOutData(createQuizMessage(MSG_PEER_HAS_LEFT, (String) msg.obj));
                 break;
             default:
                 break;
@@ -237,6 +238,13 @@ public class MessageHandler extends Handler {
                     if(wifiDirectApp.mHomeActivity != null){
                         wifiDirectApp.mHomeActivity.disconnect();
                         wifiDirectApp.mHomeActivity.finish();
+                    }
+                    break;
+                case MSG_PEER_HAS_LEFT:
+                    if(wifiDirectApp.mGameplayActivity != null){
+                        Toast t = Toast.makeText(wifiDirectApp.mGameplayActivity, message, Toast.LENGTH_SHORT);
+                        t.setGravity(Gravity.TOP, 0, 0);
+                        t.show();
                     }
                     break;
             }

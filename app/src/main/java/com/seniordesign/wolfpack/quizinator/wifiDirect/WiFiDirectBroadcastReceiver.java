@@ -4,10 +4,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.NetworkInfo;
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.util.Log;
+
+import java.util.ArrayList;
 
 public class WiFiDirectBroadcastReceiver extends BroadcastReceiver
         implements WifiP2pManager.PeerListListener,
@@ -107,6 +110,8 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver
     public void onPeersAvailable(WifiP2pDeviceList peerList) {
         Log.d(TAG, "onPeersAvailable");
         WifiDirectApp wifiDirectApp = WifiDirectApp.getInstance();
+        if(wifiDirectApp.mManageActivity != null)
+            findDisconnectedPlayers(peerList);
         wifiDirectApp.mPeers.clear();
         wifiDirectApp.mPeers.addAll(peerList.getDeviceList());
         if (wifiDirectApp.mP2pInfo != null &&
@@ -117,6 +122,40 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver
         }
         if (wifiDirectApp.mHomeActivity != null)
             wifiDirectApp.mHomeActivity.onPeersAvailable();
+    }
+
+    private void findDisconnectedPlayers(WifiP2pDeviceList peerList){
+        ArrayList<WifiP2pDevice> currentPeers = new ArrayList<>();
+        WifiDirectApp wifiDirectApp = WifiDirectApp.getInstance();
+        for (WifiP2pDevice d : wifiDirectApp.mPeers) {
+            if (d.status == WifiP2pDevice.CONNECTED) {
+                currentPeers.add(d);
+            }
+        }
+        ArrayList<WifiP2pDevice> updatedPeers = new ArrayList<>();
+        for (WifiP2pDevice d : peerList.getDeviceList()) {
+            if (d.status == WifiP2pDevice.CONNECTED) {
+                updatedPeers.add(d);
+            }
+        }
+        if(currentPeers.size() > updatedPeers.size()){
+            //handle disconnects
+//                for(int i = 0; i < currentPeers.size(); ++i){
+//                    for(int j = 0; j < updatedPeers.size(); ++j){
+//                        if(currentPeers.get(i).deviceAddress.equals(updatedPeers.get(j).deviceAddress)){
+//
+//                        }
+//                    }
+//                }
+            currentPeers.removeAll(updatedPeers);//please work
+        }
+        StringBuilder sb = new StringBuilder();
+        for(WifiP2pDevice name : currentPeers){
+            if(sb.toString().length() > 0)
+                sb.append("\n");
+            sb.append(name.deviceName).append(" has left the game");
+        }
+        ConnectionService.sendMessage(MessageCodes.MSG_PEER_HAS_LEFT, sb.toString());
     }
 
     /**
