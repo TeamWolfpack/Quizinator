@@ -5,11 +5,13 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.database.Card;
 import com.seniordesign.wolfpack.quizinator.database.Rules;
 import com.seniordesign.wolfpack.quizinator.messages.Answer;
@@ -242,8 +244,9 @@ public class MessageHandler extends Handler {
                     break;
                 case MSG_PEER_HAS_LEFT:
                     if(wifiDirectApp.mGameplayActivity != null){
+                        Toolbar toolbar = (Toolbar) wifiDirectApp.mGameplayActivity.findViewById(R.id.toolbar);
                         Toast t = Toast.makeText(wifiDirectApp.mGameplayActivity, message, Toast.LENGTH_SHORT);
-                        t.setGravity(Gravity.TOP, 0, 0);
+                        t.setGravity(Gravity.TOP, 0, toolbar.getHeight());
                         t.show();
                     }
                     break;
