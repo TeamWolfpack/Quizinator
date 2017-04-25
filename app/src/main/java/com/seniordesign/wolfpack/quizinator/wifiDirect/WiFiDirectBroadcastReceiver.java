@@ -147,15 +147,16 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver
 //                        }
 //                    }
 //                }
-            updatedPeers.removeAll(currentPeers);//please work
+            currentPeers.removeAll(updatedPeers);
+
+            StringBuilder sb = new StringBuilder();
+            for(WifiP2pDevice name : currentPeers){
+                if(sb.toString().length() > 0)
+                    sb.append("\n");
+                sb.append(name.deviceName).append(" has left the game");
+            }
+            ConnectionService.sendMessage(MessageCodes.MSG_PEER_HAS_LEFT, sb.toString());
         }
-        StringBuilder sb = new StringBuilder();
-        for(WifiP2pDevice name : currentPeers){
-            if(sb.toString().length() > 0)
-                sb.append("\n");
-            sb.append(name.deviceName).append(" has left the game");
-        }
-        ConnectionService.sendMessage(MessageCodes.MSG_PEER_HAS_LEFT, sb.toString());
     }
 
     /**
