@@ -139,16 +139,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver
             }
         }
         if(currentPeers.size() > updatedPeers.size()){
-            //handle disconnects
-//                for(int i = 0; i < currentPeers.size(); ++i){
-//                    for(int j = 0; j < updatedPeers.size(); ++j){
-//                        if(currentPeers.get(i).deviceAddress.equals(updatedPeers.get(j).deviceAddress)){
-//
-//                        }
-//                    }
-//                }
             currentPeers.removeAll(updatedPeers);
-
             StringBuilder sb = new StringBuilder();
             for(WifiP2pDevice name : currentPeers){
                 if(sb.toString().length() > 0)
