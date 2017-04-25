@@ -147,7 +147,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver
 //                        }
 //                    }
 //                }
-            currentPeers.removeAll(updatedPeers);//please work
+            updatedPeers.removeAll(currentPeers);//please work
         }
         StringBuilder sb = new StringBuilder();
         for(WifiP2pDevice name : currentPeers){
