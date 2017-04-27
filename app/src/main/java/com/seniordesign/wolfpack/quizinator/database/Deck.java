@@ -64,6 +64,10 @@ public class Deck implements Shareable{
         return cards.remove(card);
     }
 
+    public boolean removeCard(int index){
+        return cards.remove(index)!=null;
+    }
+
     public boolean shuffleDeck(){
         long seed = System.nanoTime();
         Collections.shuffle(cards, new Random(seed));

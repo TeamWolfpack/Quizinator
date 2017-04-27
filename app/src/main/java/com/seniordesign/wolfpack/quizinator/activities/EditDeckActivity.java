@@ -146,7 +146,7 @@ public class EditDeckActivity extends AppCompatActivity  implements AdapterView.
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if(parent.getId()==R.id.cards_in_deck){
             //Remove card from deck
-            deck.removeCard(deck.getCards().get(position));
+            deck.removeCard(position);
         }
         else{
             //Remove card from deck
