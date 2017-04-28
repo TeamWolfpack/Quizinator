@@ -19,6 +19,7 @@ public class Card implements Shareable{
     private String moderatorNeeded;
     private int points = 1;
     private boolean doubleEdge;
+    private String uuid;
 
     private int maxPossibleAnswers;   //Can't have over 4 options
 
@@ -129,5 +130,13 @@ public class Card implements Shareable{
 
     public boolean isDoubleEdge(){
         return doubleEdge;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }

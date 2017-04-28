@@ -19,15 +19,17 @@ class QuizSQLiteHelper extends SQLiteOpenHelper {
     static final String CARD_COLUMN_CORRECTANSWER = "_correctAnswer";
     static final String CARD_COLUMN_POINTS = "_points";
     static final String CARD_COLUMN_MODERATORNEEDED = "_moderatorNeeded";
+    static final String CARD_COLUMN_UUID = "_uuid";
 
     // Deck table contents
-   static final String TABLE_DECKS = "decks";
-   static final String DECK_COLUMN_ID = "_id";
-   static final String DECK_COLUMN_DECKNAME = "_deckName";
-   static final String DECK_COLUMN_CATEGORY = "_category";
-   static final String DECK_COLUMN_SUBJECT = "_subject";
-   static final String DECK_COLUMN_DUPLICATECARDS = "_duplicateCards";
-   static final String DECK_COLUMN_OWNER = "_owner";
+    static final String TABLE_DECKS = "decks";
+    static final String DECK_COLUMN_ID = "_id";
+    static final String DECK_COLUMN_DECKNAME = "_deckName";
+    static final String DECK_COLUMN_CATEGORY = "_category";
+    static final String DECK_COLUMN_SUBJECT = "_subject";
+    static final String DECK_COLUMN_DUPLICATECARDS = "_duplicateCards";
+    static final String DECK_COLUMN_OWNER = "_owner";
+    static final String DECK_COLUMN_UUID = "_uuid";
 
     // CardDeckRelations table contents
     static final String TABLE_CDRELATIONS = "cdrelations";
@@ -70,7 +72,8 @@ class QuizSQLiteHelper extends SQLiteOpenHelper {
             + CARD_COLUMN_CORRECTANSWER + " TEXT, "
             + CARD_COLUMN_POSSIBLEANSWERS + " TEXT, "
             + CARD_COLUMN_POINTS + " INTEGER DEFAULT 1, "
-            + CARD_COLUMN_MODERATORNEEDED + " TEXT"
+            + CARD_COLUMN_MODERATORNEEDED + " TEXT, "
+            + CARD_COLUMN_UUID + " TEXT UNIQUE"
             + ");";
 
     // Decks table creation sql statement
@@ -81,14 +84,15 @@ class QuizSQLiteHelper extends SQLiteOpenHelper {
             + DECK_COLUMN_CATEGORY + " TEXT, "
             + DECK_COLUMN_SUBJECT + " TEXT, "
             + DECK_COLUMN_DUPLICATECARDS + " TEXT, "
-            + DECK_COLUMN_OWNER + " TEXT "
+            + DECK_COLUMN_OWNER + " TEXT, "
+            + DECK_COLUMN_UUID + " TEXT UNIQUE"
             + ");";
 
     // CardDeckRelations table creation sql statement
     static final String CDRELATIONS_TABLE_CREATE = "create table if not exists "
             + TABLE_CDRELATIONS + "("
             + CDRELATIONS_COLUMN_ID + " integer primary key autoincrement, "
-            + CDRELATIONS_COLUMN_FKCARD + " INTEGER, "
+            + CDRELATIONS_COLUMN_FKCARD + " TEXT, "
             + CDRELATIONS_COLUMN_FKDECK + " INTEGER"
             + ");";
 

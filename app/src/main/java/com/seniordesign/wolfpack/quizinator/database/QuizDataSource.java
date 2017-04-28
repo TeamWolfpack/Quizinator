@@ -11,6 +11,7 @@ import com.seniordesign.wolfpack.quizinator.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class QuizDataSource {
 
@@ -25,7 +26,8 @@ public class QuizDataSource {
             QuizSQLiteHelper.CARD_COLUMN_CORRECTANSWER,
             QuizSQLiteHelper.CARD_COLUMN_POSSIBLEANSWERS,
             QuizSQLiteHelper.CARD_COLUMN_POINTS,
-            QuizSQLiteHelper.CARD_COLUMN_MODERATORNEEDED
+            QuizSQLiteHelper.CARD_COLUMN_MODERATORNEEDED,
+            QuizSQLiteHelper.CARD_COLUMN_UUID
     };
 
     private String[] deckAllColumns = {
@@ -34,7 +36,8 @@ public class QuizDataSource {
             QuizSQLiteHelper.DECK_COLUMN_CATEGORY,
             QuizSQLiteHelper.DECK_COLUMN_SUBJECT,
             QuizSQLiteHelper.DECK_COLUMN_DUPLICATECARDS,
-            QuizSQLiteHelper.DECK_COLUMN_OWNER
+            QuizSQLiteHelper.DECK_COLUMN_OWNER,
+            QuizSQLiteHelper.DECK_COLUMN_UUID
     };
 
     private String[] cdRelationsAllColumns = {
@@ -94,7 +97,7 @@ public class QuizDataSource {
     /************************ CARD METHODS START *******************************/
     public Card createCard(int cardType, String question, String correctAnswer,
                            String[] possibleCorrectAnswers, int points,
-                           String moderatorNeeded) {
+                           String moderatorNeeded, String uuid) {
         ContentValues values = new ContentValues();
         values.put(QuizSQLiteHelper.CARD_COLUMN_CARDTYPE, cardType);
         values.put(QuizSQLiteHelper.CARD_COLUMN_QUESTION, question);
@@ -105,6 +108,9 @@ public class QuizDataSource {
 
         values.put(QuizSQLiteHelper.CARD_COLUMN_POINTS, points);
         values.put(QuizSQLiteHelper.CARD_COLUMN_MODERATORNEEDED, moderatorNeeded);
+        if (uuid == null || uuid.isEmpty())
+            uuid = UUID.randomUUID().toString();
+        values.put(QuizSQLiteHelper.CARD_COLUMN_UUID, uuid);
         long insertId = database.insert(QuizSQLiteHelper.TABLE_CARDS,
                 null, values);
         Cursor cursor = database.query(QuizSQLiteHelper.TABLE_CARDS,
@@ -119,13 +125,27 @@ public class QuizDataSource {
 
     public Card createCard(Card card) {
         return createCard(card.getCardType(), card.getQuestion(), card.getCorrectAnswer(),
-                card.getPossibleAnswers(), card.getPoints(), card.getModeratorNeeded());
+                card.getPossibleAnswers(), card.getPoints(), card.getModeratorNeeded(), card.getUuid());
+    }
+
+    public boolean importCard(Card card) {
+        boolean imported = false;
+        Cursor cursor = database.query(QuizSQLiteHelper.TABLE_CARDS,
+                cardAllColumns, QuizSQLiteHelper.CARD_COLUMN_UUID
+                        + " = \'" + card.getUuid() + "\'", null,
+                null, null, null);
+        if (!cursor.moveToFirst()) {
+            createCard(card);
+            imported = true;
+        }
+        cursor.close();
+        return imported;
     }
 
     public int deleteCard(Card card) {
         long id = card.getId();
         System.out.println("Deleted card: " + card.toString());
-        deleteCardDeckRelationByCardId(id);
+        deleteCardDeckRelationByCardUuid(card.getUuid());
         return database.delete(QuizSQLiteHelper.TABLE_CARDS,
                 QuizSQLiteHelper.CARD_COLUMN_ID + " = " + id, null);
     }
@@ -190,6 +210,7 @@ public class QuizDataSource {
 
         card.setPoints(cursor.getInt(5));
         card.setModeratorNeeded(cursor.getString(6));
+        card.setUuid(cursor.getString(7));
         return card;
     }
 
@@ -225,6 +246,7 @@ public class QuizDataSource {
         values.put(QuizSQLiteHelper.DECK_COLUMN_SUBJECT, subject);
         values.put(QuizSQLiteHelper.DECK_COLUMN_DUPLICATECARDS, String.valueOf(duplicateCards));
         values.put(QuizSQLiteHelper.DECK_COLUMN_OWNER, owner);
+        values.put(QuizSQLiteHelper.DECK_COLUMN_UUID, UUID.randomUUID().toString());
         long insertId = database.insert(QuizSQLiteHelper.TABLE_DECKS,
                 null, values);
 
@@ -247,9 +269,17 @@ public class QuizDataSource {
 
     public Deck importDeck(Deck deck) {
         for (Card card : deck.getCards()) {
-            //TODO check if card exists
-            card.setId(createCard(card).getId());
-            createCardDeckRelation(card.getId(), deck.getId());
+            Cursor cursor = database.query(QuizSQLiteHelper.TABLE_CARDS,
+                    cardAllColumns, QuizSQLiteHelper.CARD_COLUMN_UUID
+                            + " = \'" + card.getUuid() + "\'", null,
+                    null, null, null);
+            if (cursor.moveToFirst()) {
+                // Card already exists, do nothing
+            } else {
+                card.setId(createCard(card).getId());
+                createCardDeckRelation(card.getUuid(), deck.getId());
+            }
+            cursor.close();
         }
         return createDeck(deck);
     }
@@ -321,6 +351,7 @@ public class QuizDataSource {
         deck.setSubject(cursor.getString(3));
         deck.setDuplicateCards(cursor.getString(4));
         deck.setOwner(cursor.getString(5));
+        deck.setUuid(cursor.getString(6));
         return deck;
     }
 
@@ -343,7 +374,7 @@ public class QuizDataSource {
     /************************ DECK METHODS END *******************************/
 
     /************************ CARDDECKRELATION METHODS START *******************************/
-    private CardDeckRelation createCardDeckRelation(long fkCard, long fkDeck) {
+    private CardDeckRelation createCardDeckRelation(String fkCard, long fkDeck) {
         ContentValues values = new ContentValues();
         values.put(QuizSQLiteHelper.CDRELATIONS_COLUMN_FKCARD, fkCard);
         values.put(QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK, fkDeck);
@@ -371,9 +402,9 @@ public class QuizDataSource {
                 QuizSQLiteHelper.CDRELATIONS_COLUMN_ID + " = " + id, null);
     }
 
-    private int deleteCardDeckRelationByCardId(long fkCard) {
+    private int deleteCardDeckRelationByCardUuid(String fkCard) {
         return database.delete(QuizSQLiteHelper.TABLE_CDRELATIONS,
-                QuizSQLiteHelper.CDRELATIONS_COLUMN_FKCARD + " = " + fkCard, null);
+                QuizSQLiteHelper.CDRELATIONS_COLUMN_FKCARD + " = \'" + fkCard + "\'", null);
     }
 
     private int deleteCardDeckRelationByDeckId(long fkDeck) {
@@ -400,7 +431,7 @@ public class QuizDataSource {
                 .append("SELECT ").append(cardColumns.toString())
                 .append(" FROM " + QuizSQLiteHelper.TABLE_CDRELATIONS + " ").append(cdrTableName)
                 .append(" INNER JOIN " + QuizSQLiteHelper.TABLE_CARDS + " ").append(cardTableName)
-                .append(" ON ").append(cdrTableName).append(".").append(QuizSQLiteHelper.CDRELATIONS_COLUMN_FKCARD).append("=").append(cardTableName).append(".").append(QuizSQLiteHelper.CARD_COLUMN_ID)
+                .append(" ON ").append(cdrTableName).append(".").append(QuizSQLiteHelper.CDRELATIONS_COLUMN_FKCARD).append("=").append(cardTableName).append(".").append(QuizSQLiteHelper.CARD_COLUMN_UUID)
                 .append(" INNER JOIN " + QuizSQLiteHelper.TABLE_DECKS + " ").append(deckTableName)
                 .append(" ON ").append(cdrTableName).append(".").append(QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK).append("=").append(deckTableName).append(".").append(QuizSQLiteHelper.DECK_COLUMN_ID)
                 .append(" WHERE ").append(cdrTableName).append(".").append(QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK).append("=\'").append(deckId).append("\'");
@@ -420,7 +451,7 @@ public class QuizDataSource {
 
     private void addCardDeckRelation(long deckId, List<Card> cards) {
         for (Card card : cards) {
-            createCardDeckRelation(card.getId(), deckId);
+            createCardDeckRelation(card.getUuid(), deckId);
         }
     }
 
@@ -442,7 +473,7 @@ public class QuizDataSource {
     private CardDeckRelation cursorToCardDeckRelation(Cursor cursor) {
         CardDeckRelation cdRelation = new CardDeckRelation();
         cdRelation.setId(cursor.getLong(0));
-        cdRelation.setFkCard(cursor.getLong(1));
+        cdRelation.setFkCard(cursor.getString(1));
         cdRelation.setFkDeck(cursor.getLong(2));
         return cdRelation;
     }
