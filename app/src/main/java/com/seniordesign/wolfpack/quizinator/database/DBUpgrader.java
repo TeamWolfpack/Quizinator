@@ -82,11 +82,57 @@ class DBUpgrader {
         for (int i = 0; i < cards.size(); i++) {
             Card card = cards.get(i);
             String uuid = UUID.randomUUID().toString();
-            if (card.getId() < 25)
-                uuid = DBDefaultTableSetup.CARDS_UUID[(int) card.getId()];
+            if (card.getId() <= 25)
+                uuid = DBDefaultTableSetup.CARDS_UUID[(int)card.getId() - 1];
             db.execSQL("UPDATE " + QuizSQLiteHelper.TABLE_CARDS +
                     " SET " + QuizSQLiteHelper.CARD_COLUMN_UUID + " = \'" + uuid + "\'" +
                     " WHERE " + QuizSQLiteHelper.CARD_COLUMN_ID + " = " + card.getId() + ";");
         }
+    }
+
+    private void cdRelationsUpgradeV3(SQLiteDatabase db){
+        String FKCARDTEMP_COLUMN = "_fkCardTemp";
+        String ADD_FKCARDTEMP_COLUMN = "ALTER TABLE IF EXISTS " + QuizSQLiteHelper.TABLE_CDRELATIONS
+                + " ADD " + FKCARDTEMP_COLUMN + " TEXT";
+        db.execSQL(ADD_FKCARDTEMP_COLUMN);
+
+        String tempTableName = "tempCDRelations";
+        String RENAME_TABLER = "ALTER TABLE IF EXISTS " + QuizSQLiteHelper.TABLE_CDRELATIONS
+                + " RENAME TO " + tempTableName;
+        db.execSQL(RENAME_TABLER);
+
+        Cursor cursor = db.query(tempTableName,
+                new String[]{
+                        QuizSQLiteHelper.CDRELATIONS_COLUMN_ID,
+                        QuizSQLiteHelper.CDRELATIONS_COLUMN_FKCARD},
+                null, null, null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Cursor uuidCursor = db.query(QuizSQLiteHelper.TABLE_CARDS,
+                    new String[]{QuizSQLiteHelper.CARD_COLUMN_UUID},
+                    QuizSQLiteHelper.CARD_COLUMN_ID + " = " + cursor.getLong(1),
+                    null, null, null, null);
+            uuidCursor.moveToFirst();
+            while (!uuidCursor.isAfterLast()) {
+                db.execSQL("UPDATE " + tempTableName +
+                        " SET " + FKCARDTEMP_COLUMN + " = " + uuidCursor.getString(0) +
+                        " WHERE " + QuizSQLiteHelper.CARD_COLUMN_ID + " = " + cursor.getLong(0));
+            }
+            uuidCursor.close();
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        db.execSQL(QuizSQLiteHelper.CDRELATIONS_TABLE_CREATE);
+
+        String COPY_TABLE_OVER = "INSERT INTO " + QuizSQLiteHelper.TABLE_CDRELATIONS + "(" +
+                QuizSQLiteHelper.CDRELATIONS_COLUMN_FKCARD + ", " +
+                QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK + ") " +
+                "SELECT (" + FKCARDTEMP_COLUMN + ", " + QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK +
+                ") FROM " + tempTableName;
+        db.execSQL(COPY_TABLE_OVER);
+
+        db.execSQL("DROP TABLE IF EXISTS " + tempTableName);
+
     }
 }
