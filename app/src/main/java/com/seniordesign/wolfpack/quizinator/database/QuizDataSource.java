@@ -277,7 +277,6 @@ public class QuizDataSource {
                 // Card already exists, do nothing
             } else {
                 card.setId(createCard(card).getId());
-                createCardDeckRelation(card.getUuid(), deck.getId());
             }
             cursor.close();
         }
