@@ -135,8 +135,8 @@ class DBUpgrader {
         String COPY_TABLE_OVER = "INSERT INTO " + QuizSQLiteHelper.TABLE_CDRELATIONS + "(" +
                 QuizSQLiteHelper.CDRELATIONS_COLUMN_FKCARD + ", " +
                 QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK + ") " +
-                "SELECT (" + FKCARDTEMP_COLUMN + ", " + QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK +
-                ") FROM " + tempTableName;
+                "SELECT " + FKCARDTEMP_COLUMN + ", " + QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK +
+                " FROM " + tempTableName;
         db.execSQL(COPY_TABLE_OVER);
 
         db.execSQL("DROP TABLE IF EXISTS " + tempTableName);
