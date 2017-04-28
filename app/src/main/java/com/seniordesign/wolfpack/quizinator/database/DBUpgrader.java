@@ -52,7 +52,7 @@ class DBUpgrader {
         cursor.close();
 
         db.execSQL("ALTER TABLE " + QuizSQLiteHelper.TABLE_DECKS + " ADD COLUMN " +
-                QuizSQLiteHelper.DECK_COLUMN_UUID + " TEXT UNIQUE");
+                QuizSQLiteHelper.DECK_COLUMN_UUID + " TEXT;");
 
         for (int i = 0; i < decks.size(); i++) {
             Deck deck = decks.get(i);
@@ -63,6 +63,8 @@ class DBUpgrader {
                     " SET " + QuizSQLiteHelper.DECK_COLUMN_UUID + " = \'" + uuid + "\'" +
                     " WHERE " + QuizSQLiteHelper.DECK_COLUMN_ID + " = " + deck.getId() + ";");
         }
+        db.execSQL("CREATE UNIQUE INDEX deckUuidIndex ON " +
+                QuizSQLiteHelper.TABLE_DECKS + "(" + QuizSQLiteHelper.DECK_COLUMN_UUID + ");");
     }
 
     private static void cardUuidUpgradeV3(SQLiteDatabase db) {
@@ -79,7 +81,7 @@ class DBUpgrader {
         cursor.close();
 
         db.execSQL("ALTER TABLE " + QuizSQLiteHelper.TABLE_CARDS + " ADD COLUMN " +
-                QuizSQLiteHelper.CARD_COLUMN_UUID + " TEXT UNIQUE");
+                QuizSQLiteHelper.CARD_COLUMN_UUID + " TEXT;");
 
         for (int i = 0; i < cards.size(); i++) {
             Card card = cards.get(i);
@@ -90,16 +92,18 @@ class DBUpgrader {
                     " SET " + QuizSQLiteHelper.CARD_COLUMN_UUID + " = \'" + uuid + "\'" +
                     " WHERE " + QuizSQLiteHelper.CARD_COLUMN_ID + " = " + card.getId() + ";");
         }
+        db.execSQL("CREATE UNIQUE INDEX cardUuidIndex ON " +
+                QuizSQLiteHelper.TABLE_CARDS + "(" + QuizSQLiteHelper.CARD_COLUMN_UUID + ");");
     }
 
     private static void cdRelationsUpgradeV3(SQLiteDatabase db){
         String FKCARDTEMP_COLUMN = "_fkCardTemp";
-        String ADD_FKCARDTEMP_COLUMN = "ALTER TABLE IF EXISTS " + QuizSQLiteHelper.TABLE_CDRELATIONS
+        String ADD_FKCARDTEMP_COLUMN = "ALTER TABLE " + QuizSQLiteHelper.TABLE_CDRELATIONS
                 + " ADD " + FKCARDTEMP_COLUMN + " TEXT";
         db.execSQL(ADD_FKCARDTEMP_COLUMN);
 
         String tempTableName = "tempCDRelations";
-        String RENAME_TABLER = "ALTER TABLE IF EXISTS " + QuizSQLiteHelper.TABLE_CDRELATIONS
+        String RENAME_TABLER = "ALTER TABLE " + QuizSQLiteHelper.TABLE_CDRELATIONS
                 + " RENAME TO " + tempTableName;
         db.execSQL(RENAME_TABLER);
 

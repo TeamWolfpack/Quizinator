@@ -8,7 +8,7 @@ class QuizSQLiteHelper extends SQLiteOpenHelper {
 
     // database filename
     private static final String DATABASE_NAME = "quizinator.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     // Card table contents
     static final String TABLE_CARDS = "cards";
