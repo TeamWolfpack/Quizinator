@@ -123,6 +123,7 @@ class DBUpgrader {
                 db.execSQL("UPDATE " + tempTableName +
                         " SET " + FKCARDTEMP_COLUMN + " = \'" + uuidCursor.getString(0) + "\'" +
                         " WHERE " + QuizSQLiteHelper.CARD_COLUMN_ID + " = " + cursor.getLong(0));
+                uuidCursor.moveToNext();
             }
             uuidCursor.close();
             cursor.moveToNext();
