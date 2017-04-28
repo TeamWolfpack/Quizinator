@@ -147,5 +147,7 @@ class QuizSQLiteHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if(oldVersion < 2)
             DBUpgrader.upgradeToV2(db);
+        if(oldVersion < 3)
+            DBUpgrader.upgradeToV3(db);
     }
 }

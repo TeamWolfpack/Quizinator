@@ -33,7 +33,9 @@ class DBUpgrader {
     }
 
     static void upgradeToV3(SQLiteDatabase db){
-        // does the methods
+        deckUuidUpgradeV3(db);
+        cardUuidUpgradeV3(db);
+        cdRelationsUpgradeV3(db);
     }
 
     private static void deckUuidUpgradeV3(SQLiteDatabase db) {
@@ -90,7 +92,7 @@ class DBUpgrader {
         }
     }
 
-    private void cdRelationsUpgradeV3(SQLiteDatabase db){
+    private static void cdRelationsUpgradeV3(SQLiteDatabase db){
         String FKCARDTEMP_COLUMN = "_fkCardTemp";
         String ADD_FKCARDTEMP_COLUMN = "ALTER TABLE IF EXISTS " + QuizSQLiteHelper.TABLE_CDRELATIONS
                 + " ADD " + FKCARDTEMP_COLUMN + " TEXT";
