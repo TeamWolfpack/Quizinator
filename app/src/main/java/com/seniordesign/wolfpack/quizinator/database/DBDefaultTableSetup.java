@@ -7,8 +7,8 @@ import com.seniordesign.wolfpack.quizinator.Constants;
 
 class DBDefaultTableSetup {
 
-    private static final String DECK_UUID = "0000FFF0-0000-1000-8000-068A5F9B0000";
-    private static final String[] CARDS_UUID = new String[] {
+    static final String DECK_UUID = "0000FFF0-0000-1000-8000-068A5F9B0000";
+    static final String[] CARDS_UUID = new String[] {
             "0000FFF0-0000-1000-8000-068A5F9B0001",
             "0000FFF0-0000-1000-8000-068A5F9B0002",
             "0000FFF0-0000-1000-8000-068A5F9B0003",
