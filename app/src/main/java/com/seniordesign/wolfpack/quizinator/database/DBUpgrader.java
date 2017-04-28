@@ -27,4 +27,10 @@ class DBUpgrader {
         db.execSQL(HIGHSCORES_TABLE_CREATE);
         DBDefaultTableSetup.setDefaultRuleSet(db);
     }
+
+    static void upgradeToV3(SQLiteDatabase db){
+        // does the methods
+    }
+
+    
 }
