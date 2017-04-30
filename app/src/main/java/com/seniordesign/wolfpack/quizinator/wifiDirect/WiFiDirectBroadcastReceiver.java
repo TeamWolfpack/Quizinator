@@ -9,6 +9,7 @@ import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -147,6 +148,9 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver
                 sb.append(name.deviceName).append(" has left the game");
             }
             ConnectionService.sendMessage(MessageCodes.MSG_PEER_HAS_LEFT, sb.toString());
+            if (wifiDirectApp.mManageActivity != null) {
+                Toast.makeText(wifiDirectApp.mManageActivity, sb.toString(), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

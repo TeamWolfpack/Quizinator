@@ -106,6 +106,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
         Deck deck = dataSource.getFilteredDeck(rules.getDeckId(), cardTypeList, wifiDirectApp.mIsServer);
 
         cardLimit = Math.min(deck.getCards().size(),rules.getMaxCardCount());
+        updateRemainingCount(cardLimit);
 
         nextCardSpinner = (Spinner) findViewById(R.id.next_card_spinner);
         NextCardAdapter nextCardAdapter = new NextCardAdapter(this, deck.getCards());
@@ -159,6 +160,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
                         nextCardSpinner.setSelection(0);
                     }
                     updateCurrentCardView(currentCard);
+                    updateRemainingCount(cardLimit - cardsPlayed);
                 }
             });
         } else {
@@ -199,6 +201,11 @@ public class ManageGameplayActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("No", null)
                 .show();
+    }
+
+    private void updateRemainingCount(int count) {
+        TextView remaining = (TextView) findViewById(R.id.remaining_card_count);
+        remaining.setText("Remaining: " + count);
     }
 
     /**
