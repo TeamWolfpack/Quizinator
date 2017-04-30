@@ -1,17 +1,15 @@
 package com.seniordesign.wolfpack.quizinator.messages;
 
-/**
- * Created by farrowc on 3/15/2017.
- */
-
 public class Wager {
     private String playerName;
-    private String address;
+    private String ip;
+    private String macAddress;
     private int wager;
 
-    public Wager(String deviceName, String address, int wager) {
+    public Wager(String deviceName, String ipAddress, String macAddress, int wager) {
         this.playerName = deviceName;
-        this.address = address;
+        this.ip = ipAddress;
+        this.macAddress = macAddress;
         this.wager = wager;
     }
 
@@ -23,6 +21,8 @@ public class Wager {
         return wager;
     }
 
-    public String getAddress() { return address; }
+    public String getIpAddress() { return ip; }
+
+    public String getMacAddress() { return macAddress; }
 
 }

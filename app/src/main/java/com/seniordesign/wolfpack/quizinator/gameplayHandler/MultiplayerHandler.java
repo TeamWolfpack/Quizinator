@@ -126,7 +126,8 @@ public class MultiplayerHandler implements GamePlayHandler {
         timeTaken = System.nanoTime() - timeTaken;
         Answer answer = new Answer(
                 properties.getWifiDirectApp().mDeviceName,
-                properties.getWifiDirectApp().mMyAddress,
+                properties.getWifiDirectApp().mMyIpAddress,
+                properties.getWifiDirectApp().mThisDevice.deviceAddress,
                 choice,
                 timeTaken
         );

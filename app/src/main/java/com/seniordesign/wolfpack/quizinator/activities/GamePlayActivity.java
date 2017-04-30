@@ -320,7 +320,7 @@ public class GamePlayActivity extends AppCompatActivity {
         if (gamePlayHandler instanceof MultiplayerHandler) {
             ConnectionService.sendMessage(
                     MSG_ANSWER_CONFIRMATION_HANDSHAKE_ACTIVITY,
-                    properties.getWifiDirectApp().mMyAddress);
+                    properties.getWifiDirectApp().mMyIpAddress);
         }
         quickCorrectAnswerConfirmation(correct);
     }
@@ -378,7 +378,8 @@ public class GamePlayActivity extends AppCompatActivity {
         wagerVal = Math.max(wagerVal, 0);
         wager = new Wager(
                 properties.getWifiDirectApp().mDeviceName,
-                properties.getWifiDirectApp().mMyAddress,
+                properties.getWifiDirectApp().mMyIpAddress,
+                properties.getWifiDirectApp().mThisDevice.deviceAddress,
                 wagerVal
         );
         String json = properties.getGson().toJson(wager);

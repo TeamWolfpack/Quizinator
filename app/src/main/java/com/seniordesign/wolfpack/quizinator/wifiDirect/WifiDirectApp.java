@@ -31,7 +31,7 @@ public class WifiDirectApp extends Application {
     public WifiP2pManager mP2pMan;
     public WifiP2pManager.Channel mP2pChannel;
     public boolean mP2pConnected;
-    public String mMyAddress;
+    public String mMyIpAddress;
     // the p2p name that is configured from UI.
     public String mDeviceName;
     public WiFiDirectBroadcastReceiver mReceiver;
@@ -172,7 +172,7 @@ public class WifiDirectApp extends Application {
 
     public void setMyAddress(String addr) {
         Log.d(TAG, "setMyAddress");
-        mMyAddress = addr;
+        mMyIpAddress = addr;
     }
 
     public Intent getLaunchActivityIntent(Class<?> cls, String initializeMessage){

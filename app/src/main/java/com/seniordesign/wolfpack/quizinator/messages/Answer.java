@@ -1,19 +1,17 @@
 package com.seniordesign.wolfpack.quizinator.messages;
 
-/**
- * Created by leonardj on 11/5/2016.
- */
-
 public class Answer {
 
     private String playerName;
-    private String address;
+    private String ip;
+    private String macAddress;
     private String answer;
     private long timeTaken;
 
-    public Answer(String deviceName, String address, String answer, long timeTaken) {
+    public Answer(String deviceName, String ipAddress, String address, String answer, long timeTaken) {
         this.playerName = deviceName;
-        this.address = address;
+        this.ip = ipAddress;
+        this.macAddress = address;
         this.answer = answer;
         this.timeTaken = timeTaken;
     }
@@ -26,7 +24,9 @@ public class Answer {
         return answer;
     }
 
-    public String getAddress() { return address; }
+    public String getIpAddress() { return ip; }
+
+    public String getMacAddress() { return macAddress; }
 
     public long getTimeTaken() { return timeTaken; }
 }
