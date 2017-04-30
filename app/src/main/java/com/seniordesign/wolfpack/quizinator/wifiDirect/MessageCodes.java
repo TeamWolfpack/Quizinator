@@ -2,8 +2,7 @@ package com.seniordesign.wolfpack.quizinator.wifiDirect;
 
 public final class MessageCodes {
 
-    static final String PACKAGE_NAME =
-            MessageCodes.class.getPackage().getName();
+//    static final String PACKAGE_NAME = MessageCodes.class.getPackage().getName();
 
     static final int MSG_NULL = 0;
     static final int MSG_STARTSERVER = 1001;
@@ -12,7 +11,7 @@ public final class MessageCodes {
     static final int MSG_NEW_CLIENT = 1006;
     static final int MSG_FINISH_CONNECT = 1007;
     static final int MSG_PULLIN_DATA = 1008;
-    static final int MSG_REGISTER_ACTIVITY = 1009;
+//    static final int MSG_REGISTER_ACTIVITY = 1009;
 
     static final int MSG_SELECT_ERROR = 2001;
     static final int MSG_BROKEN_CONN = 2002;
@@ -30,4 +29,5 @@ public final class MessageCodes {
 
     //update peerlist
     public static final int MSG_DISCONNECT_FROM_ALL_PEERS = 4000;
+    public static final int MSG_PEER_HAS_LEFT = 4001;
 }

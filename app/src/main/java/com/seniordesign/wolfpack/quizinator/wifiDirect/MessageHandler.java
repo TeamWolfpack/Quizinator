@@ -5,9 +5,13 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.database.Card;
 import com.seniordesign.wolfpack.quizinator.database.Rules;
 import com.seniordesign.wolfpack.quizinator.messages.Answer;
@@ -28,6 +32,7 @@ import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_E
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_FINISH_CONNECT;
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_NEW_CLIENT;
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_NULL;
+import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_PEER_HAS_LEFT;
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_PLAYER_READY_ACTIVITY;
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_PULLIN_DATA;
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_PUSHOUT_DATA;
@@ -126,6 +131,9 @@ public class MessageHandler extends Handler {
             case MSG_DISCONNECT_FROM_ALL_PEERS:
                 mConnMan.pushOutData(createQuizMessage(MSG_DISCONNECT_FROM_ALL_PEERS, (String) msg.obj));
                 break;
+            case MSG_PEER_HAS_LEFT:
+                mConnMan.pushOutData(createQuizMessage(MSG_PEER_HAS_LEFT, (String) msg.obj));
+                break;
             default:
                 break;
         }
@@ -184,8 +192,6 @@ public class MessageHandler extends Handler {
 
     /**
      * Handles the message type: MSG_PULLIN_DATA
-     * @param b
-     * @return
      */
     private String onPullInData(Bundle b){
         String data = b.getString("DATA");
@@ -234,6 +240,14 @@ public class MessageHandler extends Handler {
                     if(wifiDirectApp.mHomeActivity != null){
                         wifiDirectApp.mHomeActivity.disconnect();
                         wifiDirectApp.mHomeActivity.finish();
+                    }
+                    break;
+                case MSG_PEER_HAS_LEFT:
+                    if(wifiDirectApp.mGameplayActivity != null){
+                        Toolbar toolbar = (Toolbar) wifiDirectApp.mGameplayActivity.findViewById(R.id.toolbar);
+                        Toast t = Toast.makeText(wifiDirectApp.mGameplayActivity, message, Toast.LENGTH_SHORT);
+                        t.setGravity(Gravity.TOP, 0, toolbar.getHeight());
+                        t.show();
                     }
                     break;
             }

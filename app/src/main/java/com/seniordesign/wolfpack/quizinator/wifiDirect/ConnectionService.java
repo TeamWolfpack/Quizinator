@@ -36,9 +36,8 @@ public class ConnectionService extends Service implements ChannelListener {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (mInstance != null) {
+        if (mInstance != null)
             return;
-        }
         mInstance = this;
         initializeConnectionService();
     }
@@ -102,7 +101,6 @@ public class ConnectionService extends Service implements ChannelListener {
      * Returns the MessageHandler so that other classes can read messages.
      */
     public Handler getHandler() {
-        //TODO -> external classes call this, they should not be able to
         return mHandler;
     }
 
@@ -110,13 +108,11 @@ public class ConnectionService extends Service implements ChannelListener {
      * Sends message(s) to peer(s).
      */
     public static boolean sendMessage(int code, String message) {
-        //TODO -> external classes call this, they should not be able to
         Message result = getInstance().getHandler().obtainMessage();
             result.what = code;
             result.obj = message;
         return getInstance().getHandler().sendMessage(result);
     }
-
 
     /**
      * Returns status of device.
