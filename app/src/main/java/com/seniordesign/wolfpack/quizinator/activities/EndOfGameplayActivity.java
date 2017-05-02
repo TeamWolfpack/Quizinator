@@ -1,19 +1,17 @@
 package com.seniordesign.wolfpack.quizinator.activities;
 
 import android.content.Intent;
-import android.support.v4.graphics.drawable.TintAwareDrawable;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.seniordesign.wolfpack.quizinator.Constants;
-import com.seniordesign.wolfpack.quizinator.adapters.CardAdapter;
 import com.seniordesign.wolfpack.quizinator.adapters.OtherPlayersAdapter;
 import com.seniordesign.wolfpack.quizinator.database.GamePlayStats;
 import com.seniordesign.wolfpack.quizinator.database.HighScores;
@@ -29,7 +27,7 @@ import java.util.Map;
 
 public class EndOfGameplayActivity extends AppCompatActivity {
 
-    private QuizDataSource highScoresDataSource;
+    private QuizDataSource dataSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +36,12 @@ public class EndOfGameplayActivity extends AppCompatActivity {
         setTitle(Constants.END_OF_GAMEPLAY);
         initializeDB();
 
+        boolean isMultiplayerGame = false;
         GamePlayStats gamePlayStats;
         Map<String, Pair<String, Integer>> playerScores = new HashMap<>();
         if (getIntent().getExtras() != null) {
             gamePlayStats = getIntent().getExtras().getParcelable("gameStats");
+            isMultiplayerGame = getIntent().getExtras().getBoolean("multiplayerGame");
 
             String json = getIntent().getExtras().getString("playerScores");
             Type typeOfHashMap = new TypeToken<Map<String, Pair<String, Integer>>>() { }.getType();
@@ -67,8 +67,8 @@ public class EndOfGameplayActivity extends AppCompatActivity {
         );
 
         HighScores highScores = new HighScores();
-        if (highScoresDataSource.getAllHighScores().size() > 0) {
-            for(HighScores hs : highScoresDataSource.getAllHighScores()){
+        if (dataSource.getAllHighScores().size() > 0) {
+            for(HighScores hs : dataSource.getAllHighScores()){
                 if(hs.getDeckID() == gamePlayStats.getDeckID()){
                     highScores = hs;
                     break;
@@ -79,9 +79,14 @@ public class EndOfGameplayActivity extends AppCompatActivity {
             highScores.setBestTime(0);
             highScores.setDeckID(-1);
         }
-        if(highScores.getDeckID()==-1){
-            findViewById(R.id.end_of_gameplay_row_hs_hs).setVisibility(View.INVISIBLE);
-            findViewById(R.id.end_of_gameplay_row_hs_time).setVisibility(View.INVISIBLE);
+        if(isMultiplayerGame || highScores.getDeckID()==-1){
+            findViewById(R.id.end_of_gameplay_row_hs_hs).setVisibility(View.GONE);
+            findViewById(R.id.end_of_gameplay_row_hs_time).setVisibility(View.GONE);
+
+            TableRow bottomRow = (TableRow) findViewById(R.id.end_of_gameplay_row_hs_cards);
+            TableRow.LayoutParams params = new TableRow.LayoutParams(bottomRow.getLayoutParams());
+            params.setMargins(0, 0, 0, 4);
+            bottomRow.setLayoutParams(params);
         }
         else{
             findViewById(R.id.end_of_gameplay_row_hs_hs).setVisibility(View.VISIBLE);
@@ -95,7 +100,7 @@ public class EndOfGameplayActivity extends AppCompatActivity {
                 (highScores.getBestTime()/60000) + ":" + formattedHighScoreSeconds
         );
 
-        if (playerScores != null && playerScores.size() > 0)
+        if (isMultiplayerGame && (playerScores != null && playerScores.size() > 0))
             populateOtherPlayersScores(playerScores.values());
     }
 
@@ -117,24 +122,20 @@ public class EndOfGameplayActivity extends AppCompatActivity {
     }
 
     private boolean initializeDB(){
-        int positiveDBConnections = 0;
-        highScoresDataSource = new QuizDataSource(this);
-        if(highScoresDataSource.open()){
-            positiveDBConnections++;
-        }
-        return (positiveDBConnections == 1);
+        dataSource = new QuizDataSource(this);
+        return dataSource.open();
     }
 
     @Override
     protected void onResume(){
         super.onResume();
-        highScoresDataSource.open();
+        dataSource.open();
     }
 
     @Override
     protected void onPause(){
         super.onPause();
-        highScoresDataSource.close();
+        dataSource.close();
     }
 
     @Override

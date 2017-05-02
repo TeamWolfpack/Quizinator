@@ -159,15 +159,21 @@ public class GamePlayActivity extends AppCompatActivity {
         } else {
             s.setDeckID(-1);
         }
-        checkGameStatsAgainstHighScoresDB(s);
-        intent.putExtra("gameStats", s);
 
-        if (endOfGameMessage.getPlayerScores() != null) {
-            Map<String, Pair<String, Integer>> playerScores = endOfGameMessage.getPlayerScores();
-            // Remove yourself from the list of player scores
-            playerScores.remove(properties.getWifiDirectApp().mThisDevice.deviceAddress);
-            intent.putExtra("playerScores", new Gson().toJson(playerScores));
+        boolean isMultiplayerGame = gamePlayHandler instanceof MultiplayerHandler;
+        if (isMultiplayerGame) {
+            if (endOfGameMessage.getPlayerScores() != null) {
+                Map<String, Pair<String, Integer>> playerScores = endOfGameMessage.getPlayerScores();
+                // Remove yourself from the list of player scores
+                playerScores.remove(properties.getWifiDirectApp().mThisDevice.deviceAddress);
+                intent.putExtra("playerScores", new Gson().toJson(playerScores));
+            }
+        } else {
+            checkGameStatsAgainstHighScoresDB(s);
         }
+
+        intent.putExtra("multiplayerGame", isMultiplayerGame);
+        intent.putExtra("gameStats", s);
 
         startActivity(intent);
         finish();
