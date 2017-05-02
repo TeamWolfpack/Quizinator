@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.os.CountDownTimer;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import com.seniordesign.wolfpack.quizinator.database.Card;
 import com.seniordesign.wolfpack.quizinator.database.Deck;
 import com.seniordesign.wolfpack.quizinator.database.Rules;
 import com.seniordesign.wolfpack.quizinator.database.QuizDataSource;
+import com.seniordesign.wolfpack.quizinator.messages.EndOfGameMessage;
 import com.seniordesign.wolfpack.quizinator.messages.Wager;
 import com.seniordesign.wolfpack.quizinator.R;
 
@@ -38,6 +40,7 @@ import com.seniordesign.wolfpack.quizinator.wifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.wifiDirect.WifiDirectApp;
 
 import java.lang.reflect.Type;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -181,7 +184,11 @@ public class ManageGameplayActivity extends AppCompatActivity {
     public void endGame(View v) {
         if (v == null) {
             gameplayTimerRunning.cancel();
-            String json = gson.toJson(rules.getTimeLimit() - gameplayTimerRemaining);
+
+            Map<String, Pair<String, Integer>> scores = generateScoresMap();
+            long gameTime = rules.getTimeLimit() - gameplayTimerRemaining;
+            EndOfGameMessage endOfGameMessage = new EndOfGameMessage(scores, gameTime);
+            String json = gson.toJson(endOfGameMessage);
             ConnectionService.sendMessage(MSG_END_OF_GAME_ACTIVITY, json);
             startActivity(new Intent(ManageGameplayActivity.this, MainMenuActivity.class));
             finish();
@@ -201,6 +208,15 @@ public class ManageGameplayActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("No", null)
                 .show();
+    }
+
+    private Map<String, Pair<String, Integer>> generateScoresMap() {
+        Map<String, Pair<String, Integer>> scores = new HashMap<>();
+        for (WifiP2pDevice device: wifiDirectApp.getConnectedPeers()) {
+            Pair<String, Integer> pair = new Pair<>(device.deviceName, playerScores.get(device.deviceAddress));
+            scores.put(device.deviceAddress, pair);
+        }
+        return scores;
     }
 
     private void updateRemainingCount(int count) {

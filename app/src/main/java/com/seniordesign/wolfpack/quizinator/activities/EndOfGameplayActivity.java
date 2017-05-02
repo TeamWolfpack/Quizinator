@@ -1,16 +1,31 @@
 package com.seniordesign.wolfpack.quizinator.activities;
 
 import android.content.Intent;
+import android.support.v4.graphics.drawable.TintAwareDrawable;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.seniordesign.wolfpack.quizinator.Constants;
+import com.seniordesign.wolfpack.quizinator.adapters.CardAdapter;
+import com.seniordesign.wolfpack.quizinator.adapters.OtherPlayersAdapter;
 import com.seniordesign.wolfpack.quizinator.database.GamePlayStats;
 import com.seniordesign.wolfpack.quizinator.database.HighScores;
 import com.seniordesign.wolfpack.quizinator.database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.R;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class EndOfGameplayActivity extends AppCompatActivity {
 
@@ -24,8 +39,13 @@ public class EndOfGameplayActivity extends AppCompatActivity {
         initializeDB();
 
         GamePlayStats gamePlayStats;
+        Map<String, Pair<String, Integer>> playerScores = new HashMap<>();
         if (getIntent().getExtras() != null) {
             gamePlayStats = getIntent().getExtras().getParcelable("gameStats");
+
+            String json = getIntent().getExtras().getString("playerScores");
+            Type typeOfHashMap = new TypeToken<Map<String, Pair<String, Integer>>>() { }.getType();
+            playerScores = new Gson().fromJson(json, typeOfHashMap);
         } else {
             gamePlayStats = new GamePlayStats();
             gamePlayStats.setScore(0);
@@ -74,6 +94,20 @@ public class EndOfGameplayActivity extends AppCompatActivity {
         ((TextView)findViewById(R.id.endOfGameHighScoreTimeText)).setText(
                 (highScores.getBestTime()/60000) + ":" + formattedHighScoreSeconds
         );
+
+        if (playerScores != null && playerScores.size() > 0)
+            populateOtherPlayersScores(playerScores.values());
+    }
+
+    private void populateOtherPlayersScores(Collection<Pair<String, Integer>> playerScores) {
+        findViewById(R.id.end_of_multi_game_title).setVisibility(View.VISIBLE);
+        ListView otherPlayers = (ListView) findViewById(R.id.end_of_gameplay_list_of_other_players);
+        otherPlayers.setVisibility(View.VISIBLE);
+
+        List<Pair<String, Integer>> scores = new ArrayList<>(playerScores);
+        OtherPlayersAdapter adapter =
+                new OtherPlayersAdapter(this, R.layout.array_adapter_list_of_other_players, scores);
+        otherPlayers.setAdapter(adapter);
     }
 
     public void showMainMenu(View v){

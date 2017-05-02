@@ -11,6 +11,7 @@ import com.seniordesign.wolfpack.quizinator.database.Deck;
 import com.seniordesign.wolfpack.quizinator.database.QuizDataSource;
 import com.seniordesign.wolfpack.quizinator.database.Rules;
 import com.seniordesign.wolfpack.quizinator.R;
+import com.seniordesign.wolfpack.quizinator.messages.EndOfGameMessage;
 
 import java.lang.reflect.Type;
 import java.util.Collections;
@@ -82,7 +83,8 @@ public class SinglePlayerHandler implements GamePlayHandler {
             properties.setDeckIndex(properties.getDeckIndex()+1);
             properties.setCardsPlayed(properties.getCardsPlayed()+1);
         } else {
-            gamePlayActivity.endGamePlay(properties.getRules().getTimeLimit() - properties.getGamePlayTimerRemaining());
+            long gameTime = properties.getRules().getTimeLimit() - properties.getGamePlayTimerRemaining();
+            gamePlayActivity.endGamePlay(new EndOfGameMessage(null, gameTime));
         }
         return properties.getCurrentCard().getId();
     }

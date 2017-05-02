@@ -16,6 +16,7 @@ import com.seniordesign.wolfpack.quizinator.database.Card;
 import com.seniordesign.wolfpack.quizinator.database.Rules;
 import com.seniordesign.wolfpack.quizinator.messages.Answer;
 import com.seniordesign.wolfpack.quizinator.messages.Confirmation;
+import com.seniordesign.wolfpack.quizinator.messages.EndOfGameMessage;
 import com.seniordesign.wolfpack.quizinator.messages.QuizMessage;
 import com.seniordesign.wolfpack.quizinator.messages.Wager;
 
@@ -228,7 +229,7 @@ public class MessageHandler extends Handler {
                     break;
                 case MSG_END_OF_GAME_ACTIVITY:
                     wifiDirectApp.mGameplayActivity.endGamePlay(
-                            Long.parseLong(message));
+                            gson.fromJson(message, EndOfGameMessage.class));
                     break;
                 case MSG_SEND_WAGER_ACTIVITY:
                     wifiDirectApp.mGameplayActivity.createWager();
