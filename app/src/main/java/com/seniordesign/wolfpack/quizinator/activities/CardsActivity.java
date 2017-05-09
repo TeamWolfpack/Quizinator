@@ -497,7 +497,10 @@ public class CardsActivity extends AppCompatActivity {
     private void importCard(String cardPath){
         Card newCard = (new Card()).fromJsonFilePath(cardPath);
         if(newCard != null)
-            dataSource.createCard(newCard);
+            if (dataSource.importCard(newCard))
+                Toast.makeText(this, "Card Imported!", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(this, "Card already exists", Toast.LENGTH_SHORT).show();
         initializeListOfCards();
     }
 }

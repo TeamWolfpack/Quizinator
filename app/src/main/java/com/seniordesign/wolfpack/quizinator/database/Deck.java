@@ -25,8 +25,9 @@ public class Deck implements Shareable{
     private boolean duplicateCards;
     private String owner;
     private List<Card> cards;
+    private String uuid;
 
-//    private boolean moderatorNeeded;
+    //    private boolean moderatorNeeded;
 
     public Deck(){
 
@@ -142,6 +143,14 @@ public class Deck implements Shareable{
 
     public void setCards(List<Card> cards) {
         this.cards = cards;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
 //    public Deck filter(Rules rules) {

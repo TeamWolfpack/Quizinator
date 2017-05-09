@@ -7,7 +7,7 @@ package com.seniordesign.wolfpack.quizinator.database;
 public class CardDeckRelation {
 
     private long id;
-    private long fkCard;
+    private String fkCard;
     private long fkDeck;
 
     public long getId() {
@@ -18,11 +18,11 @@ public class CardDeckRelation {
         this.id = id;
     }
 
-    public long getFkCard() {
+    public String getFkCard() {
         return fkCard;
     }
 
-    public void setFkCard(long fkCard) {
+    public void setFkCard(String fkCard) {
         this.fkCard = fkCard;
     }
 
