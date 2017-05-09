@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.os.CountDownTimer;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import com.seniordesign.wolfpack.quizinator.database.Card;
 import com.seniordesign.wolfpack.quizinator.database.Deck;
 import com.seniordesign.wolfpack.quizinator.database.Rules;
 import com.seniordesign.wolfpack.quizinator.database.QuizDataSource;
+import com.seniordesign.wolfpack.quizinator.messages.EndOfGameMessage;
 import com.seniordesign.wolfpack.quizinator.messages.Wager;
 import com.seniordesign.wolfpack.quizinator.R;
 
@@ -38,8 +40,11 @@ import com.seniordesign.wolfpack.quizinator.wifiDirect.ConnectionService;
 import com.seniordesign.wolfpack.quizinator.wifiDirect.WifiDirectApp;
 
 import java.lang.reflect.Type;
+import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_ANSWER_CONFIRMATION_ACTIVITY;
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_END_OF_GAME_ACTIVITY;
@@ -73,6 +78,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
 
     private ArrayList<Answer> answers;
     private ArrayList<Answer> selectedAnswers;
+    private Map<String, Integer> playerScores;
 
     private boolean doubleEdgeActive = false;
     private boolean receivedWagers = false;
@@ -95,8 +101,6 @@ public class ManageGameplayActivity extends AppCompatActivity {
 
         dataSource = new QuizDataSource(this);
         dataSource.open();
-//        rules = dataSource.getAllRules().get(dataSource.getAllRules().size()-1); //TODO need to change
-//        rules = wifiDirectApp.mGameplayActivity.properties.getRules();
         String ruleSetName = getIntent().getStringExtra(Constants.RULES);
         rules = dataSource.getRuleSetByName(ruleSetName);
 
@@ -105,6 +109,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
         Deck deck = dataSource.getFilteredDeck(rules.getDeckId(), cardTypeList, wifiDirectApp.mIsServer);
 
         cardLimit = Math.min(deck.getCards().size(),rules.getMaxCardCount());
+        updateRemainingCount(cardLimit);
 
         nextCardSpinner = (Spinner) findViewById(R.id.next_card_spinner);
         NextCardAdapter nextCardAdapter = new NextCardAdapter(this, deck.getCards());
@@ -113,6 +118,11 @@ public class ManageGameplayActivity extends AppCompatActivity {
 
         initializeGameTimer(rules.getTimeLimit());
         gameplayTimerRunning = gameplayTimerStatic.start();
+
+        playerScores = new HashMap<>();
+        for (WifiP2pDevice device: wifiDirectApp.getConnectedPeers()) {
+            playerScores.put(device.deviceAddress, 0);
+        }
 
         Button highRiskButton = (Button) findViewById(R.id.double_edge);
         if(rules.isDoubleEdgeSword()){
@@ -153,6 +163,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
                         nextCardSpinner.setSelection(0);
                     }
                     updateCurrentCardView(currentCard);
+                    updateRemainingCount(cardLimit - cardsPlayed);
                 }
             });
         } else {
@@ -173,7 +184,11 @@ public class ManageGameplayActivity extends AppCompatActivity {
     public void endGame(View v) {
         if (v == null) {
             gameplayTimerRunning.cancel();
-            String json = gson.toJson(rules.getTimeLimit() - gameplayTimerRemaining);
+
+            Map<String, Pair<String, Integer>> scores = generateScoresMap();
+            long gameTime = rules.getTimeLimit() - gameplayTimerRemaining;
+            EndOfGameMessage endOfGameMessage = new EndOfGameMessage(scores, gameTime);
+            String json = gson.toJson(endOfGameMessage);
             ConnectionService.sendMessage(MSG_END_OF_GAME_ACTIVITY, json);
             startActivity(new Intent(ManageGameplayActivity.this, MainMenuActivity.class));
             finish();
@@ -193,6 +208,20 @@ public class ManageGameplayActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("No", null)
                 .show();
+    }
+
+    private Map<String, Pair<String, Integer>> generateScoresMap() {
+        Map<String, Pair<String, Integer>> scores = new HashMap<>();
+        for (WifiP2pDevice device: wifiDirectApp.getConnectedPeers()) {
+            Pair<String, Integer> pair = new Pair<>(device.deviceName, playerScores.get(device.deviceAddress));
+            scores.put(device.deviceAddress, pair);
+        }
+        return scores;
+    }
+
+    private void updateRemainingCount(int count) {
+        TextView remaining = (TextView) findViewById(R.id.remaining_card_count);
+        remaining.setText("Remaining: " + count);
     }
 
     /**
@@ -348,7 +377,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
 
         for (Answer answer : answers) {
             if (!currentCard.isDoubleEdge() || !answer.getAnswer().isEmpty()) {
-                sendConfirmationMessage(answer.getAddress(), false);
+                sendConfirmationMessage(answer, false);
             }
         }
         answers = new ArrayList<>();
@@ -356,13 +385,13 @@ public class ManageGameplayActivity extends AppCompatActivity {
 
     private void selectAndRespondToSelectedAnswer(Answer selectedAnswer){
         Log.d(TAG,"Selected answer gets the points: " + selectedAnswer.getDeviceName());
-        sendConfirmationMessage(selectedAnswer.getAddress(), true);
+        sendConfirmationMessage(selectedAnswer, true);
 
         for(Answer answer : answers){
-            if (answer.getAddress().equals(selectedAnswer.getAddress()))
+            if (answer.getIpAddress().equals(selectedAnswer.getIpAddress()))
                 continue;
             if (!currentCard.isDoubleEdge() || !answer.getAnswer().isEmpty())
-                sendConfirmationMessage(answer.getAddress(), false);
+                sendConfirmationMessage(answer, false);
         }
         answers = new ArrayList<>();
         if (alertDialog != null && alertDialog.isShowing())
@@ -411,7 +440,12 @@ public class ManageGameplayActivity extends AppCompatActivity {
         if (!mustPickWinner) {
             List<Answer> players = new ArrayList<>();
             for (WifiP2pDevice device : wifiDirectApp.getConnectedPeers()) {
-                players.add(new Answer(device.deviceName, device.deviceAddress, null, 0));
+                players.add(new Answer(
+                        device.deviceName,
+                        null,
+                        device.deviceAddress,
+                        playerScores.get(device.deviceAddress).toString(),
+                        0));
             }
             playerAdapter = new ActivePlayerAdapter(dialogView.getContext(), players, mustPickWinner);
 
@@ -473,7 +507,7 @@ public class ManageGameplayActivity extends AppCompatActivity {
         }
 
         Log.d(TAG,"Selected answer gets the points: " + selectedAnswer.getDeviceName());
-        sendConfirmationMessage(selectedAnswer.getAddress(), true);
+        sendConfirmationMessage(selectedAnswer, true);
 
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setText("Close");
         selectedAnswers.add(selectedAnswer);
@@ -482,17 +516,43 @@ public class ManageGameplayActivity extends AppCompatActivity {
     private void selectAndRespondToAnswers(){
         for(Answer answerI : answers){
             if (answerI.getAnswer().equals(currentCard.getCorrectAnswer())) {
-                sendConfirmationMessage(answerI.getAddress(), true);
+                sendConfirmationMessage(answerI, true);
             } else if (!currentCard.isDoubleEdge() || !answerI.getAnswer().isEmpty()) {
-                sendConfirmationMessage(answerI.getAddress(), false);
+                sendConfirmationMessage(answerI, false);
             }
         }
         answers = new ArrayList<>();
     }
 
-    private void sendConfirmationMessage(String address, boolean correct) {
-        String confirmation = gson.toJson(new Confirmation(address, correct));
+    private void sendConfirmationMessage(Answer answer, boolean correct) {
+        updateScore(answer, correct);
+        String confirmation = gson.toJson(new Confirmation(answer.getIpAddress(), correct));
         ConnectionService.sendMessage(MSG_ANSWER_CONFIRMATION_ACTIVITY, confirmation);
+    }
+
+    private void updateScore(Answer answer, boolean correct) {
+        int points = currentCard.getPoints();
+        if (wagers != null && !wagers.isEmpty()) {
+            for (Wager wager: wagers) {
+                if (wager.getIpAddress().equals(answer.getIpAddress())) {
+                    points = wager.getWager();
+                    break;
+                }
+            }
+        }
+        if (!correct) {
+            if (currentCard.isDoubleEdge())
+                points = -points;
+            else
+                points = 0;
+        }
+
+        if (playerScores.containsKey(answer.getMacAddress())) {
+            Integer p = playerScores.get(answer.getMacAddress());
+            playerScores.put(answer.getMacAddress(), p + points < 0 ? 0 : p + points);
+        } else {
+            playerScores.put(answer.getMacAddress(), points < 0 ? 0 : points);
+        }
     }
 
     private void autoSelectAnswers(){

@@ -70,14 +70,15 @@ public class ActivePlayerAdapter extends BaseAdapter {
         TextView playerName = (TextView) view.findViewById(R.id.active_player_name);
         playerName.setText(player.getDeviceName());
 
-        LinearLayout responseArea = (LinearLayout) view.findViewById(R.id.active_player_response_area);
-        if (!mustSelectWinner) {
-            responseArea.setVisibility(View.GONE);
-            return view;
-        }
-
         TextView playerAnswer = (TextView) view.findViewById(R.id.active_player_answer);
         playerAnswer.setText(player.getAnswer());
+
+        if (!mustSelectWinner) {
+            view.findViewById(R.id.active_player_response_area_time).setVisibility(View.GONE);
+            TextView answerLabel = (TextView) view.findViewById(R.id.active_player_response_area_answer_label);
+            answerLabel.setText(R.string.points);
+            return view;
+        }
 
         TextView playerTime = (TextView) view.findViewById(R.id.active_player_time);
         playerTime.setText(String.format(Locale.US, "%.3f sec", player.getTimeTaken() / 1000000000.0));

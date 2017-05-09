@@ -123,6 +123,31 @@
         </TableRow>
     </TableLayout>
 
+    <TextView
+        android:id="@+id/end_of_multi_game_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/other_players_title"
+        android:textStyle="bold"
+        android:textSize="@dimen/md_text_size_headline"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_below="@id/end_of_gameplay_table"
+        android:visibility="gone"
+        />
+
+    <ListView
+        android:id="@+id/end_of_gameplay_list_of_other_players"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_below="@id/end_of_multi_game_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginLeft="@dimen/fab_margin"
+        android:background="@drawable/rounded_table_layout_shape"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:visibility="gone"/>
+
     <android.support.design.widget.FloatingActionButton
         app:srcCompat="@drawable/ic_close_black_24dp"
         android:id="@+id/goToMainMenu"

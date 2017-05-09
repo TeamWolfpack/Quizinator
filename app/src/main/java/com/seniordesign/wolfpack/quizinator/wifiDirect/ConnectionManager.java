@@ -8,7 +8,9 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import android.util.Log;
@@ -196,10 +198,11 @@ public class ConnectionManager {
      */
     void onBrokenConnection(SocketChannel channel) {
         try {
-            if (mApp.mIsServer)
+            if (mApp.mIsServer) {
                 mClientChannels.remove(channel.socket().getInetAddress().getHostAddress());
-            else
+            } else {
                 closeClient();
+            }
             channel.close();
         } catch (Exception e) {
             Log.d(TAG, "onBrokenConnection error: " + e);

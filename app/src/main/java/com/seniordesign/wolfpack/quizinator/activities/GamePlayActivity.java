@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.CountDownTimer;
+import android.os.Parcelable;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Constants;
 import com.seniordesign.wolfpack.quizinator.filters.NumberFilter;
 import com.seniordesign.wolfpack.quizinator.fragments.FreeResponseAnswerFragment;
@@ -28,6 +31,7 @@ import com.seniordesign.wolfpack.quizinator.database.Card;
 import com.seniordesign.wolfpack.quizinator.database.GamePlayStats;
 import com.seniordesign.wolfpack.quizinator.database.HighScores;
 import com.seniordesign.wolfpack.quizinator.fragments.MultipleChoiceAnswerFragment;
+import com.seniordesign.wolfpack.quizinator.messages.EndOfGameMessage;
 import com.seniordesign.wolfpack.quizinator.messages.Wager;
 import com.seniordesign.wolfpack.quizinator.R;
 import com.seniordesign.wolfpack.quizinator.Util;
@@ -37,6 +41,8 @@ import com.seniordesign.wolfpack.quizinator.wifiDirect.WifiDirectApp;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_ANSWER_CONFIRMATION_HANDSHAKE_ACTIVITY;
 import static com.seniordesign.wolfpack.quizinator.wifiDirect.MessageCodes.MSG_SEND_WAGER_CONFIRMATION_ACTIVITY;
@@ -133,10 +139,10 @@ public class GamePlayActivity extends AppCompatActivity {
     public void endGamePlay() {
         long time = properties.getRules().getCardDisplayTime() +
                 properties.getCardsPlayed();
-        endGamePlay(time);
+        endGamePlay(new EndOfGameMessage(null, time));
     }
 
-    public void endGamePlay(long totalGameTime) {
+    public void endGamePlay(EndOfGameMessage endOfGameMessage) {
         if (properties.getCardTimerRunning() != null) {
             properties.getCardTimerRunning().cancel();
         }
@@ -146,16 +152,29 @@ public class GamePlayActivity extends AppCompatActivity {
         final Intent intent = new Intent(this, EndOfGameplayActivity.class);
         GamePlayStats s = new GamePlayStats();
         s.setScore(properties.getScore());
-        s.setTimeElapsed(totalGameTime);
+        s.setTimeElapsed(endOfGameMessage.getGameTime());
         s.setTotalCardsCompleted(properties.getCardsPlayed());
         if(properties.getDeck()!=null){
             s.setDeckID(properties.getDeck().getId());
-        }
-        else{
+        } else {
             s.setDeckID(-1);
         }
-        checkGameStatsAgainstHighScoresDB(s);
+
+        boolean isMultiplayerGame = gamePlayHandler instanceof MultiplayerHandler;
+        if (isMultiplayerGame) {
+            if (endOfGameMessage.getPlayerScores() != null) {
+                Map<String, Pair<String, Integer>> playerScores = endOfGameMessage.getPlayerScores();
+                // Remove yourself from the list of player scores
+                playerScores.remove(properties.getWifiDirectApp().mThisDevice.deviceAddress);
+                intent.putExtra("playerScores", new Gson().toJson(playerScores));
+            }
+        } else {
+            checkGameStatsAgainstHighScoresDB(s);
+        }
+
+        intent.putExtra("multiplayerGame", isMultiplayerGame);
         intent.putExtra("gameStats", s);
+
         startActivity(intent);
         finish();
     }
@@ -248,7 +267,8 @@ public class GamePlayActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                endGamePlay(properties.getRules().getTimeLimit() - properties.getGamePlayTimerRemaining());
+                long gameTime = properties.getRules().getTimeLimit() - properties.getGamePlayTimerRemaining();
+                endGamePlay(new EndOfGameMessage(null, gameTime));
             }
         });
         return true;
@@ -320,7 +340,7 @@ public class GamePlayActivity extends AppCompatActivity {
         if (gamePlayHandler instanceof MultiplayerHandler) {
             ConnectionService.sendMessage(
                     MSG_ANSWER_CONFIRMATION_HANDSHAKE_ACTIVITY,
-                    properties.getWifiDirectApp().mMyAddress);
+                    properties.getWifiDirectApp().mMyIpAddress);
         }
         quickCorrectAnswerConfirmation(correct);
     }
@@ -378,7 +398,8 @@ public class GamePlayActivity extends AppCompatActivity {
         wagerVal = Math.max(wagerVal, 0);
         wager = new Wager(
                 properties.getWifiDirectApp().mDeviceName,
-                properties.getWifiDirectApp().mMyAddress,
+                properties.getWifiDirectApp().mMyIpAddress,
+                properties.getWifiDirectApp().mThisDevice.deviceAddress,
                 wagerVal
         );
         String json = properties.getGson().toJson(wager);

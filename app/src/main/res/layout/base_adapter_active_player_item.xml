@@ -24,13 +24,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:id="@+id/active_player_response_area_answer">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/player_answer"
-                android:textSize="@dimen/md_text_size_subheading"/>
+                android:textSize="@dimen/md_text_size_subheading"
+                android:id="@+id/active_player_response_area_answer_label"/>
 
             <TextView
                 android:id="@+id/active_player_answer"
@@ -44,7 +46,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:id="@+id/active_player_response_area_time">
 
             <TextView
                 android:layout_width="wrap_content"
