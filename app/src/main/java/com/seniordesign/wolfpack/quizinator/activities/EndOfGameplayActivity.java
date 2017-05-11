@@ -116,8 +116,6 @@ public class EndOfGameplayActivity extends AppCompatActivity {
     }
 
     public void showMainMenu(View v){
-        final Intent intent = new Intent(this, MainMenuActivity.class);
-        startActivity(intent);
         finish();
     }
 
