@@ -20,6 +20,7 @@ public class Card implements Shareable{
     private int points = 1;
     private boolean doubleEdge;
     private String uuid;
+    private long lastModified;
 
     private int maxPossibleAnswers;   //Can't have over 4 options
 
@@ -138,5 +139,13 @@ public class Card implements Shareable{
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public long getLastModified() {
+        return lastModified;
+    }
+
+    public void setLastModified(long lastModified) {
+        this.lastModified = lastModified;
     }
 }

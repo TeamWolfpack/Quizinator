@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.seniordesign.wolfpack.quizinator.Constants;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,7 +28,8 @@ public class QuizDataSource {
             QuizSQLiteHelper.CARD_COLUMN_POSSIBLEANSWERS,
             QuizSQLiteHelper.CARD_COLUMN_POINTS,
             QuizSQLiteHelper.CARD_COLUMN_MODERATORNEEDED,
-            QuizSQLiteHelper.CARD_COLUMN_UUID
+            QuizSQLiteHelper.CARD_COLUMN_UUID,
+            QuizSQLiteHelper.CARD_COLUMN_LASTMODIFIED
     };
 
     private String[] deckAllColumns = {
@@ -111,6 +113,7 @@ public class QuizDataSource {
         if (uuid == null || uuid.isEmpty())
             uuid = UUID.randomUUID().toString();
         values.put(QuizSQLiteHelper.CARD_COLUMN_UUID, uuid);
+        values.put(QuizSQLiteHelper.CARD_COLUMN_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
         long insertId = database.insert(QuizSQLiteHelper.TABLE_CARDS,
                 null, values);
         Cursor cursor = database.query(QuizSQLiteHelper.TABLE_CARDS,
@@ -192,6 +195,8 @@ public class QuizDataSource {
                 return QuizSQLiteHelper.CARD_COLUMN_QUESTION + " ASC";
             case("Points"):
                 return QuizSQLiteHelper.CARD_COLUMN_POINTS + " ASC";
+            case("Last Modified"):
+                return QuizSQLiteHelper.CARD_COLUMN_LASTMODIFIED + " DESC";
             default:
                 return null;
         }
@@ -211,6 +216,7 @@ public class QuizDataSource {
         card.setPoints(cursor.getInt(5));
         card.setModeratorNeeded(cursor.getString(6));
         card.setUuid(cursor.getString(7));
+        card.setLastModified(cursor.getLong(8));
         return card;
     }
 
@@ -230,6 +236,7 @@ public class QuizDataSource {
 
         values.put(QuizSQLiteHelper.CARD_COLUMN_MODERATORNEEDED, card.getModeratorNeeded());
         values.put(QuizSQLiteHelper.CARD_COLUMN_POINTS, card.getPoints());
+        values.put(QuizSQLiteHelper.CARD_COLUMN_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
 
         String where = QuizSQLiteHelper.CARD_COLUMN_ID + " = " + card.getId();
         return database.update(QuizSQLiteHelper.TABLE_CARDS, values, where, null);

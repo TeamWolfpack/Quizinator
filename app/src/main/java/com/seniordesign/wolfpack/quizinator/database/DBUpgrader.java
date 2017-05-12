@@ -7,9 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static com.seniordesign.wolfpack.quizinator.database.QuizSQLiteHelper.HIGHSCORES_TABLE_CREATE;
-import static com.seniordesign.wolfpack.quizinator.database.QuizSQLiteHelper.RULES_TABLE_CREATE;
-
 class DBUpgrader {
 
     static void upgradeToV2(SQLiteDatabase db){
@@ -36,6 +33,7 @@ class DBUpgrader {
         deckUuidUpgradeV3(db);
         cardUuidUpgradeV3(db);
         cdRelationsUpgradeV3(db);
+        cardLastModifiedUpgradeV3(db);
     }
 
     private static void deckUuidUpgradeV3(SQLiteDatabase db) {
@@ -138,8 +136,30 @@ class DBUpgrader {
                 "SELECT " + FKCARDTEMP_COLUMN + ", " + QuizSQLiteHelper.CDRELATIONS_COLUMN_FKDECK +
                 " FROM " + tempTableName;
         db.execSQL(COPY_TABLE_OVER);
-
         db.execSQL("DROP TABLE IF EXISTS " + tempTableName);
+    }
 
+    private static void cardLastModifiedUpgradeV3(SQLiteDatabase db) {
+        List<Card> cards = new ArrayList<>();
+        Cursor cursor = db.query(QuizSQLiteHelper.TABLE_CARDS,
+                new String[]{QuizSQLiteHelper.CARD_COLUMN_ID}, null, null, null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Card card = new Card();
+            card.setId(cursor.getLong(0));
+            cards.add(card);
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        db.execSQL("ALTER TABLE " + QuizSQLiteHelper.TABLE_CARDS + " ADD COLUMN " +
+                QuizSQLiteHelper.CARD_COLUMN_LASTMODIFIED + " INTEGER;");
+
+        for (int i = 0; i < cards.size(); i++) {
+            Card card = cards.get(i);
+            db.execSQL("UPDATE " + QuizSQLiteHelper.TABLE_CARDS +
+                    " SET " + QuizSQLiteHelper.CARD_COLUMN_LASTMODIFIED + " = \'" + 0 + "\'" +
+                    " WHERE " + QuizSQLiteHelper.CARD_COLUMN_ID + " = " + card.getId() + ";");
+        }
     }
 }
