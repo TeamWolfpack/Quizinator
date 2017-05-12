@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.seniordesign.wolfpack.quizinator.Activities.ManageGameplayActivity">
+    tools:context="com.seniordesign.wolfpack.quizinator.activities.ManageGameplayActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -28,16 +28,17 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:textColor="@android:color/white"
-                android:paddingRight="10dp"
-                android:textSize="20dp"
-                android:text="Game Time: 00:00" />
+                android:paddingRight="@dimen/gameplay_stats_padding"
+                android:paddingLeft="0dp"
+                android:textSize="@dimen/gameplay_stats_font"
+                android:text="@string/initial_game_time" />
 
             <ImageButton
                 app:srcCompat="@drawable/end_circle"
                 android:id="@+id/end_game_option"
                 android:layout_toLeftOf="@id/gamePlayTimeHostText"
                 android:layout_toStartOf="@id/gamePlayTimeHostText"
-                android:padding="5dp"
+                android:padding="@dimen/icon_padding"
                 android:scaleType="fitCenter"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/end_game"
@@ -51,7 +52,7 @@
                 android:id="@+id/players_button"
                 android:layout_toLeftOf="@id/end_game_option"
                 android:layout_toStartOf="@id/end_game_option"
-                android:padding="5dp"
+                android:padding="@dimen/icon_padding"
                 android:scaleType="fitCenter"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/end_game"
@@ -72,11 +73,29 @@
         android:padding="@dimen/spinner_padding"
         android:background="@drawable/accent_border">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/next_card"
-            android:textSize="@dimen/md_text_size_title"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/next_card"
+                android:textSize="@dimen/md_text_size_title"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"/>
+
+            <TextView
+                android:id="@+id/remaining_card_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/md_text_size_title"
+                android:layout_toRightOf="@id/remaining_card_count"
+                android:layout_toEndOf="@id/remaining_card_count"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"/>
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -99,6 +118,15 @@
                 android:layout_width="0dp"
                 android:text="@string/shuffle"/>
 
+            <Button
+                android:background="@android:color/transparent"
+                android:textColor="@color/colorAccent"
+                android:id="@+id/double_edge"
+                android:onClick="doubleEdgeSelect"
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="0.2"
+                android:text="@string/double_edge"/>
             <Button
                 android:background="@android:color/transparent"
                 android:textColor="@color/colorAccent"
@@ -165,12 +193,11 @@
                     android:layout_weight="0.5"
                     android:orientation="vertical">
 
-                    <ImageView
+                    <com.seniordesign.wolfpack.quizinator.views.CardIcon
                         android:id="@+id/current_card_type_icon"
-                        android:layout_width="@dimen/md_icon_width_and_height"
-                        android:layout_height="@dimen/md_icon_width_and_height"
-                        android:scaleType="fitCenter"
-                        android:contentDescription="@string/card_type" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
 
                     <TextView
                         android:id="@+id/current_card_points"

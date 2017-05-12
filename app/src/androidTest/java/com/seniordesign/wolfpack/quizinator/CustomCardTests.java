@@ -6,9 +6,9 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.WindowManager;
 
-import com.seniordesign.wolfpack.quizinator.Activities.CardsActivity;
-import com.seniordesign.wolfpack.quizinator.Database.Card;
-import com.seniordesign.wolfpack.quizinator.Database.QuizDataSource;
+import com.seniordesign.wolfpack.quizinator.activities.CardsActivity;
+import com.seniordesign.wolfpack.quizinator.database.Card;
+import com.seniordesign.wolfpack.quizinator.database.QuizDataSource;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -29,7 +29,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
@@ -65,7 +64,7 @@ public class CustomCardTests {
 
         onData(anything())
                 .inAdapterView(withId(R.id.list_of_cards))
-                .atPosition(10)
+                .atPosition(25)
                 .perform(click());
         onView(withText(Constants.DELETE)).perform(click());
         onView(withText(Constants.DELETE)).perform(click());

@@ -6,7 +6,7 @@
     android:id="@+id/activity_new_game_settings"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.seniordesign.wolfpack.quizinator.Activities.NewGameSettingsActivity">
+    tools:context="com.seniordesign.wolfpack.quizinator.activities.NewGameSettingsActivity">
 
     <TableLayout
         android:layout_height="wrap_content"
@@ -15,6 +15,26 @@
         android:layout_marginLeft="@dimen/fab_margin"
         android:layout_marginTop="@dimen/fab_margin"
         android:stretchColumns="1">
+
+        <TableRow
+            android:id="@+id/ruleset_row"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="@dimen/activity_vertical_margin">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:text="@string/select_ruleset"
+                android:layout_marginRight="@dimen/activity_horizontal_margin_half"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin_half" />
+            <Spinner
+                android:id="@+id/ruleset_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_column="1"/>
+        </TableRow>
 
         <TableRow
             android:layout_height="wrap_content"
@@ -61,6 +81,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="number"
+                    android:maxLength="2"
                     android:text="@string/min"/>
                 <TextView
                     android:id="@+id/game_semicolon"
@@ -72,6 +93,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="number"
+                    android:maxLength="2"
                     android:text="@string/no_time"/>
             </LinearLayout>
         </TableRow>
@@ -140,7 +162,8 @@
         <TableRow
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:layout_marginBottom="@dimen/activity_vertical_margin_half">
             <TextView
                 android:id="@+id/card_count_label"
                 android:layout_width="wrap_content"
@@ -152,11 +175,60 @@
                 android:id="@+id/card_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxLength="5"
                 android:layout_marginStart="@dimen/spinner_padding"
                 android:layout_marginLeft="@dimen/spinner_padding"
                 android:layout_marginEnd="@dimen/spinner_padding"
                 android:layout_marginRight="@dimen/spinner_padding"
                 android:inputType="number"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:visibility="gone"
+            android:id="@+id/allow_multiple_winners_row"
+            android:layout_marginBottom="@dimen/activity_vertical_margin_half">
+            <CheckBox
+                android:id="@+id/allow_multiple_winners"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_span="2"
+                android:text="@string/allow_multiple_winners"
+                android:textColor="?android:attr/textColorTertiary" />
+        </TableRow>
+
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:visibility="gone"
+            android:id="@+id/double_edge_questions_row"
+            android:layout_marginBottom="@dimen/activity_vertical_margin_half">
+            <CheckBox
+                android:id="@+id/include_double_edge_questions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_span="2"
+                android:text="@string/double_edge_sword_questions"
+                android:textColor="?android:attr/textColorTertiary" />
+        </TableRow>
+
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:visibility="gone"
+            android:id="@+id/final_wager_question_row"
+            android:layout_marginBottom="@dimen/activity_vertical_margin_half">
+            <CheckBox
+                android:id="@+id/include_final_wager_question"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_span="2"
+                android:text="@string/wager_final_question"
+                android:textColor="?android:attr/textColorTertiary" />
         </TableRow>
 
         <LinearLayout

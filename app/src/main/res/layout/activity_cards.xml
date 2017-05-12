@@ -5,7 +5,7 @@
                 android:id="@+id/activity_cards"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context="com.seniordesign.wolfpack.quizinator.Activities.CardsActivity">
+                tools:context="com.seniordesign.wolfpack.quizinator.activities.CardsActivity">
     <LinearLayout
         android:id="@+id/activity_card_creation"
         android:layout_width="match_parent"
@@ -23,23 +23,25 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"/>
 
-            <!-- TODO For when we add the Moderator class later -->
-            <!--<CheckBox-->
-                <!--android:id="@+id/moderator_needed_filter_checkbox"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_weight="3"-->
-                <!--android:button="@null"-->
-                <!--android:drawableRight="?android:attr/listChoiceIndicatorMultiple"-->
-                <!--android:text="@string/moderator_needed_filter" />-->
+            <Spinner
+                android:id="@+id/card_sort_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:spinnerMode="dropdown"
+                android:entries="@array/card_sort_list"/>
+
         </LinearLayout>
         <ListView
             android:id="@+id/list_of_cards"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:divider="@android:color/transparent"
-            android:dividerHeight="@dimen/array_adapter_padding"/>
+            android:dividerHeight="@dimen/array_adapter_padding"
+            android:paddingBottom="@dimen/listview_bottom_padding"
+            android:clipToPadding="false"/>
     </LinearLayout>
+
     <android.support.design.widget.FloatingActionButton
         app:srcCompat="@drawable/ic_plus_btn_white_24dp"
         android:id="@+id/new_card_button"
@@ -52,4 +54,16 @@
         android:layout_marginRight="@dimen/fab_margin"
         android:layout_marginEnd="@dimen/fab_margin"
         android:onClick="newCardClick" />
+
+    <android.support.design.widget.FloatingActionButton
+        app:srcCompat="@drawable/ic_file_download_black_24dp"
+        android:id="@+id/import_card_button"
+        android:layout_above="@+id/new_card_button"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:onClick="importCardClick" />
 </RelativeLayout>

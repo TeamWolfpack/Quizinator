@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.seniordesign.wolfpack.quizinator.Activities.MainMenuActivity"
+    tools:context="com.seniordesign.wolfpack.quizinator.activities.MainMenuActivity"
     tools:showIn="@layout/app_bar_navigation_drawer">
 
 
@@ -55,6 +55,13 @@
             android:layout_height="wrap_content"
             android:text="@string/host_game"
             android:onClick="initiateHostGame"
+            />
+        <Button
+            android:id="@+id/highscoresButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/highscores"
+            android:onClick="initiateHighscores"
             />
     </LinearLayout>
 </RelativeLayout>

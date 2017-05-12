@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="3dp"
+    android:paddingTop="@dimen/array_adapter_padding"
     >
 
     <TextView
@@ -27,14 +27,14 @@
         android:layout_width="fill_parent"
         android:layout_height="?android:attr/listPreferredItemHeight"
         android:background="?android:attr/activatedBackgroundIndicator"
-        android:padding="3dip"
+        android:padding="@dimen/array_adapter_padding"
         >
 
         <ImageView
             android:id="@+id/icon"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:layout_marginRight="2dp"
+            android:layout_marginRight="@dimen/icon_padding"
             android:src="@drawable/machine"
             />
 

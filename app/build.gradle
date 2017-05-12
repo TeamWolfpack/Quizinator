@@ -8,7 +8,7 @@ android {
         applicationId "com.seniordesign.wolfpack.quizinator"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 6
+        versionCode 7
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -52,4 +52,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
     compile 'com.google.android.gms:play-services-appindexing:9.8.0'
+    // import FilePicker
+    // @url -> https://android-arsenal.com/details/1/3950
+    compile 'com.github.angads25:filepicker:1.1.0'
+
 }

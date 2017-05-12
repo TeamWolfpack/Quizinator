@@ -3,17 +3,15 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/array_adapter_rounded_corners">
+    android:background="@drawable/array_adapter_rounded_corners"
+    android:padding="@dimen/array_adapter_padding">
 
-    <ImageView
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_weight="0"
-        android:paddingRight="@dimen/array_adapter_padding"
-        android:paddingLeft="@dimen/array_adapter_padding"
-        android:id="@+id/card_type_icon" />
+    <com.seniordesign.wolfpack.quizinator.views.CardIcon
+        android:id="@+id/card_type_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:paddingRight="@dimen/array_adapter_padding"
         android:paddingLeft="@dimen/array_adapter_padding"

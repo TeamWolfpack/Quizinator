@@ -16,19 +16,19 @@
             android:layout_height="match_parent"
             android:layout_weight="0.2"
             android:text="@string/deck_name"
-            android:textSize="16sp"
+            android:textSize="@dimen/md_text_size_subheading"
             android:textColor="#000000"
             android:maxLines="1"
             android:ellipsize="end"
             android:id="@+id/array_adapter_deck_name"
             android:paddingLeft="0dp"
-            android:paddingRight="5dp" />
+            android:paddingRight="@dimen/text_padding" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.8"
             android:text="@string/deck_size"
-            android:textSize="16sp"
+            android:textSize="@dimen/md_text_size_subheading"
             android:textColor="#000000"
             android:id="@+id/array_adapter_deck_size" />
     </LinearLayout>
@@ -37,69 +37,66 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingRight="@dimen/array_adapter_padding"
-        android:paddingLeft="@dimen/array_adapter_padding">
+        android:paddingLeft="@dimen/array_adapter_padding"
+        android:paddingBottom="@dimen/array_adapter_padding">
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_weight="0"
-            android:paddingRight="5dp"
-            android:src="@drawable/mc_icon"
-            android:id="@+id/array_adapter_deck_MC_icon" />
+        <com.seniordesign.wolfpack.quizinator.views.CardIcon
+            android:id="@+id/array_adapter_deck_MC_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/icon_padding"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:padding="@dimen/card_count_padding"
             android:text="@string/MC_count"
-            android:textSize="16sp"
+            android:textSize="@dimen/md_text_size_subheading"
             android:textColor="#000000"
             android:id="@+id/array_adapter_deck_MC_count" />
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_weight="0"
-            android:paddingRight="5dp"
-            android:src="@drawable/tf_icon"
-            android:id="@+id/array_adapter_deck_TF_icon" />
+        <com.seniordesign.wolfpack.quizinator.views.CardIcon
+            android:id="@+id/array_adapter_deck_TF_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/icon_padding"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:padding="@dimen/card_count_padding"
             android:text="@string/TF_count"
-            android:textSize="16sp"
+            android:textSize="@dimen/md_text_size_subheading"
             android:textColor="#000000"
             android:id="@+id/array_adapter_deck_TF_count" />
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_weight="0"
-            android:paddingRight="5dp"
-            android:src="@drawable/fr_icon"
-            android:id="@+id/array_adapter_deck_FR_icon" />
+        <com.seniordesign.wolfpack.quizinator.views.CardIcon
+            android:id="@+id/array_adapter_deck_FR_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/icon_padding"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:padding="@dimen/card_count_padding"
             android:text="@string/FR_count"
-            android:textSize="16sp"
+            android:textSize="@dimen/md_text_size_subheading"
             android:textColor="#000000"
             android:id="@+id/array_adapter_deck_FR_count" />
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_weight="0"
-            android:paddingRight="5dp"
-            android:src="@drawable/vr_icon"
-            android:id="@+id/array_adapter_deck_VR_icon" />
+        <com.seniordesign.wolfpack.quizinator.views.CardIcon
+            android:id="@+id/array_adapter_deck_VR_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/icon_padding"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:padding="@dimen/card_count_padding"
             android:text="@string/VR_count"
-            android:textSize="16sp"
+            android:textSize="@dimen/md_text_size_subheading"
             android:textColor="#000000"
             android:id="@+id/array_adapter_deck_VR_count" />
     </LinearLayout>

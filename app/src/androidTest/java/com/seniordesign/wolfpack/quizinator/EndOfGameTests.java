@@ -6,7 +6,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.seniordesign.wolfpack.quizinator.Activities.EndOfGameplayActivity;
+import com.seniordesign.wolfpack.quizinator.activities.EndOfGameplayActivity;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -64,7 +64,6 @@ public class EndOfGameTests {
         onView(withId(R.id.endOfGameScoreText)).check(matches(isDisplayed()));
         onView(withId(R.id.endOfGameTimeText)).check(matches(isDisplayed()));
         onView(withId(R.id.endOfGameTotalCardsText)).check(matches(isDisplayed()));
-        onView(withId(R.id.endOfGameHighScoreText)).check(matches(isDisplayed()));
         onView(withId(R.id.goToMainMenu)).check(matches(isDisplayed()));
     }
 }

@@ -11,7 +11,7 @@
         android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:layout_marginRight="2dip"
+        android:layout_marginRight="2dp"
         android:src="@drawable/machine"
         />
 
@@ -49,19 +49,20 @@
             >
 
             <Button
+                android:id="@+id/btn_disconnect"
+                android:onClick="onDisconnectButtonClicked"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:text="@string/disconnect_peer_button"
+                />
+
+            <Button
                 android:id="@+id/btn_connect"
                 android:onClick="onConnectButtonClicked"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/connect_peer_button"
-                />
-
-            <Button
-                android:id="@+id/btn_disconnect"
-                android:onClick="onDisconnectButtonClicked"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/disconnect_peer_button"
                 />
 
         </LinearLayout>

@@ -21,12 +21,14 @@
     <string name="solo_game">Solo Game</string>
     <string name="join_game">Join Game</string>
     <string name="host_game">Host Game</string>
+    <string name="highscores">High Scores</string>
     <string name="cards">Cards</string>
 
     <string name="game_over">Game Over</string>
+    <string name="results">Results</string>
     <string name="main_menu">Main Menu</string>
 
-    <string name="enabling_wifi">Enabling Wifi...</string>
+    <string name="enabling_wifi">Enabling Wifi…</string>
     <string name="p2p_off_warning">P2P is disabled</string>
     <string name="yes">yes</string>
     <string name="no">no</string>
@@ -47,6 +49,13 @@
         <item>Both</item>
     </string-array>
 
+    <string-array name="card_sort_list">
+        <item>Sort by…</item>
+        <item>Question</item>
+        <item>Points</item>
+        <item>Last Modified</item>
+    </string-array>
+
     <string name="wifi_direct_disabled">WiFi Direct Disabled, please re-enable.</string>
     <string name="host_game_game_settings">Game Settings</string>
 
@@ -55,8 +64,14 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="send_card">Send Card</string>
+    <string name="double_edge">High Risk!</string>
     <string name="end_game">End Game</string>
     <string name="question">Question</string>
+    <string name="double_edge_notifier">High Risk!</string>
+
+    <string name="hs_score">Score:</string>
+    <string name="hs_time">Time</string>
+    <string name="hs_deck">Deck</string>
 
     <string name="deck_name">Deck Name</string>
     <string name="deck_size">Deck Size</string>
@@ -70,6 +85,7 @@
     <string name="cancel">Cancel</string>
     <string name="Delete">Delete</string>
     <string name="select_deck">Select Deck</string>
+    <string name="select_ruleset">Select Ruleset</string>
 
     <string name="type">Type</string>
     <string name="points">Points</string>
@@ -83,6 +99,12 @@
     <string name="nav_bar_check_p2p_compliance">Check P2P Compatibility</string>
     <string name="nav_bar_edit_decks">Edit Decks</string>
     <string name="nav_bar_edit_cards">Edit Cards</string>
+    <string name="nav_bar_help">Help</string>
+    <string name="nav_bar_help_singleplayer">Singleplayer</string>
+    <string name="nav_bar_help_multi_host">Multiplayer: Host</string>
+    <string name="nav_bar_help_multi_player">Multiplayer: Player</string>
+    <string name="nav_bar_help_custom">Decks and Cards</string>
+    <string name="nav_bar_help_rules">Advanced Rules</string>
     <string name="next_card">Next Card</string>
     <string name="shuffle">Shuffle</string>
     <string name="score_label">Score:</string>
@@ -98,7 +120,7 @@
     <string name="correct_answer_label">Correct Answer(s)</string>
 
     <!--ANSWER FRAGMENT BUTTONS-->
-    <string name="frag_answer_buzzer">Buzzer</string>
+    <string name="frag_answer_buzzer">Buzz In</string>
     <string name="frag_answer_submit">Submit</string>
     <string name="frag_answer_A">A</string>
     <string name="frag_answer_B">B</string>
@@ -108,4 +130,20 @@
     <string name="response_time">Response Time</string>
     <string name="solo_play_card_count_warning">*Free and Verbal Response cards can\'t be used in Solo Play</string>
 
+    <string name="create_wager">Set Your Wager</string>
+    <string name="note">Note:</string>
+    <string name="wager_text_min">A blank wager is zero points</string>
+    <string name="wager_text_max">A wager higher than your score wagers all your points</string>
+    <string name="accept">Accept</string>
+    <string name="wager">Wager:</string>
+    <string name="player_wagers">Wagers:</string>
+    <string name="double_edge_sword_questions">Double Edge Sword Questions</string>
+    <string name="wager_final_question">Wager Final Question</string>
+    <string name="allow_multiple_winners">Allow Multiple Winners</string>
+
+    <string name="sharing_send_to">Send to…</string>
+    <string name="initial_score">Score: 0</string>
+    <string name="initial_game_time">Game Time: 00:00</string>
+    <string name="initial_time_left">Time Left: 00.00</string>
+    <string name="other_players_title">Other Players</string>>
 </resources>

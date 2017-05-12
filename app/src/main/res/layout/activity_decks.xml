@@ -5,15 +5,16 @@
     android:id="@+id/activity_decks"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.seniordesign.wolfpack.quizinator.Activities.DecksActivity">
+    tools:context="com.seniordesign.wolfpack.quizinator.activities.DecksActivity">
     
     <ListView
         android:id="@+id/list_of_decks"
-        android:layout_weight="0.8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:divider="@android:color/transparent"
-        android:dividerHeight="@dimen/array_adapter_padding"/>
+        android:dividerHeight="@dimen/array_adapter_padding"
+        android:paddingBottom="@dimen/listview_bottom_padding"
+        android:clipToPadding="false"/>
 
     <android.support.design.widget.FloatingActionButton
         app:srcCompat="@drawable/ic_plus_btn_white_24dp"
@@ -28,5 +29,15 @@
         android:layout_marginEnd="@dimen/fab_margin"
         android:onClick="newDeckClick" />
 
-
+    <android.support.design.widget.FloatingActionButton
+        app:srcCompat="@drawable/ic_file_download_black_24dp"
+        android:id="@+id/import_deck_button"
+        android:layout_above="@+id/new_deck_button"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:onClick="importDeckClick" />
 </RelativeLayout>
