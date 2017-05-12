@@ -58,7 +58,8 @@ class DBDefaultTableSetup {
                     "\'" + gson.toJson(new String[]{"2", "1", "4", "3"}) + "\' AS \'" + QuizSQLiteHelper.CARD_COLUMN_POSSIBLEANSWERS + "\'," +
                     "\'" + "1" + "\' AS \'" + QuizSQLiteHelper.CARD_COLUMN_POINTS + "\'," +
                     "\'" + false + "\' AS \'" + QuizSQLiteHelper.CARD_COLUMN_MODERATORNEEDED + "\'," +
-                    "\'" + CARDS_UUID[0] + "\' AS \'" + QuizSQLiteHelper.CARD_COLUMN_UUID + "\' " +
+                    "\'" + CARDS_UUID[0] + "\' AS \'" + QuizSQLiteHelper.CARD_COLUMN_UUID + "\', " +
+                    "\'" + 0 + "\' AS \'" + QuizSQLiteHelper.CARD_COLUMN_LASTMODIFIED + "\' " +
                 "UNION ALL SELECT \'" + "2" + "\'," +
                     "\'" + Constants.CARD_TYPES.MULTIPLE_CHOICE.ordinal() + "\', " +
                     "\'" + "What is the symbol for Iron?" + "\', " +
@@ -66,7 +67,8 @@ class DBDefaultTableSetup {
                     "\'" + gson.toJson(new String[]{"Fe", "Ir", "I", "C"}) + "\', " +
                     "\'" + "1" + "\', " +
                     "\'" + false + "\', " +
-                    "\'" + CARDS_UUID[1] + "\' " +
+                    "\'" + CARDS_UUID[1] + "\', " +
+                    "\'" + 0 + "\' " +
                 "UNION ALL SELECT \'" + "3" + "\'," +
                     "\'" + Constants.CARD_TYPES.MULTIPLE_CHOICE.ordinal() + "\'," +
                     "\'" + "Who was the 2nd president of the US?" + "\'," +
@@ -74,7 +76,8 @@ class DBDefaultTableSetup {
                     "\'" + gson.toJson(new String[]{"George Washington", "Thomas Jefferson", "Abraham Lincoln", "John Adams"}) + "\'," +
                     "\'" + "1" + "\'," +
                     "\'" + false + "\', " +
-                    "\'" + CARDS_UUID[2] + "\' " +
+                    "\'" + CARDS_UUID[2] + "\', " +
+                    "\'" + 0 + "\' " +
                 "UNION ALL SELECT \'" + "4" + "\'," +
                     "\'" + Constants.CARD_TYPES.MULTIPLE_CHOICE.ordinal() + "\'," +
                     "\'" + "What restaurant chain has the Golden Arches?" + "\'," +
@@ -82,7 +85,8 @@ class DBDefaultTableSetup {
                     "\'" + gson.toJson(new String[]{"McDonalds", "Wendys", "Subway", "Burger King"}) + "\'," +
                     "\'" + "1" + "\'," +
                     "\'" + false + "\', " +
-                    "\'" + CARDS_UUID[3] + "\' " +
+                    "\'" + CARDS_UUID[3] + "\', " +
+                    "\'" + 0 + "\' " +
                 "UNION ALL SELECT \'" + "5" + "\'," +
                     "\'" + Constants.CARD_TYPES.MULTIPLE_CHOICE.ordinal() + "\'," +
                     "\'" + "Which of the following is a coastal state?" + "\'," +
@@ -90,7 +94,8 @@ class DBDefaultTableSetup {
                     "\'" + gson.toJson(new String[]{"Maine", "Wisconsin", "Idaho", "Tennessee"}) + "\'," +
                     "\'" + "1" + "\'," +
                     "\'" + false + "\', " +
-                    "\'" + CARDS_UUID[4] + "\' " +
+                    "\'" + CARDS_UUID[4] + "\', " +
+                    "\'" + 0 + "\' " +
 
                 //True False
                 "UNION ALL SELECT \'" + "6" + "\', " + "\'" +
@@ -100,7 +105,8 @@ class DBDefaultTableSetup {
                     "\'" + gson.toJson(TRUE_FALSE_ANSWERS) + "\', " +
                     "\'1\', " +
                     "\'" + false + "\', " +
-                    "\'" + CARDS_UUID[5] + "\' " +
+                    "\'" + CARDS_UUID[5] + "\', " +
+                    "\'" + 0 + "\' " +
                 "UNION ALL SELECT \'" + "7" + "\', " + "\'" +
                     Constants.CARD_TYPES.TRUE_FALSE.ordinal() + "\', " +
                     "\'4*5 = 20\', " +
@@ -108,7 +114,8 @@ class DBDefaultTableSetup {
                     "\'" + gson.toJson(TRUE_FALSE_ANSWERS) + "\', " +
                     "\'1\', " +
                     "\'" + false + "\', " +
-                    "\'" + CARDS_UUID[6] + "\' " +
+                    "\'" + CARDS_UUID[6] + "\', " +
+                    "\'" + 0 + "\' " +
                 "UNION ALL SELECT \'" + "8" + "\', " + "\'" +
                     Constants.CARD_TYPES.TRUE_FALSE.ordinal() + "\', " +
                     "\'20*10 = 100\', " +
@@ -116,7 +123,8 @@ class DBDefaultTableSetup {
                     "\'" + gson.toJson(TRUE_FALSE_ANSWERS) + "\', " +
                     "\'1\', " +
                     "\'" + false + "\', " +
-                    "\'" + CARDS_UUID[7] + "\' " +
+                    "\'" + CARDS_UUID[7] + "\', " +
+                    "\'" + 0 + "\' " +
                 "UNION ALL SELECT \'" + "9" + "\', " + "\'" +
                     Constants.CARD_TYPES.TRUE_FALSE.ordinal() + "\', " +
                     "\'10*91 = 901\', " +
@@ -124,7 +132,8 @@ class DBDefaultTableSetup {
                     "\'" + gson.toJson(TRUE_FALSE_ANSWERS) + "\', " +
                     "\'1\', " +
                     "\'" + false + "\', " +
-                    "\'" + CARDS_UUID[8] + "\' " +
+                    "\'" + CARDS_UUID[8] + "\', " +
+                    "\'" + 0 + "\' " +
                 "UNION ALL SELECT \'" + "10" + "\', " + "\'" +
                     Constants.CARD_TYPES.TRUE_FALSE.ordinal() + "\', " +
                     "\'100^2 = 10000\', " +
@@ -132,7 +141,8 @@ class DBDefaultTableSetup {
                     "\'" + gson.toJson(TRUE_FALSE_ANSWERS) + "\', " +
                     "\'1\', " +
                     "\'" + false + "\', " +
-                    "\'" + CARDS_UUID[9] + "\' " +
+                    "\'" + CARDS_UUID[9] + "\', " +
+                    "\'" + 0 + "\' " +
                 "UNION ALL SELECT \'" + "11" + "\', " + "\'" +
                     Constants.CARD_TYPES.TRUE_FALSE.ordinal() + "\', " +
                     "\'10*102 = 1002\', " +
@@ -140,7 +150,8 @@ class DBDefaultTableSetup {
                     "\'" + gson.toJson(TRUE_FALSE_ANSWERS) + "\', " +
                     "\'1\', " +
                     "\'" + false + "\', " +
-                    "\'" + CARDS_UUID[10] + "\' " +
+                    "\'" + CARDS_UUID[10] + "\', " +
+                    "\'" + 0 + "\' " +
                 "UNION ALL SELECT \'" + "12" + "\', " + "\'" +
                     Constants.CARD_TYPES.TRUE_FALSE.ordinal() + "\', " +
                     "\'8/2 = 4\', " +
@@ -148,7 +159,8 @@ class DBDefaultTableSetup {
                     "\'" + gson.toJson(TRUE_FALSE_ANSWERS) + "\', " +
                     "\'1\', " +
                     "\'" + false + "\', " +
-                    "\'" + CARDS_UUID[11] + "\' " +
+                    "\'" + CARDS_UUID[11] + "\', " +
+                    "\'" + 0 + "\' " +
                 "UNION ALL SELECT \'" + "13" + "\', " + "\'" +
                     Constants.CARD_TYPES.TRUE_FALSE.ordinal() + "\', " +
                     "\'120/4 = 30\', " +
@@ -156,7 +168,8 @@ class DBDefaultTableSetup {
                     "\'" + gson.toJson(TRUE_FALSE_ANSWERS) + "\', " +
                     "\'1\', " +
                     "\'" + false + "\', " +
-                    "\'" + CARDS_UUID[12] + "\' " +
+                    "\'" + CARDS_UUID[12] + "\', " +
+                    "\'" + 0 + "\' " +
                 "UNION ALL SELECT \'" + "14" + "\', " + "\'" +
                     Constants.CARD_TYPES.TRUE_FALSE.ordinal() + "\', " +
                     "\'6*7 = 41\', " +
@@ -164,7 +177,8 @@ class DBDefaultTableSetup {
                     "\'" + gson.toJson(TRUE_FALSE_ANSWERS) + "\', " +
                     "\'1\', " +
                     "\'" + false + "\', " +
-                    "\'" + CARDS_UUID[13] + "\' " +
+                    "\'" + CARDS_UUID[13] + "\', " +
+                    "\'" + 0 + "\' " +
                 "UNION ALL SELECT \'" + "15" + "\', " + "\'" +
                     Constants.CARD_TYPES.TRUE_FALSE.ordinal() + "\', " +
                     "\'Does MSOE stand for Milwaukee School of Engineering?\', " +
@@ -172,7 +186,8 @@ class DBDefaultTableSetup {
                     "\'" + gson.toJson(TRUE_FALSE_ANSWERS) + "\', " +
                     "\'1\', " +
                     "\'" + false + "\', " +
-                    "\'" + CARDS_UUID[14] + "\' " +
+                    "\'" + CARDS_UUID[14] + "\', " +
+                    "\'" + 0 + "\' " +
 
                 //Free Response
                 "UNION ALL SELECT \'" + "16" + "\', " + "\'" +
@@ -182,7 +197,8 @@ class DBDefaultTableSetup {
                     "\'" + "" + /* Look at Answer field */"\', " +
                     "\'1\', " +
                     "\'" + true + "\', " +
-                    "\'" + CARDS_UUID[15] + "\' " +
+                    "\'" + CARDS_UUID[15] + "\', " +
+                    "\'" + 0 + "\' " +
                 "UNION ALL SELECT \'" + "17" + "\', " + "\'" +
                     Constants.CARD_TYPES.FREE_RESPONSE.ordinal() + "\', " +
                     "\'What mathematical property says (a + b) + c = a + (b + c)?\', " +
@@ -190,7 +206,8 @@ class DBDefaultTableSetup {
                     "\'" + "" + /* Look at Answer field */"\', " +
                     "\'1\', " +
                     "\'" + true + "\', " +
-                    "\'" + CARDS_UUID[16] + "\' " +
+                    "\'" + CARDS_UUID[16] + "\', " +
+                    "\'" + 0 + "\' " +
                 "UNION ALL SELECT \'" + "18" + "\', " + "\'" +
                     Constants.CARD_TYPES.FREE_RESPONSE.ordinal() + "\', " +
                     "\'What is the abbreviation for Tyrannosaurus?\', " +
@@ -198,7 +215,8 @@ class DBDefaultTableSetup {
                     "\'" + "" + /* Look at Answer field */"\', " +
                     "\'1\', " +
                     "\'" + true + "\', " +
-                    "\'" + CARDS_UUID[17] + "\' " +
+                    "\'" + CARDS_UUID[17] + "\', " +
+                    "\'" + 0 + "\' " +
                 "UNION ALL SELECT \'" + "19" + "\', " + "\'" +
                     Constants.CARD_TYPES.FREE_RESPONSE.ordinal() + "\', " +
                     "\'Which color has the longest wavelength in the color spectrum?\', " +
@@ -206,7 +224,8 @@ class DBDefaultTableSetup {
                     "\'" + "" + /* Look at Answer field */"\', " +
                     "\'1\', " +
                     "\'" + true + "\', " +
-                    "\'" + CARDS_UUID[18] + "\' " +
+                    "\'" + CARDS_UUID[18] + "\', " +
+                    "\'" + 0 + "\' " +
                 "UNION ALL SELECT \'" + "20" + "\', " + "\'" +
                     Constants.CARD_TYPES.FREE_RESPONSE.ordinal() + "\', " +
                     "\'How many members are in the Senate?\', " +
@@ -214,7 +233,8 @@ class DBDefaultTableSetup {
                     "\'" + "" + /* Look at Answer field */"\', " +
                     "\'1\', " +
                     "\'" + true + "\', " +
-                    "\'" + CARDS_UUID[19] + "\' " +
+                    "\'" + CARDS_UUID[19] + "\', " +
+                    "\'" + 0 + "\' " +
 
                 //Verbal Response
                 "UNION ALL SELECT \'" + "21" + "\', " + "\'" +
@@ -224,7 +244,8 @@ class DBDefaultTableSetup {
                     "\'" + "" + /* Look at Answer field */"\', " +
                     "\'1\', " +
                     "\'" + true + "\', " +
-                    "\'" + CARDS_UUID[20] + "\' " +
+                    "\'" + CARDS_UUID[20] + "\', " +
+                    "\'" + 0 + "\' " +
                 "UNION ALL SELECT \'" + "22" + "\', " + "\'" +
                     Constants.CARD_TYPES.VERBAL_RESPONSE.ordinal() + "\', " +
                     "\'Name one of the three astronauts that were on Apollo 11?\', " +
@@ -232,7 +253,8 @@ class DBDefaultTableSetup {
                     "\'" + "" + /* Look at Answer field */"\', " +
                     "\'1\', " +
                     "\'" + true + "\', " +
-                    "\'" + CARDS_UUID[21] + "\' " +
+                    "\'" + CARDS_UUID[21] + "\', " +
+                    "\'" + 0 + "\' " +
                 "UNION ALL SELECT \'" + "23" + "\', " + "\'" +
                     Constants.CARD_TYPES.VERBAL_RESPONSE.ordinal() + "\', " +
                     "\'What are the three branches of the United States government?\', " +
@@ -240,7 +262,8 @@ class DBDefaultTableSetup {
                     "\'" + "" + /* Look at Answer field */"\', " +
                     "\'1\', " +
                     "\'" + true + "\', " +
-                    "\'" + CARDS_UUID[22] + "\' " +
+                    "\'" + CARDS_UUID[22] + "\', " +
+                    "\'" + 0 + "\' " +
                 "UNION ALL SELECT \'" + "24" + "\', " + "\'" +
                     Constants.CARD_TYPES.VERBAL_RESPONSE.ordinal() + "\', " +
                     "\'Name all seven continents.\', " +
@@ -248,7 +271,8 @@ class DBDefaultTableSetup {
                     "\'" + "" + /* Look at Answer field */"\', " +
                     "\'1\', " +
                     "\'" + true + "\', " +
-                    "\'" + CARDS_UUID[23] + "\' " +
+                    "\'" + CARDS_UUID[23] + "\', " +
+                    "\'" + 0 + "\' " +
                 "UNION ALL SELECT \'" + "25" + "\', " + "\'" +
                     Constants.CARD_TYPES.VERBAL_RESPONSE.ordinal() + "\', " +
                     "\'Give an example of Classical conditioning (aka. Pavlovian or Respondent conditioning) at work.\', " +
@@ -256,7 +280,8 @@ class DBDefaultTableSetup {
                     "\'" + "" + /* Look at Answer field */"\', " +
                     "\'1\', " +
                     "\'" + true + "\', " +
-                    "\'" + CARDS_UUID[24] + "\';";
+                    "\'" + CARDS_UUID[24] + "\', " +
+                    "\'" + 0 + "\';";
         db.execSQL(query);
     }
 

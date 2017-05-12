@@ -54,13 +54,18 @@ public class MainMenuActivity extends AppCompatActivity
         startService(serviceIntent);  // start the connection service
 
         //Init data source
-        dataSource = new QuizDataSource(this);
+        initializeDB();
 
         //Check if wifiDirect is supported
         if(!isWifiDirectSupported(this)){
             ((Button)findViewById(R.id.hostGameButton)).setTextColor(ContextCompat.getColor(this,R.color.colorGrayedOut));
             ((Button)findViewById(R.id.joinGameButton)).setTextColor(ContextCompat.getColor(this,R.color.colorGrayedOut));
         }
+    }
+
+    private boolean initializeDB(){
+        dataSource = new QuizDataSource(this);
+        return dataSource.open();
     }
 
     @Override

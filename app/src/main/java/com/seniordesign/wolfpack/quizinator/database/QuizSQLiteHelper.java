@@ -20,6 +20,7 @@ class QuizSQLiteHelper extends SQLiteOpenHelper {
     static final String CARD_COLUMN_POINTS = "_points";
     static final String CARD_COLUMN_MODERATORNEEDED = "_moderatorNeeded";
     static final String CARD_COLUMN_UUID = "_uuid";
+    static final String CARD_COLUMN_LASTMODIFIED = "_lastModified";
 
     // Deck table contents
     static final String TABLE_DECKS = "decks";
@@ -73,7 +74,8 @@ class QuizSQLiteHelper extends SQLiteOpenHelper {
             + CARD_COLUMN_POSSIBLEANSWERS + " TEXT, "
             + CARD_COLUMN_POINTS + " INTEGER DEFAULT 1, "
             + CARD_COLUMN_MODERATORNEEDED + " TEXT, "
-            + CARD_COLUMN_UUID + " TEXT UNIQUE"
+            + CARD_COLUMN_UUID + " TEXT UNIQUE, "
+            + CARD_COLUMN_LASTMODIFIED + " INTEGER"
             + ");";
 
     // Decks table creation sql statement

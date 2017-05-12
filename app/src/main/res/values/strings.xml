@@ -49,11 +49,11 @@
         <item>Both</item>
     </string-array>
 
-
     <string-array name="card_sort_list">
         <item>Sort by…</item>
         <item>Question</item>
         <item>Points</item>
+        <item>Last Modified</item>
     </string-array>
 
     <string name="wifi_direct_disabled">WiFi Direct Disabled, please re-enable.</string>
